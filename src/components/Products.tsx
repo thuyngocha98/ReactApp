@@ -10,7 +10,7 @@ type MyProps = { products: Product[], getProducts: any};
 class Places extends Component<MyProps> {
 
     componentDidMount() {
-       this.props.getProducts(5, 33);   
+       this.props.getProducts(5, 33);
     }
 
     placesOutput = () => {
@@ -25,12 +25,11 @@ class Places extends Component<MyProps> {
                 )}
             />
         )
-    }
+    };
 
     render() {
         return (
             <View style={styles.container}>
-              
                 <View style={styles.listContainer}>
                     {this.placesOutput()}
                 </View>

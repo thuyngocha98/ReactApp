@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
+
 const ListItem = (props) => {
     return (
       <TouchableOpacity>
@@ -9,7 +10,7 @@ const ListItem = (props) => {
         </View>
       </TouchableOpacity>
     );
-}
+};
 
 const styles = StyleSheet.create({
   listItem: {

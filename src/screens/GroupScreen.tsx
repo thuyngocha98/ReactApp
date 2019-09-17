@@ -1,19 +1,23 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
-// import { ExpoLinksView } from '@expo/samples';
 import Products from '../components/Products'
 
-export default function ProductsScreen() {
-    return (
-        <ScrollView style={styles.container}>
-            <Products/>
-        </ScrollView>
-    );
+
+class GroupScreen extends Component {
+    static navigationOptions = {
+      header: null
+    };
+    render() {
+        return (
+            <ScrollView style={styles.container}>
+                <Products/>
+            </ScrollView>
+        );
+    }
 }
 
-ProductsScreen.navigationOptions = {
-    header: null,
-};
+export default GroupScreen;
+
 
 const styles = StyleSheet.create({
     container: {

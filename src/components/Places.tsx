@@ -1,26 +1,26 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, TextInput, Button, FlatList } from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet, View, TextInput, Button, FlatList} from 'react-native';
 import ListItem from './ListItem';
-import { connect } from 'react-redux';
-import { addPlace } from '../actions/action';
+import {connect} from 'react-redux';
+import {addPlace} from '../actions/action';
 import Place from '../models/place';
-import { string } from 'prop-types';
+import {string} from 'prop-types';
 
 type Props = { places: Place[], add: any };
-type State = { placeName: string};
+type State = { placeName: string };
 
-class Places extends Component<Props, State> { 
-    
+class Places extends Component<Props, State> {
+
     state = {
         placeName: ''
-    }
+    };
 
-   
-    placeNameChangeHandler = ( value ) => {
+
+    placeNameChangeHandler = (value) => {
         this.setState({
             placeName: value
         });
-    }
+    };
 
     placeSubmitHandler = () => {
 
@@ -29,26 +29,26 @@ class Places extends Component<Props, State> {
         }
 
         console.log(this.state.placeName);
-    
+
         const place = new Place(this.state.placeName);
         this.props.add(place);
-    }
+    };
 
 
     placesOutput = () => {
-        const { places } = this.props;  
+        const {places} = this.props;
         return (
             <FlatList style={styles.listContainer}
-                data = {places}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={info => (
-                    <ListItem
-                        placeName={info.item.name}
-                    />
-                )}
+                      data={places}
+                      keyExtractor={(item, index) => index.toString()}
+                      renderItem={info => (
+                          <ListItem
+                              placeName={info.item.name}
+                          />
+                      )}
             />
         )
-    }
+    };
 
     render() {
         return (
@@ -59,12 +59,11 @@ class Places extends Component<Props, State> {
                         style={styles.placeInput}
                         value={this.state.placeName}
                         onChangeText={this.placeNameChangeHandler}
-                    ></TextInput>
-                    
-                    <Button 
-                        title ='Add'                     
+                    />
+                    <Button
+                        title='Add'
                         onPress={this.placeSubmitHandler}
-                    ></Button>
+                    />
                 </View>
                 <View style={styles.listContainer}>
                     {this.placesOutput()}
@@ -108,7 +107,7 @@ const mapStateToProps = state => {
     return {
         places: state.places.places
     }
-}
+};
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -116,6 +115,6 @@ const mapDispatchToProps = dispatch => {
             dispatch(addPlace(place))
         }
     }
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Places)

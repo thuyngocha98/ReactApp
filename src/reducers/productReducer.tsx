@@ -2,7 +2,7 @@ import { RECEIVE_PRODUCTS } from "../actions/ActionTypes";
 
 
 const initialState = {
-    products: [] 
+    products: []
 };
 
 const productReducer = (state = initialState, action) => {
@@ -14,7 +14,7 @@ const productReducer = (state = initialState, action) => {
             return {
                 ...state,
                 products: action.payload
-            };    
+            };
         default:
             return state;
     }

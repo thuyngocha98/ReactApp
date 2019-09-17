@@ -1,18 +1,23 @@
-import React from 'react';
+
+import React, {Component} from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import Places from '../components/Places';
 
-export default function ServicesScreen() {
-  return (
-    <ScrollView style={styles.container}>    
-      <Places />
-    </ScrollView>
-  );
+
+class ActivityScreen extends Component {
+    static navigationOptions = {
+       header : null
+    };
+    render() {
+        return (
+            <ScrollView style={styles.container}>
+                <Places />
+            </ScrollView>
+        );
+    }
 }
 
-ServicesScreen.navigationOptions = {
-  title: 'Services',
-};
+export default ActivityScreen;
 
 const styles = StyleSheet.create({
   container: {

@@ -1,94 +1,143 @@
 import React from 'react';
-import { Platform } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import {Platform} from 'react-native';
+import {createStackNavigator, createBottomTabNavigator} from 'react-navigation';
 
+import {Feather, MaterialCommunityIcons, Ionicons} from '@expo/vector-icons';
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import ProductsScreen from '../screens/ProductsScreen';
-import SettingScreen from '../screens/SettingScreen';
-import ServicesScreen from '../screens/ServicesScreen';
+import FriendsScreen from '../screens/FriendsScreen';
+import GroupScreen from '../screens/GroupScreen';
+import SettingScreen from '../screens/AccountScreen';
+import ActivityScreen from '../screens/ActivityScreen';
+import AddExpense from "../screens/AddExpense";
+import Colors from '../constants/Colors';
 
 const configPlat = Platform.select({
-  web: { headerMode: 'screen' },
-  default: {},
+    web: {headerMode: 'screen'},
+    default: {},
 });
 
 const HomeStack = createStackNavigator(
-  {
-    Home: HomeScreen,
-  },
-  // config
+    {
+        HomeScreen: FriendsScreen,
+    },
+    // config
 );
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} 
-          name={Platform.OS === 'ios'
-          ? 'ios-home'
-          : 'md-home'
-      }
-    />
-  ),
+    tabBarLabel: 'Friends',
+    tabBarIcon: ({focused}) => (
+        <MaterialCommunityIcons focused={focused}
+                                name={Platform.OS === 'ios'
+                                    ? 'ios-home'
+                                    : 'account'
+                                }
+                                size={26}
+                                style={{marginBottom: -3}}
+                                color={focused ? Colors.tabIconSelected : Colors.blackText}
+        />
+    ),
 };
 
-// HomeStack.path = '';
 
 const LinksStack = createStackNavigator(
-  {
-    Links: ProductsScreen,
-  },
-  // config
+    {
+        ProductsScreen: GroupScreen,
+    },
+    // config
 );
 
 LinksStack.navigationOptions = {
-  tabBarLabel: 'Products',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-aperture' : 'md-aperture'} />
-  ),
+    tabBarLabel: 'Groups',
+    tabBarIcon: ({focused}) => (
+        <MaterialCommunityIcons focused={focused}
+                                name={Platform.OS === 'ios'
+                                    ? 'ios-home'
+                                    : 'account-group'
+                                }
+                                size={26}
+                                style={{marginBottom: -3}}
+                                color={focused ? Colors.tabIconSelected : Colors.blackText}
+        />
+    ),
 };
 
-// LinksStack.path = '';
+
+const ExpenseStack = createStackNavigator(
+    {
+        AddExpense
+    }
+);
+
+ExpenseStack.navigationOptions= {
+    tabBarLabel: 'Expense',
+    tabBarIcon: ({focused}) => (
+        <Ionicons focused={focused}
+                 name={Platform.OS === 'ios'
+                     ? 'ios-home'
+                     : 'ios-add-circle-outline'
+                 }
+                 size={26}
+                 style={{marginBottom: -3}}
+                 color={focused ? Colors.tabIconSelected : Colors.blackText}
+        />
+    ),
+
+};
+
 
 const ServicesStack = createStackNavigator(
-  {
-    Services: ServicesScreen,
-  },
-  // config
+    {
+        ServicesScreen: ActivityScreen,
+    },
+    // config
 );
 
 ServicesStack.navigationOptions = {
-  tabBarLabel: 'Services',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'} />
-  ),
+    tabBarLabel: 'Activity',
+    tabBarIcon: ({focused}) => (
+        <Feather focused={focused}
+                 name={Platform.OS === 'ios'
+                     ? 'ios-home'
+                     : 'activity'
+                 }
+                 size={26}
+                 style={{marginBottom: -3}}
+                 color={focused ? Colors.tabIconSelected : Colors.blackText}
+        />
+    ),
 };
 
 // LinksStack.path = '';
 
 const SettingStack = createStackNavigator(
-  {
-    Settings: SettingScreen,
-  },
-  // config
+    {
+        SettingScreen,
+    },
+    // config
 );
 
 SettingStack.navigationOptions = {
-  tabBarLabel: 'Settings',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
-  ),
+    tabBarLabel: 'Account',
+    tabBarIcon: ({focused}) => (
+        <MaterialCommunityIcons focused={focused}
+                                name={Platform.OS === 'ios'
+                                    ? 'ios-home'
+                                    : 'account-circle'
+                                }
+                                size={26}
+                                style={{marginBottom: -3}}
+                                color={focused ? Colors.tabIconSelected : Colors.blackText}
+        />
+    ),
 };
-
-// SettingStack.path = '';
-
 
 
 const tabNavigator = createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  ServicesStack,
-  SettingStack,
+    HomeStack,
+    LinksStack,
+    ExpenseStack,
+    ServicesStack,
+    SettingStack,
 });
 
 // tabNavigator.path = '';
