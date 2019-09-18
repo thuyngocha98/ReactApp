@@ -6,24 +6,31 @@ import {Feather, MaterialCommunityIcons, Ionicons} from '@expo/vector-icons';
 import TabBarIcon from '../components/TabBarIcon';
 import FriendsScreen from '../screens/FriendsScreen';
 import GroupScreen from '../screens/GroupScreen';
-import SettingScreen from '../screens/AccountScreen';
 import ActivityScreen from '../screens/ActivityScreen';
 import AddExpense from "../screens/AddExpense";
 import Colors from '../constants/Colors';
+import AccountScreen from "../screens/AccountScreen";
 
 const configPlat = Platform.select({
     web: {headerMode: 'screen'},
     default: {},
 });
 
-const HomeStack = createStackNavigator(
+
+
+const FriendsStack = createStackNavigator(
     {
-        HomeScreen: FriendsScreen,
-    },
-    // config
+        FriendsScreen: {
+            screen: FriendsScreen,
+            navigationOptions: {
+                header: null
+            }
+        }
+    }
+
 );
 
-HomeStack.navigationOptions = {
+FriendsStack.navigationOptions = {
     tabBarLabel: 'Friends',
     tabBarIcon: ({focused}) => (
         <MaterialCommunityIcons focused={focused}
@@ -36,17 +43,23 @@ HomeStack.navigationOptions = {
                                 color={focused ? Colors.tabIconSelected : Colors.blackText}
         />
     ),
+    tabBarOptions: {
+        activeTintColor: Colors.tintColor,
+        labelStyle: {
+            marginBottom:5
+        }
+    }
 };
 
 
-const LinksStack = createStackNavigator(
+const GroupStack = createStackNavigator(
     {
-        ProductsScreen: GroupScreen,
+        GroupScreen,
     },
     // config
 );
 
-LinksStack.navigationOptions = {
+GroupStack.navigationOptions = {
     tabBarLabel: 'Groups',
     tabBarIcon: ({focused}) => (
         <MaterialCommunityIcons focused={focused}
@@ -59,6 +72,12 @@ LinksStack.navigationOptions = {
                                 color={focused ? Colors.tabIconSelected : Colors.blackText}
         />
     ),
+    tabBarOptions: {
+        activeTintColor: Colors.tintColor,
+        labelStyle: {
+            marginBottom:5
+        }
+    }
 };
 
 
@@ -81,18 +100,24 @@ ExpenseStack.navigationOptions= {
                  color={focused ? Colors.tabIconSelected : Colors.blackText}
         />
     ),
+    tabBarOptions: {
+        activeTintColor: Colors.tintColor,
+        labelStyle: {
+            marginBottom:5
+        }
+    }
 
 };
 
 
-const ServicesStack = createStackNavigator(
+const ActivityStack = createStackNavigator(
     {
-        ServicesScreen: ActivityScreen,
+         ActivityScreen,
     },
     // config
 );
 
-ServicesStack.navigationOptions = {
+ActivityStack.navigationOptions = {
     tabBarLabel: 'Activity',
     tabBarIcon: ({focused}) => (
         <Feather focused={focused}
@@ -105,18 +130,24 @@ ServicesStack.navigationOptions = {
                  color={focused ? Colors.tabIconSelected : Colors.blackText}
         />
     ),
+    tabBarOptions: {
+        activeTintColor: Colors.tintColor,
+        labelStyle: {
+            marginBottom:5
+        }
+    }
 };
 
 // LinksStack.path = '';
 
-const SettingStack = createStackNavigator(
+const AccountStack = createStackNavigator(
     {
-        SettingScreen,
+        AccountScreen,
     },
     // config
 );
 
-SettingStack.navigationOptions = {
+AccountStack.navigationOptions = {
     tabBarLabel: 'Account',
     tabBarIcon: ({focused}) => (
         <MaterialCommunityIcons focused={focused}
@@ -129,15 +160,21 @@ SettingStack.navigationOptions = {
                                 color={focused ? Colors.tabIconSelected : Colors.blackText}
         />
     ),
+    tabBarOptions: {
+        activeTintColor: Colors.tintColor,
+        labelStyle: {
+            marginBottom:5
+        }
+    }
 };
 
 
 const tabNavigator = createBottomTabNavigator({
-    HomeStack,
-    LinksStack,
+    FriendsStack,
+    GroupStack,
     ExpenseStack,
-    ServicesStack,
-    SettingStack,
+    ActivityStack,
+    AccountStack,
 });
 
 // tabNavigator.path = '';
