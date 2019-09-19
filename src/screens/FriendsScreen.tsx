@@ -8,37 +8,45 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import {EvilIcons} from '@expo/vector-icons';
-import Layout from "../constants/Layout";
-import styles from "../styles/FriendsScreen";
+import styles from "../styles/FriendsScreenStyle";
+import {EvilIcons} from "@expo/vector-icons";
 
 class FriendsScreen extends Component {
-    // static navigationOptions = {
-    //     headerStyle: {
-    //         borderBottomWidth: 0,
-    //         elevation:1
-    //     }
-    // };
+    static  navigationOptions = ({navigation}) => {
+      return {
+          headerStyle: {
+              elevation: 0
+          },
+          headerLeft: (
+              <TouchableOpacity>
+                  <EvilIcons name='search' size={30} style={{marginLeft: 10}}/>
+              </TouchableOpacity>
+          ),
+          headerRight: (
+              <View>
+                  <TouchableOpacity activeOpacity={0.5} style={{marginRight: 20}} onPress={() => navigation.navigate('AddFriendsScreen')}>
+                      <Text style={{fontSize: 20}}>
+                          Add Friends
+                      </Text>
+                  </TouchableOpacity>
+              </View>
+          )
+      }
+    };
 
     render() {
         return (
             <View>
-                <View style={styles.header}>
-                    <TouchableOpacity style={styles.search}>
-                        <EvilIcons name='search' size={40}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.5}>
-                        <Text style={styles.addFriends}>
-                            Add Friends
-                        </Text>
-                    </TouchableOpacity>
-                </View>
                 <Text style={styles.friends}>
                     Friends
                 </Text>
-                <View style={styles.cartExpense}>
+               <ScrollView>
+                   <View style={styles.cartExpense}>
+                       <Text style={{color: '#fff'}}>
 
-                </View>
+                       </Text>
+                   </View>
+               </ScrollView>
             </View>
         );
     }

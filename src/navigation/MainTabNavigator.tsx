@@ -1,15 +1,16 @@
 import React from 'react';
-import {Platform} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import {createStackNavigator, createBottomTabNavigator} from 'react-navigation';
 
 import {Feather, MaterialCommunityIcons, Ionicons} from '@expo/vector-icons';
-import TabBarIcon from '../components/TabBarIcon';
 import FriendsScreen from '../screens/FriendsScreen';
 import GroupScreen from '../screens/GroupScreen';
 import ActivityScreen from '../screens/ActivityScreen';
-import AddExpense from "../screens/AddExpense";
+import AddExpenseScreen from "../screens/AddExpenseScreen";
 import Colors from '../constants/Colors';
 import AccountScreen from "../screens/AccountScreen";
+import AddFriendsScreen from "../screens/AddFriendsScreen";
+import AddContactScreen from "../screens/AddContactScreen";
 
 const configPlat = Platform.select({
     web: {headerMode: 'screen'},
@@ -17,36 +18,41 @@ const configPlat = Platform.select({
 });
 
 
-
 const FriendsStack = createStackNavigator(
     {
-        FriendsScreen: {
-            screen: FriendsScreen,
-            navigationOptions: {
-                header: null
-            }
-        }
+        FriendsScreen,
+        AddFriendsScreen,
+        AddContactScreen
+    },
+    {
+        initialRouteName: '',
     }
-
 );
 
-FriendsStack.navigationOptions = {
-    tabBarLabel: 'Friends',
-    tabBarIcon: ({focused}) => (
-        <MaterialCommunityIcons focused={focused}
-                                name={Platform.OS === 'ios'
-                                    ? 'ios-home'
-                                    : 'account'
-                                }
-                                size={26}
-                                style={{marginBottom: -3}}
-                                color={focused ? Colors.tabIconSelected : Colors.blackText}
-        />
-    ),
-    tabBarOptions: {
-        activeTintColor: Colors.tintColor,
-        labelStyle: {
-            marginBottom:5
+FriendsStack.navigationOptions = ({navigation}) => {
+    let tabBarVisible = true;
+    if (navigation.state.index > 0) {
+        tabBarVisible = false;
+    }
+    return {
+        tabBarVisible,
+        tabBarLabel: 'Friends',
+        tabBarIcon: ({focused}) => (
+            <MaterialCommunityIcons focused={focused}
+                                    name={Platform.OS === 'ios'
+                                        ? 'ios-home'
+                                        : 'account'
+                                    }
+                                    size={26}
+                                    style={{marginBottom: -3}}
+                                    color={focused ? Colors.tabIconSelected : Colors.blackText}
+            />
+        ),
+        tabBarOptions: {
+            activeTintColor: Colors.tintColor,
+            labelStyle: {
+                marginBottom: 5
+            }
         }
     }
 };
@@ -75,7 +81,7 @@ GroupStack.navigationOptions = {
     tabBarOptions: {
         activeTintColor: Colors.tintColor,
         labelStyle: {
-            marginBottom:5
+            marginBottom: 5
         }
     }
 };
@@ -83,27 +89,27 @@ GroupStack.navigationOptions = {
 
 const ExpenseStack = createStackNavigator(
     {
-        AddExpense
+        AddExpense: AddExpenseScreen
     }
 );
 
-ExpenseStack.navigationOptions= {
+ExpenseStack.navigationOptions = {
     tabBarLabel: 'Expense',
     tabBarIcon: ({focused}) => (
         <Ionicons focused={focused}
-                 name={Platform.OS === 'ios'
-                     ? 'ios-home'
-                     : 'ios-add-circle-outline'
-                 }
-                 size={26}
-                 style={{marginBottom: -3}}
-                 color={focused ? Colors.tabIconSelected : Colors.blackText}
+                  name={Platform.OS === 'ios'
+                      ? 'ios-home'
+                      : 'ios-add-circle-outline'
+                  }
+                  size={26}
+                  style={{marginBottom: -3}}
+                  color={focused ? Colors.tabIconSelected : Colors.blackText}
         />
     ),
     tabBarOptions: {
         activeTintColor: Colors.tintColor,
         labelStyle: {
-            marginBottom:5
+            marginBottom: 5
         }
     }
 
@@ -112,7 +118,7 @@ ExpenseStack.navigationOptions= {
 
 const ActivityStack = createStackNavigator(
     {
-         ActivityScreen,
+        ActivityScreen,
     },
     // config
 );
@@ -133,7 +139,7 @@ ActivityStack.navigationOptions = {
     tabBarOptions: {
         activeTintColor: Colors.tintColor,
         labelStyle: {
-            marginBottom:5
+            marginBottom: 5
         }
     }
 };
@@ -163,7 +169,7 @@ AccountStack.navigationOptions = {
     tabBarOptions: {
         activeTintColor: Colors.tintColor,
         labelStyle: {
-            marginBottom:5
+            marginBottom: 5
         }
     }
 };
@@ -176,7 +182,5 @@ const tabNavigator = createBottomTabNavigator({
     ActivityStack,
     AccountStack,
 });
-
-// tabNavigator.path = '';
 
 export default tabNavigator;
