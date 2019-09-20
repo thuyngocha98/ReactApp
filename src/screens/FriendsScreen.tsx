@@ -18,8 +18,8 @@ class FriendsScreen extends Component {
               elevation: 0
           },
           headerLeft: (
-              <TouchableOpacity>
-                  <EvilIcons name='search' size={30} style={{marginLeft: 10}}/>
+              <TouchableOpacity onPress={() => navigation.navigate('SplitWiseProScreen')}>
+                  <EvilIcons name='search' size={30} style={{marginLeft: 10}} />
               </TouchableOpacity>
           ),
           headerRight: (

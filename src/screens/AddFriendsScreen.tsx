@@ -4,8 +4,8 @@ import Colors from "../constants/Colors";
 import Layout from "../constants/Layout";
 import styles from "../styles/AddFriendsScreenStyle";
 import {EvilIcons, MaterialCommunityIcons} from "@expo/vector-icons";
-
-class AddFriendsScreen extends Component {
+type  Props={navigation}
+class AddFriendsScreen extends Component<Props> {
   static navigationOptions = {
     header:null
   };
@@ -14,12 +14,16 @@ class AddFriendsScreen extends Component {
   addContact = () => {
         this.props.navigation.navigate('AddContactScreen');
   };
+
+  goBackFriendsScreen = () => {
+      this.props.navigation.goBack();
+  };
     render() {
         return (
             <View>
                 <View style={{ backgroundColor: Colors.tabIconSelected}}>
                     <View style={styles.header}>
-                        <TouchableOpacity activeOpacity={0.5}>
+                        <TouchableOpacity activeOpacity={0.5} onPress={this.goBackFriendsScreen}>
                             <Text style={styles.cancel}>Cancel</Text>
                         </TouchableOpacity>
                         <Text style={styles.addFriends}>Add Friends</Text>

@@ -1,24 +1,39 @@
 import React, {Component} from 'react';
-import {View, Text, TextInput, TouchableOpacity} from "react-native";
+import {View, Text, TextInput, Button, TouchableOpacity} from "react-native";
 import Colors from "../constants/Colors";
 import styles from '../styles/AddContactScreenStyle';
+import Modal from "react-native-modal";
+import Layout from "../constants/Layout";
 
 
-class AddContactScreen extends Component {
+type MyProps = { navigation, Modal };
+type MyState = { isModalVisible };
+
+class AddContactScreen extends Component<MyProps, MyState> {
     static navigationOptions = {
         header: null
     };
 
-    comeBackAddFriendsScreen = () => {
-      this.props.navigation.navigate('AddFriendsScreen')
+    constructor(props) {
+        super(props);
+        this.state ={
+            isModalVisible: false
+        }
+    }
+
+    showModal = () => {
+      this.setState({
+          isModalVisible: !this.state.isModalVisible
+      })
     };
 
     render() {
+
         return (
             <View>
                 <View style={{backgroundColor: Colors.tabIconSelected}}>
                     <View style={styles.header}>
-                        <TouchableOpacity activeOpacity={0.5} onPress={this.comeBackAddFriendsScreen}>
+                        <TouchableOpacity activeOpacity={0.5} onPress={this.showModal}>
                             <Text style={styles.cancel}>Cancel</Text>
                         </TouchableOpacity>
                         <Text style={styles.addContact}>Add new Contact</Text>

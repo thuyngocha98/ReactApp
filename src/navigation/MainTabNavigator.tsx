@@ -11,6 +11,7 @@ import Colors from '../constants/Colors';
 import AccountScreen from "../screens/AccountScreen";
 import AddFriendsScreen from "../screens/AddFriendsScreen";
 import AddContactScreen from "../screens/AddContactScreen";
+import SplitWiseProScreen from "../screens/SplitWiseProScreen";
 
 const configPlat = Platform.select({
     web: {headerMode: 'screen'},
@@ -22,7 +23,8 @@ const FriendsStack = createStackNavigator(
     {
         FriendsScreen,
         AddFriendsScreen,
-        AddContactScreen
+        AddContactScreen,
+        SplitWiseProScreen
     },
     {
         initialRouteName: '',
