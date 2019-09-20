@@ -5,7 +5,7 @@ import {createStackNavigator, createBottomTabNavigator} from 'react-navigation';
 import {Feather, MaterialCommunityIcons, Ionicons} from '@expo/vector-icons';
 import FriendsScreen from '../screens/FriendsScreen';
 import GroupScreen from '../screens/GroupScreen';
-import ActivityScreen from '../screens/ActivityScreen';
+import ActivityScreen from "../screens/ActivityScreen";
 import AddExpenseScreen from "../screens/AddExpenseScreen";
 import Colors from '../constants/Colors';
 import AccountScreen from "../screens/AccountScreen";

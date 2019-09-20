@@ -5,7 +5,7 @@ import Layout from "../constants/Layout";
 const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
-        paddingTop: 50,
+        paddingTop: 40,
         paddingHorizontal: 25,
     },
    cancel: {

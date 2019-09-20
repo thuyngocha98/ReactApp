@@ -2,9 +2,8 @@ import React, {Component} from 'react';
 import {View, Text, TextInput, Button, TouchableOpacity} from "react-native";
 import Colors from "../constants/Colors";
 import styles from '../styles/AddContactScreenStyle';
-import Modal from "react-native-modal";
+import Dialog, {FadeAnimation,DialogFooter, DialogButton, DialogContent } from 'react-native-popup-dialog';
 import Layout from "../constants/Layout";
-
 
 type MyProps = { navigation, Modal };
 type MyState = { isModalVisible };
@@ -17,14 +16,29 @@ class AddContactScreen extends Component<MyProps, MyState> {
     constructor(props) {
         super(props);
         this.state ={
-            isModalVisible: false
+            isModalVisible:false
         }
     }
 
     showModal = () => {
       this.setState({
           isModalVisible: !this.state.isModalVisible
+
+      });
+
+    };
+
+    cancel = () => {
+      this.setState({
+          isModalVisible: false
       })
+    };
+
+    continue = () => {
+        this.setState({
+            isModalVisible: fa
+        })
+       this.props.navigation.goBack();
     };
 
     render() {
@@ -59,9 +73,43 @@ class AddContactScreen extends Component<MyProps, MyState> {
                         have another chance to
                         review before sending.</Text>
                 </View>
+                <View >
+                    <Dialog
+                        FadeAnimation={new FadeAnimation({
+                            initialValue: 0, // optional
+                            // animationDuration: 150, // optional
+                            useNativeDriver: true, // optional
+                        })}
+                        width={Layout.window.width -100}
+                        visible={this.state.isModalVisible}
+                        footer={
+                            <DialogFooter>
+                                <DialogButton
+                                    text="Continue"
+                                    onPress={this.continue}
+                                />
+                                <DialogButton
+                                    text="Cancel"
+                                    onPress={this.cancel}
+                                    textStyle={{color:'red'}}
+                                />
+                            </DialogFooter>
+                        }
+                    >
+                        <DialogContent>
+                            <View style={{marginTop:15}}>
+                                <Text style={{textAlign:'center', fontWeight:'bold', fontSize:20, marginBottom:5}}>Cancel adding new contact?</Text>
+                                <Text style={{textAlign:'center'}}>If you Continue, this person will not be added to your group.</Text>
+                            </View>
+                        </DialogContent>
+                    </Dialog>
+                </View>
             </View>
         );
     }
 }
+
+
+
 
 export default AddContactScreen;

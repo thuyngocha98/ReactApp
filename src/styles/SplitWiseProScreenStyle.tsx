@@ -64,6 +64,12 @@ const styles = StyleSheet.create({
         textDecorationLine:'underline',
         textDecorationStyle: "solid",
         textDecorationColor: "black"
+    },
+    term: {
+        textDecorationLine:'underline',
+        textDecorationStyle: "solid",
+        textDecorationColor: "black",
+        marginTop: 10
     }
 });
 export default styles;

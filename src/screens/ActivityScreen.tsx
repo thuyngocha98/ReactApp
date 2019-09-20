@@ -1,28 +1,14 @@
-
 import React, {Component} from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
-import Places from '../components/Places';
-
+import {View,Text} from "react-native";
 
 class ActivityScreen extends Component {
-    static navigationOptions = {
-       header : null
-    };
     render() {
         return (
-            <ScrollView style={styles.container}>
-                <Places />
-            </ScrollView>
+            <View>
+                <Text>Evan</Text>
+            </View>
         );
     }
 }
 
 export default ActivityScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 15,
-    backgroundColor: '#fff',
-  },
-});

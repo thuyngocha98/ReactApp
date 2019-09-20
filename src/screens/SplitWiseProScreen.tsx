@@ -92,7 +92,7 @@ class SplitWiseProScreen extends Component<Props> {
                                 <Text style={styles.save}>Save VND71000/year</Text>
                             </View>
                             <View>
-                                <TouchableOpacity activeOpacity={0.5}>
+                                <TouchableOpacity activeOpacity={0.5} onPress={this.onGoBackAddFriendsScreen}>
                                     <Text style={styles.notNow}>Not now, thanks</Text>
                                 </TouchableOpacity>
                             </View>
@@ -103,7 +103,7 @@ class SplitWiseProScreen extends Component<Props> {
                                     and auto-renews unless disabled 24 hours before the end of the billing cycle.
                                     You can manage your subscription by going to iTunes Account Settings.
                                 </Text>
-                                <Text style={{marginTop: 10}}>Terms of Service + Privacy Policy </Text>
+                                <Text style={styles.term}>Terms of Service + Privacy Policy </Text>
                             </View>
                         </View>
 
