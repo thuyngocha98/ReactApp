@@ -1,8 +1,8 @@
 import React from 'react';
-import {Platform} from 'react-native';
-import {createStackNavigator, createBottomTabNavigator} from 'react-navigation';
+import { Platform, View, Text } from 'react-native';
+import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
-import {Feather, MaterialCommunityIcons, Ionicons} from '@expo/vector-icons';
+import { Feather, MaterialCommunityIcons, Ionicons, EvilIcons } from '@expo/vector-icons';
 import TabBarIcon from '../components/TabBarIcon';
 import FriendsScreen from '../screens/FriendsScreen';
 import GroupScreen from '../screens/GroupScreen';
@@ -10,9 +10,10 @@ import ActivityScreen from '../screens/ActivityScreen';
 import AddExpense from "../screens/AddExpense";
 import Colors from '../constants/Colors';
 import AccountScreen from "../screens/AccountScreen";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const configPlat = Platform.select({
-    web: {headerMode: 'screen'},
+    web: { headerMode: 'screen' },
     default: {},
 });
 
@@ -32,21 +33,21 @@ const FriendsStack = createStackNavigator(
 
 FriendsStack.navigationOptions = {
     tabBarLabel: 'Friends',
-    tabBarIcon: ({focused}) => (
+    tabBarIcon: ({ focused }) => (
         <MaterialCommunityIcons focused={focused}
-                                name={Platform.OS === 'ios'
-                                    ? 'ios-home'
-                                    : 'account'
-                                }
-                                size={26}
-                                style={{marginBottom: -3}}
-                                color={focused ? Colors.tabIconSelected : Colors.blackText}
+            name={Platform.OS === 'ios'
+                ? 'ios-home'
+                : 'account'
+            }
+            size={26}
+            style={{ marginBottom: -3 }}
+            color={focused ? Colors.tabIconSelected : Colors.blackText}
         />
     ),
     tabBarOptions: {
         activeTintColor: Colors.tintColor,
         labelStyle: {
-            marginBottom:5
+            marginBottom: 5
         }
     }
 };
@@ -54,28 +55,54 @@ FriendsStack.navigationOptions = {
 
 const GroupStack = createStackNavigator(
     {
-        GroupScreen,
+        GroupScreen: {
+            screen: GroupScreen,
+            navigationOptions: {
+                headerStyle: {
+                    elevation: 0,
+                    textAlign: 'center',
+                },
+                headerRight:
+                    (
+                        <View style={{ marginRight: 10 }}>
+                            <TouchableOpacity>
+                                <Text style={{ fontSize: 18}}>Start a new group</Text>
+                            </TouchableOpacity>
+                        </View>
+                    ),
+                headerLeft:
+                    (
+                        <View style={{ marginLeft: 10 }}>
+                            <TouchableOpacity >
+                                <EvilIcons name='search' size={30} />
+                            </TouchableOpacity>
+                        </View >
+                    )
+
+
+            }
+        }
     },
     // config
 );
 
 GroupStack.navigationOptions = {
     tabBarLabel: 'Groups',
-    tabBarIcon: ({focused}) => (
+    tabBarIcon: ({ focused }) => (
         <MaterialCommunityIcons focused={focused}
-                                name={Platform.OS === 'ios'
-                                    ? 'ios-home'
-                                    : 'account-group'
-                                }
-                                size={26}
-                                style={{marginBottom: -3}}
-                                color={focused ? Colors.tabIconSelected : Colors.blackText}
+            name={Platform.OS === 'ios'
+                ? 'ios-home'
+                : 'account-group'
+            }
+            size={26}
+            style={{ marginBottom: -3 }}
+            color={focused ? Colors.tabIconSelected : Colors.blackText}
         />
     ),
     tabBarOptions: {
         activeTintColor: Colors.tintColor,
         labelStyle: {
-            marginBottom:5
+            marginBottom: 5
         }
     }
 };
@@ -87,23 +114,23 @@ const ExpenseStack = createStackNavigator(
     }
 );
 
-ExpenseStack.navigationOptions= {
+ExpenseStack.navigationOptions = {
     tabBarLabel: 'Expense',
-    tabBarIcon: ({focused}) => (
+    tabBarIcon: ({ focused }) => (
         <Ionicons focused={focused}
-                 name={Platform.OS === 'ios'
-                     ? 'ios-home'
-                     : 'ios-add-circle-outline'
-                 }
-                 size={26}
-                 style={{marginBottom: -3}}
-                 color={focused ? Colors.tabIconSelected : Colors.blackText}
+            name={Platform.OS === 'ios'
+                ? 'ios-home'
+                : 'ios-add-circle-outline'
+            }
+            size={26}
+            style={{ marginBottom: -3 }}
+            color={focused ? Colors.tabIconSelected : Colors.blackText}
         />
     ),
     tabBarOptions: {
         activeTintColor: Colors.tintColor,
         labelStyle: {
-            marginBottom:5
+            marginBottom: 5
         }
     }
 
@@ -112,28 +139,28 @@ ExpenseStack.navigationOptions= {
 
 const ActivityStack = createStackNavigator(
     {
-         ActivityScreen,
+        ActivityScreen,
     },
     // config
 );
 
 ActivityStack.navigationOptions = {
     tabBarLabel: 'Activity',
-    tabBarIcon: ({focused}) => (
+    tabBarIcon: ({ focused }) => (
         <Feather focused={focused}
-                 name={Platform.OS === 'ios'
-                     ? 'ios-home'
-                     : 'activity'
-                 }
-                 size={26}
-                 style={{marginBottom: -3}}
-                 color={focused ? Colors.tabIconSelected : Colors.blackText}
+            name={Platform.OS === 'ios'
+                ? 'ios-home'
+                : 'activity'
+            }
+            size={26}
+            style={{ marginBottom: -3 }}
+            color={focused ? Colors.tabIconSelected : Colors.blackText}
         />
     ),
     tabBarOptions: {
         activeTintColor: Colors.tintColor,
         labelStyle: {
-            marginBottom:5
+            marginBottom: 5
         }
     }
 };
@@ -149,21 +176,21 @@ const AccountStack = createStackNavigator(
 
 AccountStack.navigationOptions = {
     tabBarLabel: 'Account',
-    tabBarIcon: ({focused}) => (
+    tabBarIcon: ({ focused }) => (
         <MaterialCommunityIcons focused={focused}
-                                name={Platform.OS === 'ios'
-                                    ? 'ios-home'
-                                    : 'account-circle'
-                                }
-                                size={26}
-                                style={{marginBottom: -3}}
-                                color={focused ? Colors.tabIconSelected : Colors.blackText}
+            name={Platform.OS === 'ios'
+                ? 'ios-home'
+                : 'account-circle'
+            }
+            size={26}
+            style={{ marginBottom: -3 }}
+            color={focused ? Colors.tabIconSelected : Colors.blackText}
         />
     ),
     tabBarOptions: {
         activeTintColor: Colors.tintColor,
         labelStyle: {
-            marginBottom:5
+            marginBottom: 5
         }
     }
 };

@@ -28,6 +28,5 @@ const styles = StyleSheet.create({
         marginTop: 20,
         borderRadius: 20
     },
-
 });
 export default styles;
