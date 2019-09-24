@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, FlatList, Image, TouchableOpacity, Alert } from 'react-native';
-import MainScreenGroupStyles from '../../../styles/GroupsStyles/MainScreenGroupStyles';
+import MainScreenGroupStyles from '../../../styles/GroupsStyles/MainScreenGroupStyles/MainScreenGroupStyles';
 import ListItemGroup from './ListItemGroup';
 import Colors from '../../../constants/Colors';
 import { MaterialCommunityIcons } from '@expo/vector-icons';

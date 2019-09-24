@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { screenWidth } from "../../constants/Dimensions";
+import { screenWidth } from "../../../constants/Dimensions";
 
 const ListItemGroupStyles = StyleSheet.create({
     mainContainer: {

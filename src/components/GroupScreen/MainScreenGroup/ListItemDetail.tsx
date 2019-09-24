@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ListItemDetailStyles from '../../../styles/GroupsStyles/ListItemDetailStyles';
+import ListItemDetailStyles from '../../../styles/GroupsStyles/MainScreenGroupStyles/ListItemDetailStyles';
 import { Entypo } from '@expo/vector-icons';
 import { View, Text } from 'react-native';
 import Colors from '../../../constants/Colors';

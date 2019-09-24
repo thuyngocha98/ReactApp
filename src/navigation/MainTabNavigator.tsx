@@ -11,6 +11,7 @@ import AddExpense from "../screens/AddExpense";
 import Colors from '../constants/Colors';
 import AccountScreen from "../screens/AccountScreen";
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import CreateGroupScreen from '../components/GroupScreen/CreateGroupScreen/CreateGroupScreen';
 
 const configPlat = Platform.select({
     web: { headerMode: 'screen' },
@@ -57,30 +58,9 @@ const GroupStack = createStackNavigator(
     {
         GroupScreen: {
             screen: GroupScreen,
-            navigationOptions: {
-                headerStyle: {
-                    elevation: 0,
-                    textAlign: 'center',
-                },
-                headerRight:
-                    (
-                        <View style={{ marginRight: 10 }}>
-                            <TouchableOpacity>
-                                <Text style={{ fontSize: 18}}>Start a new group</Text>
-                            </TouchableOpacity>
-                        </View>
-                    ),
-                headerLeft:
-                    (
-                        <View style={{ marginLeft: 10 }}>
-                            <TouchableOpacity >
-                                <EvilIcons name='search' size={30} />
-                            </TouchableOpacity>
-                        </View >
-                    )
-
-
-            }
+        },
+        CreateGroupScreen: {
+            screen: CreateGroupScreen
         }
     },
     // config

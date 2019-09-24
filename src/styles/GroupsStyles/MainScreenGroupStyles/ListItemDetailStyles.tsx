@@ -1,6 +1,6 @@
 import { StyleSheet, ColorPropType } from "react-native";
-import { screenWidth } from "../../constants/Dimensions";
-import Colors from "../../constants/Colors";
+import { screenWidth } from "../../../constants/Dimensions";
+import Colors from "../../../constants/Colors";
 
 const ListItemDetailStyles = StyleSheet.create({
     container: {

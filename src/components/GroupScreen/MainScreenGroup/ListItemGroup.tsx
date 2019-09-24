@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, FlatList, Image, Text } from 'react-native';
-import ListItemGroupStyles from '../../../styles/GroupsStyles/ListItemGroupStyles';
+import ListItemGroupStyles from '../../../styles/GroupsStyles/MainScreenGroupStyles/ListItemGroupStyles';
 import Colors from '../../../constants/Colors';
 import { FontAwesome5 } from '@expo/vector-icons';
 import ListItemDetail from './ListItemDetail';
