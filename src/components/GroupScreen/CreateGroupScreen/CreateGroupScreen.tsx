@@ -131,7 +131,9 @@ class CreateGroupScreen extends Component<State> {
                                 style={[CreateGroupScreenStyles.apartment,
                                 [{
                                     backgroundColor: this.state.colorApartment
-                                        ? Colors.tintColor : Colors.white
+                                        ? Colors.tintColor : Colors.white,
+                                    color: this.state.colorApartment
+                                        ? Colors.white : Colors.tintColor,
                                 }]]}
                             > Apartment</Text>
                         </TouchableOpacity>
@@ -145,7 +147,9 @@ class CreateGroupScreen extends Component<State> {
                                 style={[CreateGroupScreenStyles.house,
                                 [{
                                     backgroundColor: this.state.colorHouse
-                                        ? Colors.tintColor : Colors.white
+                                        ? Colors.tintColor : Colors.white,
+                                    color: this.state.colorHouse
+                                        ? Colors.white : Colors.tintColor,
                                 }]]}
                             >House</Text>
                         </TouchableOpacity>
@@ -159,7 +163,9 @@ class CreateGroupScreen extends Component<State> {
                                 style={[CreateGroupScreenStyles.trip,
                                 [{
                                     backgroundColor: this.state.colorTrip
-                                        ? Colors.tintColor : Colors.white
+                                        ? Colors.tintColor : Colors.white,
+                                    color: this.state.colorTrip
+                                        ? Colors.white : Colors.tintColor,
                                 }]]}
                             >Trip</Text>
                         </TouchableOpacity>
@@ -173,7 +179,9 @@ class CreateGroupScreen extends Component<State> {
                                 style={[CreateGroupScreenStyles.order,
                                 [{
                                     backgroundColor: this.state.colorOrder
-                                        ? Colors.tintColor : Colors.white
+                                        ? Colors.tintColor : Colors.white,
+                                    color: this.state.colorOrder
+                                        ? Colors.white : Colors.tintColor,
                                 }]]}
                             >Order</Text>
                         </TouchableOpacity>
