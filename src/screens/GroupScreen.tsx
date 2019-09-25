@@ -39,7 +39,9 @@ class GroupScreen extends Component<Props> {
 
     render() {
         return (
-            <MainScreenGroup />
+            <MainScreenGroup  
+                    navigation={this.props.navigation}
+            />
         );
     }
 }

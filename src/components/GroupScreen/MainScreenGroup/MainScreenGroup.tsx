@@ -12,6 +12,10 @@ function mapStateToProps(state) {
     };
 }
 
+type Props = {
+    navigation?: any,
+}
+
 const data = [
     {
         id: 0,
@@ -53,7 +57,7 @@ const data = [
     },
 ]
 
-class MainScreenGroup extends Component {
+class MainScreenGroup extends Component<Props> {
 
     _ItemSeparatorComponent = () => {
         return(
@@ -91,7 +95,7 @@ class MainScreenGroup extends Component {
                         renderItem={({ item }) => (
                             <TouchableOpacity 
                                 onPress={() => {
-                                    Alert.alert("you click item "+ item.id)
+                                    this.props.navigation.navigate('DetailGroupScreen')
                                 }}
                             >
                                 <ListItemGroup

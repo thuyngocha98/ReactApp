@@ -12,6 +12,7 @@ import Colors from '../constants/Colors';
 import AccountScreen from "../screens/AccountScreen";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CreateGroupScreen from '../components/GroupScreen/CreateGroupScreen/CreateGroupScreen';
+import DetailGroupScreen from '../components/GroupScreen/DetailGroupScreen/DetailGroupScreen';
 
 const configPlat = Platform.select({
     web: { headerMode: 'screen' },
@@ -61,6 +62,9 @@ const GroupStack = createStackNavigator(
         },
         CreateGroupScreen: {
             screen: CreateGroupScreen
+        },
+        DetailGroupScreen: {
+            screen: DetailGroupScreen
         }
     },
     // config
