@@ -1,4 +1,5 @@
 import {StyleSheet} from "react-native";
+import Colors from "../constants/Colors";
 
 const styles = StyleSheet.create({
     header: {
@@ -12,9 +13,9 @@ const styles = StyleSheet.create({
     },
     friends: {
         marginLeft: 20,
-        marginTop: 20,
+        marginTop: 10,
         fontWeight: '500',
-        fontSize: 25
+        fontSize: 25,
     },
     addFriends: {
         fontSize: 20,
@@ -23,11 +24,10 @@ const styles = StyleSheet.create({
     },
     cartExpense: {
         height: 80,
-        backgroundColor: 'mediumseagreen',
+        backgroundColor: Colors.tabIconSelected,
         marginHorizontal: 20,
         marginTop: 20,
         borderRadius: 20
     },
-
 });
 export default styles;

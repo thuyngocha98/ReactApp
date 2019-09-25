@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text} from 'react-native';
 
-class AddExpense extends Component {
+class AddExpenseScreen extends Component {
     render() {
         return (
            <View>
@@ -13,5 +13,5 @@ class AddExpense extends Component {
     }
 }
 
-export default AddExpense;
+export default AddExpenseScreen;
 

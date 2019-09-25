@@ -1,28 +1,49 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet} from 'react-native';
-import Products from '../components/Products'
+import { View, Text, TouchableOpacity} from 'react-native';
+import MainScreenGroup from '../components/GroupScreen/MainScreenGroup/MainScreenGroup';
+import { EvilIcons } from '@expo/vector-icons';
 
+type Props = {
+    navigation?: any,
+}
 
-class GroupScreen extends Component {
-    static navigationOptions = {
-      header: null
+class GroupScreen extends Component<Props> {
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerStyle: {
+                elevation: 0,
+                textAlign: 'center',
+            },
+            headerRight:
+                (
+                    <View style={{ marginRight: 10 }}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('CreateGroupScreen')
+                            }}
+                        >
+                            <Text style={{ fontSize: 18 }}>Start a new group</Text>
+                        </TouchableOpacity>
+                    </View>
+                ),
+            headerLeft:
+                (
+                    <View style={{ marginLeft: 10 }}>
+                        <TouchableOpacity >
+                            <EvilIcons name='search' size={30} />
+                        </TouchableOpacity>
+                    </View >
+                )
+        };
     };
+
     render() {
         return (
-            <ScrollView style={styles.container}>
-                <Products/>
-            </ScrollView>
+            <MainScreenGroup  
+                    navigation={this.props.navigation}
+            />
         );
     }
 }
 
 export default GroupScreen;
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingTop: 15,
-        backgroundColor: '#fff',
-    },
-});
