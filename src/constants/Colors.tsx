@@ -15,5 +15,6 @@ export default {
     noticeBackground: tintColor,
     noticeText: '#fff',
     white: '#ffffff',
-    blackText: 'rgba(0,0,0,0.55)'
+    blackText: 'rgba(0,0,0,0.55)',
+    splitWise:'rgba(179,38,255,1)'
 };

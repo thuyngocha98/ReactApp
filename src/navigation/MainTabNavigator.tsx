@@ -6,13 +6,16 @@ import { Feather, MaterialCommunityIcons, Ionicons, EvilIcons } from '@expo/vect
 import TabBarIcon from '../components/TabBarIcon';
 import FriendsScreen from '../screens/FriendsScreen';
 import GroupScreen from '../screens/GroupScreen';
-import ActivityScreen from '../screens/ActivityScreen';
-import AddExpense from "../screens/AddExpense";
+import ActivityScreen from "../screens/ActivityScreen";
+import AddExpenseScreen from "../screens/AddExpenseScreen";
 import Colors from '../constants/Colors';
 import AccountScreen from "../screens/AccountScreen";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CreateGroupScreen from '../components/GroupScreen/CreateGroupScreen/CreateGroupScreen';
 import DetailGroupScreen from '../components/GroupScreen/DetailGroupScreen/DetailGroupScreen';
+import AddFriendsScreen from "../screens/AddFriendsScreen";
+import AddContactScreen from "../screens/AddContactScreen";
+import SplitWiseProScreen from "../screens/SplitWiseProScreen";
 
 const configPlat = Platform.select({
     web: { headerMode: 'screen' },
@@ -20,36 +23,42 @@ const configPlat = Platform.select({
 });
 
 
-
 const FriendsStack = createStackNavigator(
     {
-        FriendsScreen: {
-            screen: FriendsScreen,
-            navigationOptions: {
-                header: null
-            }
-        }
+        FriendsScreen,
+        AddFriendsScreen,
+        AddContactScreen,
+        SplitWiseProScreen
+    },
+    {
+        initialRouteName: '',
     }
-
 );
 
-FriendsStack.navigationOptions = {
-    tabBarLabel: 'Friends',
-    tabBarIcon: ({ focused }) => (
-        <MaterialCommunityIcons focused={focused}
-            name={Platform.OS === 'ios'
-                ? 'ios-home'
-                : 'account'
+FriendsStack.navigationOptions = ({navigation}) => {
+    let tabBarVisible = true;
+    if (navigation.state.index > 0) {
+        tabBarVisible = false;
+    }
+    return {
+        tabBarVisible,
+        tabBarLabel: 'Friends',
+        tabBarIcon: ({focused}) => (
+            <MaterialCommunityIcons focused={focused}
+                                    name={Platform.OS === 'ios'
+                                        ? 'ios-home'
+                                        : 'account'
+                                    }
+                                    size={26}
+                                    style={{marginBottom: -3}}
+                                    color={focused ? Colors.tabIconSelected : Colors.blackText}
+            />
+        ),
+        tabBarOptions: {
+            activeTintColor: Colors.tintColor,
+            labelStyle: {
+                marginBottom: 5
             }
-            size={26}
-            style={{ marginBottom: -3 }}
-            color={focused ? Colors.tabIconSelected : Colors.blackText}
-        />
-    ),
-    tabBarOptions: {
-        activeTintColor: Colors.tintColor,
-        labelStyle: {
-            marginBottom: 5
         }
     }
 };
@@ -94,7 +103,7 @@ GroupStack.navigationOptions = {
 
 const ExpenseStack = createStackNavigator(
     {
-        AddExpense
+        AddExpense: AddExpenseScreen
     }
 );
 
@@ -187,7 +196,5 @@ const tabNavigator = createBottomTabNavigator({
     ActivityStack,
     AccountStack,
 });
-
-// tabNavigator.path = '';
 
 export default tabNavigator;
