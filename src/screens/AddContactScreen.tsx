@@ -36,8 +36,8 @@ class AddContactScreen extends Component<MyProps, MyState> {
 
     continue = () => {
         this.setState({
-            isModalVisible: fa
-        })
+            isModalVisible: false
+        });
        this.props.navigation.goBack();
     };
 
