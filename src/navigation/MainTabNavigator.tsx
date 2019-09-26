@@ -13,9 +13,9 @@ import AccountScreen from "../screens/AccountScreen";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CreateGroupScreen from '../components/GroupScreen/CreateGroupScreen/CreateGroupScreen';
 import DetailGroupScreen from '../components/GroupScreen/DetailGroupScreen/DetailGroupScreen';
-import AddFriendsScreen from "../screens/AddFriendsScreen";
-import AddContactScreen from "../screens/AddContactScreen";
-import SplitWiseProScreen from "../screens/SplitWiseProScreen";
+import AddFriendsScreen from "../components/FriendsScreen/AddFriendsScreen/AddFriendsScreen";
+import AddContactScreen from "../components/FriendsScreen/AddContactScreen/AddContactScreen";
+import SplitWiseProScreen from "../components/FriendsScreen/SplitWiseProScreen/SplitWiseProScreen";
 
 const configPlat = Platform.select({
     web: { headerMode: 'screen' },
@@ -35,11 +35,16 @@ const FriendsStack = createStackNavigator(
     }
 );
 
+
+
 FriendsStack.navigationOptions = ({navigation}) => {
     let tabBarVisible = true;
-    if (navigation.state.index > 0) {
-        tabBarVisible = false;
+    let routeName = navigation.state.routes[navigation.state.index].routeName;
+    console.log(routeName);
+    if ( routeName == 'SplitWiseProScreen' ) {
+        tabBarVisible = false
     }
+
     return {
         tabBarVisible,
         tabBarLabel: 'Friends',

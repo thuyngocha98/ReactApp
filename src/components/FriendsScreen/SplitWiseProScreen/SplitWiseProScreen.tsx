@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {View, Text, Image, Button, TouchableOpacity, ScrollView} from "react-native";
-import Colors from "../constants/Colors";
-import styles from "../styles/SplitWiseProScreenStyle";
+import Colors from "../../../constants/Colors";
+import styles from "../../../styles/FriendsScreenStyles/SplitWiseProScreenStyle/SplitWiseProScreenStyle";
 import {AntDesign} from "@expo/vector-icons";
 // @ts-ignore
-import money from "../../assets/images/money.png";
-import Layout from "../constants/Layout";
+import money from "../../../../assets/images/money.png";
+import Layout from "../../../constants/Layout";
 
 type Props = { navigation }
 

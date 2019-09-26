@@ -23,7 +23,7 @@ const data = [
         detail: 'you are owned',
         price: '51,000$',
         data: [
-            
+
         ]
     },
     {
@@ -36,7 +36,7 @@ const data = [
                 id: 0,
                 text: 'Ha owes you 40000$',
             },
-            
+
         ]
     },
     {
@@ -55,7 +55,7 @@ const data = [
             }
         ]
     },
-]
+];
 
 class MainScreenGroup extends Component<Props> {
 
@@ -63,7 +63,7 @@ class MainScreenGroup extends Component<Props> {
         return(
             <View style={{ flex: 1, height: 1, backgroundColor: Colors.lightgray }} />
         );
-    }
+    };
     render() {
         return (
             <View style={MainScreenGroupStyles.container}>
@@ -93,7 +93,7 @@ class MainScreenGroup extends Component<Props> {
                     <FlatList
                         data={data}
                         renderItem={({ item }) => (
-                            <TouchableOpacity 
+                            <TouchableOpacity
                                 onPress={() => {
                                     this.props.navigation.navigate('DetailGroupScreen')
                                 }}

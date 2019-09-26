@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { View, TouchableOpacity, Text, Animated, ScrollView } from 'react-native';
 import Colors from '../../../constants/Colors';
 import DetailGroupScreenStyles from '../../../styles/GroupsStyles/DetailGroupScreenStyles/DetailGroupScreenStyles';
-import CollapsingToolbar from 'react-native-collapsingtoolbar';
 import { Icon } from 'expo';
 
 function mapStateToProps(state) {
@@ -33,7 +32,7 @@ class DetailGroupScreen extends Component {
                     <View style={DetailGroupScreenStyles.headerRight}>
                         <TouchableOpacity
                             onPress={() => {
-                                
+
                             }}
                         >
                             <Text>Done</Text>

@@ -8,7 +8,7 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import styles from "../styles/FriendsScreenStyle";
+import styles from "../styles/FriendsScreenStyles/FriendsScreenStyle/FriendsScreenStyle";
 import {EvilIcons} from "@expo/vector-icons";
 
 class FriendsScreen extends Component {

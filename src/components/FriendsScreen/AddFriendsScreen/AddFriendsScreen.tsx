@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {View, Text, TextInput, TouchableOpacity} from "react-native";
-import Colors from "../constants/Colors";
-import Layout from "../constants/Layout";
-import styles from "../styles/AddFriendsScreenStyle";
+import Colors from "../../../constants/Colors";
+import Layout from "../../../constants/Layout";
+import styles from "../../../styles/FriendsScreenStyles/AddFriendsScreenStyle/AddFriendsScreenStyle";
 import {EvilIcons, MaterialCommunityIcons} from "@expo/vector-icons";
 type  Props={navigation}
 class AddFriendsScreen extends Component<Props> {
