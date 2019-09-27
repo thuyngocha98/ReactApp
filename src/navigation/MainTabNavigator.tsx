@@ -13,9 +13,9 @@ import AccountScreen from "../screens/AccountScreen";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CreateGroupScreen from '../components/GroupScreen/CreateGroupScreen/CreateGroupScreen';
 import DetailGroupScreen from '../components/GroupScreen/DetailGroupScreen/DetailGroupScreen';
-import AddFriendsScreen from "../components/FriendScreen/AddFriendsScreen";
-import AddContactScreen from "../components/FriendScreen/AddContactScreen";
-import SplitWiseProScreen from "../components/FriendScreen/SplitWiseProScreen";
+import AddFriendsScreen from "../screens/AddFriendsScreen";
+import AddContactScreen from "../screens/AddContactScreen";
+import SplitWiseProScreen from "../screens/SplitWiseProScreen";
 
 const configPlat = Platform.select({
     web: { headerMode: 'screen' },
