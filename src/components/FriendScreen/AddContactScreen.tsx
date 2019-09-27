@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {View, Text, TextInput, Button, TouchableOpacity} from "react-native";
-import Colors from "../constants/Colors";
-import styles from '../styles/AddContactScreenStyle';
+import Colors from "../../constants/Colors";
+import styles from '../../styles/FriendStyles/AddContactScreenStyle';
 import Dialog, {FadeAnimation,DialogFooter, DialogButton, DialogContent } from 'react-native-popup-dialog';
-import Layout from "../constants/Layout";
+import Layout from "../../constants/Layout";
 
 type MyProps = { navigation, Modal };
 type MyState = { isModalVisible };
