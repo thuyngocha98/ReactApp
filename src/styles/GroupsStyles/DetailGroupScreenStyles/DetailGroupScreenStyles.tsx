@@ -4,7 +4,8 @@ import { screenWidth } from "../../../constants/Dimensions";
 
 const DetailGroupScreenStyles = StyleSheet.create({
     headerRight: {
-        marginRight: 15
+        marginRight: 20,
+        marginTop: 10,
     },
     textHeaderRight: {
         fontSize: 17,
@@ -12,10 +13,21 @@ const DetailGroupScreenStyles = StyleSheet.create({
     },
     headerLeft: {
         marginLeft: 15,
+        marginTop: 10,
     },
     textHeaderLeft: {
         fontSize: 17,
         color: Colors.white
+    },
+    mainContainer: {
+        flex: 1,
+        flexDirection: 'column'
+    },
+    dateTitle: {
+        backgroundColor: Colors.tintColor,
+    },
+    date: {
+        margin: 10,
     },
 });
 export default DetailGroupScreenStyles;
