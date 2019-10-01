@@ -63,7 +63,7 @@ class CreateGroupScreen extends Component<State> {
         colorHouse: false,
         colorTrip: false,
         colorOrder: false,
-    }
+    };
 
     _selectCategoryGroupType(index) {
         switch(index){
@@ -73,7 +73,7 @@ class CreateGroupScreen extends Component<State> {
                     colorHouse: false,
                     colorTrip: false,
                     colorOrder: false
-                })
+                });
                 break;
             case 2:
                 this.setState({
@@ -81,7 +81,7 @@ class CreateGroupScreen extends Component<State> {
                     colorHouse: true,
                     colorTrip: false,
                     colorOrder: false
-                })
+                });
                 break;
             case 3:
                 this.setState({
@@ -89,7 +89,7 @@ class CreateGroupScreen extends Component<State> {
                     colorHouse: false,
                     colorTrip: true,
                     colorOrder: false
-                })
+                });
                 break;
             case 4:
                 this.setState({
@@ -97,7 +97,7 @@ class CreateGroupScreen extends Component<State> {
                     colorHouse: false,
                     colorTrip: false,
                     colorOrder: true
-                })
+                });
                 break;
         }
     }

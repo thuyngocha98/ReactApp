@@ -1,54 +1,102 @@
 import React, {Component} from 'react';
 import {
+    FlatList,
     Image,
-    Platform,
     ScrollView,
-    StyleSheet,
     Text,
     TouchableOpacity,
     View,
 } from 'react-native';
 // @ts-ignore
-import styles from "../styles/FriendsScreenStyles/FriendsScreenStyle/FriendsScreenStyle";
-import {EvilIcons, Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
+import styles from "../../../styles/FriendsScreenStyles/MainFriendsOweScreenStyle/MainFriendsOweScreenStyle";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 // @ts-ignore
-import avatar from "../../assets/images/avatar.jpg"
+import avatar from "../../../../assets/images/avatar.jpg";
+import ListItemGroup from "../../GroupScreen/MainScreenGroup/ListItemGroup";
+import Colors from "../../../constants/Colors";
+import ListItemFriendsOwe from "./ListItemFriendsOwe";
 
-class MainFriendsOwe extends Component {
+type Props = {
+    navigation?: any,
+}
 
-    static  navigationOptions = ({navigation}) => {
-        return {
-            headerStyle: {
-                elevation: 0
+class MainFriendsOweScreen extends Component<Props> {
+
+    state = {
+        data: [
+            {
+                id: 0,
+                nameFriend: 'Ha Tran',
+                detail: 'owes you',
+                money: '51,000 US$',
+                data: [
+                    {
+                        id: 0,
+                        description: 'Ha owes you',
+                        money:' 51,000 ',
+                        type:'US$ for "Ticket Movie"'
+                    }
+                ]
             },
-            headerLeft: (
-                <TouchableOpacity onPress={() => navigation.navigate('SplitWiseProScreen')}>
-                    <EvilIcons name='search' size={30} style={{marginLeft: 10}} />
-                </TouchableOpacity>
-            ),
-            headerRight: (
-                <View>
-                    <TouchableOpacity activeOpacity={0.5} style={{marginRight: 20}} onPress={() => navigation.navigate('AddFriendsScreen')}>
-                        <Text style={{fontSize: 20}}>
-                            Add Friends
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            )
-        }
+            {
+                id: 2,
+                nameFriend: 'Trung Nguyen',
+                detail: 'owes you',
+                money: '200,000 US$',
+                data: [
+                    {
+                        id: 0,
+                        description: 'Ha owes you  ',
+                        money: '40,000 ',
+                        type:'US$ for "Hotel"'
+                    },
+
+                ]
+            },
+            {
+                id: 3,
+                nameFriend: 'ZeTrunMin',
+                detail: 'owes you',
+                money: '100,000 US$',
+                data: [
+                    {
+                        id: 0,
+                        description:  'ZeTrunMin owes you ',
+                        money:'30,000 ',
+                        type: "US$ for \"Ticket Plan\""
+                    },
+                    {
+                        id: 1,
+                        description: 'ZeTrunMin owes you ',
+                        money:'70,000 ',
+                        type: 'US$ for "cake"'
+
+                    }
+                ]
+            },
+        ]
     };
 
+    _ItemSeparatorComponent = () => {
+        return (
+            <View style={{flex: 1, height: 1, backgroundColor: Colors.lightgray}}/>
+        );
+    };
 
     render() {
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         return (
             <View>
                 <Text style={styles.friends}>
                     Friends
                 </Text>
-                <ScrollView >
+                <ScrollView>
                     <View style={styles.cartExpense}>
                         <Image style={styles.avatar} source={avatar}/>
-                        <View style={{ flex: 1}} >
+                        <View style={{flex: 1}}>
                             <Text style={{color: 'white'}}>Total balance</Text>
                             <Text style={styles.textDetail}>You are owned 305.151,00 US$</Text>
                         </View>
@@ -56,11 +104,27 @@ class MainFriendsOwe extends Component {
                             <MaterialCommunityIcons color={'white'} size={25} name={'menu'} style={styles.iconMenu}/>
                         </TouchableOpacity>
                     </View>
-
+                    <View>
+                        <FlatList
+                            data={this.state.data}
+                            renderItem={({item}) => (
+                                <TouchableOpacity>
+                                    <ListItemFriendsOwe
+                                        nameFriend={item.nameFriend}
+                                        detail={item.detail}
+                                        money={item.money}
+                                        data={item.data}
+                                    />
+                                </TouchableOpacity>
+                            )}
+                            keyExtractor={item => item.id.toString()}
+                            ItemSeparatorComponent={this._ItemSeparatorComponent}
+                        />
+                    </View>
                 </ScrollView>
             </View>
         );
     }
 }
 
-export default MainFriendsOwe;
+export default MainFriendsOweScreen;

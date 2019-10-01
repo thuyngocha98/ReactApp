@@ -16,6 +16,8 @@ import DetailGroupScreen from '../components/GroupScreen/DetailGroupScreen/Detai
 import AddFriendsScreen from "../components/FriendsScreen/AddFriendsScreen/AddFriendsScreen";
 import AddContactScreen from "../components/FriendsScreen/AddContactScreen/AddContactScreen";
 import SplitWiseProScreen from "../components/FriendsScreen/SplitWiseProScreen/SplitWiseProScreen";
+import MainDetailsWhoPaidScreen from "../components/FriendsScreen/MainDetailsWhoPaidScreen/MainDetailsWhoPaidScreen";
+
 
 const configPlat = Platform.select({
     web: { headerMode: 'screen' },
@@ -28,10 +30,12 @@ const FriendsStack = createStackNavigator(
         FriendsScreen,
         AddFriendsScreen,
         AddContactScreen,
-        SplitWiseProScreen
+        SplitWiseProScreen,
+        MainDetailsWhoPaidScreen
     },
     {
-        initialRouteName: '',
+        initialRouteName: '':
+        ,
     }
 );
 
@@ -40,7 +44,6 @@ const FriendsStack = createStackNavigator(
 FriendsStack.navigationOptions = ({navigation}) => {
     let tabBarVisible = true;
     let routeName = navigation.state.routes[navigation.state.index].routeName;
-    console.log(routeName);
     if ( routeName == 'SplitWiseProScreen' ) {
         tabBarVisible = false
     }
