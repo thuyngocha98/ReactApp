@@ -34,7 +34,7 @@ const FriendsStack = createStackNavigator(
         MainDetailsWhoPaidScreen
     },
     {
-        initialRouteName: '':
+        initialRouteName: ''
         ,
     }
 );
