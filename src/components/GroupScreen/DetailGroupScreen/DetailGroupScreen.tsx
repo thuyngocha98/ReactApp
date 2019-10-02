@@ -1,12 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, TouchableOpacity, Text, Animated, ScrollView, Alert, FlatList } from 'react-native';
+import {
+    View,
+    TouchableOpacity,
+    Text,
+    Animated,
+    ScrollView,
+    Alert,
+    FlatList,
+    StatusBar,
+    SectionList
+} from 'react-native';
 import Colors from '../../../constants/Colors';
 import DetailGroupScreenStyles from '../../../styles/GroupsStyles/DetailGroupScreenStyles/DetailGroupScreenStyles';
 import { Ionicons, EvilIcons, FontAwesome5 } from '@expo/vector-icons';
 import HeaderTitleComponent from './HeaderTitleComponent';
 import { screenWidth } from '../../../constants/Dimensions';
 import ListItemContent from './ListItemContent';
+import Constants from 'expo-constants';
 
 function mapStateToProps(state) {
     return {
@@ -14,79 +25,143 @@ function mapStateToProps(state) {
     };
 }
 
+type Props = {
+    navigation?: any,
+}
 
-class DetailGroupScreen extends Component {
+class DetailGroupScreen extends Component<Props> {
 
     static navigationOptions = ({ navigation }) => {
         return {
-            headerStyle: {
-                elevation: 0,
-                backgroundColor: Colors.tintColor,
-                height: 250,
-            },
-            headerTitle: <HeaderTitleComponent />,
-            headerRight:
-                (
-                    <View style={DetailGroupScreenStyles.headerRight}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                Alert.alert(screenWidth.toString())
-                            }}
-                        >
-                            <Ionicons name='ios-settings' size={30} color={Colors.white} />
-                        </TouchableOpacity>
-                    </View>
-                ),
-            headerLeft:
-                (
-                    <View style={DetailGroupScreenStyles.headerLeft}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                navigation.goBack();
-                            }}
-                        >
-                            <Ionicons name='ios-arrow-back' size={30} color={Colors.white} />
-                        </TouchableOpacity>
-                    </View >
-                ),
-            headerRightContainerStyle: {
-                alignItems: 'flex-start',
-            },
-            headerLeftContainerStyle: {
-                alignItems: 'flex-start',
-            }
+            header: null
         };
     };
 
     data = [
         {
-            id: 0,
-            month: "thg 9",
-            day: "25",
-            title: "Hotel",
-            detail: "You paid 200,00 US$",
-            titleMoney: "you lent",
-            money: "100,00 US$"
+            title: "tháng 9 2019",
+            data: [
+                {
+                    id: 0,
+                    month: "thg 9",
+                    day: "25",
+                    title: "Hotel",
+                    detail: "You paid 200,00 US$",
+                    titleMoney: "you lent",
+                    money: "100,00 US$"
+                },
+                {
+                    id: 1,
+                    month: "thg 9",
+                    day: "26",
+                    title: "Restaurant",
+                    detail: "You paid 500,00 US$",
+                    titleMoney: "you lent",
+                    money: "250,00 US$"
+                },
+                {
+                    id: 2,
+                    month: "thg 9",
+                    day: "27",
+                    title: "Dinner",
+                    detail: "You paid 50,00 US$",
+                    titleMoney: "you lent",
+                    money: "20,00 US$"
+                },
+                {
+                    id: 3,
+                    month: "thg 9",
+                    day: "25",
+                    title: "Hotel",
+                    detail: "You paid 200,00 US$",
+                    titleMoney: "you lent",
+                    money: "100,00 US$"
+                },
+                {
+                    id: 4,
+                    month: "thg 9",
+                    day: "26",
+                    title: "Restaurant",
+                    detail: "You paid 500,00 US$",
+                    titleMoney: "you lent",
+                    money: "250,00 US$"
+                },
+            ]
         },
         {
-            id: 1,
-            month: "thg 9",
-            day: "26",
-            title: "Restaurant",
-            detail: "You paid 500,00 US$",
-            titleMoney: "you lent",
-            money: "250,00 US$"
+            title: "tháng 8 2019",
+            data: [
+                {
+                    id: 0,
+                    month: "thg 9",
+                    day: "25",
+                    title: "Hotel",
+                    detail: "You paid 200,00 US$",
+                    titleMoney: "you lent",
+                    money: "100,00 US$"
+                },
+                {
+                    month: "thg 9",
+                    day: "26",
+                    title: "Restaurant",
+                    detail: "You paid 500,00 US$",
+                    titleMoney: "you lent",
+                    money: "250,00 US$"
+                },
+
+            ]
         },
         {
-            id: 2,
-            month: "thg 9",
-            day: "27",
-            title: "Dinner",
-            detail: "You paid 50,00 US$",
-            titleMoney: "you lent",
-            money: "20,00 US$"
+            title: "tháng 7 2019",
+            data: [
+                {
+                    id: 0,
+                    month: "thg 9",
+                    day: "25",
+                    title: "Hotel",
+                    detail: "You paid 200,00 US$",
+                    titleMoney: "you lent",
+                    money: "100,00 US$"
+                },
+                {
+                    id: 1,
+                    month: "thg 9",
+                    day: "26",
+                    title: "Restaurant",
+                    detail: "You paid 500,00 US$",
+                    titleMoney: "you lent",
+                    money: "250,00 US$"
+                },
+                {
+                    id: 2,
+                    month: "thg 9",
+                    day: "27",
+                    title: "Dinner",
+                    detail: "You paid 50,00 US$",
+                    titleMoney: "you lent",
+                    money: "20,00 US$"
+                },
+                {
+                    id: 3,
+                    month: "thg 9",
+                    day: "25",
+                    title: "Hotel",
+                    detail: "You paid 200,00 US$",
+                    titleMoney: "you lent",
+                    money: "100,00 US$"
+                },
+                {
+                    id: 4,
+                    month: "thg 9",
+                    day: "26",
+                    title: "Restaurant",
+                    detail: "You paid 500,00 US$",
+                    titleMoney: "you lent",
+                    money: "250,00 US$"
+                },
+            ]
         }
-    ]
+    ];
 
     _ItemSeparatorComponent = () => {
         return (
@@ -94,18 +169,17 @@ class DetailGroupScreen extends Component {
         );
     }
 
-    handleLoadMore = () => {
-        Alert.alert("aaa")
-    }
 
     render() {
         return (
             <View style={DetailGroupScreenStyles.mainContainer}>
-                <View style={DetailGroupScreenStyles.dateTitle}>
-                    <Text style={DetailGroupScreenStyles.date}>tháng 9 2019</Text>
+                <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
+                <View style={DetailGroupScreenStyles.header}>
+                    <HeaderTitleComponent navigation={this.props.navigation} />
                 </View>
-                <FlatList
-                    data={this.data}
+                <SectionList
+                    sections={this.data}
+                    keyExtractor={(item, index) => item + index}
                     renderItem={({ item }) => (
                         <TouchableOpacity
                             onPress={() => {
@@ -122,8 +196,11 @@ class DetailGroupScreen extends Component {
                             />
                         </TouchableOpacity>
                     )}
-                    keyExtractor={item => item.id.toString()}
-                    ItemSeparatorComponent={this._ItemSeparatorComponent}
+                    renderSectionHeader={({ section: { title } }) => (
+                        <View style={DetailGroupScreenStyles.dateTitle}>
+                            <Text style={DetailGroupScreenStyles.date}>{title}</Text>
+                        </View>
+                    )}
                 />
             </View>
         );

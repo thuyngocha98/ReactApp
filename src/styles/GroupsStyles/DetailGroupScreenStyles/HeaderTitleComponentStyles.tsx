@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 import Colors from "../../../constants/Colors";
 import { screenWidth } from "../../../constants/Dimensions";
+import  Constants  from "expo-constants";
 
 const HeaderTitleComponentStyles = StyleSheet.create({
     container: {
@@ -11,43 +12,62 @@ const HeaderTitleComponentStyles = StyleSheet.create({
     },
     backgroundImage: {
         width: screenWidth,
-        height: 250,
+        height: screenWidth / 1.6456 + Constants.statusBarHeight,
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    header: {
+        width: screenWidth,
+        margin: screenWidth/41.14,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    btnBack: {
+        marginLeft: screenWidth/27.43,
+    },
+    btnSetting: {
+        marginRight: screenWidth/27.43,
+    },
+    iconCamera: {
+        marginTop: screenWidth/82.28,
+        width: screenWidth/5.1425,
+        height: screenWidth / 5.1425,
+        tintColor: Colors.white,
+        alignSelf: 'center'
+    },
+    contentText: {
+        width: screenWidth,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
     },
-    iconCamera: {
-        width: 80,
-        height: 80,
-        tintColor: Colors.white,
-        margin: 10
-    },
     textTitle: {
         fontWeight: 'bold',
-        fontSize: 25,
-        color: Colors.white   
+        fontSize: 22,
+        color: Colors.white  ,
     },
     numberPeopleAndTime: {
-        marginBottom: 10,
+        marginBottom: screenWidth / 41.14,
         fontSize: 14,
         color: Colors.white   
     },
     owesAndMoney: {
         flexDirection: 'row',
-        marginBottom: 10,
+        marginBottom: screenWidth/41.14,
     },
     owes: {
-        fontSize: 17,
+        fontSize: 16,
         color: Colors.white   
     },
     money: {
-        fontSize: 18,
+        fontSize: 17,
         fontWeight: '500',
         color: Colors.white   
     },
     flatList: {
         backgroundColor: '#696969',
-        height: 55,
+        height: screenWidth/7.48,
         width: screenWidth,
         justifyContent: 'center',
         alignItems: 'center'

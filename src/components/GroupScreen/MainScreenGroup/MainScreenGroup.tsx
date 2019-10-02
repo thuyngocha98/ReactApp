@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, FlatList, Image, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, FlatList, Image, TouchableOpacity, Alert, StatusBar } from 'react-native';
 import MainScreenGroupStyles from '../../../styles/GroupsStyles/MainScreenGroupStyles/MainScreenGroupStyles';
 import ListItemGroup from './ListItemGroup';
 import Colors from '../../../constants/Colors';
@@ -67,6 +67,7 @@ class MainScreenGroup extends Component<Props> {
     render() {
         return (
             <View style={MainScreenGroupStyles.container}>
+                <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent />
                 <Text style={MainScreenGroupStyles.group}>
                     Groups
                 </Text>

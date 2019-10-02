@@ -6,6 +6,8 @@ import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import ListItemHeader from './ListItemHeader';
 import { LinearGradient } from 'expo-linear-gradient';
 import { screenWidth } from '../../../constants/Dimensions';
+import { Ionicons } from '@expo/vector-icons';
+import Colors from '../../../constants/Colors';
 function mapStateToProps(state) {
     return {
 
@@ -14,6 +16,7 @@ function mapStateToProps(state) {
 
 type States = {
     itemSelected?: number,
+    navigation?: any,
 }
 
 class HeaderTitleComponent extends Component<States> {
@@ -52,24 +55,44 @@ class HeaderTitleComponent extends Component<States> {
         },
     ]
 
-    _onScroll =  () => {
-        Alert.alert(event.nativeEvent.contentOffset.y)
-    }
     render() {
+        const { navigation } = this.props;
         return (
             <View style={HeaderTitleComponentStyles.container}>
                 <ImageBackground
                     source={{ uri: "https://designroast.org/wp-content/uploads/2014/02/pattern-thepatternlibrary.png" }}
                     style={HeaderTitleComponentStyles.backgroundImage}>
-                    <Image
-                        style={HeaderTitleComponentStyles.iconCamera}
-                        source={require("../../../../assets/images/icon_camera.png")}
-                    />
-                    <Text style={HeaderTitleComponentStyles.textTitle}>Hotel</Text>
-                    <Text style={HeaderTitleComponentStyles.numberPeopleAndTime}>2 people •	Created thg 9 2019</Text>
-                    <View style={HeaderTitleComponentStyles.owesAndMoney}>
-                        <Text style={HeaderTitleComponentStyles.owes}>Trung owes you </Text>
-                        <Text style={HeaderTitleComponentStyles.money}>325,324,00 US$</Text>
+                    <View style={HeaderTitleComponentStyles.header}>
+                        <View style={HeaderTitleComponentStyles.btnBack}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    navigation.goBack();
+                                }}
+                            >
+                                <Ionicons name='ios-arrow-back' size={30} color={Colors.white} />
+                            </TouchableOpacity>
+                        </View >
+                        <Image
+                            style={HeaderTitleComponentStyles.iconCamera}
+                            source={require("../../../../assets/images/icon_camera.png")}
+                        />
+                        <View style={HeaderTitleComponentStyles.btnSetting}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    Alert.alert(screenWidth.toString())
+                                }}
+                            >
+                                <Ionicons name='ios-settings' size={30} color={Colors.white} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View style={HeaderTitleComponentStyles.contentText}>
+                        <Text style={HeaderTitleComponentStyles.textTitle}>Hotel</Text>
+                        <Text style={HeaderTitleComponentStyles.numberPeopleAndTime}>2 people •	Created thg 9 2019</Text>
+                        <View style={HeaderTitleComponentStyles.owesAndMoney}>
+                            <Text style={HeaderTitleComponentStyles.owes}>Trung owes you </Text>
+                            <Text style={HeaderTitleComponentStyles.money}>325,324,00 US$</Text>
+                        </View>
                     </View>
                     <View style={HeaderTitleComponentStyles.flatList}>
                         <FlatList
@@ -79,9 +102,7 @@ class HeaderTitleComponent extends Component<States> {
                             renderItem={({ item }) => (
                                 <TouchableOpacity
                                     onPress={() => {
-                                        this.setState({
-                                            itemSelected: item.id,
-                                        })
+                                        item.title == "Balances" ? navigation.navigate('BalanceScreen') : null
                                     }}
                                 >
                                     <ListItemHeader
@@ -100,7 +121,7 @@ class HeaderTitleComponent extends Component<States> {
                             style={{
                                 position: 'absolute',
                                 left: 0,
-                                right:  375,
+                                right: 375,
                                 top: 0,
                                 height: 55,
                             }}

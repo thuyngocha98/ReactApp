@@ -16,6 +16,7 @@ import DetailGroupScreen from '../components/GroupScreen/DetailGroupScreen/Detai
 import AddFriendsScreen from "../screens/AddFriendsScreen";
 import AddContactScreen from "../screens/AddContactScreen";
 import SplitWiseProScreen from "../screens/SplitWiseProScreen";
+import BalanceScreen from '../components/GroupScreen/DetailGroupScreen/BalanceScreen/BalanceScreen';
 
 const configPlat = Platform.select({
     web: { headerMode: 'screen' },
@@ -74,6 +75,9 @@ const GroupStack = createStackNavigator(
         },
         DetailGroupScreen: {
             screen: DetailGroupScreen
+        },
+        BalanceScreen: {
+            screen: BalanceScreen
         }
     },
     // config

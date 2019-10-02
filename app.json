@@ -1,9 +1,12 @@
 {
   "expo": {
-    "name": "SW-Travel",
-    "slug": "ReactApp",
+    "name": "WeGo",
+    "slug": "we-go",
     "privacy": "public",
     "sdkVersion": "33.0.0",
+    "androidStatusBar": {
+      "backgroundColor": "#f7bd42"
+    },
     "platforms": [
       "ios",
       "android",

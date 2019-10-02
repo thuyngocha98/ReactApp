@@ -5,7 +5,7 @@ import { screenWidth } from "../../../constants/Dimensions";
 const ListItemContentStyles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        margin: 10,
+        margin: screenWidth /41.14,
         justifyContent: 'center',
         alignItems: 'center'
     },

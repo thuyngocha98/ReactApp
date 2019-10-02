@@ -1,19 +1,20 @@
 import { StyleSheet } from "react-native";
 import Colors from "../../../constants/Colors";
 import { screenWidth } from "../../../constants/Dimensions";
+import  Constants  from "expo-constants";
 
 const DetailGroupScreenStyles = StyleSheet.create({
     headerRight: {
-        marginRight: 20,
-        marginTop: 10,
+        marginRight: screenWidth /20.57,
+        marginTop: screenWidth /41.14,
     },
     textHeaderRight: {
         fontSize: 17,
         color: Colors.white
     },
     headerLeft: {
-        marginLeft: 15,
-        marginTop: 10,
+        marginLeft: screenWidth /27.43,
+        marginTop: screenWidth /41.14,
     },
     textHeaderLeft: {
         fontSize: 17,
@@ -23,11 +24,14 @@ const DetailGroupScreenStyles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column'
     },
+    header: {
+        height: screenWidth/1.6456 + Constants.statusBarHeight
+    },
     dateTitle: {
         backgroundColor: Colors.tintColor,
     },
     date: {
-        margin: 10,
+        margin: screenWidth /41.14,
     },
 });
 export default DetailGroupScreenStyles;
