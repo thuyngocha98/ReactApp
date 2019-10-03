@@ -42,7 +42,7 @@ class MainFriendsOweScreen extends Component<Props> {
                 id: 2,
                 nameFriend: 'Trung Nguyen',
                 detail: 'owes you',
-                money: '200,000 US$',
+                money: '40,000 US$',
                 data: [
                     {
                         id: 0,
@@ -69,7 +69,7 @@ class MainFriendsOweScreen extends Component<Props> {
                         id: 1,
                         description: 'ZeTrunMin owes you ',
                         money:'70,000 ',
-                        type: 'US$ for "cake"'
+                        type: 'US$ for "cake"',
 
                     }
                 ]

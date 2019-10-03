@@ -7,15 +7,24 @@ const Styles = StyleSheet.create({
         flexDirection: 'row',
         marginLeft: 20,
         alignItems: 'center',
+        marginBottom:5
     },
-    description: {
-        marginLeft: 15,
-        alignItems: 'center',
-        fontSize: 15,
-        color: Colors.gray
+    owe: {
+        marginLeft: 5,
     },
-    money:{
-        color: Colors.splitWise
+    owes:{
+        marginRight:5
+    },
+    oweContainer:{
+        flexDirection: 'row',
+        marginLeft:20,
+    },
+    image:{
+        width:20,
+        height:20,
+        borderRadius:10,
+        resizeMode:'cover',
+        marginRight:10,
     }
 });
 export default Styles;

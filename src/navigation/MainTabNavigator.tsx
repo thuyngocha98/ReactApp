@@ -1,8 +1,8 @@
 import React from 'react';
-import { Platform, View, Text } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import {Platform, View, Text} from 'react-native';
+import {createStackNavigator, createBottomTabNavigator} from 'react-navigation';
 
-import { Feather, MaterialCommunityIcons, Ionicons, EvilIcons } from '@expo/vector-icons';
+import {Feather, MaterialCommunityIcons, Ionicons, EvilIcons} from '@expo/vector-icons';
 import TabBarIcon from '../components/TabBarIcon';
 import FriendsScreen from '../screens/FriendsScreen';
 import GroupScreen from '../screens/GroupScreen';
@@ -10,17 +10,19 @@ import ActivityScreen from "../screens/ActivityScreen";
 import AddExpenseScreen from "../screens/AddExpenseScreen";
 import Colors from '../constants/Colors';
 import AccountScreen from "../screens/AccountScreen";
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import CreateGroupScreen from '../components/GroupScreen/CreateGroupScreen/CreateGroupScreen';
 import DetailGroupScreen from '../components/GroupScreen/DetailGroupScreen/DetailGroupScreen';
 import AddFriendsScreen from "../components/FriendsScreen/AddFriendsScreen/AddFriendsScreen";
 import AddContactScreen from "../components/FriendsScreen/AddContactScreen/AddContactScreen";
 import SplitWiseProScreen from "../components/FriendsScreen/SplitWiseProScreen/SplitWiseProScreen";
 import MainDetailsWhoPaidScreen from "../components/FriendsScreen/MainDetailsWhoPaidScreen/MainDetailsWhoPaidScreen";
+import MainActivityDetailsWhoPaidScreen from "../components/ActivityScreen/MainActivityDetailsWhoPaidScreen/MainActivityDetailsWhoPaidScreen";
+import MainActivityScreen from "../components/ActivityScreen/RecentActivityScreen/MainActivityScreen";
 
 
 const configPlat = Platform.select({
-    web: { headerMode: 'screen' },
+    web: {headerMode: 'screen'},
     default: {},
 });
 
@@ -35,16 +37,15 @@ const FriendsStack = createStackNavigator(
     },
     {
         initialRouteName: ''
-        ,
+
     }
 );
-
 
 
 FriendsStack.navigationOptions = ({navigation}) => {
     let tabBarVisible = true;
     let routeName = navigation.state.routes[navigation.state.index].routeName;
-    if ( routeName == 'SplitWiseProScreen' ) {
+    if (routeName == 'SplitWiseProScreen') {
         tabBarVisible = false
     }
 
@@ -89,15 +90,15 @@ const GroupStack = createStackNavigator(
 
 GroupStack.navigationOptions = {
     tabBarLabel: 'Groups',
-    tabBarIcon: ({ focused }) => (
+    tabBarIcon: ({focused}) => (
         <MaterialCommunityIcons focused={focused}
-            name={Platform.OS === 'ios'
-                ? 'ios-home'
-                : 'account-group'
-            }
-            size={26}
-            style={{ marginBottom: -3 }}
-            color={focused ? Colors.tabIconSelected : Colors.blackText}
+                                name={Platform.OS === 'ios'
+                                    ? 'ios-home'
+                                    : 'account-group'
+                                }
+                                size={26}
+                                style={{marginBottom: -3}}
+                                color={focused ? Colors.tabIconSelected : Colors.blackText}
         />
     ),
     tabBarOptions: {
@@ -117,15 +118,15 @@ const ExpenseStack = createStackNavigator(
 
 ExpenseStack.navigationOptions = {
     tabBarLabel: 'Expense',
-    tabBarIcon: ({ focused }) => (
+    tabBarIcon: ({focused}) => (
         <Ionicons focused={focused}
-            name={Platform.OS === 'ios'
-                ? 'ios-home'
-                : 'ios-add-circle-outline'
-            }
-            size={26}
-            style={{ marginBottom: -3 }}
-            color={focused ? Colors.tabIconSelected : Colors.blackText}
+                  name={Platform.OS === 'ios'
+                      ? 'ios-home'
+                      : 'ios-add-circle-outline'
+                  }
+                  size={26}
+                  style={{marginBottom: -3}}
+                  color={focused ? Colors.tabIconSelected : Colors.blackText}
         />
     ),
     tabBarOptions: {
@@ -141,21 +142,26 @@ ExpenseStack.navigationOptions = {
 const ActivityStack = createStackNavigator(
     {
         ActivityScreen,
+        MainActivityDetailsWhoPaidScreen
     },
+    {
+        initialRouteName: ''
+
+    }
     // config
 );
 
 ActivityStack.navigationOptions = {
     tabBarLabel: 'Activity',
-    tabBarIcon: ({ focused }) => (
+    tabBarIcon: ({focused}) => (
         <Feather focused={focused}
-            name={Platform.OS === 'ios'
-                ? 'ios-home'
-                : 'activity'
-            }
-            size={26}
-            style={{ marginBottom: -3 }}
-            color={focused ? Colors.tabIconSelected : Colors.blackText}
+                 name={Platform.OS === 'ios'
+                     ? 'ios-home'
+                     : 'activity'
+                 }
+                 size={26}
+                 style={{marginBottom: -3}}
+                 color={focused ? Colors.tabIconSelected : Colors.blackText}
         />
     ),
     tabBarOptions: {
@@ -165,6 +171,7 @@ ActivityStack.navigationOptions = {
         }
     }
 };
+
 
 // LinksStack.path = '';
 
@@ -177,15 +184,15 @@ const AccountStack = createStackNavigator(
 
 AccountStack.navigationOptions = {
     tabBarLabel: 'Account',
-    tabBarIcon: ({ focused }) => (
+    tabBarIcon: ({focused}) => (
         <MaterialCommunityIcons focused={focused}
-            name={Platform.OS === 'ios'
-                ? 'ios-home'
-                : 'account-circle'
-            }
-            size={26}
-            style={{ marginBottom: -3 }}
-            color={focused ? Colors.tabIconSelected : Colors.blackText}
+                                name={Platform.OS === 'ios'
+                                    ? 'ios-home'
+                                    : 'account-circle'
+                                }
+                                size={26}
+                                style={{marginBottom: -3}}
+                                color={focused ? Colors.tabIconSelected : Colors.blackText}
         />
     ),
     tabBarOptions: {
@@ -198,10 +205,10 @@ AccountStack.navigationOptions = {
 
 
 const tabNavigator = createBottomTabNavigator({
+    ActivityStack,
     FriendsStack,
     GroupStack,
     ExpenseStack,
-    ActivityStack,
     AccountStack,
 });
 
