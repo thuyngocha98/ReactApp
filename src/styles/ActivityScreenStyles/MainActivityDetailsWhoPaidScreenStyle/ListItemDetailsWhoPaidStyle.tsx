@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native";
 import { screenWidth } from "../../../constants/Dimensions";
-import Colors from "../../../constants/Colors";
 
 const Styles = StyleSheet.create({
     mainContainer: {
@@ -9,7 +8,7 @@ const Styles = StyleSheet.create({
         marginHorizontal: 20,
         marginVertical: 10,
     },
-    cartContainer: {
+    container1: {
         flexDirection: 'row',
         alignItems: 'center',
     },
@@ -18,12 +17,12 @@ const Styles = StyleSheet.create({
         flexDirection: 'row',
         margin: 5,
     },
-    nameFriend: {
+    namePaid: {
         flex: 1,
-        flexDirection: 'column',
-        alignItems: 'flex-start',
+        flexDirection: 'row',
+        alignItems: 'center',
         marginLeft: 10,
-        justifyContent: 'center'
+
     },
     textDetail: {
         flex: 1,
@@ -34,14 +33,12 @@ const Styles = StyleSheet.create({
     avatar: {
         width: 40,
         height: 40,
-        resizeMode: 'contain',
+        borderRadius:40,
+        resizeMode: 'cover',
     },
-    name: {
+    personPaid: {
         fontWeight: '400',
         fontSize: 16
-    },
-    color:{
-        color: Colors.splitWise
     }
 });
 export default Styles;

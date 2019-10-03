@@ -28,8 +28,8 @@ class ListItemFriendsOwe extends Component<Props> {
 
                         </View>
                         <View style={Styles.textDetail}>
-                            <Text style={{color: Colors.tabIconSelected}}>{this.props.detail}</Text>
-                            <Text style={{color: Colors.tabIconSelected}}>{this.props.money}</Text>
+                            <Text style={Styles.color}>{this.props.detail}</Text>
+                            <Text style={Styles.color}>{this.props.money}</Text>
                         </View>
                     </View>
                     <FontAwesome5 name='chevron-right' size={20} color={Colors.lightgray}/>
