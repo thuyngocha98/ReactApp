@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, Image, FlatList} from "react-native";
+import {View, Text, TouchableOpacity, Image, FlatList, StatusBar} from "react-native";
 import Colors from "../../../constants/Colors";
 import styles from "../../../styles/FriendsScreenStyles/MainDetailsWhoPaidScreenStyle/MainDetailsWhoPaidScreenStyle";
 import {Ionicons, AntDesign, Entypo} from '@expo/vector-icons';
@@ -62,6 +62,7 @@ class MainDetailsWhoPaidScreen extends Component<Props> {
         // @ts-ignore
         return (
             <View>
+                <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
                 <View style={{backgroundColor: Colors.tabIconSelected}}>
                     <View style={styles.header}>
                         <TouchableOpacity activeOpacity={0.5}>

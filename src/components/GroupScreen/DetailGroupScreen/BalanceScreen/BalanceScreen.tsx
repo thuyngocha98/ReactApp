@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Colors from '../../../../constants/Colors';
-import { View, TouchableOpacity, Text, StatusBar } from 'react-native';
+import { View, TouchableOpacity, Text, StatusBar, Image, Button, Alert, FlatList } from 'react-native';
 import BalanceScreenStyles from '../../../../styles/GroupsStyles/DetailGroupScreenStyles/BalanceScreen/BalanceScreenStyles';
+import { MaterialCommunityIcons, FontAwesome5, Entypo } from '@expo/vector-icons';
+import ListItemBalance from './ListItemBalance';
 
 function mapStateToProps(state) {
     return {
@@ -43,13 +45,51 @@ class BalanceScreen extends Component {
                 )
         };
     };
+
+    state = {
+        isShow: false,
+    }
+
+    data = [
+        {
+            id: 0,
+            money: "321.121,00 US$",
+            name: "Nguyễn Minh Trung",
+            nameSub: "vê l",
+            nameSecondSub: "Nguyễn M",
+            isGetBack: true,
+            moneySub: "321.121, 00 US$"
+
+        },
+        {
+            id: 1,
+            money: "321.121,00 US$",
+            name: "Thủy Ngọc Hà",
+            nameSub: "Nguyễn M",
+            nameSecondSub: "Hà T",
+            isGetBack: false,
+            moneySub: "321.121, 00 US$"
+        }
+    ]
+
     render() {
         return (
-            <View style={{flex: 1}}>
-                <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
-
+            <View style={BalanceScreenStyles.container}>
+                <FlatList
+                    data={this.data}
+                    renderItem={({ item }) => (
+                        <ListItemBalance
+                            money={item.money}
+                            name={item.name}
+                            nameSub={item.nameSub}
+                            nameSecondSub={item.nameSecondSub}
+                            isGetBack={item.isGetBack}
+                            moneySub={item.moneySub}
+                        />
+                    )}
+                    keyExtractor={item => item.id.toString()}
+                />
             </View>
-           
         );
     }
 }

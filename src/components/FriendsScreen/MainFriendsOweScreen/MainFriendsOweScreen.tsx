@@ -6,6 +6,7 @@ import {
     Text,
     TouchableOpacity,
     View,
+    StatusBar,
 } from 'react-native';
 // @ts-ignore
 import styles from "../../../styles/FriendsScreenStyles/MainFriendsOweScreenStyle/MainFriendsOweScreenStyle";
@@ -90,6 +91,7 @@ class MainFriendsOweScreen extends Component<Props> {
         // @ts-ignore
         return (
             <View>
+                <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent />
                 <Text style={styles.friends}>
                     Friends
                 </Text>

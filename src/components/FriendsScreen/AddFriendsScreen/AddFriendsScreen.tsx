@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, TextInput, TouchableOpacity} from "react-native";
+import {View, Text, TextInput, TouchableOpacity, StatusBar} from "react-native";
 import Colors from "../../../constants/Colors";
 import Layout from "../../../constants/Layout";
 import styles from "../../../styles/FriendsScreenStyles/AddFriendsScreenStyle/AddFriendsScreenStyle";
@@ -21,6 +21,7 @@ class AddFriendsScreen extends Component<Props> {
     render() {
         return (
             <View>
+                <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
                 <View style={{ backgroundColor: Colors.tabIconSelected}}>
                     <View style={styles.header}>
                         <TouchableOpacity activeOpacity={0.5} onPress={this.goBackFriendsScreen}>

@@ -18,5 +18,6 @@ export default {
     blackText: 'rgba(0,0,0,0.55)',
     splitWise:'rgba(179,38,255,1)',
     black: '#000000',
-    LightCyan: '#E0FFFF'
+    LightCyan: '#E0FFFF',
+    orangered: '#ff4500'
 };

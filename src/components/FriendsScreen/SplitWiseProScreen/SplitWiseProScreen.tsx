@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, Image, Button, TouchableOpacity, ScrollView} from "react-native";
+import {View, Text, Image, Button, TouchableOpacity, ScrollView, StatusBar} from "react-native";
 import Colors from "../../../constants/Colors";
 import styles from "../../../styles/FriendsScreenStyles/SplitWiseProScreenStyle/SplitWiseProScreenStyle";
 import {AntDesign} from "@expo/vector-icons";
@@ -21,6 +21,7 @@ class SplitWiseProScreen extends Component<Props> {
     render() {
         return (
             <View>
+                <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
                 <View style={{backgroundColor: Colors.splitWise}}>
                     <View style={styles.header}>
                         <TouchableOpacity activeOpacity={0.5} onPress={this.onGoBackAddFriendsScreen}>

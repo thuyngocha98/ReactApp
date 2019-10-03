@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TouchableOpacity, Alert, Image, TextInput, Switch } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, Image, TextInput, Switch, StatusBar } from 'react-native';
 import Colors from '../../../constants/Colors';
 import CreateGroupScreenStyles from '../../../styles/GroupsStyles/CreateGroupScreenStyles/CreateGroupScreenStyles';
 
@@ -104,6 +104,7 @@ class CreateGroupScreen extends Component<State> {
     render() {
         return (
             <View style={CreateGroupScreenStyles.container}>
+                <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
                 <View style={CreateGroupScreenStyles.categoryGroupName}>
                     <Image
                         style={CreateGroupScreenStyles.iconCamera}
