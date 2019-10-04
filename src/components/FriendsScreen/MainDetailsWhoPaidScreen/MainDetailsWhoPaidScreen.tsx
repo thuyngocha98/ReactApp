@@ -2,13 +2,8 @@ import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, Image, FlatList, StatusBar} from "react-native";
 import Colors from "../../../constants/Colors";
 import styles from "../../../styles/FriendsScreenStyles/MainDetailsWhoPaidScreenStyle/MainDetailsWhoPaidScreenStyle";
+import TransactedComponent from "./TransactedComponent";
 import {Ionicons, AntDesign, Entypo} from '@expo/vector-icons';
-// @ts-ignore
-import list from "../../../../assets/images/list.png";
-// @ts-ignore
-import camera from "../../../../assets/images/photo-camera.png";
-// @ts-ignore
-import user from "../../../../assets/images/user.png";
 import ListItemDetailsWhoPaid from "./ListItemDetailsWhoPaid";
 // @ts-ignore
 import avatar from '../../../../assets/images/avatar.jpg';
@@ -59,13 +54,16 @@ class MainDetailsWhoPaidScreen extends Component<Props> {
     };
 
     render() {
-        // @ts-ignore
+        const {navigation} =this.props;
         return (
             <View>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
                 <View style={{backgroundColor: Colors.tabIconSelected}}>
                     <View style={styles.header}>
-                        <TouchableOpacity activeOpacity={0.5}>
+                        <TouchableOpacity
+                            activeOpacity={0.5}
+                            onPress={()=> navigation.goBack()}
+                        >
                             <Ionicons name={'ios-arrow-back'} size={35} color={'white'} style={{marginTop: -10}}/>
                         </TouchableOpacity>
                         <Text style={styles.titleDetails}>Details</Text>
@@ -79,44 +77,9 @@ class MainDetailsWhoPaidScreen extends Component<Props> {
                     </View>
 
                 </View>
-                <View style={styles.details}>
-                    <View style={{flexDirection: 'row'}}>
-                        <View style={styles.icons}>
-                            <Image source={list}/>
-                        </View>
-                        <View style={styles.contentDetails}>
-                            <Text style={styles.iconTravel}>Drink</Text>
-                            <Text style={styles.money}>11.00US$</Text>
-                        </View>
-                        <TouchableOpacity style={styles.camera} activeOpacity={0.5}>
-                            <Image style={{tintColor: 'gray'}} source={camera}/>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={{flexDirection: 'row', paddingHorizontal: 20}}>
-                    <View style={{flex: 1.5}}>
-
-                    </View>
-                    <View style={styles.personAdd}>
-                        <View style={styles.person}>
-                            <View style={styles.userBorder}>
-                                <Image source={user}/>
-                                <Text style={{marginHorizontal: 10, fontSize: 15, fontWeight: '600'}}>ZeTrungMin
-                                    Nguyen</Text>
-                            </View>
-                        </View>
-                        <View style={{flexDirection: 'row'}}>
-                            <Text style={{fontSize: 14, marginBottom: 5, opacity: 0.5}}>Added by you on </Text>
-                            <Text style={{fontSize: 14, opacity: 0.5}}>ngày 16 tháng 9, 2019</Text>
-                        </View>
-                        <View style={{flexDirection: 'row'}}>
-                            <Text style={{fontSize: 14, marginBottom: 5, opacity: 0.5}}>Last updated by you on </Text>
-                            <Text style={{fontSize: 14, opacity: 0.5}}>ngày 18 tháng 9, 2019</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.hr}>
-                </View>
+             <View>
+                 <TransactedComponent/>
+             </View>
                 <View>
                     <FlatList
                         data={this.state.data}

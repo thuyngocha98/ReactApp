@@ -2,13 +2,9 @@ import React, {Component} from 'react';
 import {View, Text, Image, ImageBackground, Alert, StatusBar} from 'react-native';
 import styles from "../../../styles/FriendsScreenStyles/OweTripDetailsMemberScreenStyle/HeaderOweTripDetailsMemberScreenStyle";
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
-import {LinearGradient} from 'expo-linear-gradient';
 import {screenWidth} from '../../../constants/Dimensions';
 import {Ionicons} from '@expo/vector-icons';
-import Colors from '../../../constants/Colors';
 import ListItemMember from "../OweTripsMemberScreen/ListItemMember";
-// @ts-ignore
-import userMember from "../../../../assets/images/usermember.png";
 // @ts-ignore
 import triangle2 from "../../../../assets/images/triangle2.png";
 // @ts-ignore
@@ -120,7 +116,7 @@ class HeaderOweTripDetailsMemberScreen extends Component<States>{
                    </ImageBackground>
                </View>
                <View >
-                    <ListItemDetailsMember/>
+                    <ListItemDetailsMember navigation={navigation}/>
                </View>
            </View>
         );

@@ -149,6 +149,7 @@ class ListItemDetailsMember extends Component<Props> {
     ];
 
     render() {
+        const {navigation} = this.props;
         return (
             <View  style={styles.marginTop}>
                 <SectionList
@@ -156,9 +157,7 @@ class ListItemDetailsMember extends Component<Props> {
                     keyExtractor={(item, index) => item + index}
                     renderItem={({ item }) => (
                         <TouchableOpacity
-                            onPress={() => {
-                                Alert.alert(item.title)
-                            }}
+                            onPress={() => navigation.navigate('MainDetailsWhoPaidScreen') }
                         >
                             <ListItemDetailsContent
                                 month={item.month}

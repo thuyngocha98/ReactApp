@@ -34,8 +34,8 @@ class MainFriendsOweScreen extends Component<Props> {
                     {
                         id: 0,
                         description: 'Ha owes you',
-                        money:' 51,000 ',
-                        type:'US$ for "Ticket Movie"'
+                        money: ' 51,000 ',
+                        type: 'US$ for "Ticket Movie"'
                     }
                 ]
             },
@@ -49,7 +49,7 @@ class MainFriendsOweScreen extends Component<Props> {
                         id: 0,
                         description: 'Ha owes you  ',
                         money: '40,000 ',
-                        type:'US$ for "Hotel"'
+                        type: 'US$ for "Hotel"'
                     },
 
                 ]
@@ -62,14 +62,14 @@ class MainFriendsOweScreen extends Component<Props> {
                 data: [
                     {
                         id: 0,
-                        description:  'ZeTrunMin owes you ',
-                        money:'30,000 ',
+                        description: 'ZeTrunMin owes you ',
+                        money: '30,000 ',
                         type: "US$ for \"Ticket Plan\""
                     },
                     {
                         id: 1,
                         description: 'ZeTrunMin owes you ',
-                        money:'70,000 ',
+                        money: '70,000 ',
                         type: 'US$ for "cake"',
 
                     }
@@ -85,13 +85,10 @@ class MainFriendsOweScreen extends Component<Props> {
     };
 
     render() {
-        // @ts-ignore
-        // @ts-ignore
-        // @ts-ignore
-        // @ts-ignore
+        const {navigation} = this.props;
         return (
             <View>
-                <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent />
+                <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent/>
                 <Text style={styles.friends}>
                     Friends
                 </Text>
@@ -110,7 +107,9 @@ class MainFriendsOweScreen extends Component<Props> {
                         <FlatList
                             data={this.state.data}
                             renderItem={({item}) => (
-                                <TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={ () => navigation.navigate('HeaderOweTripMemberScreen')}
+                                >
                                     <ListItemFriendsOwe
                                         nameFriend={item.nameFriend}
                                         detail={item.detail}

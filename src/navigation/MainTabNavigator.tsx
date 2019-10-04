@@ -35,13 +35,12 @@ const FriendsStack = createStackNavigator(
         AddFriendsScreen,
         AddContactScreen,
         SplitWiseProScreen,
-        MainDetailsWhoPaidScreen,
         HeaderOweTripMemberScreen,
-        HeaderOweTripDetailsMemberScreen
+        HeaderOweTripDetailsMemberScreen,
+        MainDetailsWhoPaidScreen,
     },
     {
-        initialRouteName: 'HeaderOweTripDetailsMemberScreen'
-
+        initialRouteName: ''
     }
 );
 
