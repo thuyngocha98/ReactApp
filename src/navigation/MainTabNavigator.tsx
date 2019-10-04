@@ -19,7 +19,8 @@ import SplitWiseProScreen from "../components/FriendsScreen/SplitWiseProScreen/S
 import MainDetailsWhoPaidScreen from "../components/FriendsScreen/MainDetailsWhoPaidScreen/MainDetailsWhoPaidScreen";
 import BalanceScreen from '../components/GroupScreen/DetailGroupScreen/BalanceScreen/BalanceScreen';
 import MainActivityDetailsWhoPaidScreen from "../components/ActivityScreen/MainActivityDetailsWhoPaidScreen/MainActivityDetailsWhoPaidScreen";
-import MainActivityScreen from "../components/ActivityScreen/RecentActivityScreen/MainActivityScreen";
+import HeaderOweTripMemberScreen from "../components/FriendsScreen/OweTripsMemberScreen/HeaderOweTripMemberScreen";
+import HeaderOweTripDetailsMemberScreen from "../components/FriendsScreen/OweTripsDetailMemberScreen/HeaderOweTripDetailsMemberScreen";
 
 
 const configPlat = Platform.select({
@@ -34,10 +35,12 @@ const FriendsStack = createStackNavigator(
         AddFriendsScreen,
         AddContactScreen,
         SplitWiseProScreen,
-        MainDetailsWhoPaidScreen
+        MainDetailsWhoPaidScreen,
+        HeaderOweTripMemberScreen,
+        HeaderOweTripDetailsMemberScreen
     },
     {
-        initialRouteName: ''
+        initialRouteName: 'HeaderOweTripDetailsMemberScreen'
 
     }
 );
@@ -209,10 +212,10 @@ AccountStack.navigationOptions = {
 
 
 const tabNavigator = createBottomTabNavigator({
-    ActivityStack,
     FriendsStack,
     GroupStack,
     ExpenseStack,
+    ActivityStack,
     AccountStack,
 });
 

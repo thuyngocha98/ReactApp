@@ -3,12 +3,9 @@ import Colors from "../../../constants/Colors";
 import { screenWidth } from "../../../constants/Dimensions";
 import  Constants  from "expo-constants";
 
-const HeaderTitleComponentStyles = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     backgroundImage: {
         width: screenWidth,
@@ -16,6 +13,7 @@ const HeaderTitleComponentStyles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'flex-end',
         alignItems: 'center',
+        resizeMode:'cover'
     },
     header: {
         width: screenWidth,
@@ -29,11 +27,11 @@ const HeaderTitleComponentStyles = StyleSheet.create({
     btnSetting: {
         marginRight: screenWidth/27.43,
     },
-    iconCamera: {
+    iconUser: {
         marginTop: screenWidth/82.28,
         width: screenWidth/5.1425,
         height: screenWidth / 5.1425,
-        tintColor: Colors.white,
+        tintColor: Colors.blackText,
         alignSelf: 'center'
     },
     contentText: {
@@ -45,12 +43,10 @@ const HeaderTitleComponentStyles = StyleSheet.create({
     textTitle: {
         fontWeight: 'bold',
         fontSize: 22,
-        color: Colors.white  ,
     },
     numberPeopleAndTime: {
         marginBottom: screenWidth / 41.14,
         fontSize: 14,
-        color: Colors.white
     },
     owesAndMoney: {
         flexDirection: 'row',
@@ -58,19 +54,17 @@ const HeaderTitleComponentStyles = StyleSheet.create({
     },
     owes: {
         fontSize: 16,
-        color: Colors.white
     },
     money: {
         fontSize: 17,
-        fontWeight: '500',
-        color: Colors.white
+        fontWeight: '500'
     },
     flatList: {
-        backgroundColor: '#696969',
+        // backgroundColor: '#696969',
         height: screenWidth/7.48,
         width: screenWidth,
         justifyContent: 'center',
         alignItems: 'center'
     }
 });
-export default HeaderTitleComponentStyles;
+export default styles;
