@@ -96,7 +96,7 @@ class MainScreenGroup extends Component<Props> {
                         renderItem={({ item }) => (
                             <TouchableOpacity
                                 onPress={() => {
-                                    this.props.navigation.navigate('DetailGroupScreen')
+                                    this.props.navigation.navigate('DetailGroupScreen', {nameGroup: item.nameGroup})
                                 }}
                             >
                                 <ListItemGroup

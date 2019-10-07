@@ -171,11 +171,12 @@ class DetailGroupScreen extends Component<Props> {
 
 
     render() {
+        const nameGroup = this.props.navigation.getParam('nameGroup', 'NO Name')
         return (
             <View style={DetailGroupScreenStyles.mainContainer}>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
                 <View style={DetailGroupScreenStyles.header}>
-                    <HeaderTitleComponent navigation={this.props.navigation} />
+                    <HeaderTitleComponent navigation={this.props.navigation} nameGroup={nameGroup} />
                 </View>
                 <SectionList
                     sections={this.data}

@@ -8,7 +8,7 @@ const MainScreenGroupStyles = StyleSheet.create({
     },
     group: {
         marginLeft: 20,
-        marginTop: 15,
+        marginTop: 10,
         fontWeight: '500',
         fontSize: 25
     },

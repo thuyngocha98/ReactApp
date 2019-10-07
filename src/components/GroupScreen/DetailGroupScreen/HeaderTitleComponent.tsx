@@ -17,6 +17,7 @@ function mapStateToProps(state) {
 type States = {
     itemSelected?: number,
     navigation?: any,
+    nameGroup?: string,
 }
 
 class HeaderTitleComponent extends Component<States> {
@@ -87,7 +88,7 @@ class HeaderTitleComponent extends Component<States> {
                         </View>
                     </View>
                     <View style={HeaderTitleComponentStyles.contentText}>
-                        <Text style={HeaderTitleComponentStyles.textTitle}>Hotel</Text>
+                        <Text style={HeaderTitleComponentStyles.textTitle}>{this.props.nameGroup}</Text>
                         <Text style={HeaderTitleComponentStyles.numberPeopleAndTime}>2 people •	Created thg 9 2019</Text>
                         <View style={HeaderTitleComponentStyles.owesAndMoney}>
                             <Text style={HeaderTitleComponentStyles.owes}>Trung owes you </Text>
@@ -102,7 +103,14 @@ class HeaderTitleComponent extends Component<States> {
                             renderItem={({ item }) => (
                                 <TouchableOpacity
                                     onPress={() => {
-                                        item.title == "Balances" ? navigation.navigate('BalanceScreen') : null
+                                        switch (item.title) {
+                                            case "Balances":
+                                                navigation.navigate('BalanceScreen')
+                                                break;
+                                            case "Totals":
+                                                navigation.navigate('TotalScreen', {nameGroup: this.props.nameGroup})
+                                                break;
+                                        }
                                     }}
                                 >
                                     <ListItemHeader
@@ -121,9 +129,9 @@ class HeaderTitleComponent extends Component<States> {
                             style={{
                                 position: 'absolute',
                                 left: 0,
-                                right: 375,
+                                right: screenWidth/1.096,
                                 top: 0,
-                                height: 55,
+                                height: screenWidth / 7.48,
                             }}
                             start={{ x: 0, y: 0.5 }}
                             end={{ x: 0.8, y: 0.5 }}
@@ -132,10 +140,10 @@ class HeaderTitleComponent extends Component<States> {
                             colors={['rgba(0,0,0,0.8)', 'transparent']}
                             style={{
                                 position: 'absolute',
-                                left: 375,
+                                left: screenWidth / 1.096,
                                 right: 0,
                                 top: 0,
-                                height: 55,
+                                height: screenWidth / 7.48,
                             }}
                             start={{ x: 1, y: 0.5 }}
                             end={{ x: 0.2, y: 0.5 }}

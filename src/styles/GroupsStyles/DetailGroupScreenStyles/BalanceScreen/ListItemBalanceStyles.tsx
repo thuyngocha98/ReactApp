@@ -9,6 +9,7 @@ const ListItemBalanceStyles = StyleSheet.create({
         alignItems: 'center',
         marginHorizontal: 10,
         marginBottom: 10,
+        
     },
     firtItem: {
         flexDirection: 'row',
@@ -23,9 +24,9 @@ const ListItemBalanceStyles = StyleSheet.create({
         justifyContent: 'center'
     },
     photo: {
-        width: 40,
-        height: 40,
-        borderRadius: 20
+        width: 46,
+        height: 46,
+        borderRadius: 23
     },
     title: {
         flex: 3.5,
@@ -35,7 +36,7 @@ const ListItemBalanceStyles = StyleSheet.create({
     },
     name: {
         fontWeight: '600',
-        fontSize: 17,
+        fontSize: 16,
     },
     money: {
         fontSize: 16
@@ -57,7 +58,7 @@ const ListItemBalanceStyles = StyleSheet.create({
     secondItem: {
         flexDirection: 'row',
         width: screenWidth,
-        marginLeft: 90,
+        marginLeft: 85,
         alignItems: 'center',
     },
     iconSecond: {

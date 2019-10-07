@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { View, Text, TouchableOpacity} from 'react-native';
 import MainScreenGroup from '../components/GroupScreen/MainScreenGroup/MainScreenGroup';
 import { EvilIcons } from '@expo/vector-icons';
+import { APPBAR_HEIGHT } from '../constants/Dimensions';
 
 type Props = {
     navigation?: any,
@@ -13,6 +14,7 @@ class GroupScreen extends Component<Props> {
             headerStyle: {
                 elevation: 0,
                 textAlign: 'center',
+                height: APPBAR_HEIGHT
             },
             headerRight:
                 (
@@ -22,7 +24,7 @@ class GroupScreen extends Component<Props> {
                                 navigation.navigate('CreateGroupScreen')
                             }}
                         >
-                            <Text style={{ fontSize: 18 }}>Start a new group</Text>
+                            <Text style={{ fontSize: 19 }}>Start a new group</Text>
                         </TouchableOpacity>
                     </View>
                 ),

@@ -20,6 +20,7 @@ import MainDetailsWhoPaidScreen from "../components/FriendsScreen/MainDetailsWho
 import BalanceScreen from '../components/GroupScreen/DetailGroupScreen/BalanceScreen/BalanceScreen';
 import MainActivityDetailsWhoPaidScreen from "../components/ActivityScreen/MainActivityDetailsWhoPaidScreen/MainActivityDetailsWhoPaidScreen";
 import MainActivityScreen from "../components/ActivityScreen/RecentActivityScreen/MainActivityScreen";
+import TotalScreen from '../components/GroupScreen/DetailGroupScreen/TotalScreen/TotalScreen';
 
 
 const configPlat = Platform.select({
@@ -87,6 +88,9 @@ const GroupStack = createStackNavigator(
         },
         BalanceScreen: {
             screen: BalanceScreen
+        },
+        TotalScreen: {
+            screen: TotalScreen
         }
     },
     // config

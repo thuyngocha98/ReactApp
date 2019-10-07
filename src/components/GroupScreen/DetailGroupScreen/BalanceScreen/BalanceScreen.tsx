@@ -5,6 +5,7 @@ import { View, TouchableOpacity, Text, StatusBar, Image, Button, Alert, FlatList
 import BalanceScreenStyles from '../../../../styles/GroupsStyles/DetailGroupScreenStyles/BalanceScreen/BalanceScreenStyles';
 import { MaterialCommunityIcons, FontAwesome5, Entypo } from '@expo/vector-icons';
 import ListItemBalance from './ListItemBalance';
+import { APPBAR_HEIGHT } from '../../../../constants/Dimensions';
 
 function mapStateToProps(state) {
     return {
@@ -20,11 +21,13 @@ class BalanceScreen extends Component {
                 elevation: 0,
                 textAlign: 'center',
                 backgroundColor: Colors.tintColor,
+                height: APPBAR_HEIGHT
             },
             headerTitleStyle: {
                 flex: 1,
                 textAlign: 'center',
-                color: Colors.white
+                color: Colors.white,
+                fontSize: 20,
             },
             headerRight:
                 (

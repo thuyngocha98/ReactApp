@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, ScrollView, FlatList, Image, TouchableOpacity} from "react-native";
+import {View, Text, ScrollView, FlatList, Image, TouchableOpacity, StatusBar} from "react-native";
 import styles from "../../../styles/ActivityScreenStyles/RecentActivityScreenStyle/MainActivityScreenStyle";
 import ListItemActivity from "./ListItemActivity";
 // @ts-ignore
@@ -126,6 +126,7 @@ class MainActivityScreen extends Component<Props> {
     render() {
         return (
             <View>
+                <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent />
                 <ScrollView style={styles.scrollView}>
                     <View>
                         <Text style={styles.title}>Recent activity</Text>

@@ -46,6 +46,7 @@ const HeaderTitleComponentStyles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 22,
         color: Colors.white  ,
+        marginLeft: -10
     },
     numberPeopleAndTime: {
         marginBottom: screenWidth / 41.14,
