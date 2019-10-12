@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import MainFriendsOweScreen from "../components/FriendsScreen/MainFriendsOweScreen/MainFriendsOweScreen";
-import {Text, TouchableOpacity, View} from "react-native";
+import {StatusBar, Text, TouchableOpacity, View} from "react-native";
 import {EvilIcons} from "@expo/vector-icons";
 
 type Props ={
@@ -32,7 +32,10 @@ class FriendsScreen extends Component<Props> {
 
     render() {
         return (
-            <MainFriendsOweScreen navigation={this.props.navigation}/>
+           <View>
+               <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent/>
+               <MainFriendsOweScreen navigation={this.props.navigation}/>
+           </View>
         );
     }
 }

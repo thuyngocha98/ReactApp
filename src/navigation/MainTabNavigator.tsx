@@ -21,6 +21,9 @@ import BalanceScreen from '../components/GroupScreen/DetailGroupScreen/BalanceSc
 import MainActivityDetailsWhoPaidScreen from "../components/ActivityScreen/MainActivityDetailsWhoPaidScreen/MainActivityDetailsWhoPaidScreen";
 import HeaderOweTripMemberScreen from "../components/FriendsScreen/OweTripsMemberScreen/HeaderOweTripMemberScreen";
 import HeaderOweTripDetailsMemberScreen from "../components/FriendsScreen/OweTripsDetailMemberScreen/HeaderOweTripDetailsMemberScreen";
+import MainLoginScreen from "../components/LoginScreen/MainLoginScreen";
+import MainSignUpScreen from "../components/SignUpScreen/MainSignUpScreen";
+import MainForgotPasswordScreen from "../components/ForgotPasswordScreen/MainForgotPasswordScreen";
 
 
 const configPlat = Platform.select({
@@ -31,6 +34,9 @@ const configPlat = Platform.select({
 
 const FriendsStack = createStackNavigator(
     {
+        MainLoginScreen,
+        MainSignUpScreen,
+        MainForgotPasswordScreen,
         FriendsScreen,
         AddFriendsScreen,
         AddContactScreen,
@@ -48,7 +54,7 @@ const FriendsStack = createStackNavigator(
 FriendsStack.navigationOptions = ({navigation}) => {
     let tabBarVisible = true;
     let routeName = navigation.state.routes[navigation.state.index].routeName;
-    if (routeName == 'SplitWiseProScreen') {
+    if (routeName == 'SplitWiseProScreen' || routeName == 'MainLoginScreen' || routeName == 'MainSignUpScreen' || routeName == 'MainForgotPasswordScreen') {
         tabBarVisible = false
     }
 
