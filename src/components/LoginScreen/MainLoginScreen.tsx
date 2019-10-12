@@ -53,11 +53,10 @@ class MainLoginScreen extends Component<Props> {
         try {
             const value = await AsyncStorage.getItem('jwt');
             if (value !== null) {
-                console.log(value);
                 this.props.navigation.navigate('FriendsScreen')
             }
         } catch (error) {
-            console.log(error);
+            alert(error);
         }
     };
 
@@ -85,7 +84,7 @@ class MainLoginScreen extends Component<Props> {
                 }
             })
             .catch((error) => {
-                console.log(error);
+                alert(error);
             });
     };
 

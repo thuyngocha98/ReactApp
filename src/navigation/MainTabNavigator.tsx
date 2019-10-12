@@ -221,7 +221,7 @@ const tabNavigator = createBottomTabNavigator({
     GroupStack,
     ExpenseStack,
     ActivityStack,
-    AccountStack,
+    AccountStack
 });
 
 export default tabNavigator;
