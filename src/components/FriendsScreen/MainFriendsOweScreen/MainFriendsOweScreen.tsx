@@ -85,13 +85,10 @@ class MainFriendsOweScreen extends Component<Props> {
     };
 
     render() {
-        // @ts-ignore
-        // @ts-ignore
-        // @ts-ignore
-        // @ts-ignore
+        const {navigation} = this.props;
         return (
             <View>
-                <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent />
+                <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent/>
                 <Text style={styles.friends}>
                     Friends
                 </Text>
@@ -109,8 +106,10 @@ class MainFriendsOweScreen extends Component<Props> {
                     <View>
                         <FlatList
                             data={this.state.data}
-                            renderItem={({ item }) => (
-                                <TouchableOpacity>
+                            renderItem={({item}) => (
+                                <TouchableOpacity
+                                    onPress={ () => navigation.navigate('HeaderOweTripMemberScreen')}
+                                >
                                     <ListItemFriendsOwe
                                         nameFriend={item.nameFriend}
                                         detail={item.detail}

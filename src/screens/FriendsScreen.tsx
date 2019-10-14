@@ -1,9 +1,13 @@
 import React, {Component} from 'react';
 import MainFriendsOweScreen from "../components/FriendsScreen/MainFriendsOweScreen/MainFriendsOweScreen";
-import {Text, TouchableOpacity, View} from "react-native";
+import {StatusBar, Text, TouchableOpacity, View} from "react-native";
 import {EvilIcons} from "@expo/vector-icons";
 
-class FriendsScreen extends Component {
+type Props ={
+  navigation? :any
+};
+
+class FriendsScreen extends Component<Props> {
     static  navigationOptions = ({navigation}) => {
         return {
             headerStyle: {
@@ -28,7 +32,10 @@ class FriendsScreen extends Component {
 
     render() {
         return (
-            <MainFriendsOweScreen/>
+           <View>
+               <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent/>
+               <MainFriendsOweScreen navigation={this.props.navigation}/>
+           </View>
         );
     }
 }

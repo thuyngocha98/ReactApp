@@ -80,6 +80,7 @@ class MainActivityDetailsWhoPaidScreen extends Component<Props> {
         // @ts-ignore
         return (
             <View>
+                <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
                 <View style={{backgroundColor: Colors.tabIconSelected}}>
                     <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent />
                     <View style={styles.header}>

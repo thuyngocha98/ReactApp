@@ -26,6 +26,11 @@ import ExpenseDetailScreen from '../components/ExpenseScreen/ExpenseDetailScreen
 import ExpenseMoreOptionScreen from '../components/ExpenseScreen/ExpenseDetailScreen/ExpenseMoreOptionScreen/EqualSplit/ExpenseMoreOptionScreen';
 import ExpenseByNumberSplitScreen from '../components/ExpenseScreen/ExpenseDetailScreen/ExpenseMoreOptionScreen/NumberSplit/ExpenseByNumberSplitScreen';
 import ExpenseByPlusOrMinusScreen from '../components/ExpenseScreen/ExpenseDetailScreen/ExpenseMoreOptionScreen/PlusMinusSplit/ExpenseByPlusOrMinusScreen';
+import HeaderOweTripMemberScreen from "../components/FriendsScreen/OweTripsMemberScreen/HeaderOweTripMemberScreen";
+import HeaderOweTripDetailsMemberScreen from "../components/FriendsScreen/OweTripsDetailMemberScreen/HeaderOweTripDetailsMemberScreen";
+import MainLoginScreen from "../components/LoginScreen/MainLoginScreen";
+import MainSignUpScreen from "../components/SignUpScreen/MainSignUpScreen";
+import MainForgotPasswordScreen from "../components/ForgotPasswordScreen/MainForgotPasswordScreen";
 
 
 const configPlat = Platform.select({
@@ -35,15 +40,19 @@ const configPlat = Platform.select({
 
 const FriendsStack = createStackNavigator(
     {
+        MainLoginScreen,
+        MainSignUpScreen,
+        MainForgotPasswordScreen,
         FriendsScreen,
         AddFriendsScreen,
         AddContactScreen,
         SplitWiseProScreen,
-        MainDetailsWhoPaidScreen
+        HeaderOweTripMemberScreen,
+        HeaderOweTripDetailsMemberScreen,
+        MainDetailsWhoPaidScreen,
     },
     {
         initialRouteName: ''
-
     }
 );
 
@@ -51,7 +60,7 @@ const FriendsStack = createStackNavigator(
 FriendsStack.navigationOptions = ({navigation}) => {
     let tabBarVisible = true;
     let routeName = navigation.state.routes[navigation.state.index].routeName;
-    if (routeName == 'SplitWiseProScreen') {
+    if (routeName == 'SplitWiseProScreen' || routeName == 'MainLoginScreen' || routeName == 'MainSignUpScreen' || routeName == 'MainForgotPasswordScreen') {
         tabBarVisible = false
     }
 
@@ -269,11 +278,11 @@ AccountStack.navigationOptions = {
 
 
 const tabNavigator = createBottomTabNavigator({
-    ActivityStack,
     FriendsStack,
     GroupStack,
     ExpenseStack,
-    AccountStack,
+    ActivityStack,
+    AccountStack
 });
 
 export default tabNavigator;

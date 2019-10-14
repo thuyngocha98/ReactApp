@@ -24,7 +24,7 @@ class HeaderTitleComponent extends Component<States> {
 
     state = {
         itemSelected: 0,
-    }
+    };
     data = [
         {
             id: 0,
@@ -54,7 +54,7 @@ class HeaderTitleComponent extends Component<States> {
             id: 6,
             title: "Export"
         },
-    ]
+    ];
 
     render() {
         const { navigation } = this.props;
@@ -116,8 +116,7 @@ class HeaderTitleComponent extends Component<States> {
                                     <ListItemHeader
                                         title={item.title}
                                         itemSelected={
-                                            this.state.itemSelected == item.id ?
-                                                true : false
+                                            this.state.itemSelected == item.id
                                         }
                                     />
                                 </TouchableOpacity>
@@ -148,7 +147,6 @@ class HeaderTitleComponent extends Component<States> {
                             start={{ x: 1, y: 0.5 }}
                             end={{ x: 0.2, y: 0.5 }}
                         />
-
                     </View>
                 </ImageBackground>
             </View>
