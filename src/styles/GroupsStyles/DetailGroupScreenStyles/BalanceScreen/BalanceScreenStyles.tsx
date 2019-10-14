@@ -8,14 +8,14 @@ const BalanceScreenStyles = StyleSheet.create({
         marginLeft: screenWidth / 27.43,
     },
     textHeaderLeft: {
-        fontSize: 17,
+        fontSize: 16,
         color: Colors.white
     },
     headerRight: {
         marginRight: screenWidth / 27.43,
     },
     textHeaderRight: {
-        fontSize: 17,
+        fontSize: 16,
         color: Colors.white
     },
     container: {

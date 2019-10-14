@@ -1,5 +1,5 @@
 import React from 'react';
-import {Platform, View, Text} from 'react-native';
+import {Platform, View, Text, Animated, Easing} from 'react-native';
 import {createStackNavigator, createBottomTabNavigator} from 'react-navigation';
 
 import {Feather, MaterialCommunityIcons, Ionicons, EvilIcons} from '@expo/vector-icons';
@@ -7,7 +7,6 @@ import TabBarIcon from '../components/TabBarIcon';
 import FriendsScreen from '../screens/FriendsScreen';
 import GroupScreen from '../screens/GroupScreen';
 import ActivityScreen from "../screens/ActivityScreen";
-import AddExpenseScreen from "../screens/AddExpenseScreen";
 import Colors from '../constants/Colors';
 import AccountScreen from "../screens/AccountScreen";
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -21,13 +20,18 @@ import BalanceScreen from '../components/GroupScreen/DetailGroupScreen/BalanceSc
 import MainActivityDetailsWhoPaidScreen from "../components/ActivityScreen/MainActivityDetailsWhoPaidScreen/MainActivityDetailsWhoPaidScreen";
 import MainActivityScreen from "../components/ActivityScreen/RecentActivityScreen/MainActivityScreen";
 import TotalScreen from '../components/GroupScreen/DetailGroupScreen/TotalScreen/TotalScreen';
+import ExpenseScreen from '../screens/ExpenseScreen';
+import InputExpenseScreen from '../components/ExpenseScreen/InputExpenseScreen/InputExpenseScreen';
+import ExpenseDetailScreen from '../components/ExpenseScreen/ExpenseDetailScreen/ExpenseDetailScreen';
+import ExpenseMoreOptionScreen from '../components/ExpenseScreen/ExpenseDetailScreen/ExpenseMoreOptionScreen/EqualSplit/ExpenseMoreOptionScreen';
+import ExpenseByNumberSplitScreen from '../components/ExpenseScreen/ExpenseDetailScreen/ExpenseMoreOptionScreen/NumberSplit/ExpenseByNumberSplitScreen';
+import ExpenseByPlusOrMinusScreen from '../components/ExpenseScreen/ExpenseDetailScreen/ExpenseMoreOptionScreen/PlusMinusSplit/ExpenseByPlusOrMinusScreen';
 
 
 const configPlat = Platform.select({
     web: {headerMode: 'screen'},
     default: {},
 });
-
 
 const FriendsStack = createStackNavigator(
     {
@@ -120,30 +124,82 @@ GroupStack.navigationOptions = {
 
 const ExpenseStack = createStackNavigator(
     {
-        AddExpense: AddExpenseScreen
+        AddExpense: {
+            screen: ExpenseScreen,
+        },
+        InputExpenseScreen: {
+            screen: InputExpenseScreen,
+        },
+        ExpenseDetailScreen: {
+            screen: ExpenseDetailScreen,
+        },
+        ExpenseMoreOptionScreen: {
+            screen: ExpenseMoreOptionScreen,
+        },
+        ExpenseByNumberSplitScreen: {
+            screen: ExpenseByNumberSplitScreen
+        },
+        ExpenseByPlusOrMinusScreen: {
+            screen: ExpenseByPlusOrMinusScreen,
+            
+        }
+    },
+    {
+        transitionConfig: () => ({
+            transitionSpec: {
+                duration: 0,
+                timing: Animated.timing,
+                easing: Easing.step0,
+            },
+        }),
     }
 );
 
-ExpenseStack.navigationOptions = {
-    tabBarLabel: 'Expense',
-    tabBarIcon: ({focused}) => (
-        <Ionicons focused={focused}
-                  name={Platform.OS === 'ios'
-                      ? 'ios-home'
-                      : 'ios-add-circle-outline'
-                  }
-                  size={26}
-                  style={{marginBottom: -3}}
-                  color={focused ? Colors.tabIconSelected : Colors.blackText}
-        />
-    ),
-    tabBarOptions: {
-        activeTintColor: Colors.tintColor,
-        labelStyle: {
-            marginBottom: 5
-        }
+ExpenseStack.navigationOptions = ({ navigation }) => {
+    let tabBarVisible;
+    if (navigation.state.routes.length > 1) {
+        navigation.state.routes.map(route => {
+            if (route.routeName === "InputExpenseScreen") {
+                tabBarVisible = false;
+            }
+            else if (route.routeName === "ExpenseDetailScreen") {
+                tabBarVisible = false;
+            }
+            else if (route.routeName === "ExpenseMoreOptionScreen") {
+                tabBarVisible = false;
+            }
+            else if (route.routeName === "ExpenseByNumberSplitScreen") {
+                tabBarVisible = false;
+            }
+            else if (route.routeName === "ExpenseByPlusOrMinusScreen") {
+                tabBarVisible = false;
+            }
+            else {
+                tabBarVisible = true;
+            }
+        });
     }
-
+    return {
+        tabBarVisible,
+        tabBarLabel: 'Expense',
+        tabBarIcon: ({ focused }) => (
+            <Ionicons focused={focused}
+                name={Platform.OS === 'ios'
+                    ? 'ios-home'
+                    : 'ios-add-circle-outline'
+                }
+                size={26}
+                style={{ marginBottom: -3 }}
+                color={focused ? Colors.tabIconSelected : Colors.blackText}
+            />
+        ),
+        tabBarOptions: {
+            activeTintColor: Colors.tintColor,
+            labelStyle: {
+                marginBottom: 5
+            }
+        }
+    };
 };
 
 

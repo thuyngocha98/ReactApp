@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     FlatList,
     Image,
@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 // @ts-ignore
 import styles from "../../../styles/FriendsScreenStyles/MainFriendsOweScreenStyle/MainFriendsOweScreenStyle";
-import {MaterialCommunityIcons} from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 // @ts-ignore
 import avatar from "../../../../assets/images/avatar.jpg";
 import ListItemGroup from "../../GroupScreen/MainScreenGroup/ListItemGroup";
@@ -34,8 +34,8 @@ class MainFriendsOweScreen extends Component<Props> {
                     {
                         id: 0,
                         description: 'Ha owes you',
-                        money:' 51,000 ',
-                        type:'US$ for "Ticket Movie"'
+                        money: ' 51,000 ',
+                        type: 'US$ for "Ticket Movie"'
                     }
                 ]
             },
@@ -49,7 +49,7 @@ class MainFriendsOweScreen extends Component<Props> {
                         id: 0,
                         description: 'Ha owes you  ',
                         money: '40,000 ',
-                        type:'US$ for "Hotel"'
+                        type: 'US$ for "Hotel"'
                     },
 
                 ]
@@ -62,14 +62,14 @@ class MainFriendsOweScreen extends Component<Props> {
                 data: [
                     {
                         id: 0,
-                        description:  'ZeTrunMin owes you ',
-                        money:'30,000 ',
+                        description: 'ZeTrunMin owes you ',
+                        money: '30,000 ',
                         type: "US$ for \"Ticket Plan\""
                     },
                     {
                         id: 1,
                         description: 'ZeTrunMin owes you ',
-                        money:'70,000 ',
+                        money: '70,000 ',
                         type: 'US$ for "cake"',
 
                     }
@@ -80,7 +80,7 @@ class MainFriendsOweScreen extends Component<Props> {
 
     _ItemSeparatorComponent = () => {
         return (
-            <View style={{flex: 1, height: 1, backgroundColor: Colors.lightgray}}/>
+            <View style={{ flex: 1, height: 1, backgroundColor: Colors.lightgray }} />
         );
     };
 
@@ -97,19 +97,19 @@ class MainFriendsOweScreen extends Component<Props> {
                 </Text>
                 <ScrollView>
                     <View style={styles.cartExpense}>
-                        <Image style={styles.avatar} source={avatar}/>
-                        <View style={{flex: 1}}>
-                            <Text style={{color: 'white'}}>Total balance</Text>
+                        <Image style={styles.avatar} source={avatar} />
+                        <View style={{ flex: 1 }}>
+                            <Text style={{ color: 'white' }}>Total balance</Text>
                             <Text style={styles.textDetail}>You are owned 305.151,00 US$</Text>
                         </View>
                         <TouchableOpacity activeOpacity={0.5}>
-                            <MaterialCommunityIcons color={'white'} size={25} name={'menu'} style={styles.iconMenu}/>
+                            <MaterialCommunityIcons color={'white'} size={25} name={'menu'} style={styles.iconMenu} />
                         </TouchableOpacity>
                     </View>
                     <View>
                         <FlatList
                             data={this.state.data}
-                            renderItem={({item}) => (
+                            renderItem={({ item }) => (
                                 <TouchableOpacity>
                                     <ListItemFriendsOwe
                                         nameFriend={item.nameFriend}

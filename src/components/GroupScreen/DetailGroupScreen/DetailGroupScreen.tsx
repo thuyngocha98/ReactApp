@@ -37,6 +37,20 @@ class DetailGroupScreen extends Component<Props> {
         };
     };
 
+    _navListener: any;
+
+    componentDidMount() {
+        // set barstyle of statusbar
+        this._navListener = this.props.navigation.addListener('didFocus', () => {
+            StatusBar.setBarStyle('light-content');
+        });
+    }
+
+    componentWillUnmount() {
+        // remove barstyle when lead screen
+        this._navListener.remove();
+    }
+
     data = [
         {
             title: "tháng 9 2019",

@@ -38,7 +38,7 @@ class TotalScreen extends Component<Props, States> {
                 flex: 1,
                 textAlign: 'center',
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 18,
             },
             headerRight:
                 (

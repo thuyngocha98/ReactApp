@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, Image, FlatList} from "react-native";
+import {View, Text, TouchableOpacity, Image, FlatList, StatusBar} from "react-native";
 import Colors from "../../../constants/Colors";
 import styles from "../../../styles/ActivityScreenStyles/MainActivityDetailsWhoPaidScreenStyle/MainActivityDetailsWhoPaidScreenStyle";
 import {Ionicons, AntDesign, Entypo} from '@expo/vector-icons';
@@ -51,6 +51,21 @@ class MainActivityDetailsWhoPaidScreen extends Component<Props> {
 
     };
 
+    _navListener: any;
+
+    componentDidMount() {
+
+        // set barstyle of statusbar
+        this._navListener = this.props.navigation.addListener('didFocus', () => {
+            StatusBar.setBarStyle('dark-content');
+        });
+    }
+
+    componentWillUnmount() {
+        // remove barstyle when lead screen
+        this._navListener.remove();
+    }
+
     _ItemSeparatorComponent = () => {
         return (
             <View style={{flex: 1, height: 1, backgroundColor: Colors.lightgray}}/>
@@ -66,6 +81,7 @@ class MainActivityDetailsWhoPaidScreen extends Component<Props> {
         return (
             <View>
                 <View style={{backgroundColor: Colors.tabIconSelected}}>
+                    <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent />
                     <View style={styles.header}>
                         <TouchableOpacity activeOpacity={0.5} onPress={this.goBack}>
                             <Ionicons name={'ios-arrow-back'} size={35} color={'white'} style={{marginTop: -10}}/>
