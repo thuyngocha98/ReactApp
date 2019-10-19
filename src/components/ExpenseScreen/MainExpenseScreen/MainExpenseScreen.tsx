@@ -27,7 +27,7 @@ class MainExpenseScreen extends Component<Props> {
     }
 
     componentWillUnmount() {
-        // remove barstyle when lead screen
+        // remove barstyle
         this._navListener.remove();
     }
 

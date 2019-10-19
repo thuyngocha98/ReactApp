@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const TIMEOUT = 100
 // const BASEURL = 'http://192.168.0.135:3000/'
-const BASEURL = 'http://139.180.141.68/coreapiccx/'
+export const BASEURL = 'http://192.168.1.7:3001'
 
 axios.defaults.withCredentials = true
 

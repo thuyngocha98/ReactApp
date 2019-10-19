@@ -17,11 +17,11 @@ const styles = StyleSheet.create({
         width: screenWidth / 3,
         height: screenWidth / 3,
         tintColor: Colors.tabIconSelected,
-        marginBottom: 10,
+        marginBottom: screenHeight/41.1,
     },
     userContainer: {
         flexDirection: 'row',
-        paddingHorizontal: screenWidth / 10,
+        paddingHorizontal: screenWidth / 7,
         marginBottom: screenWidth / 10
     },
     user: {
@@ -29,20 +29,19 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: screenWidth,
         alignItems: 'center',
-        borderColor: 'rgba(0,0,0,1)',
-        borderBottomWidth: 1,
-        borderRadius: screenWidth / 15,
+        borderBottomColor: 'rgba(0,0,0,1)',
+        borderBottomWidth: 0.5,
     },
     userName: {
         tintColor: Colors.blackText,
         width: screenWidth / 20,
         height: screenWidth / 20,
-        marginLeft: 10,
-        marginRight: 5
+        marginRight: screenHeight/82.2
     },
     input: {
+        flex: 1,
         fontSize: 16,
-        marginLeft: 5,
+        marginLeft: screenHeight/82.2,
 
     },
     buttonSignUp: {
@@ -77,6 +76,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderWidth: 1,
+        borderColor: Colors.gray,
         borderRadius: screenWidth / 16,
     },
     textLogin: {

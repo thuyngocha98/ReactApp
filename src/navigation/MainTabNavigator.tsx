@@ -30,6 +30,7 @@ import HeaderOweTripMemberScreen from "../components/FriendsScreen/OweTripsMembe
 import HeaderOweTripDetailsMemberScreen from "../components/FriendsScreen/OweTripsDetailMemberScreen/HeaderOweTripDetailsMemberScreen";
 import MainLoginScreen from "../components/LoginScreen/MainLoginScreen";
 import MainSignUpScreen from "../components/SignUpScreen/MainSignUpScreen";
+import verifyScreen from "../components/SignUpScreen/verifyScreen";
 import MainForgotPasswordScreen from "../components/ForgotPasswordScreen/MainForgotPasswordScreen";
 
 
@@ -43,6 +44,7 @@ const FriendsStack = createStackNavigator(
         MainLoginScreen,
         MainSignUpScreen,
         MainForgotPasswordScreen,
+        verifyScreen,
         FriendsScreen,
         AddFriendsScreen,
         AddContactScreen,
@@ -60,7 +62,7 @@ const FriendsStack = createStackNavigator(
 FriendsStack.navigationOptions = ({navigation}) => {
     let tabBarVisible = true;
     let routeName = navigation.state.routes[navigation.state.index].routeName;
-    if (routeName == 'SplitWiseProScreen' || routeName == 'MainLoginScreen' || routeName == 'MainSignUpScreen' || routeName == 'MainForgotPasswordScreen') {
+    if (routeName == 'SplitWiseProScreen' || routeName == 'MainLoginScreen' || routeName == 'MainSignUpScreen' || routeName == 'MainForgotPasswordScreen' || routeName == 'verifyScreen') {
         tabBarVisible = false
     }
 

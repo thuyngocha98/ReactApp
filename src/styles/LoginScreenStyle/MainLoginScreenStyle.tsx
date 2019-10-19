@@ -4,23 +4,22 @@ import {StyleSheet} from "react-native";
 
 const styles = StyleSheet.create({
     mainContainer: {
-        backgroundColor: 'rgba(255,255,255,1)',
+        backgroundColor: '#ffffff',
         flex: 1,
     },
     imageBackground: {
-
         flex: 1,
     },
     header: {
         alignItems: 'center',
-        marginTop: screenHeight / 10,
-        marginBottom: screenHeight / 10
+        marginTop: screenHeight / 7,
+        marginBottom: screenHeight / 20
     },
     reactLogo: {
         width: screenWidth / 3,
         height: screenWidth / 3,
         tintColor: Colors.tabIconSelected,
-        marginBottom: 10,
+        marginBottom: screenWidth/41.1,
     },
     title: {
         fontSize: 24,
@@ -37,7 +36,7 @@ const styles = StyleSheet.create({
         height: screenWidth / 8,
         alignItems: 'center',
         borderRadius: screenWidth / 16,
-        borderColor:'rgba(0,0,0,1)',
+        borderColor:Colors.lightgray,
         borderWidth:1,
         backgroundColor: 'rgba(255, 255, 255, 0.3)',
     },
@@ -45,30 +44,31 @@ const styles = StyleSheet.create({
         opacity:0.6,
         width: screenWidth / 20,
         height: screenWidth / 20,
-        marginLeft: 15
+        marginLeft: screenWidth/27.4
     },
     password: {
         tintColor:Colors.blackText,
         width: screenWidth / 15,
         height: screenWidth / 15,
-        marginLeft: 10
+        marginLeft: screenWidth / 34.25
     },
     input: {
+        flex: 1,
         fontSize: 16,
-        marginLeft: 5,
+        marginLeft: screenWidth/51.375,
         color: Colors.blackText
     },
     input1: {
         flex: 1,
         fontSize: 16,
-        marginLeft: 5,
+        marginLeft: screenWidth/82.2,
         color: Colors.blackText
     },
     eyeBlack: {
         width: screenWidth / 15,
         height: screenWidth / 15,
         tintColor: 'rgba(0,0,0,0.5)',
-        marginRight: 10
+        marginRight: screenWidth/41.1
     },
     buttonLogin: {
         flexDirection: 'row',
@@ -91,13 +91,15 @@ const styles = StyleSheet.create({
     },
     footer: {
         flexDirection:'row',
+        marginTop: screenWidth/41.1,
         paddingHorizontal: screenWidth / 8,
     },
     register: {
+        flex: 1,
+        marginLeft: screenWidth/82.2,
     },
     forgot: {
-        flex:1,
-        marginLeft:5,
+        
     },
     textForgot: {
         fontSize: 16

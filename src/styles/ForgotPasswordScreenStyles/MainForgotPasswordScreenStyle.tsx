@@ -17,33 +17,45 @@ const styles = StyleSheet.create({
         width: screenWidth / 3,
         height: screenWidth / 3,
         tintColor: Colors.tabIconSelected,
-        marginBottom: 10,
+        marginBottom: screenWidth/41.1,
     },
     userContainer: {
         flexDirection: 'row',
-        paddingHorizontal: screenWidth / 10,
+        paddingHorizontal: screenWidth / 8,
         marginBottom: screenWidth / 10
     },
     user: {
-        flex: 1,
+        flex: 3,
         flexDirection: 'row',
         width: screenWidth,
         alignItems: 'center',
-        borderColor: 'rgba(0,0,0,1)',
-        borderBottomWidth: 1,
-        borderRadius: screenWidth / 15,
+        borderBottomColor: 'rgba(0,0,0,1)',
+        borderBottomWidth: 0.5,
     },
     userName: {
         tintColor: Colors.blackText,
         width: screenWidth / 20,
         height: screenWidth / 20,
-        marginLeft: 10,
-        marginRight: 5
+        marginRight: screenWidth/82.2
     },
     input: {
+        flex: 1,
         fontSize: 16,
-        marginLeft: 5,
-
+        marginLeft: screenWidth/82.2,
+    },
+    send: {
+        flex: 1,
+        backgroundColor: Colors.tintColor,
+        borderRadius: screenWidth/51.375,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: screenWidth/82.2,
+    },
+    txtSend: {
+        fontSize: 16,
+        color: Colors.white,
+        paddingHorizontal: screenWidth/41.1,
+        paddingVertical: screenWidth/82.2,
     },
     buttonChange: {
         flexDirection: 'row',
@@ -71,6 +83,7 @@ const styles = StyleSheet.create({
         borderWidth:1,
         marginHorizontal:screenWidth/8,
         borderRadius: screenWidth / 16,
+        borderColor: Colors.gray,
     },
     buttonLogin1: {
         flex: 1,
@@ -79,6 +92,7 @@ const styles = StyleSheet.create({
         height: screenWidth / 8,
         alignItems: 'center',
         justifyContent: 'center',
+        borderColor: Colors.gray,
     },
     textLogin: {
         fontSize: 20,
