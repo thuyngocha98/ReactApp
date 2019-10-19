@@ -62,7 +62,7 @@ class MainSignUpScreen extends Component<Props> {
                 password: this.state.password
             };
             const json = JSON.stringify(data);
-            fetch(`${BASEURL}/api/users`, {
+            fetch(`${BASEURL}/api/user/insert_a_user`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
