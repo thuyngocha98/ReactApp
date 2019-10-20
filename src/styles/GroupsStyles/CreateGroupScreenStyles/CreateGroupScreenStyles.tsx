@@ -1,16 +1,17 @@
 import { StyleSheet } from "react-native";
 import Colors from "../../../constants/Colors";
+import { screenWidth } from "../../../constants/Dimensions";
 
 const CreateGroupScreenStyles = StyleSheet.create({
     headerRight: {
-        marginRight: 15
+        marginRight: screenWidth/27.4
     },
     textHeaderRight: {
         fontSize: 17,
         color: Colors.white
     },
     headerLeft: {
-        marginLeft: 15,
+        marginLeft: screenWidth/27.4,
     },
     textHeaderLeft: {
         fontSize: 17,
@@ -22,39 +23,39 @@ const CreateGroupScreenStyles = StyleSheet.create({
     },
     categoryGroupName: {
         flexDirection: 'row',
-        margin: 20
+        margin: screenWidth/20.55
     },
     iconCamera: {
-        width: 80,
-        height: 80
+        width: screenWidth/5.1375,
+        height: screenWidth/5.1375
     },
     nameAndDetail: {
         flexDirection: 'column',
         justifyContent: 'center',
-        marginLeft: 15
+        marginLeft: screenWidth/27.4
     },
     groupName: {
         fontWeight: "500",
         fontSize: 18,
-        marginBottom: 5,
+        marginBottom: screenWidth/82.2,
     },
     
     detail: {
 
     },
     categoryGroupType: {
-        margin: 20,
+        margin: screenWidth/20.55,
     },
     groupType: {
         fontWeight: "500",
         fontSize: 18,
-        marginBottom: 10,
+        marginBottom: screenWidth/41.1,
     },
     categoryTypeGroup: {
         flexDirection: 'row',
     },
     apartment: {
-        padding: 5,
+        padding: screenWidth/82.2,
         borderWidth: 1,
         borderRightWidth: -1,
         borderColor: Colors.tintColor,
@@ -63,21 +64,21 @@ const CreateGroupScreenStyles = StyleSheet.create({
         textAlign: 'center'
     },
     house: {
-        padding: 5,
+        padding: screenWidth/82.2,
         borderWidth: 1,
         borderRightWidth: -1,
         borderColor: Colors.tintColor,
         textAlign: 'center'
     },
     trip: {
-        padding: 5,
+        padding: screenWidth/82.2,
         borderWidth: 1,
         borderRightWidth: -1,
         borderColor: Colors.tintColor,
         textAlign: 'center'
     },
     order: {
-        padding: 5,
+        padding: screenWidth/82.2,
         borderWidth: 1,
         borderColor: Colors.tintColor,
         borderTopRightRadius: 5,

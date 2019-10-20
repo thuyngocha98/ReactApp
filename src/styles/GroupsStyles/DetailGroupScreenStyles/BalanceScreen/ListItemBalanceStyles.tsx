@@ -7,8 +7,8 @@ const ListItemBalanceStyles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
-        marginHorizontal: 10,
-        marginBottom: 10,
+        marginHorizontal: screenWidth/41.1,
+        marginBottom: screenWidth/41.1,
         
     },
     firtItem: {
@@ -24,9 +24,9 @@ const ListItemBalanceStyles = StyleSheet.create({
         justifyContent: 'center'
     },
     photo: {
-        width: 46,
-        height: 46,
-        borderRadius: 23
+        width: screenWidth/8.935,
+        height: screenWidth/8.935,
+        borderRadius: screenWidth/17.87
     },
     title: {
         flex: 3.5,
@@ -58,19 +58,19 @@ const ListItemBalanceStyles = StyleSheet.create({
     secondItem: {
         flexDirection: 'row',
         width: screenWidth,
-        marginLeft: 85,
+        marginLeft: screenWidth/4.835,
         alignItems: 'center',
     },
     iconSecond: {
 
     },
     avatarSecond: {
-        margin: 5
+        margin: screenWidth/82.2
     },
     photoSecond: {
-        width: 24,
-        height: 24,
-        borderRadius: 12
+        width: screenWidth/17.125,
+        height: screenWidth/17.125,
+        borderRadius: screenWidth/34.25
     },
     text: {
 
@@ -93,16 +93,16 @@ const ListItemBalanceStyles = StyleSheet.create({
         alignItems: 'center'
     },
     btn: {
-        borderRadius: 5,
+        borderRadius: screenWidth/82.2,
         elevation: 1,
-        marginHorizontal: 5,
+        marginHorizontal: screenWidth/82.2,
         borderBottomWidth: 2,
         borderColor: Colors.lightgray
         
     },
     txt: {
         color: Colors.blackText,
-        paddingHorizontal: 15,
+        paddingHorizontal: screenWidth/27.4,
         padding: 5,
         fontSize: 15,
         fontWeight: '500'
@@ -111,7 +111,7 @@ const ListItemBalanceStyles = StyleSheet.create({
         width: screenWidth,
         height: 0.5,
         backgroundColor: Colors.lightgray,
-        marginTop: 10,
+        marginTop: screenWidth/41.1,
     }
 
 });

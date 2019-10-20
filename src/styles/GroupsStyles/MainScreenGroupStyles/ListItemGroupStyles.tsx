@@ -5,8 +5,8 @@ const ListItemGroupStyles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         flexDirection: 'column',
-        marginHorizontal: 20,
-        marginVertical: 10,
+        marginHorizontal: screenWidth/20.55,
+        marginVertical: screenWidth/41.1,
     },
     container1: {
         flexDirection: 'row',
@@ -15,24 +15,24 @@ const ListItemGroupStyles = StyleSheet.create({
     texts: {
         flex: 1,
         flexDirection: 'row',
-        margin: 5,
+        margin: screenWidth/82.2,
     },
     nameGroup: {
         flex: 1,
         flexDirection: 'column',
         alignItems: 'flex-start',
-        marginLeft: 10,
+        marginLeft: screenWidth/41.1,
         justifyContent: 'center'
     },
     textDetail: {
         flex: 1,
         flexDirection: "column",
         alignItems: 'flex-end',
-        marginRight: 5
+        marginRight: screenWidth/82.2
     },
     avatar: {
-        width: 40,
-        height: 40,
+        width: screenWidth / 10.275,
+        height: screenWidth / 10.275,
         resizeMode: 'contain',
     },
     name: {

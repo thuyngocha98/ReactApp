@@ -36,7 +36,7 @@ const TotalScreenStyles = StyleSheet.create({
         flexDirection: 'row',
     },
     thisMonth: {
-        padding: 5,
+        padding: screenWidth/82.2,
         borderWidth: 1,
         borderRightWidth: -1,
         borderColor: Colors.tintColor,
@@ -46,7 +46,7 @@ const TotalScreenStyles = StyleSheet.create({
         fontSize: 16
     },
     lastMonth: {
-        padding: 5,
+        padding: screenWidth/82.2,
         borderWidth: 1,
         borderRightWidth: -1,
         borderColor: Colors.tintColor,
@@ -54,7 +54,7 @@ const TotalScreenStyles = StyleSheet.create({
         fontSize: 16
     },
     allTime: {
-        padding: 5,
+        padding: screenWidth/82.2,
         borderWidth: 1,
         borderColor: Colors.tintColor,
         borderTopRightRadius: 5,
@@ -69,7 +69,7 @@ const TotalScreenStyles = StyleSheet.create({
     group: {
         flexDirection: 'row',
         justifyContent: "space-between",
-        marginTop: 20,
+        marginTop: screenWidth/20.55,
     },
     totalName: {
         fontSize: 16,

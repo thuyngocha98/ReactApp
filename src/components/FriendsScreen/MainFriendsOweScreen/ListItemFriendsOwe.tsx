@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {View, FlatList, Image, Text} from 'react-native';
 import Styles from "../../../styles/FriendsScreenStyles/MainFriendsOweScreenStyle/ListItemFriendsOweStyle";
 import Colors from '../../../constants/Colors';
-import {FontAwesome5} from '@expo/vector-icons';
+import {FontAwesome5, Octicons} from '@expo/vector-icons';
 import ListDetailFriendsOwe from "./ListDetailFriendsOwe";
 // @ts-ignore
 import userFriend from "../../../../assets/images/userFriend.png";
@@ -32,8 +32,7 @@ class ListItemFriendsOwe extends Component<Props> {
                             <Text style={Styles.color}>{this.props.money}</Text>
                         </View>
                     </View>
-                    <FontAwesome5 name='chevron-right' size={20} color={Colors.lightgray}/>
-
+                    <Octicons name='chevron-right' size={25} color={Colors.lightgray} />
                 </View>
                 <View>
                     <FlatList

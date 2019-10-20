@@ -88,13 +88,13 @@ const ExpenseDetailScreenStyles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        marginBottom: 10,
     },
     txtMoreOption: {
         borderColor: Colors.lightgray,
         marginTop: screenWidth/20.55,
         borderRadius: screenWidth/82.2,
         elevation: 2,
-        borderBottomWidth: 1.5,
         padding: screenWidth/41.1,
         fontSize: 17,
     }

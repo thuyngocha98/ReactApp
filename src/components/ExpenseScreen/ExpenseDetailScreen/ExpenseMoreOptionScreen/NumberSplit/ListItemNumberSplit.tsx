@@ -44,7 +44,8 @@ class ListItemNumberSplit extends Component<Props> {
                             <TextInput
                                 style={ListItemNumberSplitStyles.inputMoney}
                                 placeholder="0.00"
-                                underlineColorAndroid={Colors.gray}
+                                keyboardType='number-pad'
+                                underlineColorAndroid={"transparent"}
                             />
                         </View>
                     </View>

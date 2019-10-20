@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text } from 'react-native';
 import ListItemContentStyles from '../../../styles/GroupsStyles/DetailGroupScreenStyles/ListItemContentStyles';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5, Octicons } from '@expo/vector-icons';
 import Colors from '../../../constants/Colors';
 
 function mapStateToProps(state) {
@@ -40,7 +40,7 @@ class ListItemContent extends Component<Props> {
                     <Text style={ListItemContentStyles.money}>{this.props.money}</Text>
                 </View>
                 <View style={ListItemContentStyles.iconDetail}>
-                    <FontAwesome5 name='chevron-right' size={20} color={Colors.lightgray} />
+                    <Octicons name='chevron-right' size={25} color={Colors.lightgray} />
                 </View>
             </View>
         );

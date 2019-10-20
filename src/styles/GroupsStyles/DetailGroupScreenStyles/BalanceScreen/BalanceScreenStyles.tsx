@@ -21,7 +21,7 @@ const BalanceScreenStyles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        marginTop: 10
+        marginTop: screenWidth/41.1
     },
 
 });

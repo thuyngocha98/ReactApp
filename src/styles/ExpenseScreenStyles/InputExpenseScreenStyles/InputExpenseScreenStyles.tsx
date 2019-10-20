@@ -22,15 +22,15 @@ const InputExpenseScreenStyles = StyleSheet.create({
     },
     nameGroup:{
         flexDirection: 'row',
-        borderRadius: screenWidth/27.4,
+        borderRadius: screenWidth/20.55,
         borderWidth: 1,
         borderColor: Colors.lightgray,
         alignItems: 'center',
         margin: screenWidth/27.4
     },
     image: {
-        width: screenWidth/13.7,
-        height: screenWidth/13.7,
+        width: screenWidth/10.275,
+        height: screenWidth/10.275,
         tintColor: Colors.tintColor,
         borderColor: Colors.lightgray,
     },

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { View, FlatList, Image, Text } from 'react-native';
 import ListItemGroupStyles from '../../../styles/GroupsStyles/MainScreenGroupStyles/ListItemGroupStyles';
 import Colors from '../../../constants/Colors';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5, Entypo, Octicons } from '@expo/vector-icons';
 import ListItemDetail from './ListItemDetail';
 
 function mapStateToProps(state) {
@@ -31,15 +31,13 @@ class ListItemGroup extends Component<Props> {
                     <View style={ListItemGroupStyles.texts}>
                         <View style={ListItemGroupStyles.nameGroup}>
                             <Text style={ListItemGroupStyles.name}>{this.props.nameGroup}</Text>
-
                         </View>
                         <View style={ListItemGroupStyles.textDetail}>
                             <Text>{this.props.detail}</Text>
                             <Text>{this.props.price}</Text>
                         </View>
                     </View>
-                    <FontAwesome5 name='chevron-right' size={20} color={Colors.lightgray} />
-
+                    <Octicons name='chevron-right' size={25} color={Colors.lightgray} />
                 </View>
                 <View>
                     <FlatList
@@ -57,4 +55,4 @@ class ListItemGroup extends Component<Props> {
     }
 }
 
-export default connect(mapStateToProps,)(ListItemGroup);
+export default connect(mapStateToProps)(ListItemGroup);

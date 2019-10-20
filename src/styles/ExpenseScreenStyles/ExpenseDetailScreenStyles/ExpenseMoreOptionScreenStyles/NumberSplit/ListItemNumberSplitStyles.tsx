@@ -45,21 +45,21 @@ const ListItemNumberSplitStyles = StyleSheet.create({
         alignItems: 'center'
     },
     viewUnitMoney: {
-        flex: 1,
+        flex: 1.2,
     },
     unitMoney: {
         color: Colors.gray,
-        fontSize: 16,
-        marginRight: screenWidth/82.5
+        fontSize: 15,
     },
     viewInput: {
-        flex: 1.7
+        flex: 1.7,
+        borderBottomWidth: 0.5,
+        borderBottomColor: Colors.gray,
     },
     inputMoney: {
         fontSize: 16,
         fontWeight: '500',
-        height: screenWidth/10.275,
-        textAlign: 'right'
+        height: screenWidth/13.7,
     }
 });
 export default ListItemNumberSplitStyles;

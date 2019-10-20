@@ -89,7 +89,7 @@ class MainSignUpScreen extends Component<Props> {
     // screen scroll when click on textInput
     _scrollToInput(position) {
         // Add a 'scroll' ref to your ScrollView
-        this.scroll.props.scrollToPosition(position, position, true)
+        this.scroll.props.scrollToPosition(1, position, true)
     }
 
     render() {
@@ -152,7 +152,7 @@ class MainSignUpScreen extends Component<Props> {
                                     onSubmitEditing={() => { this.passTextInput.focus(); }}
                                     blurOnSubmit={false}
                                     onFocus={() => {
-                                        this._scrollToInput(screenWidth/20.55)
+                                        this._scrollToInput(screenWidth/8)
                                     }}
                                 />
                             </View>
@@ -179,7 +179,7 @@ class MainSignUpScreen extends Component<Props> {
                                     onSubmitEditing={() => { this.rePassTextInput.focus(); }}
                                     blurOnSubmit={false}
                                     onFocus={() => {
-                                        this._scrollToInput(screenWidth/6.85)
+                                        this._scrollToInput(screenWidth/5.1375)
                                     }}
                                 />
                             </View>
@@ -205,7 +205,7 @@ class MainSignUpScreen extends Component<Props> {
                                     ref={(input) => { this.rePassTextInput = input; }}
                                     // onSubmitEditing={() => { this.secondTextInput.focus(); }}
                                     onFocus={() => {
-                                        this._scrollToInput(screenWidth/2.74)
+                                        this._scrollToInput(screenWidth/2.5)
                                     }}
                                 />
                             </View>

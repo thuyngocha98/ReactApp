@@ -99,6 +99,7 @@ class InputExpenseScreen extends Component<Props> {
                         <View style={InputExpenseScreenStyles.inputMoney}>
                             <TextInput
                                 style={InputExpenseScreenStyles.txtInputMoney}
+                                keyboardType='number-pad'
                                 placeholder="0,00"
                             />
                             <View style={InputExpenseScreenStyles.underLineInput} />

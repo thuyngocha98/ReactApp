@@ -132,7 +132,7 @@ class MainForgotPasswordScreen extends Component<Props> {
     // screen scroll when click on textInput
     _scrollToInput(position) {
         // Add a 'scroll' ref to your ScrollView
-        this.scroll.props.scrollToPosition(position, position, true)
+        this.scroll.props.scrollToPosition(1, position, true)
     }
 
     render() {
@@ -251,7 +251,7 @@ class MainForgotPasswordScreen extends Component<Props> {
                                     underlineColorAndroid="transparent"
                                     ref={(input) => { this.rePassTextInput = input; }}
                                     onFocus={() => {
-                                        this._scrollToInput(screenWidth/2.74)
+                                        this._scrollToInput(screenWidth/2.5)
                                     }}
                                 />
                             </View>
