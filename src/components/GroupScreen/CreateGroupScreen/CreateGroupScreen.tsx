@@ -36,10 +36,10 @@ class CreateGroupScreen extends Component<State> {
                     <View style={CreateGroupScreenStyles.headerRight}>
                         <TouchableOpacity
                             onPress={() => {
-                                Alert.alert("Done")
+                                navigation.navigate("AddMemberGroupScreen")
                             }}
                         >
-                            <Text style={CreateGroupScreenStyles.textHeaderRight}>Done</Text>
+                            <Text style={CreateGroupScreenStyles.textHeaderRight}>Next</Text>
                         </TouchableOpacity>
                     </View>
                 ),

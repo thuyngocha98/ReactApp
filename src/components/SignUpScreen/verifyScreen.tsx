@@ -1,6 +1,6 @@
 import React, { Component, createRef } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Animated, Alert, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Animated, Alert, Image, TouchableOpacity, AsyncStorage } from 'react-native';
 import CodeFiled from 'react-native-confirmation-code-field';
 import verifyScreenStyles, {
     ACTIVE_CELL_BG_COLOR,
@@ -10,15 +10,12 @@ import verifyScreenStyles, {
     NOT_EMPTY_CELL_BG_COLOR,
 } from '../../styles/SignUpScreenStyle/verifyScreenStyles';
 import { BASEURL } from '../../api/api';
-
-function mapStateToProps(state) {
-    return {
-
-    };
-}
+import { bindActionCreators } from 'redux';
+import { getApiDataUser } from '../../actions/action';
 
 type Props = {
     navigation?: any,
+    getDataUser?: any,
 }
 
 type States = {
@@ -121,21 +118,24 @@ class verifyScreen extends Component<Props, States> {
                 body: json
             })
                 .then((response) => response.json())
-                .then((res) => {
+                .then(async (res) => {
                     if (res.error) {
                         Alert.alert(res.error);
                     } else {
+                        await AsyncStorage.setItem('jwt', res.token)
+                        this.getDataUserForRedux();
                         Alert.alert(
                             'Correct Verification',
-                            res.result+`\nLet's login`,
+                            `Let's go`,
                             [
-                                { text: 'OK', onPress: () => {
-                                    this.props.navigation.navigate("MainLoginScreen")
-                                } },
+                                {
+                                    text: 'OK', onPress: () => {
+                                        this.props.navigation.navigate("FriendsScreen")
+                                    }
+                                },
                             ],
                             { cancelable: false },
                         );
-                        
                     }
                 })
                 .catch((error) => {
@@ -145,6 +145,16 @@ class verifyScreen extends Component<Props, States> {
             Alert.alert('Please enter PIN verification');
         }
     };
+
+    async getDataUserForRedux() {
+        const dataUser = await this.props.getDataUser();
+        if (dataUser !== null) {
+            // this.props.navigation.navigate('FriendsScreen');
+        }
+        else {
+            console.log("error retrieve data user")
+        }
+    }
 
 
 
@@ -182,6 +192,10 @@ class verifyScreen extends Component<Props, States> {
     }
 }
 
-export default connect(
-    mapStateToProps,
-)(verifyScreen);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        getDataUser: getApiDataUser
+    }, dispatch);
+}
+
+export default connect(null, mapDispatchToProps)(verifyScreen);

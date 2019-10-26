@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { screenWidth, screenHeight } from "../../constants/Dimensions";
 import styles from "../../styles/LoginScreenStyle/MainLoginScreenStyle";
-import Dialog, { FadeAnimation, DialogFooter, DialogButton, DialogContent } from 'react-native-popup-dialog';
+import { connect } from 'react-redux';
 
 import {
     View,
@@ -26,8 +26,11 @@ import Layout from "../../constants/Layout";
 import Colors from '../../constants/Colors';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { BASEURL } from '../../api/api';
+import { bindActionCreators } from 'redux';
+import { getApiDataUser } from '../../actions/action';
 type Props = {
-    navigation?: any
+    navigation?: any,
+    getDataUser?: any,
 }
 
 class MainLoginScreen extends Component<Props> {
@@ -48,23 +51,24 @@ class MainLoginScreen extends Component<Props> {
     scroll: any;
     secondTextInput: TextInput;
 
-    componentWillMount(): void {
-        this.receiveToken().then(r => console.log(r));
+    validateEmail(email) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
     }
-    ;
-
-    receiveToken = async () => {
-        try {
-            const value = await AsyncStorage.getItem('jwt');
-            if (value !== null) {
-                this.props.navigation.navigate('FriendsScreen')
-            }
-        } catch (error) {
-            alert(error);
-        }
-    };
 
     login = async () => {
+        if (!this.validateEmail(this.state.email)) {
+            Alert.alert("Email invalid!");
+            return;
+        }
+        if (this.state.password === "") {
+            Alert.alert("Please enter password!");
+            return;
+        }
+        if (this.state.password.length < 5) {
+            Alert.alert("Password must be at least 5 characters!");
+            return;
+        }
         const data = {
             email: this.state.email,
             password: this.state.password
@@ -79,18 +83,30 @@ class MainLoginScreen extends Component<Props> {
             body: json
         })
             .then((response) => response.json())
-            .then((res) => {
+            .then(async (res) => {
                 if (res.error) {
                     Alert.alert(res.error);
                 } else {
-                    AsyncStorage.setItem('jwt', res.token);
-                    this.props.navigation.navigate('FriendsScreen')
+                    await AsyncStorage.setItem('jwt', res.token);
+                    this.getDataUserForRedux();
                 }
             })
             .catch((error) => {
                 alert(error);
             });
     };
+
+    async getDataUserForRedux() {
+        const dataUser = await this.props.getDataUser();
+        if (dataUser !== null) {
+            this.props.navigation.navigate('FriendsScreen');
+        }
+        else{
+            Alert.alert("Something error. Please login again!")
+        }
+    }
+
+
 
     _scrollToInput(position) {
         // Add a 'scroll' ref to your ScrollView
@@ -152,7 +168,7 @@ class MainLoginScreen extends Component<Props> {
                                         underlineColorAndroid="transparent"
                                         ref={(input) => { this.secondTextInput = input; }}
                                         onFocus={() => {
-                                            this._scrollToInput(screenWidth/5.48)
+                                            this._scrollToInput(screenWidth / 5.48)
                                         }}
                                     />
                                     <TouchableOpacity activeOpacity={0.5} onPress={this.showPass}>
@@ -188,5 +204,11 @@ class MainLoginScreen extends Component<Props> {
     }
 }
 
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        getDataUser: getApiDataUser
+    }, dispatch);
+}
 
-export default MainLoginScreen;
+
+export default connect(null, mapDispatchToProps)(MainLoginScreen);

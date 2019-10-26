@@ -32,6 +32,7 @@ import MainLoginScreen from "../components/LoginScreen/MainLoginScreen";
 import MainSignUpScreen from "../components/SignUpScreen/MainSignUpScreen";
 import verifyScreen from "../components/SignUpScreen/verifyScreen";
 import MainForgotPasswordScreen from "../components/ForgotPasswordScreen/MainForgotPasswordScreen";
+import AddMemberGroupScreen from '../components/GroupScreen/CreateGroupScreen/AddMemberGroupScreen';
 
 
 const configPlat = Platform.select({
@@ -98,6 +99,9 @@ const GroupStack = createStackNavigator(
         CreateGroupScreen: {
             screen: CreateGroupScreen
         },
+        AddMemberGroupScreen: {
+            screen: AddMemberGroupScreen,
+        },
         DetailGroupScreen: {
             screen: DetailGroupScreen
         },
@@ -111,25 +115,51 @@ const GroupStack = createStackNavigator(
     // config
 );
 
-GroupStack.navigationOptions = {
-    tabBarLabel: 'Groups',
-    tabBarIcon: ({focused}) => (
-        <MaterialCommunityIcons focused={focused}
-                                name={Platform.OS === 'ios'
-                                    ? 'ios-home'
-                                    : 'account-group'
-                                }
-                                size={26}
-                                style={{marginBottom: -3}}
-                                color={focused ? Colors.tabIconSelected : Colors.blackText}
-        />
-    ),
-    tabBarOptions: {
-        activeTintColor: Colors.tintColor,
-        labelStyle: {
-            marginBottom: 5
-        }
+GroupStack.navigationOptions = ({ navigation }) => {
+    let tabBarVisible;
+    if (navigation.state.routes.length > 1) {
+        navigation.state.routes.map(route => {
+            if (route.routeName === "CreateGroupScreen") {
+                tabBarVisible = false;
+            }
+            else if (route.routeName === "DetailGroupScreen") {
+                tabBarVisible = false;
+            }
+            else if (route.routeName === "BalanceScreen") {
+                tabBarVisible = false;
+            }
+            else if (route.routeName === "TotalScreen") {
+                tabBarVisible = false;
+            }
+            else if (route.routeName === "AddMemberGroupScreen") {
+                tabBarVisible = false;
+            }
+            else {
+                tabBarVisible = true;
+            }
+        });
     }
+    return {
+        tabBarVisible,
+        tabBarLabel: 'Groups',
+        tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons focused={focused}
+                name={Platform.OS === 'ios'
+                    ? 'ios-home'
+                    : 'account-group'
+                }
+                size={26}
+                style={{ marginBottom: -3 }}
+                color={focused ? Colors.tabIconSelected : Colors.blackText}
+            />
+        ),
+        tabBarOptions: {
+            activeTintColor: Colors.tintColor,
+            labelStyle: {
+                marginBottom: 5
+            }
+        }
+    };
 };
 
 

@@ -54,7 +54,28 @@ class MainSignUpScreen extends Component<Props> {
         })
     }
 
+    validateEmail(email) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+
     signUp = async () => {
+        if (this.state.name.length < 2) {
+            Alert.alert("Name must be at least 2 characters!");
+            return;
+        }
+        if (!this.validateEmail(this.state.email)) {
+            Alert.alert("Email invalid!");
+            return;
+        }
+        if(this.state.password === ""){
+            Alert.alert("Please enter password!");
+            return;
+        }
+        if (this.state.password.length < 5) {
+            Alert.alert("Password must be at least 5 characters!");
+            return;
+        }
         if (this.state.password === this.state.repeatPassword) {
             const data = {
                 name: this.state.name,

@@ -36,10 +36,13 @@ const MainScreenGroupStyles = StyleSheet.create({
         marginLeft: screenWidth/41.1,
     },
     textTotal: {
-
+        color: Colors.white,
+        fontSize: 17,
     },
     textDetail: {
-        color: Colors.mediumseagreen
+        color: Colors.white,
+        fontSize: 16,
+        
     },
     menu: {
         flex: 1

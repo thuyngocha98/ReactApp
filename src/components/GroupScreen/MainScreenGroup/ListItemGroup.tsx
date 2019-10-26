@@ -16,7 +16,9 @@ type Props = {
     nameGroup?: string,
     detail?: string,
     price?: string,
-    data?: any[]
+    isOwned?: boolean,
+    data?: any[],
+
 }
 
 class ListItemGroup extends Component<Props> {
@@ -30,16 +32,22 @@ class ListItemGroup extends Component<Props> {
                     />
                     <View style={ListItemGroupStyles.texts}>
                         <View style={ListItemGroupStyles.nameGroup}>
-                            <Text style={ListItemGroupStyles.name}>{this.props.nameGroup}</Text>
+                            <Text style={ListItemGroupStyles.name}>
+                                {this.props.nameGroup}
+                            </Text>
                         </View>
                         <View style={ListItemGroupStyles.textDetail}>
-                            <Text>{this.props.detail}</Text>
-                            <Text>{this.props.price}</Text>
+                            <Text style={{ color: this.props.isOwned ? Colors.mediumseagreen : Colors.orangered}}>
+                                {this.props.detail}
+                            </Text>
+                            <Text style={{ color: this.props.isOwned ? Colors.mediumseagreen : Colors.orangered }}>
+                                {this.props.price}
+                            </Text>
                         </View>
                     </View>
                     <Octicons name='chevron-right' size={25} color={Colors.lightgray} />
                 </View>
-                <View>
+                {/* <View>
                     <FlatList
                         data={this.props.data}
                         renderItem={({ item }) => (
@@ -49,7 +57,7 @@ class ListItemGroup extends Component<Props> {
                         )}
                         keyExtractor={item => item.id.toString()}
                     />
-                </View>
+                </View> */}
             </View>
         );
     }

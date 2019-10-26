@@ -54,7 +54,27 @@ class MainForgotPasswordScreen extends Component<Props> {
         })
     }
 
+    validateEmail(email) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+
     onChangePassword = async () => {
+        if (!this.validateEmail(this.state.email)) {
+            Alert.alert("Email invalid!");
+            return;
+        }
+        if (this.state.password === "") {
+            Alert.alert("Please enter password!");
+            return;
+        }
+        if (this.state.password.length < 5) {
+            Alert.alert("Password must be at least 5 characters!");
+            return;
+        }
+        const data = {
+            email: this.state.email,
+        };
         if (this.state.password === this.state.repeatPassword) {
             const data = {
                 email: this.state.email,
@@ -97,6 +117,10 @@ class MainForgotPasswordScreen extends Component<Props> {
     };
 
     sendMailGetCode = async () => {
+        if (!this.validateEmail(this.state.email)) {
+            Alert.alert("Email invalid!");
+            return;
+        }
         const data = {
             email: this.state.email,
         };

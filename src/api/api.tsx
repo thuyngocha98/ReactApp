@@ -1,9 +1,9 @@
 
 import axios from 'axios';
+import { AsyncStorage } from 'react-native';
 
 const TIMEOUT = 100
-// const BASEURL = 'http://192.168.0.135:3000/'
-export const BASEURL = 'http://192.168.1.7:3001'
+export const BASEURL = 'http://10.45.163.86:3001'
 
 axios.defaults.withCredentials = true
 
@@ -24,7 +24,6 @@ export default {
         }
     },
 
-    
     //
     postOrder: async (order) => {
         try {
@@ -44,5 +43,31 @@ export default {
         catch (error) {
             console.log(error);
         }
+    },
+
+    // get data user
+    _getDataUser: async () => {
+        const token = await AsyncStorage.getItem('jwt');
+        var dataUser = [];
+        const data = {
+            token: token
+        };
+        const json = JSON.stringify(data);
+        await fetch(`${BASEURL}/api/user/get_info_user`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+            body: json
+        })
+            .then((response) => response.json())
+            .then((res) => {
+                dataUser = res;
+            })
+            .catch((error) => {
+                alert(error);
+            });
+        return dataUser;
     }
 }

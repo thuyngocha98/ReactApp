@@ -20,3 +20,13 @@ export const getTopProducts = (pageIndex = 1, pageSize = 8) => async (dispatch) 
     var products = await api.getProducts(pageIndex, pageSize);
     dispatch(receiveProducts(products));
 }
+
+export const getDataUser = (data: any[]) => ({
+  type: types.GET_API_DATA_USER,
+  payload: data
+});
+
+export const getApiDataUser = () => async (dispatch) => {
+  var data = await api._getDataUser();
+  dispatch(getDataUser(data));
+}

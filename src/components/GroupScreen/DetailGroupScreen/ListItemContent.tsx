@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text } from 'react-native';
 import ListItemContentStyles from '../../../styles/GroupsStyles/DetailGroupScreenStyles/ListItemContentStyles';
-import { FontAwesome5, Octicons } from '@expo/vector-icons';
+import { FontAwesome5, Octicons, FontAwesome } from '@expo/vector-icons';
 import Colors from '../../../constants/Colors';
 
 function mapStateToProps(state) {
@@ -29,7 +29,7 @@ class ListItemContent extends Component<Props> {
                     <Text style={ListItemContentStyles.day}>{this.props.day}</Text>
                 </View>
                 <View style={ListItemContentStyles.iconTitle}>
-                    <FontAwesome5 name='city' size={20} color={Colors.lightgray} />
+                    <FontAwesome name='file-text-o' size={25} color={Colors.lightgray} />
                 </View>
                 <View style={ListItemContentStyles.content}>
                     <Text style={ListItemContentStyles.title}>{this.props.title}</Text>

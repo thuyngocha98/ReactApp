@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Image, SectionList, TouchableOpacity, StatusBar, Alert } from 'react-native';
 import MainExpenseScreenStyles from '../../../styles/ExpenseScreenStyles/MainExpenseScreenStyles/MainExpenseScreenStyles';
-import Colors from '../../../constants/Colors';
-import { FontAwesome } from '@expo/vector-icons';
 import ListItemGroup from './ListItemGroup';
 
 function mapStateToProps(state) {

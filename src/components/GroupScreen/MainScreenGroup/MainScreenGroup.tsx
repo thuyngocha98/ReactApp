@@ -8,12 +8,13 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 function mapStateToProps(state) {
     return {
-
+        
     };
 }
 
 type Props = {
     navigation?: any,
+    dataUser?: any[],
 }
 
 const data = [
@@ -22,38 +23,21 @@ const data = [
         nameGroup: 'Group 1',
         detail: 'you are owned',
         price: '51,000$',
-        data: [
-
-        ]
+        isOwned: true,
     },
     {
-        id: 2,
+        id: 1,
         nameGroup: 'Da lat trip',
         detail: 'you are owned',
         price: '200,000$',
-        data: [
-            {
-                id: 0,
-                text: 'Ha owes you 40000$',
-            },
-
-        ]
+        isOwned: true,
     },
     {
-        id: 3,
+        id: 2,
         nameGroup: 'Vung Tau Trip',
-        detail: 'you are owned',
+        detail: 'you are owed',
         price: '100,000$',
-        data: [
-            {
-                id: 0,
-                text: 'lakjfjk owes you 1000$',
-            },
-            {
-                id: 1,
-                text: 'skfjlk owes you 100$',
-            }
-        ]
+        isOwned: false,
     },
 ];
 
@@ -100,7 +84,7 @@ class MainScreenGroup extends Component<Props> {
                                 Alert.alert("Menu")
                             }}
                         >
-                            <MaterialCommunityIcons name='menu' size={25} />
+                            <MaterialCommunityIcons name='menu' size={25} color={Colors.white}/>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -117,7 +101,8 @@ class MainScreenGroup extends Component<Props> {
                                     nameGroup={item.nameGroup}
                                     detail={item.detail}
                                     price={item.price}
-                                    data={item.data}
+                                    isOwned={item.isOwned}
+                                    // data={item.data}
                                 />
                             </TouchableOpacity>
                         )}
