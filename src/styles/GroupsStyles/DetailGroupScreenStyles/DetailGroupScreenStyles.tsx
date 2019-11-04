@@ -33,5 +33,12 @@ const DetailGroupScreenStyles = StyleSheet.create({
     date: {
         margin: screenWidth /41.14,
     },
+    activityIndicator: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Colors.white,
+        marginTop: 100,
+    }
 });
 export default DetailGroupScreenStyles;

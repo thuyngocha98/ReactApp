@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text,  Image, TouchableOpacity, AsyncStorage} from "react-native";
+import {View, Text,  Image, TouchableOpacity, AsyncStorage, StatusBar} from "react-native";
 import Colors from "../../constants/Colors";
 import styles from "../../styles/AccountScreenStyle/MainAccountScreenStyle";
 import {MaterialCommunityIcons, EvilIcons, AntDesign} from "@expo/vector-icons";
@@ -19,6 +19,7 @@ class MainAccountScreen extends Component<Props> {
         return (
             <View>
                 <View style={styles.headerContainer}>
+                    <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
                     <View style={styles.header}>
                         <Text style={styles.textAccount}>My Account</Text>
                         <Image source={avatar} style={styles.avatar}/>

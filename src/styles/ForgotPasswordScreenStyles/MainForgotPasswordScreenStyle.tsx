@@ -10,12 +10,12 @@ const styles = StyleSheet.create({
     },
     header: {
         alignItems: 'center',
-        marginTop: screenHeight / 15,
-        marginBottom: screenHeight / 15
+        marginTop: screenHeight / 10,
+        marginBottom: screenHeight / 20
     },
     reactLogo: {
-        width: screenWidth / 3,
-        height: screenWidth / 3,
+        width: screenWidth / 1.684,
+        height: screenWidth / 4,
         tintColor: Colors.tabIconSelected,
         marginBottom: screenWidth/41.1,
     },

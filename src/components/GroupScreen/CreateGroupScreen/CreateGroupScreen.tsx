@@ -10,63 +10,62 @@ function mapStateToProps(state) {
     };
 }
 
-type State = {
+type Props = {
+    navigation?: any,
+}
+
+type States = {
     colorApartment?: boolean,
     colorHouse?: boolean,
     colorTrip?: boolean,
     colorOrder?: boolean,
+    name?: string,
+    checkInputName?: boolean,
 }
 
-class CreateGroupScreen extends Component<State> {
-    static navigationOptions = ({ navigation }) => {
-        return {
-            title: 'Create a group',
-            headerStyle: {
-                elevation: 0,
-                textAlign: 'center',
-                backgroundColor: Colors.tintColor,
-            },
-            headerTitleStyle: {
-                flex: 1,
-                textAlign: 'center',
-                color: Colors.white
-            },
-            headerRight:
-                (
-                    <View style={CreateGroupScreenStyles.headerRight}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                navigation.navigate("AddMemberGroupScreen")
-                            }}
-                        >
-                            <Text style={CreateGroupScreenStyles.textHeaderRight}>Next</Text>
-                        </TouchableOpacity>
-                    </View>
-                ),
-            headerLeft:
-                (
-                    <View style={CreateGroupScreenStyles.headerLeft}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                navigation.goBack();
-                            }}
-                        >
-                            <Text style={CreateGroupScreenStyles.textHeaderLeft}>Cancel</Text>
-                        </TouchableOpacity>
-                    </View >
-                )
-        };
+class CreateGroupScreen extends Component<Props, States> {
+    static navigationOptions = {
+        header: null
     };
-
     state = {
         colorApartment: true,
         colorHouse: false,
         colorTrip: false,
         colorOrder: false,
+        name: '',
+        checkInputName: false,
     };
+    _navListener: any;
+
+    componentDidMount() {
+        // set barstyle of statusbar
+        this._navListener = this.props.navigation.addListener('didFocus', () => {
+            StatusBar.setBarStyle('light-content');
+        });
+    }
+
+    componentWillUnmount() {
+        // remove barstyle when lead screen
+        this._navListener.remove();
+    }
+
+    _checkInputName(text) {
+        if(text === ""){
+            this.setState({
+                checkInputName: false,
+                name: text,
+            })
+        }else{
+            this.setState({
+                checkInputName: true,
+                name: text,
+            })
+        }
+    }
+
 
     _selectCategoryGroupType(index) {
-        switch(index){
+        switch (index) {
             case 1:
                 this.setState({
                     colorApartment: true,
@@ -102,9 +101,37 @@ class CreateGroupScreen extends Component<State> {
         }
     }
     render() {
+        const { navigation } = this.props;
         return (
             <View style={CreateGroupScreenStyles.container}>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
+                <View style={CreateGroupScreenStyles.containerHeader}>
+                    <View style={CreateGroupScreenStyles.header}>
+                        <TouchableOpacity
+                            activeOpacity={0.5}
+                            onPress={() => {
+                                navigation.goBack();
+                            }}
+                        >
+                            <Text style={CreateGroupScreenStyles.cancel}>Cancel</Text>
+                        </TouchableOpacity>
+                        <Text style={CreateGroupScreenStyles.addContact}>Add new Contact</Text>
+                        <TouchableOpacity 
+                            activeOpacity={0.5}
+                            onPress={() => {
+                                this.state.checkInputName ? 
+                                    navigation.navigate("AddMemberGroupScreen",{nameGroup: this.state.name}) :
+                                    Alert.alert("Please enter name group.")
+                            }}
+                        >
+                            <Text 
+                                style={[CreateGroupScreenStyles.add,{opacity: this.state.checkInputName ? 1 : 0.5}]}
+                            >
+                                Next
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
                 <View style={CreateGroupScreenStyles.categoryGroupName}>
                     <Image
                         style={CreateGroupScreenStyles.iconCamera}
@@ -114,8 +141,13 @@ class CreateGroupScreen extends Component<State> {
                         <Text style={CreateGroupScreenStyles.groupName}>Group Name</Text>
                         <TextInput
                             style={CreateGroupScreenStyles.detail}
+                            onChangeText={(text) => { this._checkInputName(text); }}
+                            value={this.state.name}
                             placeholder={"132 Sesame Street"}
                             autoFocus={true}
+                            keyboardType='default'
+                            autoCorrect={false}
+                            autoCapitalize="words"
                         />
                     </View>
                 </View>

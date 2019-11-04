@@ -1,25 +1,39 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, StatusBar } from "react-native";
 import Colors from "../../../constants/Colors";
-import { screenWidth } from "../../../constants/Dimensions";
+import { screenWidth, APPBAR_HEIGHT } from "../../../constants/Dimensions";
 
 const CreateGroupScreenStyles = StyleSheet.create({
-    headerRight: {
-        marginRight: screenWidth/27.4
-    },
-    textHeaderRight: {
-        fontSize: 17,
-        color: Colors.white
-    },
-    headerLeft: {
-        marginLeft: screenWidth/27.4,
-    },
-    textHeaderLeft: {
-        fontSize: 17,
-        color: Colors.white
-    },
     container: {
         flex: 1,
         flexDirection: 'column'
+    },
+    containerHeader: {
+        width: screenWidth,
+        height: APPBAR_HEIGHT + StatusBar.currentHeight,
+        backgroundColor: Colors.tabIconSelected
+    },
+    header: {
+        flex: 1,
+        marginTop: StatusBar.currentHeight,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginHorizontal: screenWidth / 27.43,
+    },
+    cancel: {
+        fontSize: 17,
+        color: Colors.white,
+    },
+    addContact: {
+        fontSize: 20,
+        fontWeight: '500',
+        color: Colors.white,
+        textAlign: 'center',
+        flex: 1,
+    },
+    add: {
+        fontSize: 17,
+        color: Colors.white
     },
     categoryGroupName: {
         flexDirection: 'row',

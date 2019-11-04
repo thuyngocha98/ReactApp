@@ -14,10 +14,17 @@ const SplashScreenStyles = StyleSheet.create({
         fontSize: 40,
         fontWeight: 'bold'
     },
+    logo: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
     indicator: {
-        paddingTop: screenWidth / 7.2,
-        justifyContent: "center",
-        alignItems: 'center'
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 });
 

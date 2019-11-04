@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, TouchableOpacity, Text, Image, FlatList, ScrollView, StatusBar } from 'react-native';
-import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5, Octicons } from '@expo/vector-icons';
 import ListItemNumberSplit from './ListItemNumberSplit';
 import { APPBAR_HEIGHT } from '../../../../../constants/Dimensions';
 import Colors from '../../../../../constants/Colors';
@@ -90,7 +90,7 @@ class ExpenseByNumberSplitScreen extends Component<Props> {
                         </Text>
                     </View>
                     <View style={ExpenseByNumberSplitScreenStyles.iconRight}>
-                        <FontAwesome5 name='chevron-right' size={20} color={Colors.lightgray} />
+                        <Octicons name='chevron-right' size={20} color={Colors.lightgray} />
                     </View>
                 </View>
                 <View style={ExpenseByNumberSplitScreenStyles.underLineInput} />

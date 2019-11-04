@@ -3,6 +3,9 @@ import Colors from "../../../constants/Colors";
 import { screenWidth } from "../../../constants/Dimensions";
 
 const ListItemContentStyles = StyleSheet.create({
+    mainContainer: {
+        flexDirection: 'column',
+    },
     container: {
         flexDirection: 'row',
         margin: screenWidth /41.14,
@@ -10,7 +13,7 @@ const ListItemContentStyles = StyleSheet.create({
         alignItems: 'center'
     },
     time: {
-        flex: 0.7,
+        flex: 0.9,
         flexDirection: 'column',
         alignItems: 'center',
     },
@@ -43,10 +46,8 @@ const ListItemContentStyles = StyleSheet.create({
         alignItems: 'flex-end',
     },
     titleMoney: {
-        color: Colors.mediumseagreen
     },
     money: {
-        color: Colors.mediumseagreen,
         fontSize: 16,
         fontWeight: "400"
     },

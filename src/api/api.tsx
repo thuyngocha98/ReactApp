@@ -3,7 +3,9 @@ import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 
 const TIMEOUT = 100
-export const BASEURL = 'http://10.45.163.86:3001'
+
+// 18.141.21.198
+export const BASEURL = 'http://192.168.1.11:3001'
 
 axios.defaults.withCredentials = true
 
@@ -69,5 +71,45 @@ export default {
                 alert(error);
             });
         return dataUser;
+    },
+
+    // get list trip
+    getListAllTrip: async () => {
+        var listAllTrip = [];
+        await fetch(`${BASEURL}/api/trip/list_all_trip`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+        })
+            .then((response) => response.json())
+            .then((res) => {
+                listAllTrip = res.data;
+            })
+            .catch((error) => {
+                alert(error);
+            });
+        return listAllTrip;
+    },
+
+    // get list user by trip id 
+    _getAllUserInTrip: async tripId => {
+        var listUserInTrip = [];
+        await fetch(`${BASEURL}/api/tripUser/list_all_user_by_tripId/${tripId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+        })
+            .then((response) => response.json())
+            .then((res) => {
+                listUserInTrip = res.data;
+            })
+            .catch((error) => {
+                alert(error);
+            });
+        return listUserInTrip;
     }
 }

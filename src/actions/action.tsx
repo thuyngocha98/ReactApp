@@ -21,6 +21,7 @@ export const getTopProducts = (pageIndex = 1, pageSize = 8) => async (dispatch) 
     dispatch(receiveProducts(products));
 }
 
+// GET API DATA USER
 export const getDataUser = (data: any[]) => ({
   type: types.GET_API_DATA_USER,
   payload: data
@@ -30,3 +31,26 @@ export const getApiDataUser = () => async (dispatch) => {
   var data = await api._getDataUser();
   dispatch(getDataUser(data));
 }
+
+// GET LIST TRIP
+export const getListTrip = (data: any[]) => ({
+  type: types.GET_LIST_TRIP,
+  payload: data
+});
+
+export const getApiListTrip = dataListAllTrip => async (dispatch) => {
+  var data = dataListAllTrip;
+  dispatch(getListTrip(data));
+}
+
+// GET LIST USER IN A TRIP
+export const getListUserInTrip = (data: any[]) => ({
+  type: types.GET_LIST_USER_IN_TRIP,
+  payload: data
+});
+
+export const getApiListUserInTrip = tripId => async (dispatch) => {
+  var data = await api._getAllUserInTrip(tripId);
+  dispatch(getListUserInTrip(data));
+}
+

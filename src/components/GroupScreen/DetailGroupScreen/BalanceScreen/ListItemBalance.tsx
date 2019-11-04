@@ -4,6 +4,7 @@ import { View, Image, Text, TouchableOpacity, Alert } from 'react-native';
 import { MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 import Colors from '../../../../constants/Colors';
 import ListItemBalanceStyles from '../../../../styles/GroupsStyles/DetailGroupScreenStyles/BalanceScreen/ListItemBalanceStyles';
+import { number2money, thumbnails } from '../../../../constants/FunctionCommon';
 
 function mapStateToProps(state) {
     return {
@@ -19,6 +20,7 @@ type Props = {
     nameSub?: string,
     moneySub?: string,
     nameSecondSub?: string,
+    data?: any[]
 }
 
 type States = {
@@ -32,6 +34,7 @@ class ListItemBalance extends Component<Props, States> {
     }
 
     render() {
+        const thumbnail = thumbnails["avatar" + this.props.data.avatar]
         return (
             <View style={ListItemBalanceStyles.container}>
                 <View style={ListItemBalanceStyles.firtItem}>
@@ -47,17 +50,17 @@ class ListItemBalance extends Component<Props, States> {
                         <View style={ListItemBalanceStyles.avatar}>
                             <Image
                                 style={ListItemBalanceStyles.photo}
-                                source={{ uri: "https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.0-1/p240x240/58727386_1340156482789355_8420310201583796224_n.jpg?_nc_cat=106&_nc_oc=AQlOWDOgSxKl2liWeIiLmsRGw5tijfF7YLQaI2T8oMkIUTtBIoI4HOkrwPDO-cFO20udwMX1pDWm-cBSBWtEa1m0&_nc_ht=scontent.fsgn5-6.fna&oh=efb30afdeee8f77b39d35064970794e2&oe=5E3BD8AB" }}
+                                source={thumbnail}
                             />
                         </View>
                         <View style={ListItemBalanceStyles.title}>
                             <Text style={ListItemBalanceStyles.name}>
-                                {this.props.name}
+                                {this.props.data.name}
                             <Text style={ListItemBalanceStyles.normal}>
-                                    {this.props.isGetBack ? " gets back " : " owes "}
+                                    {this.props.data.totalBalanceTrip >= 0 ? " gets back " : " owes "}
                                 </Text>
-                                <Text style={[ListItemBalanceStyles.money, { color: this.props.isGetBack ? Colors.mediumseagreen : Colors.orangered}]}>
-                                    {this.props.money}
+                                <Text style={[ListItemBalanceStyles.money, { color: this.props.data.totalBalanceTrip >= 0 ? Colors.mediumseagreen : Colors.orangered}]}>
+                                    {this.props.data.totalBalanceTrip >= 0 ? number2money(this.props.data.totalBalanceTrip) : number2money(this.props.data.totalBalanceTrip*(-1)) } VND
                                     <Text style={ListItemBalanceStyles.normal}>
                                         {" in total"}
                                     </Text>
@@ -72,7 +75,7 @@ class ListItemBalance extends Component<Props, States> {
                 <View>{this.state.isShow ? (
                     <View style={ListItemBalanceStyles.containerSecond}>
                         <View style={ListItemBalanceStyles.secondItem}>
-                            <View style={ListItemBalanceStyles.iconSecond}>
+                            {/* <View style={ListItemBalanceStyles.iconSecond}>
                                 <Entypo name='level-down' size={17} color={Colors.lightgray} />
                             </View>
                             <View style={ListItemBalanceStyles.avatarSecond}>
@@ -97,7 +100,7 @@ class ListItemBalance extends Component<Props, States> {
                                         </Text>
                                     </Text>
                                 </Text>
-                            </View>
+                            </View> */}
                         </View>
                         <View style={ListItemBalanceStyles.button}>
                             <TouchableOpacity

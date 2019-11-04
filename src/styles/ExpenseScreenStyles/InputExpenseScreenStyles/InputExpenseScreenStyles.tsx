@@ -1,6 +1,6 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, StatusBar } from "react-native";
 import Constants from "expo-constants";
-import { screenWidth } from "../../../constants/Dimensions";
+import { screenWidth, APPBAR_HEIGHT } from "../../../constants/Dimensions";
 import Colors from "../../../constants/Colors";
 
 const InputExpenseScreenStyles = StyleSheet.create({
@@ -8,7 +8,41 @@ const InputExpenseScreenStyles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column'
     },
+    containerHeader: {
+        width: screenWidth,
+        height: APPBAR_HEIGHT + StatusBar.currentHeight,
+        backgroundColor: Colors.tabIconSelected
+    },
     header: {
+        flex: 1,
+        marginTop: StatusBar.currentHeight,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginHorizontal: screenWidth / 27.43,
+    },
+    addContact: {
+        flex: 7,
+        fontSize: 20,
+        fontWeight: '500',
+        color: Colors.white,
+        textAlign: 'center',
+    },
+    cancel: {
+        flex: 1,
+    },
+    add: {
+       
+        fontSize: 17,
+        color: Colors.white
+    },
+    save: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+    },
+    header1: {
         flexDirection: "row",
         alignItems: 'center'
     },
@@ -46,8 +80,9 @@ const InputExpenseScreenStyles = StyleSheet.create({
     sectionInput: {
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center'
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        marginTop: screenWidth/13.7,
     },
     sectionDescription: {
         flexDirection: 'row',
@@ -77,9 +112,19 @@ const InputExpenseScreenStyles = StyleSheet.create({
 
     },
     iconMoney: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
         borderColor: Colors.lightgray,
         elevation: 2,
         borderRadius: screenWidth/82.2
+    },
+    iconvnd: {
+        fontSize: 30,
+        fontWeight: '600',
+        paddingHorizontal: screenWidth/27.4,
+        paddingVertical: screenWidth/82.2,
+        color: Colors.gray
     },
     inputMoney: {
         flexDirection: 'column',
@@ -92,16 +137,25 @@ const InputExpenseScreenStyles = StyleSheet.create({
         marginBottom: screenWidth/82.2
     },
     btnSubmit: {
-
-    },
-    txtSubmit: {
-        borderColor: Colors.lightgray,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
         marginTop: screenWidth/20.55,
-        borderRadius: screenWidth/82.2,
-        elevation: 2,
-        borderBottomWidth: 1.5,
-        padding: screenWidth/41.1,
+    },
+    text1: {
         fontSize: 17,
+        fontWeight: '400',
+    },
+    text2: {
+        fontSize: 17,
+        fontWeight: '300',
+        padding: screenWidth/82.2,
+    },
+    button: {
+        backgroundColor: Colors.white,
+        borderColor: Colors.gray,
+        elevation: 3,
+        borderRadius: screenWidth / 82.2
     }
 });
 export default InputExpenseScreenStyles;

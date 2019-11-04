@@ -130,7 +130,7 @@ class verifyScreen extends Component<Props, States> {
                             [
                                 {
                                     text: 'OK', onPress: () => {
-                                        this.props.navigation.navigate("FriendsScreen")
+                                        this.props.navigation.navigate("GroupScreen")
                                     }
                                 },
                             ],

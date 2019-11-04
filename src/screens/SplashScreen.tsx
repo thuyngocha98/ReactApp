@@ -5,6 +5,14 @@ import SplashScreenStyles from '../styles/SplashScreen/SplashScreenStyles';
 import Colors from '../constants/Colors';
 import { bindActionCreators } from 'redux';
 import { getApiDataUser } from '../actions/action';
+import { BASEURL } from '../api/api';
+
+
+function mapStateToProps(state) {
+    return {
+        
+    };
+}
 
 type Props = {
     navigation?: any,
@@ -34,7 +42,7 @@ class SplashScreen extends Component<Props, States> {
         if (data !== null) {
             const dataUser = await this.props.getDataUser();
             if (dataUser !== null) {
-                this.props.navigation.navigate('FriendsScreen');
+                this.props.navigation.navigate('GroupScreen');
             }
         }else{
             this.props.navigation.navigate('MainLoginScreen');
@@ -53,9 +61,11 @@ class SplashScreen extends Component<Props, States> {
     render() {
         return (
             <View style={SplashScreenStyles.viewStyles}>
+                <View style={SplashScreenStyles.logo}>
                 <Image
-                    style={{ width: 150, height: 150, tintColor: Colors.tintColor}}
-                    source={require('../../assets/images/Reactlogo.png')} />
+                    style={{width: 250, height: 105.2, tintColor: Colors.tintColor,resizeMode: 'contain'}}
+                    source={require('../../assets/images/wego.png')} />
+                </View>
                 <View style={SplashScreenStyles.indicator}>
                     <ActivityIndicator animating size="small" color={Colors.tintColor} />
                 </View>
@@ -70,4 +80,4 @@ const mapDispatchToProps = dispatch => {
     }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(SplashScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen);

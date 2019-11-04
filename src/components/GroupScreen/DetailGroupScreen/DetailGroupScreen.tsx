@@ -9,7 +9,8 @@ import {
     Alert,
     FlatList,
     StatusBar,
-    SectionList
+    SectionList,
+    ActivityIndicator
 } from 'react-native';
 import Colors from '../../../constants/Colors';
 import DetailGroupScreenStyles from '../../../styles/GroupsStyles/DetailGroupScreenStyles/DetailGroupScreenStyles';
@@ -18,6 +19,7 @@ import HeaderTitleComponent from './HeaderTitleComponent';
 import { screenWidth } from '../../../constants/Dimensions';
 import ListItemContent from './ListItemContent';
 import Constants from 'expo-constants';
+import { BASEURL } from '../../../api/api';
 
 function mapStateToProps(state) {
     return {
@@ -29,7 +31,19 @@ type Props = {
     navigation?: any,
 }
 
-class DetailGroupScreen extends Component<Props> {
+type States = {
+    data?: any[],
+    loading?: boolean,
+    numberUserInTrip?: number,
+}
+
+class DetailGroupScreen extends Component<Props, States> {
+
+    state = {
+        data: [],
+        loading: false,
+        numberUserInTrip: 0,
+    }
 
     static navigationOptions = ({ navigation }) => {
         return {
@@ -39,10 +53,13 @@ class DetailGroupScreen extends Component<Props> {
 
     _navListener: any;
 
+    dataTrip = this.props.navigation.getParam('dataTrip', '');
+
     componentDidMount() {
         // set barstyle of statusbar
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             StatusBar.setBarStyle('light-content');
+            this.getTransactionByTripId();
         });
     }
 
@@ -51,131 +68,29 @@ class DetailGroupScreen extends Component<Props> {
         this._navListener.remove();
     }
 
-    data = [
-        {
-            title: "tháng 9 2019",
-            data: [
-                {
-                    id: 0,
-                    month: "thg 9",
-                    day: "25",
-                    title: "Hotel",
-                    detail: "You paid 200,00 US$",
-                    titleMoney: "you lent",
-                    money: "100,00 US$"
-                },
-                {
-                    id: 1,
-                    month: "thg 9",
-                    day: "26",
-                    title: "Restaurant",
-                    detail: "You paid 500,00 US$",
-                    titleMoney: "you lent",
-                    money: "250,00 US$"
-                },
-                {
-                    id: 2,
-                    month: "thg 9",
-                    day: "27",
-                    title: "Dinner",
-                    detail: "You paid 50,00 US$",
-                    titleMoney: "you lent",
-                    money: "20,00 US$"
-                },
-                {
-                    id: 3,
-                    month: "thg 9",
-                    day: "25",
-                    title: "Hotel",
-                    detail: "You paid 200,00 US$",
-                    titleMoney: "you lent",
-                    money: "100,00 US$"
-                },
-                {
-                    id: 4,
-                    month: "thg 9",
-                    day: "26",
-                    title: "Restaurant",
-                    detail: "You paid 500,00 US$",
-                    titleMoney: "you lent",
-                    money: "250,00 US$"
-                },
-            ]
-        },
-        {
-            title: "tháng 8 2019",
-            data: [
-                {
-                    id: 0,
-                    month: "thg 9",
-                    day: "25",
-                    title: "Hotel",
-                    detail: "You paid 200,00 US$",
-                    titleMoney: "you lent",
-                    money: "100,00 US$"
-                },
-                {
-                    month: "thg 9",
-                    day: "26",
-                    title: "Restaurant",
-                    detail: "You paid 500,00 US$",
-                    titleMoney: "you lent",
-                    money: "250,00 US$"
-                },
 
-            ]
-        },
-        {
-            title: "tháng 7 2019",
-            data: [
-                {
-                    id: 0,
-                    month: "thg 9",
-                    day: "25",
-                    title: "Hotel",
-                    detail: "You paid 200,00 US$",
-                    titleMoney: "you lent",
-                    money: "100,00 US$"
-                },
-                {
-                    id: 1,
-                    month: "thg 9",
-                    day: "26",
-                    title: "Restaurant",
-                    detail: "You paid 500,00 US$",
-                    titleMoney: "you lent",
-                    money: "250,00 US$"
-                },
-                {
-                    id: 2,
-                    month: "thg 9",
-                    day: "27",
-                    title: "Dinner",
-                    detail: "You paid 50,00 US$",
-                    titleMoney: "you lent",
-                    money: "20,00 US$"
-                },
-                {
-                    id: 3,
-                    month: "thg 9",
-                    day: "25",
-                    title: "Hotel",
-                    detail: "You paid 200,00 US$",
-                    titleMoney: "you lent",
-                    money: "100,00 US$"
-                },
-                {
-                    id: 4,
-                    month: "thg 9",
-                    day: "26",
-                    title: "Restaurant",
-                    detail: "You paid 500,00 US$",
-                    titleMoney: "you lent",
-                    money: "250,00 US$"
-                },
-            ]
-        }
-    ];
+    getTransactionByTripId = async () => {
+        this.setState({ loading: true })
+        await fetch(`${BASEURL}/api/transaction/get_transaction_by_trip_id/${this.dataTrip._id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+        })
+            .then((response) => response.json())
+            .then(async (res) => {
+                await this.setState({
+                    numberUserInTrip: res.numberUser,
+                    data: res.data.reverse(),
+                    loading: false,
+                })
+            })
+            .catch((error) => {
+                alert(error);
+            });
+
+    };
 
     _ItemSeparatorComponent = () => {
         return (
@@ -183,40 +98,48 @@ class DetailGroupScreen extends Component<Props> {
         );
     }
 
-
     render() {
-        const nameGroup = this.props.navigation.getParam('nameGroup', 'NO Name')
+        var time = this.dataTrip.create_date.split("-");
         return (
             <View style={DetailGroupScreenStyles.mainContainer}>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
                 <View style={DetailGroupScreenStyles.header}>
-                    <HeaderTitleComponent navigation={this.props.navigation} nameGroup={nameGroup} />
+                    <HeaderTitleComponent
+                        navigation={this.props.navigation}
+                        nameGroup={this.dataTrip.name}
+                        idGroup={this.dataTrip._id}
+                        time={this.dataTrip.create_date}
+                        amount={this.dataTrip.oweUser}
+                        numberUserInTrip={this.state.numberUserInTrip}
+                    />
                 </View>
-                <SectionList
-                    sections={this.data}
-                    keyExtractor={(item, index) => item + index}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            onPress={() => {
-                                Alert.alert(item.title)
-                            }}
-                        >
-                            <ListItemContent
-                                month={item.month}
-                                day={item.day}
-                                title={item.title}
-                                detail={item.detail}
-                                titleMoney={item.titleMoney}
-                                money={item.money}
-                            />
-                        </TouchableOpacity>
+                <View style={DetailGroupScreenStyles.dateTitle}>
+                    <Text style={DetailGroupScreenStyles.date}>tháng {time[1]+" "+time[0]}</Text>
+                </View>
+                <View >{this.state.loading ? (
+                    <View style={DetailGroupScreenStyles.activityIndicator}>
+                        <ActivityIndicator animating size="large" color={Colors.tintColor} />
+                    </View>
+                ) : (
+                        <FlatList
+                            data={this.state.data}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({ item }) => (
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        Alert.alert("Chức năng đang phát triển")
+                                    }}
+                                >
+                                    <ListItemContent
+                                        data={item}
+                                    />
+                                </TouchableOpacity>
+                            )}
+                        />
                     )}
-                    renderSectionHeader={({ section: { title } }) => (
-                        <View style={DetailGroupScreenStyles.dateTitle}>
-                            <Text style={DetailGroupScreenStyles.date}>{title}</Text>
-                        </View>
-                    )}
-                />
+
+                </View>
+
             </View>
         );
     }

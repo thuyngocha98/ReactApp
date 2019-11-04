@@ -15,7 +15,7 @@ const Styles = StyleSheet.create({
         color: Colors.gray
     },
     money:{
-        color: Colors.splitWise
+        color: Colors.mediumseagreen
     }
 });
 export default Styles;

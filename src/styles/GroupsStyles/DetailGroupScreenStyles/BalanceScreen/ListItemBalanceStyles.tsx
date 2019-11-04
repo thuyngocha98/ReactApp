@@ -30,7 +30,7 @@ const ListItemBalanceStyles = StyleSheet.create({
     },
     title: {
         flex: 3.5,
-        alignItems: 'center',
+        flexDirection: 'column',
         justifyContent: 'center'
 
     },

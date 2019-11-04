@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { APPBAR_HEIGHT } from '../../../../../constants/Dimensions';
 import Colors from '../../../../../constants/Colors';
 import { View, TouchableOpacity, Text, Image, FlatList, ScrollView, StatusBar } from 'react-native';
-import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5, Octicons } from '@expo/vector-icons';
 import ExpenseMoreOptionScreenStyles from '../../../../../styles/ExpenseScreenStyles/ExpenseDetailScreenStyles/ExpenseMoreOptionScreenStyles/EqualSplit/ExpenseMoreOptionScreenStyles';
 import ListItemMemberExpense from './ListItemMemberExpense';
 import ListItemNumberSplit from '../NumberSplit/ListItemNumberSplit';
@@ -89,7 +89,7 @@ class ExpenseMoreOptionScreen extends Component<Props> {
                         </Text>
                     </View>
                     <View style={ExpenseMoreOptionScreenStyles.iconRight}>
-                        <FontAwesome5 name='chevron-right' size={20} color={Colors.lightgray} />
+                        <Octicons name='chevron-right' size={20} color={Colors.lightgray} />
                     </View>
                 </View>
                 <View style={ExpenseMoreOptionScreenStyles.underLineInput} />

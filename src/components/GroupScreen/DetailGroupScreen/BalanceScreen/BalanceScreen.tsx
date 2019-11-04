@@ -6,6 +6,7 @@ import BalanceScreenStyles from '../../../../styles/GroupsStyles/DetailGroupScre
 import { MaterialCommunityIcons, FontAwesome5, Entypo } from '@expo/vector-icons';
 import ListItemBalance from './ListItemBalance';
 import { APPBAR_HEIGHT } from '../../../../constants/Dimensions';
+import { BASEURL } from '../../../../api/api';
 
 function mapStateToProps(state) {
     return {
@@ -13,7 +14,17 @@ function mapStateToProps(state) {
     };
 }
 
-class BalanceScreen extends Component {
+type Props = {
+    navigation?: any,
+}
+
+type States = {
+    data?: any[],
+    loading?: boolean,
+}
+
+class BalanceScreen extends Component<Props> {
+
     static navigationOptions = ({ navigation }) => {
         return {
             title: 'Group balances',
@@ -50,8 +61,37 @@ class BalanceScreen extends Component {
     };
 
     state = {
-        isShow: false,
+        data: [],
+        loading: false
     }
+
+    componentDidMount(){
+        this.getTotalMoneyAllUserInOneTrip();
+    }
+
+    trip_id = this.props.navigation.getParam('tripId', "");
+
+    getTotalMoneyAllUserInOneTrip = async () => {
+        this.setState({ loading: true })
+        await fetch(`${BASEURL}/api/transactionUser/get_total_money_user/${this.trip_id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+        })
+            .then((response) => response.json())
+            .then(async (res) => {
+                await this.setState({
+                    data: res.listUser,
+                    loading: false,
+                })
+            })
+            .catch((error) => {
+                alert(error);
+            });
+
+    };
 
     data = [
         {
@@ -79,18 +119,13 @@ class BalanceScreen extends Component {
         return (
             <View style={BalanceScreenStyles.container}>
                 <FlatList
-                    data={this.data}
+                    data={this.state.data}
                     renderItem={({ item }) => (
                         <ListItemBalance
-                            money={item.money}
-                            name={item.name}
-                            nameSub={item.nameSub}
-                            nameSecondSub={item.nameSecondSub}
-                            isGetBack={item.isGetBack}
-                            moneySub={item.moneySub}
+                            data={item}
                         />
                     )}
-                    keyExtractor={item => item.id.toString()}
+                    keyExtractor={item => item._id.toString()}
                 />
             </View>
         );

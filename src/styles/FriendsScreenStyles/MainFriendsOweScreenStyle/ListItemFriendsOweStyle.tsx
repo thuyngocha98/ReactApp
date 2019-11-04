@@ -41,7 +41,7 @@ const Styles = StyleSheet.create({
         fontSize: 16
     },
     color:{
-        color: Colors.splitWise
+        color: Colors.mediumseagreen
     }
 });
 export default Styles;

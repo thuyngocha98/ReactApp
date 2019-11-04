@@ -15,7 +15,7 @@ import {
 // @ts-ignore
 import username from "../../../assets/images/username.png";
 // @ts-ignore
-import reactLogo from "../../../assets/images/Reactlogo.png";
+import reactLogo from "../../../assets/images/wego.png";
 // @ts-ignore
 import password from "../../../assets/images/password.png";
 // @ts-ignore
@@ -99,7 +99,7 @@ class MainLoginScreen extends Component<Props> {
     async getDataUserForRedux() {
         const dataUser = await this.props.getDataUser();
         if (dataUser !== null) {
-            this.props.navigation.navigate('FriendsScreen');
+            this.props.navigation.navigate('GroupScreen');
         }
         else{
             Alert.alert("Something error. Please login again!")
@@ -125,7 +125,7 @@ class MainLoginScreen extends Component<Props> {
                     <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent />
                     <View style={styles.imageBackground}>
                         <View style={styles.header}>
-                            <Image source={reactLogo} style={styles.reactLogo} />
+                            <Image source={reactLogo} style={styles.reactLogo} resizeMode='contain' />
                         </View>
                         <View>
                             <View style={styles.loginContainer}>

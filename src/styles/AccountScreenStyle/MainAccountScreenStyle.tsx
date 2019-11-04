@@ -20,10 +20,10 @@ const styles = StyleSheet.create({
         height: screenWidth / 4,
         borderRadius: screenWidth / 8,
         resizeMode: 'cover',
-        marginTop: screenWidth / 10
+        marginTop: screenWidth / 13.7
     },
     male: {
-        marginTop: 10
+        marginTop: screenWidth / 41.1
     },
     textUser: {
         marginTop: screenWidth / 100,
@@ -32,21 +32,21 @@ const styles = StyleSheet.create({
     },
     email: {
         opacity: 0.7,
-        marginBottom: 10,
+        marginBottom: screenWidth / 41.1,
         color: Colors.white
     },
     mainContainer: {
         marginTop: screenWidth / 15,
-        paddingHorizontal: 20
+        paddingHorizontal: screenWidth / 20.55
     },
     overView: {
         marginVertical: screenWidth / 25,
         flexDirection: 'row'
     },
     textOverview: {
-        marginLeft: 15,
+        marginLeft: screenWidth / 27.4,
         marginTop: 3,
-        fontSize: 22,
+        fontSize: 20,
         color: 'gray',
     },
     setting: {
@@ -54,9 +54,9 @@ const styles = StyleSheet.create({
         marginVertical: screenWidth / 25,
     },
     textSetting: {
-        marginLeft: 10,
+        marginLeft: screenWidth / 41.1,
         marginTop: 3,
-        fontSize: 22,
+        fontSize: 20,
         color: 'gray',
     },
     help: {
@@ -65,20 +65,20 @@ const styles = StyleSheet.create({
         marginLeft: 4
     },
     textHelp: {
-        marginLeft: 12,
+        marginLeft: screenWidth / 34.25,
         marginTop: 2,
-        fontSize: 22,
+        fontSize: 20,
         color: 'gray'
     },
     signOut: {
         flexDirection: 'row',
         marginVertical: screenWidth / 25,
-        marginLeft: 10
+        marginLeft: screenWidth/41.1
     },
     textSignOut: {
-        marginLeft: 12,
+        marginLeft: screenWidth/34.25,
         marginTop: -2,
-        fontSize: 22,
+        fontSize: 20,
         color: 'gray',
     }
 

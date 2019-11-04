@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, TouchableOpacity, Text, Image, FlatList, ScrollView, StatusBar } from 'react-native';
-import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5, Octicons } from '@expo/vector-icons';
 import { APPBAR_HEIGHT } from '../../../../../constants/Dimensions';
 import Colors from '../../../../../constants/Colors';
 import ListItemPlusOrMinus from './ListItemPlusOrMinus';
@@ -90,7 +90,7 @@ class ExpenseByPlusOrMinusScreen extends Component<Props> {
                         </Text>
                     </View>
                     <View style={ExpenseByPlusOrMinusStyles.iconRight}>
-                        <FontAwesome5 name='chevron-right' size={20} color={Colors.lightgray} />
+                        <Octicons name='chevron-right' size={20} color={Colors.lightgray} />
                     </View>
                 </View>
                 <View style={ExpenseByPlusOrMinusStyles.underLineInput} />

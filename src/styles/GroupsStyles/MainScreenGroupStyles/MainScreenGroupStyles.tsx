@@ -47,5 +47,11 @@ const MainScreenGroupStyles = StyleSheet.create({
     menu: {
         flex: 1
     },
+    activityIndicator: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Colors.white
+    }
 });
 export default MainScreenGroupStyles;

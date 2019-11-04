@@ -28,13 +28,27 @@ const styles = StyleSheet.create({
         color: Colors.white
     },
     input: {
-        marginTop: 10,
+        marginTop: 15,
         flexDirection: 'row',
         backgroundColor: Colors.white,
         marginHorizontal: 15,
         padding: 7,
         borderRadius: 5,
         marginBottom: 15,
+    },
+    input1: {
+        flexDirection: 'row',
+        backgroundColor: Colors.white,
+        marginHorizontal: 15,
+        padding: 7,
+        borderRadius: 5,
+        marginBottom: 15,
+    },
+    iconSearch: {
+        flex:1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     iconAdd: {
         flexDirection: 'row',
@@ -53,10 +67,18 @@ const styles = StyleSheet.create({
         borderBottomColor: Colors.lightgray,
         borderBottomWidth: 0.5,
     },
-    textEmail: {
+    nameAndMail: {
+        flexDirection: 'column',
         paddingVertical: 10,
-        fontSize: 18,
+    },
+    textEmail: {
+        fontSize: 15.5,
+        color: Colors.tintColor
+    },
+    textName: {
+        fontSize: 17,
         fontWeight: '400',
+        color: Colors.blackText
     }
 });
 export default styles;

@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import styles from '../../styles/ForgotPasswordScreenStyles/MainForgotPasswordScreenStyle'
 // @ts-ignore
-import reactLogo from "../../../assets/images/Reactlogo.png";
+import reactLogo from "../../../assets/images/wego.png";
 // @ts-ignore
 import signUpUser from "../../../assets/images/signUpUser.png";
 // @ts-ignore

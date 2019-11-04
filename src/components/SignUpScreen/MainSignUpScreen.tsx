@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import styles from "../../styles/SignUpScreenStyle/MainSignUpScreenStyle";
 // @ts-ignore
-import reactLogo from "../../../assets/images/Reactlogo.png";
+import reactLogo from "../../../assets/images/wego.png";
 // @ts-ignore
 import signUpUser from "../../../assets/images/signUpUser.png";
 // @ts-ignore
@@ -62,48 +62,46 @@ class MainSignUpScreen extends Component<Props> {
     signUp = async () => {
         if (this.state.name.length < 2) {
             Alert.alert("Name must be at least 2 characters!");
-            return;
-        }
-        if (!this.validateEmail(this.state.email)) {
+        } else if (!this.validateEmail(this.state.email)) {
             Alert.alert("Email invalid!");
-            return;
         }
-        if(this.state.password === ""){
+        else if (this.state.password === "") {
             Alert.alert("Please enter password!");
             return;
         }
-        if (this.state.password.length < 5) {
+        else if (this.state.password.length < 5) {
             Alert.alert("Password must be at least 5 characters!");
             return;
-        }
-        if (this.state.password === this.state.repeatPassword) {
-            const data = {
-                name: this.state.name,
-                email: this.state.email,
-                password: this.state.password
-            };
-            const json = JSON.stringify(data);
-            fetch(`${BASEURL}/api/user/insert_a_user`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json'
-                },
-                body: json
-            })
-                .then((response) => response.json())
-                .then((res) => {
-                    if (res.error) {
-                        Alert.alert(res.error);
-                    } else {
-                        this.props.navigation.navigate("verifyScreen")
-                    }
+        }else{
+            if (this.state.password === this.state.repeatPassword) {
+                const data = {
+                    name: this.state.name,
+                    email: this.state.email,
+                    password: this.state.password
+                };
+                const json = JSON.stringify(data);
+                fetch(`${BASEURL}/api/user/insert_a_user`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json'
+                    },
+                    body: json
                 })
-                .catch((error) => {
-                    console.log(error);
-                });
-        } else {
-            Alert.alert('Confirm password incorrect');
+                    .then((response) => response.json())
+                    .then((res) => {
+                        if (res.error) {
+                            Alert.alert(res.error);
+                        } else {
+                            this.props.navigation.navigate("verifyScreen")
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            } else {
+                Alert.alert('Confirm password incorrect');
+            }
         }
     };
 
@@ -173,7 +171,7 @@ class MainSignUpScreen extends Component<Props> {
                                     onSubmitEditing={() => { this.passTextInput.focus(); }}
                                     blurOnSubmit={false}
                                     onFocus={() => {
-                                        this._scrollToInput(screenWidth/8)
+                                        this._scrollToInput(screenWidth / 8)
                                     }}
                                 />
                             </View>
@@ -200,7 +198,7 @@ class MainSignUpScreen extends Component<Props> {
                                     onSubmitEditing={() => { this.rePassTextInput.focus(); }}
                                     blurOnSubmit={false}
                                     onFocus={() => {
-                                        this._scrollToInput(screenWidth/5.1375)
+                                        this._scrollToInput(screenWidth / 5.1375)
                                     }}
                                 />
                             </View>
@@ -226,7 +224,7 @@ class MainSignUpScreen extends Component<Props> {
                                     ref={(input) => { this.rePassTextInput = input; }}
                                     // onSubmitEditing={() => { this.secondTextInput.focus(); }}
                                     onFocus={() => {
-                                        this._scrollToInput(screenWidth/2.5)
+                                        this._scrollToInput(screenWidth / 2.5)
                                     }}
                                 />
                             </View>

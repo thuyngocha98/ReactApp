@@ -5,6 +5,7 @@ import ListItemGroupStyles from '../../../styles/GroupsStyles/MainScreenGroupSty
 import Colors from '../../../constants/Colors';
 import { FontAwesome5, Entypo, Octicons } from '@expo/vector-icons';
 import ListItemDetail from './ListItemDetail';
+import { number2money } from '../../../constants/FunctionCommon';
 
 function mapStateToProps(state) {
     return {
@@ -23,6 +24,11 @@ type Props = {
 
 class ListItemGroup extends Component<Props> {
     render() {
+        var money = this.props.price;
+        if (parseInt(money) < 0){
+            money = money.toString().replace('-','');
+        }
+        money = number2money(money)
         return (
             <View style={ListItemGroupStyles.mainContainer}>
                 <View style={ListItemGroupStyles.container1}>
@@ -38,26 +44,15 @@ class ListItemGroup extends Component<Props> {
                         </View>
                         <View style={ListItemGroupStyles.textDetail}>
                             <Text style={{ color: this.props.isOwned ? Colors.mediumseagreen : Colors.orangered}}>
-                                {this.props.detail}
+                                {this.props.isOwned ? "you are owned" : "you owe"}
                             </Text>
                             <Text style={{ color: this.props.isOwned ? Colors.mediumseagreen : Colors.orangered }}>
-                                {this.props.price}
+                                {money} VND
                             </Text>
                         </View>
                     </View>
                     <Octicons name='chevron-right' size={25} color={Colors.lightgray} />
                 </View>
-                {/* <View>
-                    <FlatList
-                        data={this.props.data}
-                        renderItem={({ item }) => (
-                            <ListItemDetail
-                                text={item.text}
-                            />
-                        )}
-                        keyExtractor={item => item.id.toString()}
-                    />
-                </View> */}
             </View>
         );
     }
