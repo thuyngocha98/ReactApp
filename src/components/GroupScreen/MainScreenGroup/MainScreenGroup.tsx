@@ -123,7 +123,7 @@ class MainScreenGroup extends Component<Props, States> {
                     <View style={MainScreenGroupStyles.menu}>
                         <TouchableOpacity
                             onPress={() => {
-                                Alert.alert("Menu")
+                                
                             }}
                         >
                             <MaterialCommunityIcons name='menu' size={25} color={Colors.white} />

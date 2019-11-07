@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     color: {
-        color: Colors.splitWise,
+        color: Colors.mediumseagreen,
         fontSize: 16
     },
     time:{

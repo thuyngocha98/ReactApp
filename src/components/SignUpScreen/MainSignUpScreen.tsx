@@ -136,7 +136,7 @@ class MainSignUpScreen extends Component<Props> {
                                         name: text
                                     })}
                                     placeholder={'Name'}
-                                    autoCapitalize={'none'}
+                                    autoCapitalize={'words'}
                                     returnKeyType={'next'}
                                     keyboardType='default'
                                     autoCorrect={false}

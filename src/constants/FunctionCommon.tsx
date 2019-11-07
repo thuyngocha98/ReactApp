@@ -10,3 +10,7 @@ export const thumbnails = {
     'avatar4': require('../../assets/avatar/avatar4.png'),
     'avatar5': require('../../assets/avatar/avatar5.png'),
 }
+
+export function capitalize_Words(str) {
+    return str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+}

@@ -89,7 +89,7 @@ class InputExpenseScreen extends Component<Props, States> {
         }
     }
 
-    async createTransaction(tripId){
+    async createTransaction(tripId, listTypeUser){
         const Money = parseInt(this.state.money.replace(/,/g, ''));
         const Description = this.state.description;
         this.idPayer = this.props.navigation.getParam("IdPayer", "");
@@ -98,22 +98,27 @@ class InputExpenseScreen extends Component<Props, States> {
         if (this.state.checkDescription && this.state.checkMoney){
             const listUser = this.props.listUserInTrip;
             const amount_user = Math.round(Money / listUser.length)
-            await listUser.forEach( value => {
-                if (value.user_id._id === Payer){
-                    list_user.push({
-                        type: Money,
-                        amount_user: amount_user,
-                        user_id: value.user_id._id,
-                    })
-                }
-                else{
-                    list_user.push({
-                        type: -1,
-                        amount_user: amount_user,
-                        user_id: value.user_id._id,
-                    })
-                }
-            })
+            if(listTypeUser.length > 0){
+                list_user = listTypeUser
+            }else{
+                await listUser.forEach(value => {
+                    if (value.user_id._id === Payer) {
+                        list_user.push({
+                            type: Money,
+                            amount_user: amount_user,
+                            user_id: value.user_id._id,
+                        })
+                    }
+                    else {
+                        list_user.push({
+                            type: -1,
+                            amount_user: amount_user,
+                            user_id: value.user_id._id,
+                        })
+                    }
+                })
+            }
+            
             
             const data = {
                 name: Description,
@@ -153,18 +158,12 @@ class InputExpenseScreen extends Component<Props, States> {
         }else{
             Alert.alert("Please enter full information")
         }
-        // console.log("name: "+ this.state.description)
-        // console.log("author: " + this.props.author)
-        // console.log("amount: " + this.state.money)
-        // console.log("trip_id: " + tripId)
-        // console.log("listUser: " + JSON.stringify(this.props.listUserInTrip))
-
     }
 
     render() {
         const { navigation } = this.props
+        const listTypeUser = navigation.getParam('listTypeUser', '');
         const Group = navigation.getParam('dataGroup', "");
-        // const Group = dataGroup === "" ? this.props.currenGroup : dataGroup;
         return (
             <View style={InputExpenseScreenStyles.container}>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
@@ -184,7 +183,7 @@ class InputExpenseScreen extends Component<Props, States> {
                             style={InputExpenseScreenStyles.save}
                             activeOpacity={0.5}
                             onPress={() => {
-                                this.createTransaction(Group._id)
+                                this.createTransaction(Group._id, listTypeUser)
                             }}
                         >
                             <Text
@@ -227,6 +226,7 @@ class InputExpenseScreen extends Component<Props, States> {
                                 value={this.state.description}
                                 keyboardType='default'
                                 autoCorrect={false}
+                                autoCapitalize={'words'}
                                 autoFocus
                                 underlineColorAndroid={'transparent'}
                             />
@@ -258,7 +258,8 @@ class InputExpenseScreen extends Component<Props, States> {
                             <Text 
                                 style={InputExpenseScreenStyles.text2}
                                 onPress={() => this.state.checkDescription && this.state.checkMoney 
-                                    ? navigation.navigate("ChoosePayerScreen", {listUser : this.props.listUserInTrip}) 
+                                    ? navigation.navigate("ChoosePayerScreen", 
+                                        { listUser: this.props.listUserInTrip, totalMoney: this.state.money.replace(/,/g, '')}) 
                                     : Alert.alert("Please enter full information")}
                             >
                                 you

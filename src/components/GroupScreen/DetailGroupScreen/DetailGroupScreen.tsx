@@ -127,7 +127,8 @@ class DetailGroupScreen extends Component<Props, States> {
                             renderItem={({ item }) => (
                                 <TouchableOpacity
                                     onPress={() => {
-                                        Alert.alert("Chức năng đang phát triển")
+                                        this.props.navigation.navigate("DetaiTransactionScreen", 
+                                        { nameGroup: this.dataTrip.name, transaction: item})
                                     }}
                                 >
                                     <ListItemContent

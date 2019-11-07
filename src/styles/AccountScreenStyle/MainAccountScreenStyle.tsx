@@ -20,65 +20,64 @@ const styles = StyleSheet.create({
         height: screenWidth / 4,
         borderRadius: screenWidth / 8,
         resizeMode: 'cover',
-        marginTop: screenWidth / 13.7
+        marginTop: screenWidth / 27.4
     },
     male: {
         marginTop: screenWidth / 41.1
     },
     textUser: {
         marginTop: screenWidth / 100,
-        fontSize: 16,
+        fontSize: 17,
         color: Colors.white
     },
     email: {
         opacity: 0.7,
+        fontSize: 15,
         marginBottom: screenWidth / 41.1,
         color: Colors.white
     },
     mainContainer: {
-        marginTop: screenWidth / 15,
+        marginTop: screenWidth / 20.55,
         paddingHorizontal: screenWidth / 20.55
     },
     overView: {
         marginVertical: screenWidth / 25,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     textOverview: {
         marginLeft: screenWidth / 27.4,
-        marginTop: 3,
-        fontSize: 20,
+        fontSize: 18,
         color: 'gray',
     },
     setting: {
         flexDirection: 'row',
         marginVertical: screenWidth / 25,
+        alignItems: 'center',
     },
     textSetting: {
-        marginLeft: screenWidth / 41.1,
-        marginTop: 3,
-        fontSize: 20,
+        marginLeft: screenWidth / 30,
+        fontSize: 18,
         color: 'gray',
     },
     help: {
         flexDirection: 'row',
         marginVertical: screenWidth / 25,
-        marginLeft: 4
+        alignItems: 'center',
     },
     textHelp: {
-        marginLeft: screenWidth / 34.25,
-        marginTop: 2,
-        fontSize: 20,
+        marginLeft: screenWidth / 26,
+        fontSize: 18,
         color: 'gray'
     },
     signOut: {
         flexDirection: 'row',
         marginVertical: screenWidth / 25,
-        marginLeft: screenWidth/41.1
+        alignItems: 'center',
     },
     textSignOut: {
-        marginLeft: screenWidth/34.25,
-        marginTop: -2,
-        fontSize: 20,
+        marginLeft: screenWidth / 26,
+        fontSize: 18,
         color: 'gray',
     }
 

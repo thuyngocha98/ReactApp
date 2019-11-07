@@ -147,7 +147,7 @@ class CreateGroupScreen extends Component<Props, States> {
                             autoFocus={true}
                             keyboardType='default'
                             autoCorrect={false}
-                            autoCapitalize="words"
+                            autoCapitalize={'words'}
                         />
                     </View>
                 </View>

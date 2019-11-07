@@ -154,7 +154,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
                             blurOnSubmit={false}
                             autoCorrect={false}
                             autoFocus
-                            autoCapitalize={'none'}
+                            autoCapitalize={'words'}
                             placeholder={'Enter name...'}
                         />
                         <View style={{ flex: 1 }} />
