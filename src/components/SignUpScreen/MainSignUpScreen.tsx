@@ -25,6 +25,7 @@ import { BASEURL } from '../../api/api';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Colors from '../../constants/Colors';
 import { screenWidth } from '../../constants/Dimensions';
+import DialogBox from 'react-native-dialogbox';
 
 type Props = {
     navigation?: any
@@ -44,6 +45,7 @@ class MainSignUpScreen extends Component<Props> {
     emailTextInput: TextInput;
     passTextInput: TextInput;
     rePassTextInput: TextInput;
+    dialogbox: any;
 
     componentWillUnmount() {
         this.setState({
@@ -54,6 +56,18 @@ class MainSignUpScreen extends Component<Props> {
         })
     }
 
+    handleOnPress(title, content) {
+        // alert
+        this.dialogbox.tip({
+            title: title,
+            content: content,
+            btn: {
+                text: 'OK',
+                style: { fontWeight: '500', fontSize: 20, color: "#044de0" },
+            },
+        });
+    }
+
     validateEmail(email) {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
@@ -61,18 +75,18 @@ class MainSignUpScreen extends Component<Props> {
 
     signUp = async () => {
         if (this.state.name.length < 2) {
-            Alert.alert("Name must be at least 2 characters!");
+            this.handleOnPress("Error!", ["Name invalid!", "Name must be at least 2 characters."])
         } else if (!this.validateEmail(this.state.email)) {
-            Alert.alert("Email invalid!");
+            this.handleOnPress("Error!", ["Email invalid!", "Please check again."])
         }
         else if (this.state.password === "") {
-            Alert.alert("Please enter password!");
+            this.handleOnPress("Error!", ["Password invalid!", "Please enter password."])
             return;
         }
         else if (this.state.password.length < 5) {
-            Alert.alert("Password must be at least 5 characters!");
+            this.handleOnPress("Error!", ["Password invalid!", "Password must be at least 5 characters."])
             return;
-        }else{
+        } else {
             if (this.state.password === this.state.repeatPassword) {
                 const data = {
                     name: this.state.name,
@@ -91,7 +105,7 @@ class MainSignUpScreen extends Component<Props> {
                     .then((response) => response.json())
                     .then((res) => {
                         if (res.error) {
-                            Alert.alert(res.error);
+                            this.handleOnPress("Error!", [res.error, "Please check again."])
                         } else {
                             this.props.navigation.navigate("verifyScreen")
                         }
@@ -100,7 +114,8 @@ class MainSignUpScreen extends Component<Props> {
                         console.log(error);
                     });
             } else {
-                Alert.alert('Confirm password incorrect');
+                this.handleOnPress("Error!", ["Confirm password incorrect", "Please check again."])
+
             }
         }
     };
@@ -114,143 +129,146 @@ class MainSignUpScreen extends Component<Props> {
     render() {
         const { navigation } = this.props;
         return (
-            <KeyboardAwareScrollView
-                style={{ flex: 1 }}
-                innerRef={ref => { this.scroll = ref }}
-                keyboardShouldPersistTaps='always' // can click button when is openning keyboard
-            >
-                <View style={styles.mainContainer}>
-                    <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent />
-                    <View>
-                        <View style={styles.header}>
-                            <Image source={reactLogo} style={styles.reactLogo} />
+            <View style={{ flex: 1 }}>
+                <KeyboardAwareScrollView
+                    style={{ flex: 1 }}
+                    innerRef={ref => { this.scroll = ref }}
+                    keyboardShouldPersistTaps='always' // can click button when is openning keyboard
+                >
+                    <View style={styles.mainContainer}>
+                        <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent />
+                        <View>
+                            <View style={styles.header}>
+                                <Image source={reactLogo} style={styles.reactLogo} />
+                            </View>
                         </View>
-                    </View>
-                    <View>
-                        <View style={styles.userContainer}>
-                            <View style={styles.user}>
-                                <Image source={signUpUser} style={styles.userName} />
-                                <TextInput
-                                    style={styles.input}
-                                    onChangeText={text => this.setState({
-                                        name: text
-                                    })}
-                                    placeholder={'Name'}
-                                    autoCapitalize={'words'}
-                                    returnKeyType={'next'}
-                                    keyboardType='default'
-                                    autoCorrect={false}
-                                    placeholderTextColor={Colors.lightgray}
-                                    underlineColorAndroid="transparent"
-                                    onSubmitEditing={() => { this.emailTextInput.focus(); }}
-                                    blurOnSubmit={false}
-                                    onFocus={() => {
-                                        this._scrollToInput(0)
-                                    }}
-                                />
+                        <View>
+                            <View style={styles.userContainer}>
+                                <View style={styles.user}>
+                                    <Image source={signUpUser} style={styles.userName} />
+                                    <TextInput
+                                        style={styles.input}
+                                        onChangeText={text => this.setState({
+                                            name: text
+                                        })}
+                                        placeholder={'Name'}
+                                        autoCapitalize={'words'}
+                                        returnKeyType={'next'}
+                                        keyboardType='default'
+                                        autoCorrect={false}
+                                        placeholderTextColor={Colors.lightgray}
+                                        underlineColorAndroid="transparent"
+                                        onSubmitEditing={() => { this.emailTextInput.focus(); }}
+                                        blurOnSubmit={false}
+                                        onFocus={() => {
+                                            this._scrollToInput(0)
+                                        }}
+                                    />
+                                </View>
+                            </View>
+                        </View>
+                        <View>
+                            <View style={styles.userContainer}>
+                                <View style={styles.user}>
+                                    <Image source={email} style={styles.userName} />
+                                    <TextInput
+                                        style={styles.input}
+                                        onChangeText={text => this.setState({
+                                            email: text
+                                        })}
+                                        placeholder={'Email '}
+                                        autoCapitalize={'none'}
+                                        returnKeyType={'next'}
+                                        keyboardType='email-address'
+                                        autoCorrect={false}
+                                        placeholderTextColor={Colors.lightgray}
+                                        underlineColorAndroid="transparent"
+                                        ref={(input) => { this.emailTextInput = input; }}
+                                        onSubmitEditing={() => { this.passTextInput.focus(); }}
+                                        blurOnSubmit={false}
+                                        onFocus={() => {
+                                            this._scrollToInput(screenWidth / 8)
+                                        }}
+                                    />
+                                </View>
+                            </View>
+                        </View>
+                        <View>
+                            <View style={styles.userContainer}>
+                                <View style={styles.user}>
+                                    <Image source={lock} style={styles.userName} />
+                                    <TextInput
+                                        style={styles.input}
+                                        onChangeText={text => this.setState({
+                                            password: text
+                                        })}
+                                        placeholder={'Password '}
+                                        autoCapitalize={'none'}
+                                        returnKeyType={'next'}
+                                        keyboardType='default'
+                                        secureTextEntry
+                                        autoCorrect={false}
+                                        placeholderTextColor={Colors.lightgray}
+                                        underlineColorAndroid="transparent"
+                                        ref={(input) => { this.passTextInput = input; }}
+                                        onSubmitEditing={() => { this.rePassTextInput.focus(); }}
+                                        blurOnSubmit={false}
+                                        onFocus={() => {
+                                            this._scrollToInput(screenWidth / 5.1375)
+                                        }}
+                                    />
+                                </View>
+                            </View>
+                        </View>
+                        <View>
+                            <View style={styles.userContainer}>
+                                <View style={styles.user}>
+                                    <Image source={key} style={styles.userName} />
+                                    <TextInput
+                                        style={styles.input}
+                                        onChangeText={text => this.setState({
+                                            repeatPassword: text
+                                        })}
+                                        placeholder={'Confirm Password'}
+                                        autoCapitalize={'none'}
+                                        returnKeyType={'done'}
+                                        keyboardType='default'
+                                        secureTextEntry
+                                        autoCorrect={false}
+                                        placeholderTextColor={Colors.lightgray}
+                                        underlineColorAndroid="transparent"
+                                        ref={(input) => { this.rePassTextInput = input; }}
+                                        // onSubmitEditing={() => { this.secondTextInput.focus(); }}
+                                        onFocus={() => {
+                                            this._scrollToInput(screenWidth / 2.5)
+                                        }}
+                                    />
+                                </View>
+                            </View>
+                        </View>
+                        <View>
+                            <View style={styles.buttonSignUp}>
+                                <TouchableOpacity activeOpacity={0.5} style={styles.buttonSignUp1}
+                                    onPress={this.signUp}>
+                                    <Text style={styles.textSignUp}>Sign Up</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        <View>
+                            <View style={styles.buttonLogin}>
+                                <TouchableOpacity
+                                    activeOpacity={0.5}
+                                    style={styles.buttonLogin1}
+                                    onPress={() => navigation.navigate('MainLoginScreen')}
+                                >
+                                    <Text style={styles.textLogin}>Login </Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </View>
-                    <View>
-                        <View style={styles.userContainer}>
-                            <View style={styles.user}>
-                                <Image source={email} style={styles.userName} />
-                                <TextInput
-                                    style={styles.input}
-                                    onChangeText={text => this.setState({
-                                        email: text
-                                    })}
-                                    placeholder={'Email '}
-                                    autoCapitalize={'none'}
-                                    returnKeyType={'next'}
-                                    keyboardType='email-address'
-                                    autoCorrect={false}
-                                    placeholderTextColor={Colors.lightgray}
-                                    underlineColorAndroid="transparent"
-                                    ref={(input) => { this.emailTextInput = input; }}
-                                    onSubmitEditing={() => { this.passTextInput.focus(); }}
-                                    blurOnSubmit={false}
-                                    onFocus={() => {
-                                        this._scrollToInput(screenWidth / 8)
-                                    }}
-                                />
-                            </View>
-                        </View>
-                    </View>
-                    <View>
-                        <View style={styles.userContainer}>
-                            <View style={styles.user}>
-                                <Image source={lock} style={styles.userName} />
-                                <TextInput
-                                    style={styles.input}
-                                    onChangeText={text => this.setState({
-                                        password: text
-                                    })}
-                                    placeholder={'Password '}
-                                    autoCapitalize={'none'}
-                                    returnKeyType={'next'}
-                                    keyboardType='default'
-                                    secureTextEntry
-                                    autoCorrect={false}
-                                    placeholderTextColor={Colors.lightgray}
-                                    underlineColorAndroid="transparent"
-                                    ref={(input) => { this.passTextInput = input; }}
-                                    onSubmitEditing={() => { this.rePassTextInput.focus(); }}
-                                    blurOnSubmit={false}
-                                    onFocus={() => {
-                                        this._scrollToInput(screenWidth / 5.1375)
-                                    }}
-                                />
-                            </View>
-                        </View>
-                    </View>
-                    <View>
-                        <View style={styles.userContainer}>
-                            <View style={styles.user}>
-                                <Image source={key} style={styles.userName} />
-                                <TextInput
-                                    style={styles.input}
-                                    onChangeText={text => this.setState({
-                                        repeatPassword: text
-                                    })}
-                                    placeholder={'Confirm Password'}
-                                    autoCapitalize={'none'}
-                                    returnKeyType={'done'}
-                                    keyboardType='default'
-                                    secureTextEntry
-                                    autoCorrect={false}
-                                    placeholderTextColor={Colors.lightgray}
-                                    underlineColorAndroid="transparent"
-                                    ref={(input) => { this.rePassTextInput = input; }}
-                                    // onSubmitEditing={() => { this.secondTextInput.focus(); }}
-                                    onFocus={() => {
-                                        this._scrollToInput(screenWidth / 2.5)
-                                    }}
-                                />
-                            </View>
-                        </View>
-                    </View>
-                    <View>
-                        <View style={styles.buttonSignUp}>
-                            <TouchableOpacity activeOpacity={0.5} style={styles.buttonSignUp1}
-                                onPress={this.signUp}>
-                                <Text style={styles.textSignUp}>Sign Up</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                    <View>
-                        <View style={styles.buttonLogin}>
-                            <TouchableOpacity
-                                activeOpacity={0.5}
-                                style={styles.buttonLogin1}
-                                onPress={() => navigation.navigate('MainLoginScreen')}
-                            >
-                                <Text style={styles.textLogin}>Login </Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </KeyboardAwareScrollView>
+                </KeyboardAwareScrollView>
+                <DialogBox ref={dialogbox => { this.dialogbox = dialogbox }} isOverlayClickClose={false} style={{ backgroundColor: "#333" }} />
+            </View>
         );
     }
 }

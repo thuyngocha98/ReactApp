@@ -174,7 +174,6 @@ class DetaiTransactionScreen extends Component<Props, States> {
                         scrollEnabled
                         data={this.state.data}
                         renderItem={({ item }) => (
-                            console.log(item),
                             <ListItemDetailTransaction
                                 data={item}
                             />

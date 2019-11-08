@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {View, Text, ScrollView, FlatList, Image, TouchableOpacity, StatusBar} from "react-native";
+import React, { Component } from 'react';
+import { View, Text, ScrollView, FlatList, Image, TouchableOpacity, StatusBar, ActivityIndicator } from "react-native";
 import styles from "../../../styles/ActivityScreenStyles/RecentActivityScreenStyle/MainActivityScreenStyle";
 import ListItemActivity from "./ListItemActivity";
 // @ts-ignore
@@ -9,19 +9,26 @@ import toast from "../../../../assets/images/toast.png";
 // @ts-ignore
 import car from "../../../../assets/images/car.png";
 // @ts-ignore
-import beach from "../../../../assets/images/beach.png";
-// @ts-ignore
 import wifi from "../../../../assets/images/wifi.png";
 // @ts-ignore
 import puzzle from "../../../../assets/images/puzzle.png";
+import { BASEURL } from '../../../api/api';
+import Colors from '../../../constants/Colors';
 
 type Props = {
-    navigation?:any
+    navigation?: any
+}
+
+type State = {
+    data?: any[],
+    loading?: boolean,
 }
 
 class MainActivityScreen extends Component<Props> {
     state = {
-        data: [
+        data: [],
+        loading: false,
+        data1: [
             {
                 type: 'addItem',
                 id: 0,
@@ -39,7 +46,6 @@ class MainActivityScreen extends Component<Props> {
             {
                 type: 'addItem',
                 id: 1,
-                typeImage: beach,
                 avatar: avatar,
                 name: 'Ha T.',
                 method: 'added',
@@ -118,12 +124,53 @@ class MainActivityScreen extends Component<Props> {
             },
         ]
     };
+    _navListener: any;
 
-    onDetail = () => {
-     this.props.navigation.navigate('MainActivityDetailsWhoPaidScreen')
+    componentWillMount() {
+        this.getDataActivity();
+    }
+
+    componentDidMount() {
+
+        //set barstyle of statusbar
+        this._navListener = this.props.navigation.addListener('didFocus', () => {
+            StatusBar.setBarStyle('dark-content');
+            // call api get list group
+            this.getDataActivity();
+        });
+    }
+
+    componentWillUnmount() {
+        // remove barstyle when lead screen
+        this._navListener.remove();
+    }
+
+    getDataActivity = async () => {
+        this.setState({ loading: true })
+        fetch(`${BASEURL}/api/userActivity/get_list_all_user_activity`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+        })
+            .then((response) => response.json())
+            .then((res) => {
+                this.setState({
+                    data: res.data.reverse(),
+                    loading: false
+                })
+            })
+            .catch((error) => {
+                this.setState({
+                    loading: false
+                })
+                console.log(error);
+            });
     };
 
     render() {
+
         return (
             <View>
                 <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent />
@@ -131,33 +178,29 @@ class MainActivityScreen extends Component<Props> {
                     <View>
                         <Text style={styles.title}>Recent activity</Text>
                     </View>
-                    <View>
-                        <FlatList
-                            data={this.state.data}
-                            renderItem={({item}) => (
-                                <TouchableOpacity onPress={this.onDetail} >
-                                    <ListItemActivity
-                                        type={item.type}
-                                        typeImage={item.typeImage}
-                                        avatar={item.avatar}
-                                        name={item.name}
-                                        method={item.method}
-                                        nameItem={item.nameItem}
-                                        nameFriend={item.nameFriend}
-                                        group={item.group}
-                                        owe={item.owe}
-                                        money={item.money}
-                                        date={item.date}
-                                        time={item.time}
-                                    />
-                                </TouchableOpacity>
-                            )}
-                            keyExtractor={item => item.id.toString()}
+                    <View>{this.state.loading ? (
+                        <View style={styles.activityIndicator}>
+                            <ActivityIndicator animating size="large" color={Colors.tintColor} />
+                        </View>
+                    ) : (
+                            <View>
+                                <FlatList
+                                    data={this.state.data}
+                                    renderItem={({ item }) => (
+                                        <TouchableOpacity onPress={() => { }} >
+                                            <ListItemActivity
+                                                data={item}
+                                            />
+                                        </TouchableOpacity>
+                                    )}
+                                    keyExtractor={item => item._id.toString()}
+                                />
+                            </View>
+                        )}
 
-                        />
                     </View>
                 </ScrollView>
-            </View>
+            </View >
         );
     }
 }

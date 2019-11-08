@@ -11,6 +11,12 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         marginLeft:20
     },
+    activityIndicator: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Colors.white
+    }
 });
 
 export default styles;

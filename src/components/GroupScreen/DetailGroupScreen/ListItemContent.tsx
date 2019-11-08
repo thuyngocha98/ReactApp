@@ -40,7 +40,7 @@ class ListItemContent extends Component<Props> {
 
     render() {
         var time = this.props.data.create_date.split(/[\s-T]+/);
-        
+        var name = this.props.data.namePayer.split(/[\s ]+/)
         return (
             <View style={ListItemContentStyles.mainContainer}>
                 <View style={ListItemContentStyles.container}>
@@ -58,7 +58,7 @@ class ListItemContent extends Component<Props> {
                     <View style={ListItemContentStyles.content}>
                         <Text style={ListItemContentStyles.title}>{this.props.data.name}</Text>
                         <Text style={ListItemContentStyles.detail} numberOfLines={1}>
-                            {this.props.data.namePayer} paid {number2money(this.props.data.moneyPayer)} VND
+                            {name[name.length - 1]} {this.props.data.namePayer[0]}. paid {number2money(this.props.data.moneyPayer)} VND
                     </Text>
                     </View>
                     <View style={ListItemContentStyles.totalMoney}>

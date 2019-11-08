@@ -19,11 +19,12 @@ import { BASEURL } from '../../../api/api';
 import { number2money } from '../../../constants/FunctionCommon';
 function mapStateToProps(state) {
     return {
-
+        userId: state.dataUser.dataUser._id,
     };
 }
 
 type Props = {
+    userId?: any,
     itemSelected?: number,
     navigation?: any,
     nameGroup?: string,
@@ -106,12 +107,17 @@ class HeaderTitleComponent extends Component<Props, States> {
     }
 
     callApiRemoveGroup = async () => {
+        const data = {
+            user_id: this.props.userId
+        };
+        const json = JSON.stringify(data);
         fetch(`${BASEURL}/api/trip/delete_a_trip/${this.props.idGroup}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json'
             },
+            body: json
         })
             .then((response) => response.json())
             .then((res) => {

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import styles from "../../../styles/GroupsStyles/CreateGroupScreenStyles/AddMemberGroupScreenStyles";
 import { EvilIcons, MaterialCommunityIcons, AntDesign, Feather, FontAwesome } from "@expo/vector-icons";
 import { BASEURL } from '../../../api/api';
+import DialogBox from 'react-native-dialogbox';
 
 function mapStateToProps(state) {
     return {
@@ -27,6 +28,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
         header: null
     };
     emailTextInput: TextInput;
+    dialogbox: any;
 
     constructor(props) {
         super(props);
@@ -35,6 +37,18 @@ class AddMemberGroupScreen extends Component<Props, States> {
             email: '',
             name: '',
         };
+    }
+
+    handleOnPress(title, content) {
+        // alert
+        this.dialogbox.tip({
+            title: title,
+            content: content,
+            btn: {
+                text: 'OK',
+                style: { fontWeight: '500', fontSize: 20, color: "#044de0" },
+            },
+        });
     }
 
 
@@ -58,7 +72,8 @@ class AddMemberGroupScreen extends Component<Props, States> {
 
     addEmailToList(name, email) {
         if (name === "" || email === "") {
-            Alert.alert("Please enter full infomation.")
+            this.handleOnPress("Error!", ["Information missing!!!", "Please enter full infomation.."])
+
         } else {
             let check = this.state.data.some((item, i) => {
                 if (item.name === name || item.email === email) {
@@ -66,7 +81,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
                 }
             })
             if (check) {
-                Alert.alert("Name or Email already exists");
+                this.handleOnPress("Error!", ["Name or Email already exists!", "Please check again."])
             } else {
                 if (this.validateEmail(email)) {
                     let newData = [...this.state.data, { name: name, email: email }];
@@ -76,7 +91,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
                         name: "",
                     })
                 } else {
-                    Alert.alert("Email invalid!")
+                    this.handleOnPress("Error!", ["Email invalid!", "Please check again."])
                 }
             }
         }
@@ -100,20 +115,19 @@ class AddMemberGroupScreen extends Component<Props, States> {
             .then((response) => response.json())
             .then((res) => {
                 if (res.error) {
-                    Alert.alert(res.error.message);
+                    this.handleOnPress("Error!", [res.error, "Please check again."])
                 } else {
-                    Alert.alert(
-                        'Create successful',
-                        ``,
-                        [
-                            {
-                                text: 'OK', onPress: () => {
-                                    this.props.navigation.navigate("GroupScreen")
-                                }
+                    this.dialogbox.tip({
+                        title: "Alert!",
+                        content: ["Create group successful", "Let's go!"],
+                        btn: {
+                            text: 'OK',
+                            style: { fontWeight: '500', fontSize: 20, color: "#044de0" },
+                            callback: () => {
+                                this.props.navigation.navigate("GroupScreen")
                             },
-                        ],
-                        { cancelable: false },
-                    );
+                        },
+                    });
                 }
             })
             .catch((error) => {
@@ -207,6 +221,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
                         keyExtractor={item => item.email}
                     />
                 </View>
+                <DialogBox ref={dialogbox => { this.dialogbox = dialogbox }} isOverlayClickClose={false} style={{ backgroundColor: "#333" }} />
             </View>
         );
     }
