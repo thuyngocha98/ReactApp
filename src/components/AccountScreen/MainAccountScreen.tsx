@@ -22,6 +22,22 @@ type Props = {
 }
 
 class MainAccountScreen extends Component<Props> {
+    _navListener: any;
+
+    componentDidMount() {
+
+        //set barstyle of statusbar
+        this._navListener = this.props.navigation.addListener('didFocus', () => {
+            StatusBar.setBarStyle('light-content');
+            // call api get list group
+        });
+    }
+
+    componentWillUnmount() {
+        // remove barstyle when lead screen
+        this._navListener.remove();
+    }
+
     signOut = () => {
       AsyncStorage.removeItem('jwt').then(r => console.log(r));
       this.props.navigation.navigate('MainLoginScreen')

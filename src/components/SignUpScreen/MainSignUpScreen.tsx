@@ -8,7 +8,8 @@ import {
     Image,
     TouchableOpacity,
     KeyboardAvoidingView,
-    Alert
+    Alert,
+    Platform
 } from "react-native";
 import styles from "../../styles/SignUpScreenStyle/MainSignUpScreenStyle";
 // @ts-ignore
@@ -131,6 +132,8 @@ class MainSignUpScreen extends Component<Props> {
         return (
             <View style={{ flex: 1 }}>
                 <KeyboardAwareScrollView
+                    enableOnAndroid={true}
+                    enableAutomaticScroll={(Platform.OS === 'ios')}
                     style={{ flex: 1 }}
                     innerRef={ref => { this.scroll = ref }}
                     keyboardShouldPersistTaps='always' // can click button when is openning keyboard

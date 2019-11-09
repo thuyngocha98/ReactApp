@@ -36,6 +36,7 @@ import AddMemberGroupScreen from '../components/GroupScreen/CreateGroupScreen/Ad
 import ChoosePayerScreen from '../components/ExpenseScreen/ChoosePayerScreen/ChoosePayerScreen';
 import ChooseMultiplePeopleScreen from '../components/ExpenseScreen/ChoosePayerScreen/ChooseMultiplePeopleScreen/ChooseMultiplePeopleScreen';
 import DetaiTransactionScreen from '../components/GroupScreen/DetailGroupScreen/DetailTransactionScreen/DetaiTransactionScreen';
+import { screenWidth } from '../constants/Dimensions';
 
 const configPlat = Platform.select({
     web: { headerMode: 'screen' },
@@ -82,8 +83,11 @@ FriendsStack.navigationOptions = ({ navigation }) => {
         tabBarOptions: {
             activeTintColor: Colors.tintColor,
             labelStyle: {
-                marginBottom: 5
-            }
+                paddingBottom: Platform.OS === 'ios' ? screenWidth / 41.4 : screenWidth / 80,
+            },
+            style: {
+                height: Platform.OS === 'ios' ? screenWidth / 7.52 : screenWidth / 7.2,
+            },
         }
     }
 };
@@ -153,8 +157,11 @@ GroupStack.navigationOptions = ({ navigation }) => {
         tabBarOptions: {
             activeTintColor: Colors.tintColor,
             labelStyle: {
-                marginBottom: 5
-            }
+                paddingBottom: Platform.OS === 'ios' ? screenWidth / 41.4 : screenWidth / 80,
+            },
+            style: {
+                height: Platform.OS === 'ios' ? screenWidth / 7.52 : screenWidth / 7.2,
+            },
         }
     };
 };
@@ -247,8 +254,11 @@ ExpenseStack.navigationOptions = ({ navigation }) => {
         tabBarOptions: {
             activeTintColor: Colors.tintColor,
             labelStyle: {
-                marginBottom: 5
-            }
+                paddingBottom: Platform.OS === 'ios' ? screenWidth / 41.4 : screenWidth / 80,
+            },
+            style: {
+                height: Platform.OS === 'ios' ? screenWidth / 7.52 : screenWidth / 7.2,
+            },
         }
     };
 };
@@ -282,8 +292,11 @@ ActivityStack.navigationOptions = {
     tabBarOptions: {
         activeTintColor: Colors.tintColor,
         labelStyle: {
-            marginBottom: 5
-        }
+            paddingBottom: Platform.OS === 'ios' ? screenWidth / 41.4 : screenWidth / 80,
+        },
+        style: {
+            height: Platform.OS === 'ios' ? screenWidth / 7.52 : screenWidth / 7.2,
+        },
     }
 };
 
@@ -313,8 +326,11 @@ AccountStack.navigationOptions = {
     tabBarOptions: {
         activeTintColor: Colors.tintColor,
         labelStyle: {
-            marginBottom: 5
-        }
+            paddingBottom: Platform.OS === 'ios' ? screenWidth / 41.4 : screenWidth / 80,
+        },
+        style: {
+            height: Platform.OS === 'ios' ? screenWidth / 7.52 : screenWidth / 7.2,
+        },
     }
 };
 
