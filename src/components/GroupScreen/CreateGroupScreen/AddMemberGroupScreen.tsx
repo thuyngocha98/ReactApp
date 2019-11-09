@@ -115,7 +115,17 @@ class AddMemberGroupScreen extends Component<Props, States> {
             .then((response) => response.json())
             .then((res) => {
                 if (res.error) {
-                    this.handleOnPress("Error!", [res.error, "Please check again."])
+                    this.dialogbox.tip({
+                        title: "Error!",
+                        content: [res.error, "Please enter another group name."],
+                        btn: {
+                            text: 'OK',
+                            style: { fontWeight: '500', fontSize: 20, color: "#044de0" },
+                            callback: () => {
+                                this.props.navigation.navigate("CreateGroupScreen")
+                            },
+                        },
+                    });
                 } else {
                     this.dialogbox.tip({
                         title: "Alert!",

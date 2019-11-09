@@ -12,6 +12,8 @@ import verifyScreenStyles, {
 import { BASEURL } from '../../api/api';
 import { bindActionCreators } from 'redux';
 import { getApiDataUser } from '../../actions/action';
+import DialogBox from 'react-native-dialogbox';
+
 
 type Props = {
     navigation?: any,
@@ -44,6 +46,19 @@ class verifyScreen extends Component<Props, States> {
     _animationsScale = [...new Array(codeLength)].map(
         () => new Animated.Value(1),
     );
+    dialogbox: any;
+
+    handleOnPress(title, content) {
+        // alert
+        this.dialogbox.tip({
+            title: title,
+            content: content,
+            btn: {
+                text: 'OK',
+                style: { fontWeight: '500', fontSize: 20, color: "#044de0" },
+            },
+        });
+    }
 
     onFinishCheckingCode = code => {
         this.setState({
@@ -121,28 +136,28 @@ class verifyScreen extends Component<Props, States> {
                 .then(async (res) => {
                     if (res.error) {
                         Alert.alert(res.error);
+                        this.handleOnPress("Error!", [res.error, "Please check again."])
                     } else {
                         await AsyncStorage.setItem('jwt', res.token)
                         this.getDataUserForRedux();
-                        Alert.alert(
-                            'Correct Verification',
-                            `Let's go`,
-                            [
-                                {
-                                    text: 'OK', onPress: () => {
-                                        this.props.navigation.navigate("GroupScreen")
-                                    }
+                        this.dialogbox.tip({
+                            title: "Alert!",
+                            content: ["Correct Verification", "Let's go!"],
+                            btn: {
+                                text: 'OK',
+                                style: { fontWeight: '500', fontSize: 20, color: "#044de0" },
+                                callback: () => {
+                                    this.props.navigation.navigate("GroupScreen")
                                 },
-                            ],
-                            { cancelable: false },
-                        );
+                            },
+                        });
                     }
                 })
                 .catch((error) => {
                     console.log(error);
                 });
         } else {
-            Alert.alert('Please enter PIN verification');
+            this.handleOnPress("Error!", ["PIN missing!", "Please enter PIN verification."])
         }
     };
 
@@ -161,32 +176,35 @@ class verifyScreen extends Component<Props, States> {
     render() {
         /*concept : https://dribbble.com/shots/5476562-Forgot-Password-Verification/attachments */
         return (
-            <View style={verifyScreenStyles.inputWrapper}>
-                <Text style={verifyScreenStyles.inputLabel}>Verification</Text>
-                <Image style={verifyScreenStyles.icon} source={source} />
-                <Text style={verifyScreenStyles.inputSubLabel}>
-                    {'Please enter the verification code\nwe send to your email address'}
-                </Text>
-                <CodeFiled
-                    maskSymbol=" "
-                    variant="clear"
-                    codeLength={codeLength}
-                    keyboardType="numeric"
-                    cellProps={this.cellProps.bind(this)}
-                    containerProps={this.containerProps}
-                    onFulfill={this.onFinishCheckingCode}
-                    CellComponent={Animated.Text}
-                />
-                <TouchableOpacity
-                    activeOpacity={0.6}
-                    onPress={() => {
-                        this.signUp()
-                    }}
-                >
-                    <View style={verifyScreenStyles.nextButton}>
-                        <Text style={verifyScreenStyles.nextButtonText}>Verify</Text>
-                    </View>
-                </TouchableOpacity>
+            <View style={{ flex: 1 }}>
+                <View style={verifyScreenStyles.inputWrapper}>
+                    <Text style={verifyScreenStyles.inputLabel}>Verification</Text>
+                    <Image style={verifyScreenStyles.icon} source={source} />
+                    <Text style={verifyScreenStyles.inputSubLabel}>
+                        {'Please enter the verification code\nwe send to your email address'}
+                    </Text>
+                    <CodeFiled
+                        maskSymbol=" "
+                        variant="clear"
+                        codeLength={codeLength}
+                        keyboardType="numeric"
+                        cellProps={this.cellProps.bind(this)}
+                        containerProps={this.containerProps}
+                        onFulfill={this.onFinishCheckingCode}
+                        CellComponent={Animated.Text}
+                    />
+                    <TouchableOpacity
+                        activeOpacity={0.6}
+                        onPress={() => {
+                            this.signUp()
+                        }}
+                    >
+                        <View style={verifyScreenStyles.nextButton}>
+                            <Text style={verifyScreenStyles.nextButtonText}>Verify</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+                <DialogBox ref={dialogbox => { this.dialogbox = dialogbox }} isOverlayClickClose={false} style={{ backgroundColor: "#333" }} />
             </View>
         );
     }
