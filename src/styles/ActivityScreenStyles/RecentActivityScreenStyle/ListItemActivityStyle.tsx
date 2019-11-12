@@ -1,5 +1,6 @@
 import {StyleSheet} from "react-native";
 import Colors from "../../../constants/Colors";
+import { screenWidth } from "../../../constants/Dimensions";
 
 const styles = StyleSheet.create({
     flexRow: {
@@ -21,30 +22,30 @@ const styles = StyleSheet.create({
     },
     container: {
         flexDirection: 'row',
-        marginLeft:20
+        marginLeft: screenWidth/20.55
     },
     container1: {
-        marginRight: 15
+        marginRight: screenWidth/27.4
     },
     toast: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
+        width: screenWidth/10.275,
+        height: screenWidth/10.275,
+        borderRadius: screenWidth/20.55,
         resizeMode: 'cover'
     },
     avatar: {
-        width: 20,
-        height: 20,
-        borderRadius: 10,
+        width: screenWidth / 20.55,
+        height: screenWidth / 20.55,
+        borderRadius: screenWidth / 41.1,
         resizeMode: 'cover',
-        marginTop: -15,
-        marginLeft: 25
+        marginTop: -screenWidth/27.4,
+        marginLeft: screenWidth / 16.44
     },
     hr: {
         flex:1,
         height:1,
         backgroundColor:Colors.lightgray,
-        marginVertical:15
+        marginVertical: screenWidth/27.4
     }
 });
 

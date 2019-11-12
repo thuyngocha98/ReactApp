@@ -12,7 +12,7 @@ import {
     StyleSheet,
     StatusBar,
     ImageBackground,
-    Image, TouchableOpacity, AsyncStorage, Alert, findNodeHandle, ScrollView, Button
+    Image, TouchableOpacity, AsyncStorage, Alert, findNodeHandle, ScrollView, Button, Keyboard
 } from "react-native";
 // @ts-ignore
 import username from "../../../assets/images/username.png";
@@ -53,6 +53,7 @@ class MainLoginScreen extends Component<Props, States> {
     };
 
     handleOnPress(title, content) {
+        Keyboard.dismiss()
         // alert
         this.dialogbox.tip({
             title: title,

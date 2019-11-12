@@ -7,7 +7,7 @@ import {
     StatusBar,
     Image,
     TouchableOpacity,
-    KeyboardAvoidingView, AsyncStorage, Alert
+    KeyboardAvoidingView, AsyncStorage, Alert, Keyboard
 } from "react-native";
 import styles from '../../styles/ForgotPasswordScreenStyles/MainForgotPasswordScreenStyle'
 // @ts-ignore
@@ -59,6 +59,7 @@ class MainForgotPasswordScreen extends Component<Props> {
 
     handleOnPress(title, content) {
         // alert
+        Keyboard.dismiss()
         this.dialogbox.tip({
             title: title,
             content: content,

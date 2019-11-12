@@ -46,9 +46,10 @@ const ListItemContentStyles = StyleSheet.create({
         alignItems: 'flex-end',
     },
     titleMoney: {
+        fontSize: 14,
     },
     money: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: "400"
     },
     iconDetail: {

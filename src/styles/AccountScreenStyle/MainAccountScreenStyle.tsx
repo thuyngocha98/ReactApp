@@ -38,7 +38,8 @@ const styles = StyleSheet.create({
     },
     mainContainer: {
         marginTop: screenWidth / 20.55,
-        paddingHorizontal: screenWidth / 20.55
+        paddingHorizontal: screenWidth / 20.55,
+        backgroundColor: Colors.white
     },
     overView: {
         marginVertical: screenWidth / 25,

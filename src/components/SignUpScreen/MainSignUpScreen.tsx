@@ -9,7 +9,8 @@ import {
     TouchableOpacity,
     KeyboardAvoidingView,
     Alert,
-    Platform
+    Platform,
+    Keyboard
 } from "react-native";
 import styles from "../../styles/SignUpScreenStyle/MainSignUpScreenStyle";
 // @ts-ignore
@@ -58,6 +59,7 @@ class MainSignUpScreen extends Component<Props> {
     }
 
     handleOnPress(title, content) {
+        Keyboard.dismiss()
         // alert
         this.dialogbox.tip({
             title: title,
