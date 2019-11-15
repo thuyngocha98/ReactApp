@@ -5,7 +5,7 @@ import { AsyncStorage } from 'react-native';
 const TIMEOUT = 100
 
 // 52.187.177.128
-export const BASEURL = 'http://52.187.177.128:3001'
+export const BASEURL = 'http://192.168.31.222:3001'
 
 axios.defaults.withCredentials = true
 
@@ -16,7 +16,7 @@ export default {
         try {
             let url = BASEURL + 'api/be_tree/gettreesasync';
             const response = await axios.get(url, { params: { pageIndex: pageIndex, pageSize: pageSize } });
-            // handle success          
+            // handle success
             //console.log(response);
             return response.data.data;
         }
@@ -93,7 +93,7 @@ export default {
         return listAllTrip;
     },
 
-    // get list user by trip id 
+    // get list user by trip id
     _getAllUserInTrip: async tripId => {
         var listUserInTrip = [];
         await fetch(`${BASEURL}/api/tripUser/list_all_user_by_tripId/${tripId}`, {
