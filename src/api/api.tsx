@@ -16,7 +16,7 @@ export default {
         try {
             let url = BASEURL + 'api/be_tree/gettreesasync';
             const response = await axios.get(url, { params: { pageIndex: pageIndex, pageSize: pageSize } });
-            // handle success          
+            // handle success
             //console.log(response);
             return response.data.data;
         }
@@ -93,7 +93,7 @@ export default {
         return listAllTrip;
     },
 
-    // get list user by trip id 
+    // get list user by trip id
     _getAllUserInTrip: async tripId => {
         var listUserInTrip = [];
         await fetch(`${BASEURL}/api/tripUser/list_all_user_by_tripId/${tripId}`, {
