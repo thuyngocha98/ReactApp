@@ -143,11 +143,11 @@ class CreateGroupScreen extends Component<Props, States> {
                             style={CreateGroupScreenStyles.detail}
                             onChangeText={(text) => { this._checkInputName(text); }}
                             value={this.state.name}
+                            autoCapitalize='words'
                             placeholder={"132 Sesame Street"}
                             autoFocus={true}
                             keyboardType='default'
                             autoCorrect={false}
-                            autoCapitalize={'words'}
                         />
                     </View>
                 </View>

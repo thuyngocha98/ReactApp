@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StatusBar, FlatList, Alert, ScrollView } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StatusBar, FlatList, Alert, ScrollView, Keyboard } from "react-native";
 import Colors from "../../../constants/Colors";
 import { connect } from 'react-redux';
 import styles from "../../../styles/GroupsStyles/CreateGroupScreenStyles/AddMemberGroupScreenStyles";
@@ -40,6 +40,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
     }
 
     handleOnPress(title, content) {
+        Keyboard.dismiss()
         // alert
         this.dialogbox.tip({
             title: title,

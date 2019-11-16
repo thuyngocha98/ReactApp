@@ -79,7 +79,7 @@ const ChooseMultiplePeopleScreenStyles = StyleSheet.create({
     },
     txtVND: {
         color: Colors.gray,
-        fontSize: 16,
+        fontSize: 15,
     },
     viewInputMoney: {
         flex: 2,
