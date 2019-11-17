@@ -6,6 +6,7 @@ import Colors from '../constants/Colors';
 import { bindActionCreators } from 'redux';
 import { getApiDataUser } from '../actions/action';
 import { BASEURL } from '../api/api';
+import { screenWidth } from '../constants/Dimensions';
 
 
 function mapStateToProps(state) {
@@ -63,7 +64,7 @@ class SplashScreen extends Component<Props, States> {
             <View style={SplashScreenStyles.viewStyles}>
                 <View style={SplashScreenStyles.logo}>
                 <Image
-                    style={{width: 250, height: 105.2, tintColor: Colors.tintColor,resizeMode: 'contain'}}
+                    style={{width: screenWidth/1.644, height: screenWidth/3.91, tintColor: Colors.tintColor,resizeMode: 'contain'}}
                     source={require('../../assets/images/wego.png')} />
                 </View>
                 <View style={SplashScreenStyles.indicator}>

@@ -80,7 +80,7 @@ class MainLoginScreen extends Component<Props, States> {
 
     login = async () => {
         if (!this.validateEmail(this.state.email)) {
-            this.handleOnPress("Error!", ["Email invalid!","Please check agin."])
+            this.handleOnPress("Error!", ["Email invalid!","Please check again."])
             return;
         }
         if (this.state.password === "") {

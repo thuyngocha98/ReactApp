@@ -20,5 +20,7 @@ export default {
     black: '#000000',
     LightCyan: '#E0FFFF',
     orangered: '#ff4500',
-    gainsboro: '#dcdcdc'
+    gainsboro: '#dcdcdc',
+    background: '#f2f5f8',
+    lavender: '#e6e6fa'
 };

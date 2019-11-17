@@ -2,10 +2,11 @@ import React from 'react';
 import { Platform, View, Text, Animated, Easing } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
-import { Feather, MaterialCommunityIcons, Ionicons, EvilIcons } from '@expo/vector-icons';
+import { Feather, MaterialCommunityIcons, Ionicons, EvilIcons, Octicons } from '@expo/vector-icons';
 import TabBarIcon from '../components/TabBarIcon';
 import FriendsScreen from '../screens/FriendsScreen';
 import GroupScreen from '../screens/GroupScreen';
+import SearchScreen from '../screens/SearchScreen';
 import ActivityScreen from "../screens/ActivityScreen";
 import Colors from '../constants/Colors';
 import AccountScreen from "../screens/AccountScreen";
@@ -37,12 +38,14 @@ import ChoosePayerScreen from '../components/ExpenseScreen/ChoosePayerScreen/Cho
 import ChooseMultiplePeopleScreen from '../components/ExpenseScreen/ChoosePayerScreen/ChooseMultiplePeopleScreen/ChooseMultiplePeopleScreen';
 import DetaiTransactionScreen from '../components/GroupScreen/DetailGroupScreen/DetailTransactionScreen/DetaiTransactionScreen';
 import { screenWidth } from '../constants/Dimensions';
+import SearchDetailScreen from '../components/SearchScreen/SearchDetailScreen/SearchDetailScreen';
 
 const configPlat = Platform.select({
     web: { headerMode: 'screen' },
     default: {},
 });
 
+/*
 const FriendsStack = createStackNavigator(
     {
         FriendsScreen,
@@ -76,6 +79,52 @@ FriendsStack.navigationOptions = ({ navigation }) => {
                     : 'account'
                 }
                 size={26}
+                style={{ marginBottom: -3 }}
+                color={focused ? Colors.tabIconSelected : Colors.blackText}
+            />
+        ),
+        tabBarOptions: {
+            activeTintColor: Colors.tintColor,
+            labelStyle: {
+                paddingBottom: Platform.OS === 'ios' ? screenWidth / 41.4 : screenWidth / 80,
+            },
+            style: {
+                height: Platform.OS === 'ios' ? screenWidth / 7.52 : screenWidth / 7.2,
+            },
+        }
+    }
+}
+*/
+
+const SearchStack = createStackNavigator(
+    {
+        SearchScreen: {
+            screen: SearchScreen
+        },
+        SearchDetailScreen: {
+            screen: SearchDetailScreen
+        }
+    },
+);
+
+
+SearchStack.navigationOptions = ({ navigation }) => {
+    let tabBarVisible = true;
+    let routeName = navigation.state.routes[navigation.state.index].routeName;
+    if (routeName == 'SearchDetailScreen') {
+        tabBarVisible = false
+    }
+
+    return {
+        tabBarVisible,
+        tabBarLabel: 'Search',
+        tabBarIcon: ({ focused }) => (
+            <Octicons focused={focused}
+                name={Platform.OS === 'ios'
+                    ? 'ios-home'
+                    : 'search'
+                }
+                size={22}
                 style={{ marginBottom: -3 }}
                 color={focused ? Colors.tabIconSelected : Colors.blackText}
             />
@@ -149,7 +198,7 @@ GroupStack.navigationOptions = ({ navigation }) => {
                     ? 'ios-home'
                     : 'account-group'
                 }
-                size={26}
+                size={28}
                 style={{ marginBottom: -3 }}
                 color={focused ? Colors.tabIconSelected : Colors.blackText}
             />
@@ -336,7 +385,8 @@ AccountStack.navigationOptions = {
 
 
 const tabNavigator = createBottomTabNavigator({
-    FriendsStack,
+    //FriendsStack,
+    SearchStack,
     GroupStack,
     ExpenseStack,
     ActivityStack,
