@@ -60,7 +60,7 @@ class MainLoginScreen extends Component<Props, States> {
             content: content,
             btn: {
                 text: 'OK',
-                style: { fontWeight: '500', fontSize: 20, color: "#044de0"},
+                style: { fontWeight: '500', fontSize: 20, color: "#044de0" },
             },
         });
     }
@@ -80,7 +80,7 @@ class MainLoginScreen extends Component<Props, States> {
 
     login = async () => {
         if (!this.validateEmail(this.state.email)) {
-            this.handleOnPress("Error!", ["Email invalid!","Please check again."])
+            this.handleOnPress("Error!", ["Email invalid!", "Please check again."])
             return;
         }
         if (this.state.password === "") {
@@ -107,7 +107,22 @@ class MainLoginScreen extends Component<Props, States> {
             .then((response) => response.json())
             .then(async (res) => {
                 if (res.error) {
-                    this.handleOnPress("Error!", [res.error, "Please check again."])
+                    if (res.error == "Sorry, you must validate email first") {
+                        Keyboard.dismiss()
+                        this.dialogbox.tip({
+                            title: "Warning!",
+                            content: ["Sorry, you must validate email first", "Please validate email."],
+                            btn: {
+                                text: 'OK',
+                                style: { fontWeight: '500', fontSize: 20, color: "#044de0" },
+                                callback: () => {
+                                    this.props.navigation.navigate("verifyScreen")
+                                },
+                            },
+                        });
+                    } else
+                        this.handleOnPress("Error!", [res.error, "Please check again."])
+
                 } else {
                     await AsyncStorage.setItem('jwt', res.token);
                     this.getDataUserForRedux();
@@ -193,6 +208,7 @@ class MainLoginScreen extends Component<Props, States> {
                                             onFocus={() => {
                                                 this._scrollToInput(screenWidth / 5.48)
                                             }}
+                                            onSubmitEditing={Keyboard.dismiss}
                                         />
                                         <TouchableOpacity activeOpacity={0.5} onPress={this.showPass}>
                                             <Image
@@ -224,7 +240,7 @@ class MainLoginScreen extends Component<Props, States> {
                     </View>
 
                 </KeyboardAwareScrollView >
-                <DialogBox ref={dialogbox => { this.dialogbox = dialogbox }} isOverlayClickClose={false} style={{backgroundColor: "#333"}} />
+                <DialogBox ref={dialogbox => { this.dialogbox = dialogbox }} isOverlayClickClose={false} style={{ backgroundColor: "#333" }} />
             </View>
         );
     }

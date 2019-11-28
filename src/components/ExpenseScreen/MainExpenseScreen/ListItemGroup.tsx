@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Image, Text, StatusBar } from 'react-native';
 import ListItemGroupStyles from '../../../styles/ExpenseScreenStyles/MainExpenseScreenStyles/ListItemGroupStyles';
+import Colors from '../../../constants/Colors';
 
 function mapStateToProps(state) {
     return {
@@ -11,6 +12,7 @@ function mapStateToProps(state) {
 
 type Props = {
     nameGroup?: string,
+    currenGroup?: boolean,
 }
 
 class ListItemGroup extends Component<Props> {
@@ -21,7 +23,7 @@ class ListItemGroup extends Component<Props> {
                 <View style={ListItemGroupStyles.sectionList}>
                     <View style={ListItemGroupStyles.icon}>
                         <Image
-                            style={ListItemGroupStyles.iconHome}
+                            style={[ListItemGroupStyles.iconHome, {tintColor: Colors.mediumseagreen}]}
                             source={require("../../../../assets/images/icon-home.png")}
                         />
                     </View>

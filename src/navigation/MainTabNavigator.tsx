@@ -39,6 +39,9 @@ import ChooseMultiplePeopleScreen from '../components/ExpenseScreen/ChoosePayerS
 import DetaiTransactionScreen from '../components/GroupScreen/DetailGroupScreen/DetailTransactionScreen/DetaiTransactionScreen';
 import { screenWidth } from '../constants/Dimensions';
 import SearchDetailScreen from '../components/SearchScreen/SearchDetailScreen/SearchDetailScreen';
+import TabBarComponent from '../screens/TabBarComponent';
+import MainExpenseScreen from '../components/ExpenseScreen/MainExpenseScreen/MainExpenseScreen';
+import MainScreenGroup from '../components/GroupScreen/MainScreenGroup/MainScreenGroup';
 
 const configPlat = Platform.select({
     web: { headerMode: 'screen' },
@@ -159,6 +162,9 @@ const GroupStack = createStackNavigator(
         GroupScreen: {
             screen: GroupScreen,
         },
+        MainScreenGroup: {
+            screen: MainScreenGroup,
+        },
         CreateGroupScreen: {
             screen: CreateGroupScreen
         },
@@ -184,9 +190,9 @@ const GroupStack = createStackNavigator(
 GroupStack.navigationOptions = ({ navigation }) => {
     let tabBarVisible;
     let routeName = navigation.state.routes[navigation.state.index].routeName;
-    if (routeName == 'CreateGroupScreen' || routeName == 'MainLoginScreen' || routeName == 'MainForgotPasswordScreen' || routeName == 'MainSignUpScreen' 
+    if (routeName == 'CreateGroupScreen' || routeName == 'MainLoginScreen' || routeName == 'MainForgotPasswordScreen' || routeName == 'MainSignUpScreen'
         || routeName == 'verifyScreen' || routeName == 'CreateGroupScreen' || routeName == 'DetailGroupScreen' || routeName == 'BalanceScreen'
-        || routeName == 'TotalScreen' || routeName == 'AddMemberGroupScreen' || routeName == 'DetaiTransactionScreen'){
+        || routeName == 'TotalScreen' || routeName == 'AddMemberGroupScreen' || routeName == 'DetaiTransactionScreen') {
         tabBarVisible = false
     }
     return {
@@ -224,6 +230,9 @@ const ExpenseStack = createStackNavigator(
         InputExpenseScreen: {
             screen: InputExpenseScreen,
         },
+        MainExpenseScreen: {
+            screen: MainExpenseScreen,
+        },
         ChoosePayerScreen: {
             screen: ChoosePayerScreen,
         },
@@ -253,7 +262,7 @@ const ExpenseStack = createStackNavigator(
             },
         }),
     },
-    
+
 );
 
 ExpenseStack.navigationOptions = ({ navigation }) => {
@@ -273,9 +282,6 @@ ExpenseStack.navigationOptions = ({ navigation }) => {
                 tabBarVisible = false;
             }
             else if (route.routeName === "ChoosePayerScreen") {
-                tabBarVisible = false;
-            }
-            else if (route.routeName === "InputExpenseScreen") {
                 tabBarVisible = false;
             }
             else if (route.routeName === "ChooseMultiplePeopleScreen") {
@@ -390,8 +396,10 @@ const tabNavigator = createBottomTabNavigator({
     GroupStack,
     ExpenseStack,
     ActivityStack,
-    AccountStack
-});
+    AccountStack,
+},
+    { tabBarComponent: props => <TabBarComponent {...props} /> }
+);
 
 
 export default tabNavigator;

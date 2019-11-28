@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StatusBar, FlatList, Alert, ScrollView, Keyboard } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StatusBar, FlatList, Alert, ScrollView, Keyboard, TouchableWithoutFeedback } from "react-native";
 import Colors from "../../../constants/Colors";
 import { connect } from 'react-redux';
 import styles from "../../../styles/GroupsStyles/CreateGroupScreenStyles/AddMemberGroupScreenStyles";
-import { EvilIcons, MaterialCommunityIcons, AntDesign, Feather, FontAwesome } from "@expo/vector-icons";
+import { MaterialCommunityIcons, AntDesign, Feather, FontAwesome } from "@expo/vector-icons";
 import { BASEURL } from '../../../api/api';
 import DialogBox from 'react-native-dialogbox';
 
@@ -13,15 +13,17 @@ function mapStateToProps(state) {
     };
 }
 
-type Props = { 
+type Props = {
     navigation?: any,
     user_id?: any[]
 }
 
 type States = {
+    dataUserExist?: any[],
     data?: any[],
     email?: string,
     name?: string,
+    showUserExists?: boolean
 }
 class AddMemberGroupScreen extends Component<Props, States> {
     static navigationOptions = {
@@ -33,9 +35,11 @@ class AddMemberGroupScreen extends Component<Props, States> {
     constructor(props) {
         super(props);
         this.state = {
+            dataUserExist: [],
             data: [],
             email: '',
             name: '',
+            showUserExists: false,
         };
     }
 
@@ -72,6 +76,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
     }
 
     addEmailToList(name, email) {
+        this.setState({dataUserExist: []})
         if (name === "" || email === "") {
             this.handleOnPress("Error!", ["Information missing!!!", "Please enter full infomation.."])
 
@@ -116,6 +121,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
             .then((response) => response.json())
             .then((res) => {
                 if (res.error) {
+                    Keyboard.dismiss()
                     this.dialogbox.tip({
                         title: "Error!",
                         content: [res.error, "Please enter another group name."],
@@ -128,17 +134,8 @@ class AddMemberGroupScreen extends Component<Props, States> {
                         },
                     });
                 } else {
-                    this.dialogbox.tip({
-                        title: "Alert!",
-                        content: ["Create group successful", "Let's go!"],
-                        btn: {
-                            text: 'OK',
-                            style: { fontWeight: '500', fontSize: 20, color: "#044de0" },
-                            callback: () => {
-                                this.props.navigation.navigate("GroupScreen")
-                            },
-                        },
-                    });
+                    Keyboard.dismiss()
+                    this.props.navigation.navigate("GroupScreen")
                 }
             })
             .catch((error) => {
@@ -146,11 +143,56 @@ class AddMemberGroupScreen extends Component<Props, States> {
             });
     };
 
+    listenerInputEmail(text) {
+        if(text.length <= 2)
+            this.setState({ showUserExists: false })
+        else if (this.state.dataUserExist.length > 0) {
+            if (this.state.dataUserExist[0].email.indexOf(text) < 0) {
+                this.setState({ showUserExists: false })
+            }
+            else
+                this.setState({ showUserExists: true })
+        }
+
+        this.setState({ email: text })
+        if ((text.indexOf('@') > -1) && text[text.length - 1] === '@') {
+            this.checkUserExist(text);
+        }
+    }
+
+    checkUserExist = async email => {
+        const data = {
+            email: email
+        };
+        const json = JSON.stringify(data);
+        fetch(`${BASEURL}/api/user/check_user_exists`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+            body: json
+        })
+            .then((response) => response.json())
+            .then((res) => {
+                this.setState({
+                    dataUserExist: res.data,
+                })
+                if (res.data.length > 0)
+                    this.setState({
+                        showUserExists: true,
+                    })
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
     render() {
         return (
-            <View style={styles.container}>
+            <View style={styles.container} >
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
-                <View style={{ backgroundColor: Colors.tabIconSelected }}>
+                <View style={{ backgroundColor: Colors.tabIconSelected }} >
                     <View style={styles.header}>
                         <TouchableOpacity activeOpacity={0.5} onPress={this.goBackFriendsScreen}>
                             <Text style={styles.cancel}>Cancel</Text>
@@ -167,6 +209,23 @@ class AddMemberGroupScreen extends Component<Props, States> {
                     </View>
                     <View style={styles.input}>
                         <View style={styles.iconSearch}>
+                            <MaterialCommunityIcons name='email' size={25} color={Colors.gray} />
+                        </View>
+                        <TextInput
+                            style={{ flex: 8 }}
+                            keyboardType='email-address'
+                            onChangeText={(text) => this.listenerInputEmail(text)}
+                            onSubmitEditing={() => { this.emailTextInput.focus(); }}
+                            value={this.state.email}
+                            returnKeyType={'next'}
+                            autoCapitalize={'none'}
+                            placeholder={'Enter email...'}
+                            autoFocus
+                        />
+                        <View style={{ flex: 1 }} />
+                    </View>
+                    <View style={styles.input1}>
+                        <View style={styles.iconSearch}>
                             <FontAwesome name='user' size={25} color={Colors.gray} />
                         </View>
                         <TextInput
@@ -174,28 +233,11 @@ class AddMemberGroupScreen extends Component<Props, States> {
                             keyboardType='default'
                             onChangeText={(text) => this.setState({ name: text })}
                             value={this.state.name}
-                            returnKeyType={'next'}
-                            onSubmitEditing={() => { this.emailTextInput.focus(); }}
+                            ref={(input) => { this.emailTextInput = input; }}
                             blurOnSubmit={false}
                             autoCorrect={false}
-                            autoFocus
                             autoCapitalize={'words'}
                             placeholder={'Enter name...'}
-                        />
-                        <View style={{ flex: 1 }} />
-                    </View>
-                    <View style={styles.input1}>
-                        <View style={styles.iconSearch}>
-                            <MaterialCommunityIcons name='email' size={25} color={Colors.gray} />
-                        </View>
-                        <TextInput
-                            style={{ flex: 8 }}
-                            keyboardType='email-address'
-                            onChangeText={(text) => this.setState({ email: text })}
-                            ref={(input) => { this.emailTextInput = input; }}
-                            value={this.state.email}
-                            autoCapitalize={'none'}
-                            placeholder={'Enter email...'}
                         />
                         <TouchableOpacity
                             style={styles.iconAdd}
@@ -205,6 +247,27 @@ class AddMemberGroupScreen extends Component<Props, States> {
                         >
                             <AntDesign name='adduser' size={25} style={{ marginTop: 3 }} color={Colors.gray} />
                         </TouchableOpacity>
+                    </View>
+                    <View style={styles.popuplist}>
+                        {this.state.showUserExists ? (
+                            <FlatList
+                                scrollEnabled
+                                showsVerticalScrollIndicator={false}
+                                keyboardShouldPersistTaps='always'
+                                data={this.state.dataUserExist}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity
+                                        onPress={() => { this.addEmailToList(item.name, item.email),this.setState({ showUserExists: false }) }}
+                                    >
+                                        <View style={styles.userExists}>
+                                            <Text style={styles.username}>{item.name}</Text>
+                                            <Text style={styles.email}>{item.email}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                )}
+                                keyExtractor={item => item._id.toString()}
+                            />
+                        ) : (null)}
                     </View>
                 </View>
                 <View style={styles.viewContent}>
@@ -226,7 +289,6 @@ class AddMemberGroupScreen extends Component<Props, States> {
                                 >
                                     <Feather name="delete" size={25} />
                                 </TouchableOpacity>
-
                             </View>
                         )}
                         keyExtractor={item => item.email}

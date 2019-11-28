@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { APPBAR_HEIGHT } from '../../../constants/Dimensions';
 import Colors from '../../../constants/Colors';
-import { View, TouchableOpacity, Text, Image, TextInput, StatusBar, Alert } from 'react-native';
-import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import { View, TouchableOpacity, Text, Image, TextInput, StatusBar, Alert, Keyboard } from 'react-native';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import InputExpenseScreenStyles from '../../../styles/ExpenseScreenStyles/InputExpenseScreenStyles/InputExpenseScreenStyles';
 import { bindActionCreators } from 'redux';
 import { getApiListUserInTrip } from '../../../actions/action';
@@ -12,7 +11,7 @@ import { BASEURL } from '../../../api/api';
 function mapStateToProps(state) {
     return {
         listUserInTrip: state.listUserInTrip.listUserInTrip,
-        author: state.dataUser.dataUser._id
+        author: state.dataUser.dataUser._id,
     };
 }
 
@@ -22,6 +21,7 @@ type Props = {
     currenGroup?: any,
     getListUserInTrip?: any,
     listUserInTrip?: any,
+    dataGroup?: any
 }
 
 type States = {
@@ -47,10 +47,13 @@ class InputExpenseScreen extends Component<Props, States> {
     idPayer = "";
 
     componentDidMount() {
+
         // set barstyle of statusbar
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             StatusBar.setBarStyle('light-content');
-            let data = this.props.navigation.getParam('dataGroup', "");
+            let data = this.props.navigation.getParam('dataGroup', {});
+            if(Object.getOwnPropertyNames(data).length === 0)
+                data = this.props.dataGroup
             this.props.getListUserInTrip(data._id)
         });
     }
@@ -59,6 +62,8 @@ class InputExpenseScreen extends Component<Props, States> {
         // remove barstyle when lead screen
         this._navListener.remove();
     }
+
+
 
     checkDescription(text){
         if(text === ""){
@@ -119,7 +124,6 @@ class InputExpenseScreen extends Component<Props, States> {
                 })
             }
             
-            
             const data = {
                 name: Description,
                 author: this.props.author,
@@ -145,6 +149,7 @@ class InputExpenseScreen extends Component<Props, States> {
                             checkDescription: false,
                             checkMoney: false,
                         })
+                        Keyboard.dismiss()
                         Alert.alert("Save successful")
 
                     } else {
@@ -156,6 +161,7 @@ class InputExpenseScreen extends Component<Props, States> {
                 });
 
         }else{
+            Keyboard.dismiss()
             Alert.alert("Please enter full information")
         }
     }
@@ -163,7 +169,9 @@ class InputExpenseScreen extends Component<Props, States> {
     render() {
         const { navigation } = this.props
         const listTypeUser = navigation.getParam('listTypeUser', '');
-        const Group = navigation.getParam('dataGroup', "");
+        var Group = navigation.getParam('dataGroup', {});
+        if (Object.getOwnPropertyNames(Group).length === 0)
+            Group = this.props.dataGroup
         return (
             <View style={InputExpenseScreenStyles.container}>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
@@ -173,7 +181,7 @@ class InputExpenseScreen extends Component<Props, States> {
                             style={InputExpenseScreenStyles.cancel}
                             activeOpacity={0.5}
                             onPress={() => {
-                                navigation.goBack();
+                                navigation.navigate('MainExpenseScreen', { currentGroup: Group.name});
                             }}
                         >
                             <Ionicons name='ios-close' size={45} color={Colors.white} />
@@ -202,7 +210,10 @@ class InputExpenseScreen extends Component<Props, States> {
                         </Text>
                         and:
                     </Text>
-                    <View style={InputExpenseScreenStyles.nameGroup}>
+                    <TouchableOpacity 
+                        style={InputExpenseScreenStyles.nameGroup}
+                        onPress={() => { navigation.navigate('MainExpenseScreen', { currentGroup: Group.name })}}
+                    >
                         <Image
                             style={InputExpenseScreenStyles.image}
                             source={require("../../../../assets/images/icon-home.png")}
@@ -210,13 +221,13 @@ class InputExpenseScreen extends Component<Props, States> {
                         <Text style={InputExpenseScreenStyles.txtAllOf}>
                             All of {Group.name}
                         </Text>
-                    </View>
+                    </TouchableOpacity>
                 </View>
                 <View style={InputExpenseScreenStyles.underLine} />
                 <View style={InputExpenseScreenStyles.sectionInput}>
                     <View style={InputExpenseScreenStyles.sectionDescription}>
                         <View style={InputExpenseScreenStyles.iconDescription}>
-                            <MaterialIcons name="description" size={40} color={Colors.blackText} style={{ padding: 5, }} />
+                            <MaterialIcons name="description" size={38} color={Colors.blackText} style={{ padding: 5, }} />
                         </View>
                         <View style={InputExpenseScreenStyles.inputDescription}>
                             <TextInput
@@ -224,7 +235,7 @@ class InputExpenseScreen extends Component<Props, States> {
                                 style={InputExpenseScreenStyles.txtInputDescription}
                                 placeholder="Enter a description"
                                 value={this.state.description}
-                                keyboardType='default'
+                                keyboardType= 'default'
                                 autoCorrect={false}
                                 autoCapitalize={'words'}
                                 autoFocus
@@ -247,6 +258,7 @@ class InputExpenseScreen extends Component<Props, States> {
                                 keyboardType='number-pad'
                                 placeholder="0,00"
                                 underlineColorAndroid={'transparent'}
+                                onSubmitEditing={Keyboard.dismiss}
                             />
                             <View style={InputExpenseScreenStyles.underLineInput} />
                         </View>

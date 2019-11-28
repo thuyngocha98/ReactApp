@@ -6,7 +6,6 @@ import ListItemGroup from './ListItemGroup';
 import Colors from '../../../constants/Colors';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BASEURL } from '../../../api/api';
-import { NavigationEvents } from 'react-navigation';
 import { bindActionCreators } from 'redux';
 import { getApiListTrip } from '../../../actions/action';
 import { number2money, thumbnails } from '../../../constants/FunctionCommon';
@@ -123,7 +122,7 @@ class MainScreenGroup extends Component<Props, States> {
                     <View style={MainScreenGroupStyles.menu}>
                         <TouchableOpacity
                             onPress={() => {
-                                
+                                this.props.navigation.navigate('AddMemberGroupScreen')
                             }}
                         >
                             <MaterialCommunityIcons name='menu' size={25} color={Colors.white} />

@@ -70,7 +70,7 @@ const InputExpenseScreenStyles = StyleSheet.create({
     },
     txtAllOf: {
         paddingHorizontal: screenWidth/41.1,
-        fontSize: 17
+        fontSize: 16
     },
     underLine: {
         width: screenWidth,

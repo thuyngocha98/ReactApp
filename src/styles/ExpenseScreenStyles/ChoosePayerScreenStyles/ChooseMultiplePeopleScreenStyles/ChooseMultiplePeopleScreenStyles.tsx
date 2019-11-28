@@ -119,7 +119,7 @@ const ChooseMultiplePeopleScreenStyles = StyleSheet.create({
     // footer
     footer: {
         width: screenWidth,
-        height: screenWidth/4.11,
+        height: screenWidth/4.5,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',

@@ -135,22 +135,11 @@ class verifyScreen extends Component<Props, States> {
                 .then((response) => response.json())
                 .then(async (res) => {
                     if (res.error) {
-                        Alert.alert(res.error);
                         this.handleOnPress("Error!", [res.error, "Please check again."])
                     } else {
                         await AsyncStorage.setItem('jwt', res.token)
-                        this.getDataUserForRedux();
-                        this.dialogbox.tip({
-                            title: "Alert!",
-                            content: ["Correct Verification", "Let's go!"],
-                            btn: {
-                                text: 'OK',
-                                style: { fontWeight: '500', fontSize: 20, color: "#044de0" },
-                                callback: () => {
-                                    this.props.navigation.navigate("GroupScreen")
-                                },
-                            },
-                        });
+                        await this.getDataUserForRedux();
+                        this.props.navigation.navigate("GroupScreen")
                     }
                 })
                 .catch((error) => {

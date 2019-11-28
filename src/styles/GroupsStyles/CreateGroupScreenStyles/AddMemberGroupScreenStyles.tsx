@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import Colors from "../../../constants/Colors";
-import Layout from "../../../constants/Layout";
+import { screenWidth } from "../../../constants/Dimensions";
 
 const styles = StyleSheet.create({
     container: {
@@ -9,8 +9,8 @@ const styles = StyleSheet.create({
     },
     header: {
         flexDirection: 'row',
-        paddingTop: 40,
-        paddingHorizontal: 15,
+        paddingTop: screenWidth/10.275,
+        paddingHorizontal: screenWidth/27.4,
     },
     cancel: {
         fontSize: 17,
@@ -28,21 +28,21 @@ const styles = StyleSheet.create({
         color: Colors.white
     },
     input: {
-        marginTop: 15,
+        marginTop: screenWidth/27.4,
         flexDirection: 'row',
         backgroundColor: Colors.white,
-        marginHorizontal: 15,
-        padding: 7,
+        marginHorizontal: screenWidth/27.4,
+        padding: screenWidth/58.71,
         borderRadius: 5,
-        marginBottom: 15,
+        marginBottom: screenWidth/27.4,
     },
     input1: {
         flexDirection: 'row',
         backgroundColor: Colors.white,
-        marginHorizontal: 15,
-        padding: 7,
+        marginHorizontal: screenWidth/27.4,
+        padding: screenWidth/58.71,
         borderRadius: 5,
-        marginBottom: 15,
+        marginBottom: screenWidth/27.4,
     },
     iconSearch: {
         flex:1,
@@ -57,8 +57,8 @@ const styles = StyleSheet.create({
     },
     viewContent: {
         flex: 1,
-        marginHorizontal: 20,
-        marginTop: 5,
+        marginHorizontal: screenWidth/20.55,
+        marginTop: screenWidth/82.2,
     },
     viewEmail: {
         flexDirection: 'row',
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     },
     nameAndMail: {
         flexDirection: 'column',
-        paddingVertical: 10,
+        paddingVertical: screenWidth/41.1,
     },
     textEmail: {
         fontSize: 15.5,
@@ -79,6 +79,31 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontWeight: '400',
         color: Colors.blackText
+    },
+    popuplist: {
+        alignSelf: 'center',
+        width: screenWidth - screenWidth/15,
+        position: 'absolute',
+        
+        marginTop: screenWidth/3.1615,
+        backgroundColor: Colors.white,
+        borderRadius: 5,
+    },
+    userExists: {
+        flexDirection: 'column',
+        borderWidth: 0.5,
+        borderColor: Colors.gray,
+        borderRadius: 5,
+        padding: screenWidth/82.2,
+    },
+    username: {
+        color: Colors.black,
+        fontSize: 17,
+    },
+    email: {
+        color: Colors.tintColor,
+        fontSize: 16,
     }
+
 });
 export default styles;
