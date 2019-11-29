@@ -38,6 +38,7 @@ class ChoosePayerScreen extends Component<Props, States> {
         const { navigation } = this.props
         this.listUser = navigation.getParam('listUser', "");
         const totalMoney = navigation.getParam('totalMoney', '0');
+        const list_user = navigation.getParam('list_user', '');
         return (
             <View style={ChoosePayerScreenStyles.container}>
                 <View style={ChoosePayerScreenStyles.containerHeader}>
@@ -78,7 +79,7 @@ class ChoosePayerScreen extends Component<Props, States> {
                 <TouchableOpacity style={ChoosePayerScreenStyles.multiple}
                     activeOpacity={0.6}
                     onPress={() => {
-                        this.props.navigation.navigate('ChooseMultiplePeopleScreen', { listUser: this.listUser, totalMoney: totalMoney})
+                        this.props.navigation.navigate('ChooseMultiplePeopleScreen', { list_user: list_user, listUser: this.listUser, totalMoney: totalMoney})
                     }}
                 >
                     <View style={ChoosePayerScreenStyles.multiplePeople}>

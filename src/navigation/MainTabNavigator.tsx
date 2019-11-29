@@ -27,8 +27,6 @@ import ExpenseDetailScreen from '../components/ExpenseScreen/ExpenseDetailScreen
 import ExpenseMoreOptionScreen from '../components/ExpenseScreen/ExpenseDetailScreen/ExpenseMoreOptionScreen/EqualSplit/ExpenseMoreOptionScreen';
 import ExpenseByNumberSplitScreen from '../components/ExpenseScreen/ExpenseDetailScreen/ExpenseMoreOptionScreen/NumberSplit/ExpenseByNumberSplitScreen';
 import ExpenseByPlusOrMinusScreen from '../components/ExpenseScreen/ExpenseDetailScreen/ExpenseMoreOptionScreen/PlusMinusSplit/ExpenseByPlusOrMinusScreen';
-import HeaderOweTripMemberScreen from "../components/FriendsScreen/OweTripsMemberScreen/HeaderOweTripMemberScreen";
-import HeaderOweTripDetailsMemberScreen from "../components/FriendsScreen/OweTripsDetailMemberScreen/HeaderOweTripDetailsMemberScreen";
 import MainLoginScreen from "../components/LoginScreen/MainLoginScreen";
 import MainSignUpScreen from "../components/SignUpScreen/MainSignUpScreen";
 import verifyScreen from "../components/SignUpScreen/verifyScreen";
@@ -39,7 +37,6 @@ import ChooseMultiplePeopleScreen from '../components/ExpenseScreen/ChoosePayerS
 import DetaiTransactionScreen from '../components/GroupScreen/DetailGroupScreen/DetailTransactionScreen/DetaiTransactionScreen';
 import { screenWidth } from '../constants/Dimensions';
 import SearchDetailScreen from '../components/SearchScreen/SearchDetailScreen/SearchDetailScreen';
-import TabBarComponent from '../screens/TabBarComponent';
 import MainExpenseScreen from '../components/ExpenseScreen/MainExpenseScreen/MainExpenseScreen';
 import MainScreenGroup from '../components/GroupScreen/MainScreenGroup/MainScreenGroup';
 
@@ -133,6 +130,7 @@ SearchStack.navigationOptions = ({ navigation }) => {
             />
         ),
         tabBarOptions: {
+            keyboardHidesTabBar: true,
             activeTintColor: Colors.tintColor,
             labelStyle: {
                 paddingBottom: Platform.OS === 'ios' ? screenWidth / 41.4 : screenWidth / 80,
@@ -184,6 +182,9 @@ const GroupStack = createStackNavigator(
             screen: TotalScreen
         }
     },
+    {
+        initialRouteName: 'GroupScreen',
+    }
     // config
 );
 
@@ -210,6 +211,7 @@ GroupStack.navigationOptions = ({ navigation }) => {
             />
         ),
         tabBarOptions: {
+            keyboardHidesTabBar: true,
             activeTintColor: Colors.tintColor,
             labelStyle: {
                 paddingBottom: Platform.OS === 'ios' ? screenWidth / 41.4 : screenWidth / 80,
@@ -224,7 +226,7 @@ GroupStack.navigationOptions = ({ navigation }) => {
 
 const ExpenseStack = createStackNavigator(
     {
-        AddExpense: {
+        ExpenseScreen: {
             screen: ExpenseScreen,
         },
         InputExpenseScreen: {
@@ -254,6 +256,7 @@ const ExpenseStack = createStackNavigator(
         },
     },
     {
+        initialRouteName: 'ExpenseScreen',
         transitionConfig: () => ({
             transitionSpec: {
                 duration: 0,
@@ -307,6 +310,7 @@ ExpenseStack.navigationOptions = ({ navigation }) => {
             />
         ),
         tabBarOptions: {
+            keyboardHidesTabBar: true,
             activeTintColor: Colors.tintColor,
             labelStyle: {
                 paddingBottom: Platform.OS === 'ios' ? screenWidth / 41.4 : screenWidth / 80,
@@ -379,6 +383,7 @@ AccountStack.navigationOptions = {
         />
     ),
     tabBarOptions: {
+        keyboardHidesTabBar: true,
         activeTintColor: Colors.tintColor,
         labelStyle: {
             paddingBottom: Platform.OS === 'ios' ? screenWidth / 41.4 : screenWidth / 80,
@@ -398,7 +403,6 @@ const tabNavigator = createBottomTabNavigator({
     ActivityStack,
     AccountStack,
 },
-    { tabBarComponent: props => <TabBarComponent {...props} /> }
 );
 
 

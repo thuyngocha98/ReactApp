@@ -123,6 +123,7 @@ class DetailGroupScreen extends Component<Props, States> {
                 ) : (
                         <FlatList
                             data={this.state.data}
+                            scrollEnabled
                             keyExtractor={(item, index) => index.toString()}
                             renderItem={({ item }) => (
                                 <TouchableOpacity

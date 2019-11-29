@@ -7,6 +7,7 @@ import { Ionicons, FontAwesome5, Octicons } from '@expo/vector-icons';
 import ExpenseMoreOptionScreenStyles from '../../../../../styles/ExpenseScreenStyles/ExpenseDetailScreenStyles/ExpenseMoreOptionScreenStyles/EqualSplit/ExpenseMoreOptionScreenStyles';
 import ListItemMemberExpense from './ListItemMemberExpense';
 import ListItemNumberSplit from '../NumberSplit/ListItemNumberSplit';
+import { thumbnails, number2money } from '../../../../../constants/FunctionCommon';
 
 function mapStateToProps(state) {
     return {
@@ -18,61 +19,121 @@ type Props = {
     navigation?: any,
 }
 
-class ExpenseMoreOptionScreen extends Component<Props> {
+type States = {
+    arrChecked?: any[],
+    moneysigle?: number,
+    numberPeople?: number,
+    checkAll?: boolean,
+}
+
+class ExpenseMoreOptionScreen extends Component<Props, States> {
     static navigationOptions = ({ navigation }) => {
         return {
-            title: "Expense details",
-            headerStyle: {
-                elevation: 0,
-                textAlign: 'center',
-                height: APPBAR_HEIGHT,
-                backgroundColor: Colors.tintColor,
-            },
-            headerTitleStyle: {
-                flex: 1,
-                textAlign: 'center',
-                color: Colors.white
-            },
-            headerRight:
-                (
-                    <View style={{ marginRight: 15 }}>
-                        <Text style={{ fontSize: 17, color: Colors.white }}>Done</Text>
-                    </View>
-                ),
-            headerLeft:
-                (
-                    <View style={{ marginLeft: 15 }}>
+            header: null
+        };
+    };
+    listUser: any[];
+
+    constructor(props){
+        super(props);
+        this.state = {
+            arrChecked: [],
+            moneysigle: 0,
+            numberPeople: 0,
+            checkAll: true,
+        }
+    }
+
+    componentDidMount(){
+        let totalMoney = this.props.navigation.getParam('totalMoney', "")
+        let list_user = this.props.navigation.getParam('list_user', "")
+        this.checkRealTime(list_user, totalMoney)
+    }
+
+    checkRealTime(list_user, totalMoney) {
+        var numberPeopleSplit = 0;
+        for (let i = 0; i < list_user.length; i++) {
+            if (this.state.arrChecked[i] == true)
+                numberPeopleSplit++;
+        }
+
+        if (numberPeopleSplit < list_user.length) {
+            const amount_user = Math.round(totalMoney / numberPeopleSplit)
+            this.setState({
+                moneysigle: amount_user,
+                numberPeople: numberPeopleSplit,
+                checkAll: false,
+            })
+            
+        }
+        else{
+            const amount_user = Math.round(totalMoney / list_user.length)
+            this.setState({
+                moneysigle: amount_user,
+                numberPeople: list_user.length,
+                checkAll: true,
+            })
+        }
+
+    }
+
+    createListUser(list_user,totalMoney){
+        var numberPeopleSplit = 0;
+        for (let i = 0; i < list_user.length; i++){
+            if(this.state.arrChecked[i] == true)
+                numberPeopleSplit++;
+        }
+
+        if (numberPeopleSplit < list_user.length){
+            const amount_user = Math.round(totalMoney / numberPeopleSplit)
+
+            for (let i = 0; i < list_user.length; i++) {
+                if (this.state.arrChecked[i] == true)
+                    list_user[i].amount_user = amount_user;
+                else
+                    list_user[i].amount_user = 0;
+            }
+        }
+        
+        this.props.navigation.navigate("InputExpenseScreen", { listTypeUser: list_user });
+
+    }
+
+    render() {
+        const { navigation } = this.props
+        this.listUser = navigation.getParam('listUser', "");
+        const totalMoney = navigation.getParam('totalMoney', "")
+        const list_user = navigation.getParam('list_user', "")
+        return (
+            <View style={ExpenseMoreOptionScreenStyles.container}>
+                <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
+                <View style={ExpenseMoreOptionScreenStyles.containerHeader}>
+                    <View style={ExpenseMoreOptionScreenStyles.header}>
                         <TouchableOpacity
+                            style={ExpenseMoreOptionScreenStyles.cancel}
+                            activeOpacity={0.5}
                             onPress={() => {
                                 navigation.goBack();
                             }}
                         >
                             <Ionicons name='ios-close' size={45} color={Colors.white} />
                         </TouchableOpacity>
-                    </View >
-                )
-        };
-    };
-
-    data = [
-        {
-            id: 0,
-            uriAvatar: "https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.0-1/p240x240/58727386_1340156482789355_8420310201583796224_n.jpg?_nc_cat=106&_nc_oc=AQlOWDOgSxKl2liWeIiLmsRGw5tijfF7YLQaI2T8oMkIUTtBIoI4HOkrwPDO-cFO20udwMX1pDWm-cBSBWtEa1m0&_nc_ht=scontent.fsgn5-6.fna&oh=efb30afdeee8f77b39d35064970794e2&oe=5E3BD8AB",
-            nameMenber: "Thủy Ngọc Hà",
-        },
-        {
-            id: 1,
-            uriAvatar: "https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.0-1/p240x240/58727386_1340156482789355_8420310201583796224_n.jpg?_nc_cat=106&_nc_oc=AQlOWDOgSxKl2liWeIiLmsRGw5tijfF7YLQaI2T8oMkIUTtBIoI4HOkrwPDO-cFO20udwMX1pDWm-cBSBWtEa1m0&_nc_ht=scontent.fsgn5-6.fna&oh=efb30afdeee8f77b39d35064970794e2&oe=5E3BD8AB",
-            nameMenber: "Thủy Ngọc Hà",
-        },
-    ]
-
-
-    render() {
-        const { navigation } = this.props
-        return (
-            <View style={ExpenseMoreOptionScreenStyles.container}>
-                <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
+                        <Text style={ExpenseMoreOptionScreenStyles.addContact}>Expense details</Text>
+                        <TouchableOpacity
+                            style={ExpenseMoreOptionScreenStyles.save}
+                            activeOpacity={0.5}
+                            onPress={() => {
+                                this.createListUser(list_user, totalMoney)
+                            }}
+                        >
+                            <Text
+                                style={ExpenseMoreOptionScreenStyles.add}
+                            >
+                                Done
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
                 <View style={ExpenseMoreOptionScreenStyles.paidBy}>
                     <View style={ExpenseMoreOptionScreenStyles.imageAvatar}>
                         <Image
@@ -148,20 +209,49 @@ class ExpenseMoreOptionScreen extends Component<Props> {
                 <View style={ExpenseMoreOptionScreenStyles.flatlist}>
                     <ScrollView>
                         <FlatList
-                            data={this.data}
-                            renderItem={({ item }) => (
+                            data={this.listUser}
+                            extraData={this.state}
+                            renderItem={({ item, index }) => (
+                                this.state.arrChecked[index] = this.state.arrChecked[index] === undefined ? true : this.state.arrChecked[index],
                                 <TouchableOpacity
-                                    onPress={() => {
-
+                                    activeOpacity={0.6}
+                                    onPress={async () => {
+                                        let { arrChecked } = this.state;
+                                        if(arrChecked[index] === undefined)
+                                            arrChecked[index] = true
+                                        arrChecked[index] = !arrChecked[index]
+                                        await this.setState({
+                                            arrChecked,
+                                        })
+                                        this.checkRealTime(list_user, totalMoney)
                                     }}
                                 >
-                                    <ListItemMemberExpense
-                                        uriAvatar={item.uriAvatar}
-                                        nameMember={item.nameMenber}
-                                    />
+                                    <View style={ExpenseMoreOptionScreenStyles.flatlistMember}>
+                                        <View style={ExpenseMoreOptionScreenStyles.listMember}>
+                                            <View style={ExpenseMoreOptionScreenStyles.imageAvatar}>
+                                                <Image
+                                                    style={ExpenseMoreOptionScreenStyles.avatar}
+                                                    source={thumbnails["avatar" + item.user_id.avatar]  }
+                                                />
+                                            </View>
+                                            <View style={ExpenseMoreOptionScreenStyles.content}>
+                                                <Text style={ExpenseMoreOptionScreenStyles.txt2}>
+                                                    {item.user_id.name}
+                                                </Text>
+                                            </View>
+                                            <View style={ExpenseMoreOptionScreenStyles.iconRight}>
+                                                <Ionicons 
+                                                    name='ios-checkmark-circle' 
+                                                    size={35} 
+                                                    color={this.state.arrChecked[index] ? Colors.mediumseagreen : Colors.gray } 
+                                                />
+                                            </View>
+                                        </View>
+                                        <View style={ExpenseMoreOptionScreenStyles.underLineInput} />
+                                    </View>
                                 </TouchableOpacity>
                             )}
-                            keyExtractor={item => item.id.toString()}
+                            keyExtractor={item => item.user_id._id.toString()}
                         />
                     </ScrollView>
                 </View>
@@ -169,10 +259,10 @@ class ExpenseMoreOptionScreen extends Component<Props> {
                     <View style={ExpenseMoreOptionScreenStyles.tabBar}>
                         <View style={ExpenseMoreOptionScreenStyles.contentBar}>
                             <Text style={ExpenseMoreOptionScreenStyles.moneyPerson} >
-                                127,50 US$/person
+                                {number2money(this.state.moneysigle)} VND/person
                         </Text>
                             <Text style={ExpenseMoreOptionScreenStyles.numberPeople}>
-                                {`(2 people)`}
+                                {`(` + this.state.numberPeople + ` people)`} 
                             </Text>
                         </View>
                         <View style={ExpenseMoreOptionScreenStyles.viewSeparate} >
@@ -183,7 +273,7 @@ class ExpenseMoreOptionScreen extends Component<Props> {
                                 All
                         </Text>
                             <View style={ExpenseMoreOptionScreenStyles.iconAll}>
-                                <Ionicons name='ios-checkmark-circle' size={35} color={Colors.mediumseagreen} />
+                                <Ionicons name='ios-checkmark-circle' size={35} color={this.state.checkAll ? Colors.mediumseagreen : Colors.gray} />
                             </View>
                         </View>
                     </View>
