@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, StatusBar, FlatList, TouchableOpacity, Animated } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, FlatList, TouchableOpacity, Animated, ActivityIndicator } from 'react-native';
 import Colors from '../../../constants/Colors';
 import { screenWidth } from '../../../constants/Dimensions';
 import { SearchBar } from 'react-native-elements';
 import ListItems from './Listitem';
 import { data } from './dataListitem';
+import { BASEURL } from '../../../api/api';
 
 function mapStateToProps(state) {
     return {
@@ -21,6 +22,7 @@ const AnimatedFlatlist = Animated.createAnimatedComponent(FlatList); // create a
 type States = {
     values?: string,
     data?: any[],
+    loading?: boolean
 }
 
 type Props = {
@@ -33,14 +35,16 @@ class MainSearchScreen extends Component<Props, States> {
 
     state = {
         values: '',
-        data: data,
+        data: [],
+        loading: false
     }
 
-    arrayData = data;
+    arrayData = [];
     _navListener: any;
 
     componentDidMount() {
 
+        this.getDataSearch();
         //set barstyle of statusbar
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             StatusBar.setBarStyle('light-content');
@@ -52,6 +56,31 @@ class MainSearchScreen extends Component<Props, States> {
         // remove barstyle when lead screen
         this._navListener.remove();
     }
+
+    getDataSearch = async () => {
+        this.setState({ loading: true })
+        fetch(`${BASEURL}/api/search/get_data_search`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+        })
+            .then((response) => response.json())
+            .then((res) => {
+                this.setState({
+                    data: res.data,
+                    loading: false
+                })
+                this.arrayData = res.data
+            })
+            .catch((error) => {
+                this.setState({
+                    loading: false
+                })
+                console.log(error);
+            });
+    };
 
     searchFilterFunction = text => {
         this.setState({
@@ -87,31 +116,34 @@ class MainSearchScreen extends Component<Props, States> {
                         containerStyle={styles.containerSearchbar}
                     />
                 </View>
-                <View style={styles.listItem}>
-                    <FlatList
-                        data={this.state.data}
-                        removeClippedSubviews={true}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity
-                                onPress={() => {
-                                    this.props.navigation.navigate("SearchDetailScreen", {data: item});
-                                }}
-                            >
-                                <ListItems
-                                    title={item.title}
-                                    description={item.desc}
-                                    img={item.image}
-                                />
-                            </TouchableOpacity>
-                        )}
-                        keyExtractor={item => item.title.toString()}
-                        initialNumToRender={4}
-                        onEndReachedThreshold={0.4}
-                    />
+                <View style={styles.listItem}>{this.state.loading ? (
+                    <View style={styles.activityIndicator}>
+                        <ActivityIndicator animating size="large" color={Colors.tintColor} />
+                    </View>
+                ) : (
+                        <FlatList
+                            data={this.state.data}
+                            removeClippedSubviews={true}
+                            renderItem={({ item }) => (
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        this.props.navigation.navigate("SearchDetailScreen", { data: item });
+                                    }}
+                                >
+                                    <ListItems
+                                        title={item.title}
+                                        description={item.desc}
+                                        img={BASEURL+"/"+item.image}
+                                    />
+                                </TouchableOpacity>
+                            )}
+                            keyExtractor={item => item.title.toString()}
+                            initialNumToRender={4}
+                            onEndReachedThreshold={0.4}
+                        />
+
+                    )}
                 </View>
-
-
-
             </View>
         );
     }
@@ -120,6 +152,7 @@ class MainSearchScreen extends Component<Props, States> {
 const styles = StyleSheet.create({
     containerMain: {
         flexDirection: 'column',
+        backgroundColor: Colors.background
     },
     container: {
         backgroundColor: Colors.tintColor
@@ -132,29 +165,16 @@ const styles = StyleSheet.create({
     },
     containerInput: {
         backgroundColor: Colors.white,
-        borderRadius: screenWidth/82.2,
+        borderRadius: screenWidth / 82.2,
         elevation: 0,
     },
     containerSearchbar: {
-        paddingHorizontal: screenWidth/27.4,
+        paddingHorizontal: screenWidth / 27.4,
         height: screenWidth / 3.7,
-        paddingTop: screenWidth/13.7,
-        paddingBottom: screenWidth/41.1,
+        paddingTop: screenWidth / 13.7,
+        paddingBottom: screenWidth / 41.1,
         justifyContent: 'center',
         backgroundColor: Colors.tintColor,
-    },
-    navbar: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        alignItems: 'center',
-        backgroundColor: Colors.white,
-        borderBottomColor: Colors.white,
-        borderBottomWidth: 1,
-        height: NAVBAR_HEIGHT,
-        justifyContent: 'center',
-        paddingTop: STATUS_BAR_HEIGHT,
     },
     listItem: {
         backgroundColor: Colors.background,
@@ -177,7 +197,8 @@ const styles = StyleSheet.create({
     activityIndicator: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: Colors.tintColor
+        backgroundColor: Colors.background,
+        marginTop: screenWidth / 13.4,
     },
 
 });

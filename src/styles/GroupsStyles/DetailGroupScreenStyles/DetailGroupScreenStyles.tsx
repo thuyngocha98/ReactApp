@@ -38,7 +38,7 @@ const DetailGroupScreenStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: Colors.white,
-        marginTop: 100,
+        marginTop: screenWidth/41.1,
     }
 });
 export default DetailGroupScreenStyles;

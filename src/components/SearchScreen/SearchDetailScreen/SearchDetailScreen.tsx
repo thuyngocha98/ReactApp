@@ -6,6 +6,7 @@ import { APPBAR_HEIGHT, screenWidth } from '../../../constants/Dimensions';
 import { Ionicons } from '@expo/vector-icons';
 import ListItem from './Listitem';
 import { ScrollView } from 'react-native-gesture-handler';
+import { BASEURL } from '../../../api/api';
 
 function mapStateToProps(state) {
     return {
@@ -45,7 +46,7 @@ class SearchDetailScreen extends Component<Props> {
                 <View style={styles.imageHeader}>
                     <Image
                         style={styles.image}
-                        source={{ uri: data.image }}
+                        source={{ uri: BASEURL + "/" + data.image }}
                     />
                 </View>
                 <View style={styles.viewTitle}>
@@ -70,6 +71,7 @@ class SearchDetailScreen extends Component<Props> {
                         keyExtractor={item => item.title.toString()}
                     />
                 </View>
+                <View style={styles.underLine} />
             </ScrollView>
         )
     };

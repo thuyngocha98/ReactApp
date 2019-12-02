@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { View, ImageBackground, Text, StyleSheet } from 'react-native';
 import Colors from '../../../constants/Colors';
 import { APPBAR_HEIGHT, screenWidth } from '../../../constants/Dimensions';
+import { BASEURL } from '../../../api/api';
 
 function mapStateToProps(state) {
     return {
@@ -18,7 +19,7 @@ class Listitem extends Component<Props> {
     render() {
         return (
             <View style={styles.listItem}>
-                <ImageBackground source={{ uri: this.props.data.image }} style={styles.imageBg}>
+                <ImageBackground source={{ uri: BASEURL + "/" +  this.props.data.image }} style={styles.imageBg}>
                     <View style={{ flex: 3 }} />
                     <View style={{ flex: 2, backgroundColor: Colors.black, opacity: 0.5 }} />
                     <View style={styles.viewText}>
