@@ -38,9 +38,15 @@ class SearchDetailScreen extends Component<Props> {
                             <Ionicons name='md-arrow-back' size={30} color={Colors.white} />
                         </TouchableOpacity>
                         <Text style={styles.addContact}>{data.title}</Text>
-                        <View style={styles.save} >
+                        <TouchableOpacity
+                            style={styles.save}
+                            activeOpacity={0.5}
+                            onPress={() => {
+                                this.props.navigation.navigate('PlanTripScreen', { plantrip: data.plantrip, title: data.title});
+                            }}
+                        >
                             <Text style={styles.textHeaderLeft}>Plan a trip</Text>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={styles.imageHeader}>
@@ -54,7 +60,7 @@ class SearchDetailScreen extends Component<Props> {
                     <Text style={styles.textDesc}>{data.desc}...</Text>
                 </View>
                 <View style={styles.underLine} />
-                <View style={{marginHorizontal: screenWidth/20.55, marginVertical: screenWidth/41.1,}}>
+                <View style={{ marginHorizontal: screenWidth / 20.55, marginVertical: screenWidth / 41.1, }}>
                     <Text style={styles.textRecommend}>Địa điểm nổi bật</Text>
                 </View>
                 <View style={styles.listItem}>
@@ -100,7 +106,7 @@ const styles = StyleSheet.create({
         marginHorizontal: screenWidth / 27.43,
     },
     addContact: {
-        flex: screenWidth/82.2,
+        flex: screenWidth / 82.2,
         fontSize: 20,
         fontWeight: '500',
         color: Colors.white,
@@ -125,7 +131,7 @@ const styles = StyleSheet.create({
     },
     viewTitle: {
         flexDirection: 'column',
-        margin: screenWidth/27.4,
+        margin: screenWidth / 27.4,
     },
     textRecommend: {
         fontSize: 17,
@@ -137,7 +143,7 @@ const styles = StyleSheet.create({
     },
     underLine: {
         width: screenWidth,
-        height: screenWidth/82.2,
+        height: screenWidth / 82.2,
         backgroundColor: Colors.lavender
     },
     listItem: {

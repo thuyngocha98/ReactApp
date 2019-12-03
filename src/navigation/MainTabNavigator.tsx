@@ -39,6 +39,7 @@ import { screenWidth } from '../constants/Dimensions';
 import SearchDetailScreen from '../components/SearchScreen/SearchDetailScreen/SearchDetailScreen';
 import MainExpenseScreen from '../components/ExpenseScreen/MainExpenseScreen/MainExpenseScreen';
 import MainScreenGroup from '../components/GroupScreen/MainScreenGroup/MainScreenGroup';
+import PlanTripScreen from '../components/SearchScreen/PlanTripScreen/PlanTripScreen';
 
 const configPlat = Platform.select({
     web: { headerMode: 'screen' },
@@ -103,6 +104,9 @@ const SearchStack = createStackNavigator(
         },
         SearchDetailScreen: {
             screen: SearchDetailScreen
+        },
+        PlanTripScreen: {
+            screen: PlanTripScreen,
         }
     },
 );
@@ -111,7 +115,7 @@ const SearchStack = createStackNavigator(
 SearchStack.navigationOptions = ({ navigation }) => {
     let tabBarVisible = true;
     let routeName = navigation.state.routes[navigation.state.index].routeName;
-    if (routeName == 'SearchDetailScreen') {
+    if (routeName == 'SearchDetailScreen' || routeName == 'PlanTripScreen') {
         tabBarVisible = false
     }
 
