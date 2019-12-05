@@ -40,6 +40,7 @@ import SearchDetailScreen from '../components/SearchScreen/SearchDetailScreen/Se
 import MainExpenseScreen from '../components/ExpenseScreen/MainExpenseScreen/MainExpenseScreen';
 import MainScreenGroup from '../components/GroupScreen/MainScreenGroup/MainScreenGroup';
 import PlanTripScreen from '../components/SearchScreen/PlanTripScreen/PlanTripScreen';
+import EditProfileScreen from '../components/AccountScreen/EditProfileScreen/EditProfileScreen';
 
 const configPlat = Platform.select({
     web: { headerMode: 'screen' },
@@ -369,35 +370,51 @@ ActivityStack.navigationOptions = {
 const AccountStack = createStackNavigator(
     {
         AccountScreen,
+        EditProfileScreen: {
+            screen: EditProfileScreen,
+        },
     },
     // config
 );
 
-AccountStack.navigationOptions = {
-    tabBarLabel: 'Account',
-    tabBarIcon: ({ focused }) => (
-        <MaterialCommunityIcons focused={focused}
-            name={Platform.OS === 'ios'
-                ? 'ios-home'
-                : 'account-circle'
+AccountStack.navigationOptions = ({ navigation }) => {
+    let tabBarVisible;
+    if (navigation.state.routes.length > 1) {
+        navigation.state.routes.map(route => {
+            if (route.routeName === "EditProfileScreen") {
+                tabBarVisible = false;
             }
-            size={26}
-            style={{ marginBottom: -3 }}
-            color={focused ? Colors.tabIconSelected : Colors.blackText}
-        />
-    ),
-    tabBarOptions: {
-        keyboardHidesTabBar: true,
-        activeTintColor: Colors.tintColor,
-        labelStyle: {
-            paddingBottom: Platform.OS === 'ios' ? screenWidth / 41.4 : screenWidth / 80,
-        },
-        style: {
-            height: Platform.OS === 'ios' ? screenWidth / 7.52 : screenWidth / 7.2,
-        },
+            else {
+                tabBarVisible = true;
+            }
+        });
     }
+    return {
+        tabBarVisible,
+        tabBarLabel: 'Account',
+        tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons focused={focused}
+                name={Platform.OS === 'ios'
+                    ? 'ios-home'
+                    : 'account-circle'
+                }
+                size={26}
+                style={{ marginBottom: -3 }}
+                color={focused ? Colors.tabIconSelected : Colors.blackText}
+            />
+        ),
+        tabBarOptions: {
+            keyboardHidesTabBar: true,
+            activeTintColor: Colors.tintColor,
+            labelStyle: {
+                paddingBottom: Platform.OS === 'ios' ? screenWidth / 41.4 : screenWidth / 80,
+            },
+            style: {
+                height: Platform.OS === 'ios' ? screenWidth / 7.52 : screenWidth / 7.2,
+            },
+        }
+    };
 };
-
 
 const tabNavigator = createBottomTabNavigator({
     //FriendsStack,

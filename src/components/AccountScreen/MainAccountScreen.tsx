@@ -66,7 +66,11 @@ class MainAccountScreen extends Component<Props> {
                         <MaterialCommunityIcons name={'home-outline'} size={25} color={'gray'} style={{marginLeft: screenWidth/205.5,}}/>
                         <Text style={styles.textOverview}>Overview</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.setting}>
+                    <TouchableOpacity 
+                        style={styles.setting}
+                        activeOpacity={0.6}
+                        onPress={() => { this.props.navigation.navigate("EditProfileScreen", {name: this.props.user.name, email: this.props.user.email, userId: this.props.user._id})}}
+                    >
                         <EvilIcons name={'user'} size={30} color={'gray'}/>
                         <Text style={styles.textSetting}>Account Setting</Text>
                     </TouchableOpacity>

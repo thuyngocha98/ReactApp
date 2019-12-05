@@ -122,7 +122,7 @@ class MainScreenGroup extends Component<Props, States> {
                     <View style={MainScreenGroupStyles.menu}>
                         <TouchableOpacity
                             onPress={() => {
-                                this.props.navigation.navigate('PlanTripScreen')
+                                
                             }}
                         >
                             <MaterialCommunityIcons name='menu' size={25} color={Colors.white} />
