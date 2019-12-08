@@ -5,8 +5,6 @@ import Colors from '../../../../../constants/Colors';
 import { View, TouchableOpacity, Text, Image, FlatList, ScrollView, StatusBar } from 'react-native';
 import { Ionicons, FontAwesome5, Octicons } from '@expo/vector-icons';
 import ExpenseMoreOptionScreenStyles from '../../../../../styles/ExpenseScreenStyles/ExpenseDetailScreenStyles/ExpenseMoreOptionScreenStyles/EqualSplit/ExpenseMoreOptionScreenStyles';
-import ListItemMemberExpense from './ListItemMemberExpense';
-import ListItemNumberSplit from '../NumberSplit/ListItemNumberSplit';
 import { thumbnails, number2money } from '../../../../../constants/FunctionCommon';
 
 function mapStateToProps(state) {
@@ -104,6 +102,7 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
         this.listUser = navigation.getParam('listUser', "");
         const totalMoney = navigation.getParam('totalMoney', "")
         const list_user = navigation.getParam('list_user', "")
+        const userPayer = navigation.getParam('userPayer', [])
         return (
             <View style={ExpenseMoreOptionScreenStyles.container}>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
@@ -138,14 +137,14 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
                     <View style={ExpenseMoreOptionScreenStyles.imageAvatar}>
                         <Image
                             style={ExpenseMoreOptionScreenStyles.avatar}
-                            source={{ uri: "https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.0-1/p240x240/58727386_1340156482789355_8420310201583796224_n.jpg?_nc_cat=106&_nc_oc=AQlOWDOgSxKl2liWeIiLmsRGw5tijfF7YLQaI2T8oMkIUTtBIoI4HOkrwPDO-cFO20udwMX1pDWm-cBSBWtEa1m0&_nc_ht=scontent.fsgn5-6.fna&oh=efb30afdeee8f77b39d35064970794e2&oe=5E3BD8AB" }}
+                            source={thumbnails["avatar" + userPayer.user_id.avatar] }
                         />
                     </View>
                     <View style={ExpenseMoreOptionScreenStyles.content}>
                         <Text style={ExpenseMoreOptionScreenStyles.txt1}>
-                            Paid by
+                            {`Paid by `}
                             <Text style={ExpenseMoreOptionScreenStyles.txt2}>
-                                {" Thủy Ngọc Hà"}
+                                {userPayer.user_id.name}
                             </Text>
                         </Text>
                     </View>

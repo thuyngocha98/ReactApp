@@ -71,7 +71,20 @@ class InputExpenseScreen extends Component<Props, States> {
     // send list_user to split screen (output money)
     async prepareSendListUserToSplit(listTypeUser) {
         let list_user = await this.createListUser(listTypeUser)
-        this.props.navigation.navigate("ExpenseMoreOptionScreen", { list_user: list_user, listUser: this.props.listUserInTrip, totalMoney: this.state.money.replace(/,/g, '') } )
+        //get user payer
+        let Payer;
+        let userPayer = [];
+        await list_user.forEach(value => {
+            if (value.type > 0) {
+                Payer = value.user_id;
+            }
+        });
+        await this.props.listUserInTrip.forEach(value => {
+            if (value.user_id._id  == Payer) {
+                userPayer = value;
+            }
+        });
+        this.props.navigation.navigate("ExpenseMoreOptionScreen", { list_user: list_user, listUser: this.props.listUserInTrip, totalMoney: this.state.money.replace(/,/g, ''), userPayer: userPayer } )
     }
 
     // send list_user to choose multiple people (input money)
