@@ -247,6 +247,7 @@ class MainSignUpScreen extends Component<Props> {
                                         onFocus={() => {
                                             this._scrollToInput(screenWidth / 2.5)
                                         }}
+                                        onSubmitEditing={Keyboard.dismiss}
                                     />
                                 </View>
                             </View>

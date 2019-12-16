@@ -44,7 +44,7 @@ class HeaderTitleComponent extends Component<Props, States> {
         itemSelected: 0,
         opened: false
     };
-    
+
     data = [
         {
             id: 0,
@@ -60,20 +60,13 @@ class HeaderTitleComponent extends Component<Props, States> {
         },
         {
             id: 3,
-            title: "Charts"
+            title: "Exports Money Send Mail"
         },
         {
             id: 4,
             title: "Convert to USD"
         },
-        {
-            id: 5,
-            title: "Whiteboard"
-        },
-        {
-            id: 6,
-            title: "Export"
-        },
+
     ];
 
     // click icon setting => open menu
@@ -84,7 +77,7 @@ class HeaderTitleComponent extends Component<Props, States> {
     onBackdropPress() {
         this.setState({ opened: false });
     }
-    
+
     // function delete group
     removeGroup = () => {
         this.setState({opened: false})
@@ -131,8 +124,25 @@ class HeaderTitleComponent extends Component<Props, States> {
                 console.log(error);
             });
     };
+    sendMoney = () => {
+        fetch(`${BASEURL}/api/user/send_money_all_mail/${this.props.idGroup}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+            body: null
+        })
+            .then((response) => response.json())
+            .then(async (res) => {
 
+            })
+            .catch((error) => {
+                alert(error);
+            });
+    };
     render() {
+        console.log(this.props.idGroup);
         const { navigation } = this.props;
         var time = this.props.time.split("-");
         return (
@@ -202,6 +212,8 @@ class HeaderTitleComponent extends Component<Props, States> {
                                                 case "Totals":
                                                     navigation.navigate('TotalScreen', { nameGroup: this.props.nameGroup })
                                                     break;
+                                                case "Exports Money Send Mail":
+                                                    this.sendMoney()
                                             }
                                         }}
                                     >

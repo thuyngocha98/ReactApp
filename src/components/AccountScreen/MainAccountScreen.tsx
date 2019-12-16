@@ -93,23 +93,6 @@ class MainAccountScreen extends Component<Props, States> {
             });
     };
 
-    sendAllMail = () => {
-        fetch(`${BASEURL}/api/user/send_money_all_mail`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json'
-            },
-            body: null
-        })
-            .then((response) => response.json())
-            .then(async (res) => {
-              console.log(res);
-            })
-            .catch((error) => {
-                alert(error);
-            });
-    };
 
     render() {
         let img = this.props.user.uploadAvatar === false ? <View style={styles.dashed}>
@@ -141,7 +124,11 @@ class MainAccountScreen extends Component<Props, States> {
                                                 style={{marginLeft: screenWidth / 205.5,}}/>
                         <Text style={styles.textOverview}>Overview</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.setting}>
+                    <TouchableOpacity
+                        style={styles.setting}
+                        activeOpacity={0.6}
+                        onPress={() => { this.props.navigation.navigate("EditProfileScreen", {name: this.props.user.name, email: this.props.user.email, userId: this.props.user._id})}}
+                    >
                         <EvilIcons name={'user'} size={30} color={'gray'}/>
                         <Text style={styles.textSetting}>Account Setting</Text>
                     </TouchableOpacity>
@@ -152,17 +139,6 @@ class MainAccountScreen extends Component<Props, States> {
                     <TouchableOpacity style={styles.signOut} onPress={this.signOut}>
                         <AntDesign name={'logout'} size={20} color={'gray'} style={{marginLeft: screenWidth / 137,}}/>
                         <Text style={styles.textSignOut}>Sign Out</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.5} onPress={this.sendAllMail} style={{
-                        height: 40,
-                        backgroundColor: 'green',
-                        alignItems:'center',
-                        justifyContent:'center',
-                        marginTop:10,
-                        marginHorizontal:100,
-                        borderRadius:20
-                    }}>
-                        <Text style={{color:Colors.white}}>tổng kết</Text>
                     </TouchableOpacity>
                 </View>
             </View>

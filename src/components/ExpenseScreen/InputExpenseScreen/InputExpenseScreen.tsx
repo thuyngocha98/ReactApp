@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { APPBAR_HEIGHT } from '../../../constants/Dimensions';
 import Colors from '../../../constants/Colors';
-import { View, TouchableOpacity, Text, Image, TextInput, StatusBar, Alert } from 'react-native';
-import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import { View, TouchableOpacity, Text, Image, TextInput, StatusBar, Alert, Keyboard } from 'react-native';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import InputExpenseScreenStyles from '../../../styles/ExpenseScreenStyles/InputExpenseScreenStyles/InputExpenseScreenStyles';
 import { bindActionCreators } from 'redux';
 import { getApiListUserInTrip } from '../../../actions/action';
@@ -12,7 +11,7 @@ import { BASEURL } from '../../../api/api';
 function mapStateToProps(state) {
     return {
         listUserInTrip: state.listUserInTrip.listUserInTrip,
-        author: state.dataUser.dataUser._id
+        author: state.dataUser.dataUser._id,
     };
 }
 
@@ -22,35 +21,44 @@ type Props = {
     currenGroup?: any,
     getListUserInTrip?: any,
     listUserInTrip?: any,
+    dataGroup?: any
 }
 
 type States = {
     description?: string,
     money?: string,
     checkDescription?: boolean,
-    checkMoney?: boolean
+    checkMoney?: boolean,
 }
 
+
 class InputExpenseScreen extends Component<Props, States> {
-    state = {
-        description: "",
-        money: "",
-        checkDescription: false,
-        checkMoney: false
+    constructor(props){
+        super(props);
+        this.state = {
+            description: "",
+            money: "",
+            checkDescription: false,
+            checkMoney: false,
+        }
     }
+    
     static navigationOptions = ({ navigation }) => {
         return {
-            header : null
+            header: null
         }
     };
     _navListener: any;
     idPayer = "";
 
     componentDidMount() {
+
         // set barstyle of statusbar
-        this._navListener = this.props.navigation.addListener('didFocus', () => {
+        this._navListener = this.props.navigation.addListener('didFocus', async () => {
             StatusBar.setBarStyle('light-content');
-            let data = this.props.navigation.getParam('dataGroup', "");
+            let data = this.props.navigation.getParam('dataGroup', {});
+            if (Object.getOwnPropertyNames(data).length === 0)
+                data = this.props.dataGroup
             this.props.getListUserInTrip(data._id)
         });
     }
@@ -60,18 +68,74 @@ class InputExpenseScreen extends Component<Props, States> {
         this._navListener.remove();
     }
 
-    checkDescription(text){
-        if(text === ""){
+    // send list_user to split screen (output money)
+    async prepareSendListUserToSplit(listTypeUser) {
+        let list_user = await this.createListUser(listTypeUser)
+        //get user payer
+        let Payer;
+        let userPayer = [];
+        await list_user.forEach(value => {
+            if (value.type > 0) {
+                Payer = value.user_id;
+            }
+        });
+        await this.props.listUserInTrip.forEach(value => {
+            if (value.user_id._id  == Payer) {
+                userPayer = value;
+            }
+        });
+        this.props.navigation.navigate("ExpenseMoreOptionScreen", { list_user: list_user, listUser: this.props.listUserInTrip, totalMoney: this.state.money.replace(/,/g, ''), userPayer: userPayer } )
+    }
+
+    // send list_user to choose multiple people (input money)
+    async prepareSendListUserToChoose(listTypeUser){
+        let list_user = await this.createListUser(listTypeUser)
+        this.props.navigation.navigate("ChoosePayerScreen", { list_user: list_user, listUser: this.props.listUserInTrip, totalMoney: this.state.money.replace(/,/g, '') })
+
+    }
+
+    checkDescription(text) {
+        if (text === "") {
             this.setState({
                 description: text,
                 checkDescription: false
             })
-        }else{
+        } else {
             this.setState({
                 description: text,
                 checkDescription: true
             })
         }
+    }
+
+    async createListUser(listTypeUser) {
+        const Money = parseInt(this.state.money.replace(/,/g, ''));
+        this.idPayer = this.props.navigation.getParam("IdPayer", "");
+        var Payer = this.idPayer === "" ? this.props.author : this.idPayer;
+        var list_user = [];
+        const listUser = this.props.listUserInTrip;
+        const amount_user = Math.round(Money / listUser.length)
+        if (listTypeUser.length > 0) {
+            list_user = listTypeUser
+        } else {
+            await listUser.forEach(value => {
+                if (value.user_id._id === Payer) {
+                    list_user.push({
+                        type: Money,
+                        amount_user: amount_user,
+                        user_id: value.user_id._id,
+                    })
+                }
+                else {
+                    list_user.push({
+                        type: -1,
+                        amount_user: amount_user,
+                        user_id: value.user_id._id,
+                    })
+                }
+            })
+        }
+        return list_user;
     }
 
     checkMoney(text) {
@@ -89,37 +153,12 @@ class InputExpenseScreen extends Component<Props, States> {
         }
     }
 
-    async createTransaction(tripId, listTypeUser){
+    async createTransaction(tripId, listTypeUser) {
         const Money = parseInt(this.state.money.replace(/,/g, ''));
         const Description = this.state.description;
         this.idPayer = this.props.navigation.getParam("IdPayer", "");
-        var Payer = this.idPayer === "" ? this.props.author : this.idPayer;
-        var list_user = [];
-        if (this.state.checkDescription && this.state.checkMoney){
-            const listUser = this.props.listUserInTrip;
-            const amount_user = Math.round(Money / listUser.length)
-            if(listTypeUser.length > 0){
-                list_user = listTypeUser
-            }else{
-                await listUser.forEach(value => {
-                    if (value.user_id._id === Payer) {
-                        list_user.push({
-                            type: Money,
-                            amount_user: amount_user,
-                            user_id: value.user_id._id,
-                        })
-                    }
-                    else {
-                        list_user.push({
-                            type: -1,
-                            amount_user: amount_user,
-                            user_id: value.user_id._id,
-                        })
-                    }
-                })
-            }
-            
-            
+        var list_user = await this.createListUser(listTypeUser);
+        if (this.state.checkDescription && this.state.checkMoney) {
             const data = {
                 name: Description,
                 author: this.props.author,
@@ -137,7 +176,7 @@ class InputExpenseScreen extends Component<Props, States> {
                 body: json
             })
                 .then((response) => response.json())
-                .then((res) => {
+                .then(async (res) => {
                     if (res.result === 'ok') {
                         this.setState({
                             description: "",
@@ -146,7 +185,7 @@ class InputExpenseScreen extends Component<Props, States> {
                             checkMoney: false,
                         })
                         Alert.alert("Save successful")
-
+                        this.props.navigation.navigate("ExpenseScreen")
                     } else {
                         Alert.alert("Save fail")
                     }
@@ -155,7 +194,8 @@ class InputExpenseScreen extends Component<Props, States> {
                     console.log(error);
                 });
 
-        }else{
+        } else {
+            Keyboard.dismiss()
             Alert.alert("Please enter full information")
         }
     }
@@ -163,7 +203,9 @@ class InputExpenseScreen extends Component<Props, States> {
     render() {
         const { navigation } = this.props
         const listTypeUser = navigation.getParam('listTypeUser', '');
-        const Group = navigation.getParam('dataGroup', "");
+        var Group = navigation.getParam('dataGroup', {});
+        if (Object.getOwnPropertyNames(Group).length === 0)
+            Group = this.props.dataGroup
         return (
             <View style={InputExpenseScreenStyles.container}>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
@@ -173,7 +215,7 @@ class InputExpenseScreen extends Component<Props, States> {
                             style={InputExpenseScreenStyles.cancel}
                             activeOpacity={0.5}
                             onPress={() => {
-                                navigation.goBack();
+                                navigation.navigate('MainExpenseScreen', { currentGroup: Group.name });
                             }}
                         >
                             <Ionicons name='ios-close' size={45} color={Colors.white} />
@@ -202,7 +244,10 @@ class InputExpenseScreen extends Component<Props, States> {
                         </Text>
                         and:
                     </Text>
-                    <View style={InputExpenseScreenStyles.nameGroup}>
+                    <TouchableOpacity
+                        style={InputExpenseScreenStyles.nameGroup}
+                        onPress={() => { navigation.navigate('MainExpenseScreen', { currentGroup: Group.name }) }}
+                    >
                         <Image
                             style={InputExpenseScreenStyles.image}
                             source={require("../../../../assets/images/icon-home.png")}
@@ -210,13 +255,13 @@ class InputExpenseScreen extends Component<Props, States> {
                         <Text style={InputExpenseScreenStyles.txtAllOf}>
                             All of {Group.name}
                         </Text>
-                    </View>
+                    </TouchableOpacity>
                 </View>
                 <View style={InputExpenseScreenStyles.underLine} />
                 <View style={InputExpenseScreenStyles.sectionInput}>
                     <View style={InputExpenseScreenStyles.sectionDescription}>
                         <View style={InputExpenseScreenStyles.iconDescription}>
-                            <MaterialIcons name="description" size={40} color={Colors.blackText} style={{ padding: 5, }} />
+                            <MaterialIcons name="description" size={38} color={Colors.blackText} style={{ padding: 5, }} />
                         </View>
                         <View style={InputExpenseScreenStyles.inputDescription}>
                             <TextInput
@@ -247,6 +292,7 @@ class InputExpenseScreen extends Component<Props, States> {
                                 keyboardType='number-pad'
                                 placeholder="0,00"
                                 underlineColorAndroid={'transparent'}
+                                onSubmitEditing={Keyboard.dismiss}
                             />
                             <View style={InputExpenseScreenStyles.underLineInput} />
                         </View>
@@ -255,11 +301,10 @@ class InputExpenseScreen extends Component<Props, States> {
                     <View style={InputExpenseScreenStyles.btnSubmit}>
                         <Text style={InputExpenseScreenStyles.text1}>{"Paid by "}</Text>
                         <View style={InputExpenseScreenStyles.button}>
-                            <Text 
+                            <Text
                                 style={InputExpenseScreenStyles.text2}
-                                onPress={() => this.state.checkDescription && this.state.checkMoney 
-                                    ? navigation.navigate("ChoosePayerScreen", 
-                                        { listUser: this.props.listUserInTrip, totalMoney: this.state.money.replace(/,/g, '')}) 
+                                onPress={() => this.state.checkDescription && this.state.checkMoney
+                                    ? this.prepareSendListUserToChoose(listTypeUser)
                                     : Alert.alert("Please enter full information")}
                             >
                                 you
@@ -267,9 +312,9 @@ class InputExpenseScreen extends Component<Props, States> {
                         </View>
                         <Text style={InputExpenseScreenStyles.text1}>{" and split "}</Text>
                         <View style={InputExpenseScreenStyles.button}>
-                            <Text 
+                            <Text
                                 style={InputExpenseScreenStyles.text2}
-                                onPress={() => this.state.checkDescription && this.state.checkMoney ? navigation.navigate("ExpenseMoreOptionScreen"): Alert.alert("Please enter full information")}
+                                onPress={() => this.state.checkDescription && this.state.checkMoney ? this.prepareSendListUserToSplit(listTypeUser) : Alert.alert("Please enter full information")}
                             >
                                 equally
                             </Text>

@@ -43,7 +43,7 @@ class SplashScreen extends Component<Props, States> {
         if (data !== null) {
             const dataUser = await this.props.getDataUser();
             if (dataUser !== null) {
-                this.props.navigation.navigate('AccountScreen');
+                this.props.navigation.navigate('GroupScreen');
             }
         }else{
             this.props.navigation.navigate('MainLoginScreen');

@@ -59,32 +59,24 @@ class ChooseMultiplePeopleScreen extends Component<Props, States> {
         })
     }
 
-    async functionDone(){
-        const amount_user = Math.round(parseInt(this.totalMoney) / this.listUser.length)
+    async functionDone(list_user){
         let listTypeUser = [];
-        for(let i = 0; i < this.listUser.length; i++){
+        for (let i = 0; i < list_user.length; i++){
             if(Number.isInteger(parseInt(this.state.moneyInputs[i]))){
-                await listTypeUser.push({
-                    user_id: this.listUser[i].user_id._id,
-                    type: parseInt(this.state.moneyInputs[i]),
-                    amount_user: amount_user
-                })
+                list_user[i].type = parseInt(this.state.moneyInputs[i]);
             }else{
-                await listTypeUser.push({
-                    user_id: this.listUser[i].user_id._id,
-                    type: -1,
-                    amount_user: amount_user
-                })
+                list_user[i].type = -1;
             }
         }
 
-        this.props.navigation.navigate("InputExpenseScreen", {listTypeUser : listTypeUser});
+        this.props.navigation.navigate("InputExpenseScreen", { listTypeUser: list_user});
         
     }
 
     render() {
         const { navigation } = this.props
         const listUser = navigation.getParam('listUser', "");
+        const list_user = navigation.getParam('list_user', '');
         return (
             <View style={ChooseMultiplePeopleScreenStyles.container}>
                 <View style={ChooseMultiplePeopleScreenStyles.containerHeader}>
@@ -104,7 +96,7 @@ class ChooseMultiplePeopleScreen extends Component<Props, States> {
                             style={ChooseMultiplePeopleScreenStyles.save}
                             activeOpacity={0.5}
                             onPress={() => {
-                                this.state.moneyLeft === 0 ? this.functionDone() : Alert.alert("The payment values do not add up to the total cost.")
+                                this.state.moneyLeft === 0 ? this.functionDone(list_user) : Alert.alert("The payment values do not add up to the total cost.")
                             }}
                         >
                             <Text

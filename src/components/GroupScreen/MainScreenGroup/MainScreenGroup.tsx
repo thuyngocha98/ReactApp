@@ -52,7 +52,8 @@ class MainScreenGroup extends Component<Props, States> {
         this.getListAllTrip();
     }
 
-    componentDidMount () {
+    componentDidMount() {
+
         //set barstyle of statusbar
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             StatusBar.setBarStyle('dark-content');
@@ -68,26 +69,28 @@ class MainScreenGroup extends Component<Props, States> {
     }
 
     getListAllTrip = async () => {
-        this.setState({loading: true});
-        fetch(`${BASEURL}/api/transactionUser/get_total_money_user_by_id/${this.props.userId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json'
-            },
-        })
-            .then((response) => response.json())
-            .then(async (res) => {
-                await this.props.getListAllTrip(res.data.reverse());
-                await this.caculateTotalMoney(res.data);
-                await this.setState({
-                    data: res.data,
-                    loading: false,
-                })
+        if (this.props.userId != undefined) {
+            this.setState({ loading: true })
+            fetch(`${BASEURL}/api/transactionUser/get_total_money_user_by_id/${this.props.userId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json'
+                },
             })
-            .catch((error) => {
-                alert(error);
-            });
+                .then((response) => response.json())
+                .then(async (res) => {
+                    await this.props.getListAllTrip(res.data.reverse());
+                    await this.caculateTotalMoney(res.data);
+                    await this.setState({
+                        data: res.data,
+                        loading: false,
+                    })
+                })
+                .catch((error) => {
+                    alert(error);
+                });
+        }
     };
 
     async caculateTotalMoney(data) {
@@ -95,7 +98,7 @@ class MainScreenGroup extends Component<Props, States> {
         await data.forEach(element => {
             this.totalMoney += element.oweUser;
         });
-        this.setState({total: this.totalMoney})
+        this.setState({ total: this.totalMoney })
     }
 
     _ItemSeparatorComponent = () => {
@@ -122,7 +125,7 @@ class MainScreenGroup extends Component<Props, States> {
                     <View style={MainScreenGroupStyles.text}>
                         <Text style={MainScreenGroupStyles.textTotal}>Total balance</Text>
                         <Text style={MainScreenGroupStyles.textDetail}>
-                            {this.state.total >= 0 ? "You are owned " + number2money(this.state.total) : "You owe " + number2money(this.state.total * (-1))} VND
+                            {this.state.total >= 0 ? "You are owned " + number2money(this.state.total) : "You owe " + number2money(this.state.total * (-1))}  VND
                         </Text>
                     </View>
                     <View style={MainScreenGroupStyles.menu}>

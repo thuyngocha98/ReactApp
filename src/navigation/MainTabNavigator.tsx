@@ -27,8 +27,6 @@ import ExpenseDetailScreen from '../components/ExpenseScreen/ExpenseDetailScreen
 import ExpenseMoreOptionScreen from '../components/ExpenseScreen/ExpenseDetailScreen/ExpenseMoreOptionScreen/EqualSplit/ExpenseMoreOptionScreen';
 import ExpenseByNumberSplitScreen from '../components/ExpenseScreen/ExpenseDetailScreen/ExpenseMoreOptionScreen/NumberSplit/ExpenseByNumberSplitScreen';
 import ExpenseByPlusOrMinusScreen from '../components/ExpenseScreen/ExpenseDetailScreen/ExpenseMoreOptionScreen/PlusMinusSplit/ExpenseByPlusOrMinusScreen';
-import HeaderOweTripMemberScreen from "../components/FriendsScreen/OweTripsMemberScreen/HeaderOweTripMemberScreen";
-import HeaderOweTripDetailsMemberScreen from "../components/FriendsScreen/OweTripsDetailMemberScreen/HeaderOweTripDetailsMemberScreen";
 import MainLoginScreen from "../components/LoginScreen/MainLoginScreen";
 import MainSignUpScreen from "../components/SignUpScreen/MainSignUpScreen";
 import verifyScreen from "../components/SignUpScreen/verifyScreen";
@@ -39,6 +37,10 @@ import ChooseMultiplePeopleScreen from '../components/ExpenseScreen/ChoosePayerS
 import DetaiTransactionScreen from '../components/GroupScreen/DetailGroupScreen/DetailTransactionScreen/DetaiTransactionScreen';
 import { screenWidth } from '../constants/Dimensions';
 import SearchDetailScreen from '../components/SearchScreen/SearchDetailScreen/SearchDetailScreen';
+import MainExpenseScreen from '../components/ExpenseScreen/MainExpenseScreen/MainExpenseScreen';
+import MainScreenGroup from '../components/GroupScreen/MainScreenGroup/MainScreenGroup';
+import PlanTripScreen from '../components/SearchScreen/PlanTripScreen/PlanTripScreen';
+import EditProfileScreen from '../components/AccountScreen/EditProfileScreen/EditProfileScreen';
 
 const configPlat = Platform.select({
     web: { headerMode: 'screen' },
@@ -103,6 +105,9 @@ const SearchStack = createStackNavigator(
         },
         SearchDetailScreen: {
             screen: SearchDetailScreen
+        },
+        PlanTripScreen: {
+            screen: PlanTripScreen,
         }
     },
 );
@@ -111,7 +116,7 @@ const SearchStack = createStackNavigator(
 SearchStack.navigationOptions = ({ navigation }) => {
     let tabBarVisible = true;
     let routeName = navigation.state.routes[navigation.state.index].routeName;
-    if (routeName == 'SearchDetailScreen') {
+    if (routeName == 'SearchDetailScreen' || routeName == 'PlanTripScreen') {
         tabBarVisible = false
     }
 
@@ -130,6 +135,7 @@ SearchStack.navigationOptions = ({ navigation }) => {
             />
         ),
         tabBarOptions: {
+            keyboardHidesTabBar: true,
             activeTintColor: Colors.tintColor,
             labelStyle: {
                 paddingBottom: Platform.OS === 'ios' ? screenWidth / 41.4 : screenWidth / 80,
@@ -159,6 +165,9 @@ const GroupStack = createStackNavigator(
         GroupScreen: {
             screen: GroupScreen,
         },
+        MainScreenGroup: {
+            screen: MainScreenGroup,
+        },
         CreateGroupScreen: {
             screen: CreateGroupScreen
         },
@@ -178,15 +187,18 @@ const GroupStack = createStackNavigator(
             screen: TotalScreen
         }
     },
+    {
+        initialRouteName: 'GroupScreen',
+    }
     // config
 );
 
 GroupStack.navigationOptions = ({ navigation }) => {
     let tabBarVisible;
     let routeName = navigation.state.routes[navigation.state.index].routeName;
-    if (routeName == 'CreateGroupScreen' || routeName == 'MainLoginScreen' || routeName == 'MainForgotPasswordScreen' || routeName == 'MainSignUpScreen' 
+    if (routeName == 'CreateGroupScreen' || routeName == 'MainLoginScreen' || routeName == 'MainForgotPasswordScreen' || routeName == 'MainSignUpScreen'
         || routeName == 'verifyScreen' || routeName == 'CreateGroupScreen' || routeName == 'DetailGroupScreen' || routeName == 'BalanceScreen'
-        || routeName == 'TotalScreen' || routeName == 'AddMemberGroupScreen' || routeName == 'DetaiTransactionScreen'){
+        || routeName == 'TotalScreen' || routeName == 'AddMemberGroupScreen' || routeName == 'DetaiTransactionScreen') {
         tabBarVisible = false
     }
     return {
@@ -204,6 +216,7 @@ GroupStack.navigationOptions = ({ navigation }) => {
             />
         ),
         tabBarOptions: {
+            keyboardHidesTabBar: true,
             activeTintColor: Colors.tintColor,
             labelStyle: {
                 paddingBottom: Platform.OS === 'ios' ? screenWidth / 41.4 : screenWidth / 80,
@@ -218,11 +231,14 @@ GroupStack.navigationOptions = ({ navigation }) => {
 
 const ExpenseStack = createStackNavigator(
     {
-        AddExpense: {
+        ExpenseScreen: {
             screen: ExpenseScreen,
         },
         InputExpenseScreen: {
             screen: InputExpenseScreen,
+        },
+        MainExpenseScreen: {
+            screen: MainExpenseScreen,
         },
         ChoosePayerScreen: {
             screen: ChoosePayerScreen,
@@ -245,6 +261,7 @@ const ExpenseStack = createStackNavigator(
         },
     },
     {
+        initialRouteName: 'ExpenseScreen',
         transitionConfig: () => ({
             transitionSpec: {
                 duration: 0,
@@ -253,7 +270,7 @@ const ExpenseStack = createStackNavigator(
             },
         }),
     },
-    
+
 );
 
 ExpenseStack.navigationOptions = ({ navigation }) => {
@@ -273,9 +290,6 @@ ExpenseStack.navigationOptions = ({ navigation }) => {
                 tabBarVisible = false;
             }
             else if (route.routeName === "ChoosePayerScreen") {
-                tabBarVisible = false;
-            }
-            else if (route.routeName === "InputExpenseScreen") {
                 tabBarVisible = false;
             }
             else if (route.routeName === "ChooseMultiplePeopleScreen") {
@@ -301,6 +315,7 @@ ExpenseStack.navigationOptions = ({ navigation }) => {
             />
         ),
         tabBarOptions: {
+            keyboardHidesTabBar: true,
             activeTintColor: Colors.tintColor,
             labelStyle: {
                 paddingBottom: Platform.OS === 'ios' ? screenWidth / 41.4 : screenWidth / 80,
@@ -355,34 +370,51 @@ ActivityStack.navigationOptions = {
 const AccountStack = createStackNavigator(
     {
         AccountScreen,
+        EditProfileScreen: {
+            screen: EditProfileScreen,
+        },
     },
     // config
 );
 
-AccountStack.navigationOptions = {
-    tabBarLabel: 'Account',
-    tabBarIcon: ({ focused }) => (
-        <MaterialCommunityIcons focused={focused}
-            name={Platform.OS === 'ios'
-                ? 'ios-home'
-                : 'account-circle'
+AccountStack.navigationOptions = ({ navigation }) => {
+    let tabBarVisible;
+    if (navigation.state.routes.length > 1) {
+        navigation.state.routes.map(route => {
+            if (route.routeName === "EditProfileScreen") {
+                tabBarVisible = false;
             }
-            size={26}
-            style={{ marginBottom: -3 }}
-            color={focused ? Colors.tabIconSelected : Colors.blackText}
-        />
-    ),
-    tabBarOptions: {
-        activeTintColor: Colors.tintColor,
-        labelStyle: {
-            paddingBottom: Platform.OS === 'ios' ? screenWidth / 41.4 : screenWidth / 80,
-        },
-        style: {
-            height: Platform.OS === 'ios' ? screenWidth / 7.52 : screenWidth / 7.2,
-        },
+            else {
+                tabBarVisible = true;
+            }
+        });
     }
+    return {
+        tabBarVisible,
+        tabBarLabel: 'Account',
+        tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons focused={focused}
+                name={Platform.OS === 'ios'
+                    ? 'ios-home'
+                    : 'account-circle'
+                }
+                size={26}
+                style={{ marginBottom: -3 }}
+                color={focused ? Colors.tabIconSelected : Colors.blackText}
+            />
+        ),
+        tabBarOptions: {
+            keyboardHidesTabBar: true,
+            activeTintColor: Colors.tintColor,
+            labelStyle: {
+                paddingBottom: Platform.OS === 'ios' ? screenWidth / 41.4 : screenWidth / 80,
+            },
+            style: {
+                height: Platform.OS === 'ios' ? screenWidth / 7.52 : screenWidth / 7.2,
+            },
+        }
+    };
 };
-
 
 const tabNavigator = createBottomTabNavigator({
     //FriendsStack,
@@ -390,8 +422,9 @@ const tabNavigator = createBottomTabNavigator({
     GroupStack,
     ExpenseStack,
     ActivityStack,
-    AccountStack
-});
+    AccountStack,
+},
+);
 
 
 export default tabNavigator;
