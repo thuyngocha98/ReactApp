@@ -66,16 +66,9 @@ class HeaderTitleComponent extends Component<Props, States> {
         },
         {
             id: 4,
-            title: "Convert to USD"
+            title: "Exports Money Send Mail"
         },
-        {
-            id: 5,
-            title: "Whiteboard"
-        },
-        {
-            id: 6,
-            title: "Export"
-        },
+
     ];
 
     // click icon setting => open menu
@@ -133,8 +126,25 @@ class HeaderTitleComponent extends Component<Props, States> {
                 console.log(error);
             });
     };
+    sendMoney = () => {
+        fetch(`${BASEURL}/api/user/send_money_all_mail/${this.props.idGroup}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+            body: null
+        })
+            .then((response) => response.json())
+            .then(async (res) => {
 
+            })
+            .catch((error) => {
+                alert(error);
+            });
+    };
     render() {
+        console.log(this.props.idGroup);
         const { navigation } = this.props;
         var time = this.props.time.split("-");
         return (
@@ -208,6 +218,8 @@ class HeaderTitleComponent extends Component<Props, States> {
                                                 case "Images":
                                                     navigation.navigate('ShowImagesScreen', { tripId: this.props.idGroup })
                                                     break;
+                                                case "Exports Money Send Mail":
+                                                    this.sendMoney()
                                             }
                                         }}
                                     >

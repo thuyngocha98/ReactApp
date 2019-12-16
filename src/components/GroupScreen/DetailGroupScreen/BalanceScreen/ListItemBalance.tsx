@@ -33,6 +33,9 @@ class ListItemBalance extends Component<Props, States> {
         isShow: false
     }
 
+    remind = () => {
+        alert('aa')
+    };
     render() {
         const thumbnail = thumbnails["avatar" + this.props.data.avatar]
         return (
@@ -104,7 +107,7 @@ class ListItemBalance extends Component<Props, States> {
                         </View>
                         <View style={ListItemBalanceStyles.button}>
                             <TouchableOpacity
-                                onPress={() => { Alert.alert("Remind") }}
+                                onPress={() => { this.remind() }}
                             >
                                 <View style={ListItemBalanceStyles.btn}>
                                     <Text style={ListItemBalanceStyles.txt}>Remind</Text>

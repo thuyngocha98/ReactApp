@@ -11,7 +11,7 @@ import { screenWidth } from '../constants/Dimensions';
 
 function mapStateToProps(state) {
     return {
-        
+
     };
 }
 
@@ -28,7 +28,7 @@ class SplashScreen extends Component<Props, States> {
 
     state = {
         token: '',
-    }
+    };
     receiveToken = async () => {
         try {
             const value = await AsyncStorage.getItem('jwt');
@@ -37,8 +37,8 @@ class SplashScreen extends Component<Props, States> {
             alert(error);
         }
     };
-    
-    async componentWillMount() {        
+
+    async componentWillMount() {
         const data = await this.performTimeConsumingTask();
         if (data !== null) {
             const dataUser = await this.props.getDataUser();
@@ -57,7 +57,7 @@ class SplashScreen extends Component<Props, States> {
                 2000
             )
         );
-    }
+    };
 
     render() {
         return (
@@ -79,6 +79,6 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         getDataUser: getApiDataUser
     }, dispatch);
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen);
