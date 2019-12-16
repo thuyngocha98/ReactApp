@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { View, Text, StyleSheet, StatusBar, FlatList, TouchableOpacity, Animated } from 'react-native';
 import Colors from '../../../constants/Colors';
 import { screenWidth } from '../../../constants/Dimensions';
+// @ts-ignore
 import { SearchBar } from 'react-native-elements';
 import ListItems from './Listitem';
 import { data } from './dataListitem';
@@ -34,7 +35,7 @@ class MainSearchScreen extends Component<Props, States> {
     state = {
         values: '',
         data: data,
-    }
+    };
 
     arrayData = data;
     _navListener: any;
