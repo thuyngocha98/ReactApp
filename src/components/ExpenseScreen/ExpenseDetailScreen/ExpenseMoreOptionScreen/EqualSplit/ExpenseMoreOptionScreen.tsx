@@ -103,6 +103,7 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
         const totalMoney = navigation.getParam('totalMoney', "")
         const list_user = navigation.getParam('list_user', "")
         const userPayer = navigation.getParam('userPayer', [])
+        const thumbnail = userPayer.user_id.avatar.length > 2 ? { uri: `data:image/png;base64,${userPayer.user_id.avatar}` } : thumbnails["avatar" + userPayer.user_id.avatar]
         return (
             <View style={ExpenseMoreOptionScreenStyles.container}>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
@@ -137,7 +138,7 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
                     <View style={ExpenseMoreOptionScreenStyles.imageAvatar}>
                         <Image
                             style={ExpenseMoreOptionScreenStyles.avatar}
-                            source={thumbnails["avatar" + userPayer.user_id.avatar] }
+                            source={thumbnail}
                         />
                     </View>
                     <View style={ExpenseMoreOptionScreenStyles.content}>
@@ -230,7 +231,7 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
                                             <View style={ExpenseMoreOptionScreenStyles.imageAvatar}>
                                                 <Image
                                                     style={ExpenseMoreOptionScreenStyles.avatar}
-                                                    source={thumbnails["avatar" + item.user_id.avatar]  }
+                                                    source= {item.user_id.avatar.length > 2 ? {uri: `data:image/png;base64,${item.user_id.avatar}` } : thumbnails["avatar" + item.user_id.avatar]}
                                                 />
                                             </View>
                                             <View style={ExpenseMoreOptionScreenStyles.content}>

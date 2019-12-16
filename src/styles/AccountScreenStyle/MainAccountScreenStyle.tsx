@@ -1,6 +1,6 @@
-import {screenWidth, screenHeight} from "../../constants/Dimensions";
+import { screenWidth, screenHeight } from "../../constants/Dimensions";
 import Colors from "../../constants/Colors";
-import {StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     headerContainer: {
@@ -15,26 +15,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: Colors.white
     },
-    dashed: {
-        width: screenWidth / 4.5,
-        height: screenWidth / 4.5,
-        borderRadius: screenWidth / 8,
-        borderStyle: 'dotted',
-        borderWidth: 2,
-        alignItems:'center',
-        justifyContent:"center",
-        opacity:0.5,
-    },
-    uploadImage: {
-        width: screenWidth / 4.5,
-        height: screenWidth / 4.5,
-        borderRadius: screenWidth / 6,
-        resizeMode: 'center'
-    },
     avatar: {
-        width: screenWidth / 8,
-        height: screenWidth / 8,
+        width: screenWidth / 4,
+        height: screenWidth / 4,
+        borderRadius: screenWidth / 8,
         resizeMode: 'cover',
+        marginTop: screenWidth / 27.4
     },
     male: {
         marginTop: screenWidth / 41.1

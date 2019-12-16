@@ -108,12 +108,7 @@ class MainScreenGroup extends Component<Props, States> {
     };
 
     render() {
-        console.log(this.props.user.avatar);
-        const thumbnail = thumbnails["avatar" + this.props.avatar];
-        let img = this.props.user.uploadAvatar === false ? <Image
-            style={MainScreenGroupStyles.avatar}
-            source={thumbnail}
-        /> : <Image source={{uri:`${BASEURL}/api/user/get_image/`+ this.props.user.avatar}} style={MainScreenGroupStyles.avatar}/>;
+        const thumbnail = this.props.user.avatar.length > 2 ? { uri: `data:image/png;base64,${this.props.user.avatar}` } : thumbnails["avatar" + this.props.user.avatar]
         return (
             <View style={MainScreenGroupStyles.container}>
                 <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent/>
@@ -121,7 +116,10 @@ class MainScreenGroup extends Component<Props, States> {
                     Groups
                 </Text>
                 <View style={MainScreenGroupStyles.cartExpense}>
-                    {img}
+                    <Image
+                        style={MainScreenGroupStyles.avatar}
+                        source={thumbnail}
+                    />
                     <View style={MainScreenGroupStyles.text}>
                         <Text style={MainScreenGroupStyles.textTotal}>Total balance</Text>
                         <Text style={MainScreenGroupStyles.textDetail}>

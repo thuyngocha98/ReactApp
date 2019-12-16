@@ -20,7 +20,7 @@ type Props = {
 
 class ListItemPayer extends Component<Props> {
     render() {
-        const thumbnail = thumbnails["avatar" + this.props.avatar]
+        const thumbnail = this.props.avatar.length > 2 ? { uri: `data:image/png;base64,${this.props.avatar}` } : thumbnails["avatar" + this.props.avatar]
         return (
             <View style={ListItemPayerStyles.mainContainer}>
                 <View style={ListItemPayerStyles.container}>

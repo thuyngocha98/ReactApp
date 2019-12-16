@@ -14,6 +14,7 @@ import user from "../../../../../assets/images/user.png";
 import ListItemDetailTransaction from './ListItemDetailTransaction';
 import { number2money } from '../../../../constants/FunctionCommon';
 import { BASEURL } from '../../../../api/api';
+import { screenWidth } from '../../../../constants/Dimensions';
 
 function mapStateToProps(state) {
     return {
@@ -139,7 +140,7 @@ class DetaiTransactionScreen extends Component<Props, States> {
                                 <Text style={DetailTransactionScreenStyles.money}>{number2money(this.transaction.amount)} VND</Text>
                             </View>
                             <TouchableOpacity style={DetailTransactionScreenStyles.camera} activeOpacity={0.5}>
-                                <Image style={{ tintColor: 'gray' }} source={camera} />
+                                <Image style={{ tintColor: 'gray', width: screenWidth/8.22, height: screenWidth/8.22 }} source={camera} />
                             </TouchableOpacity>
                         </View>
                     </View>

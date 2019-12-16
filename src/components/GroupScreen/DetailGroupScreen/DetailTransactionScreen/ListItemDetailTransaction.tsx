@@ -17,7 +17,7 @@ type Props = {
 
 class ListItemDetailTransaction extends Component<Props> {
     render() {
-        const thumbnail = thumbnails["avatar" + this.props.data.user_id.avatar]
+        const thumbnail = this.props.data.user_id.avatar.length > 2 ? { uri: `data:image/png;base64,${this.props.data.user_id.avatar}` } : thumbnails["avatar" + this.props.data.user_id.avatar]
         return (
             <View style={ListItemDetailTransactionStyles.mainContainer}>
                 <View style={ListItemDetailTransactionStyles.container}>
