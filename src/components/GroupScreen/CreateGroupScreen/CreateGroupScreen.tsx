@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TouchableOpacity, Alert, Image, TextInput, Switch, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, Image, TextInput, Switch, StatusBar, Button, Keyboard, ToastAndroid } from 'react-native';
 import Colors from '../../../constants/Colors';
 import CreateGroupScreenStyles from '../../../styles/GroupsStyles/CreateGroupScreenStyles/CreateGroupScreenStyles';
+import DateTimePicker from "react-native-modal-datetime-picker";
 
 function mapStateToProps(state) {
     return {
@@ -21,6 +22,10 @@ type States = {
     colorOrder?: boolean,
     name?: string,
     checkInputName?: boolean,
+    isDateTimePickerVisible?:boolean,
+    isDateTimePickerVisible1?: boolean,
+    startDay?: string,
+    endDay?: string,
 }
 
 class CreateGroupScreen extends Component<Props, States> {
@@ -34,6 +39,10 @@ class CreateGroupScreen extends Component<Props, States> {
         colorOrder: false,
         name: '',
         checkInputName: false,
+        isDateTimePickerVisible: false,
+        isDateTimePickerVisible1: false,
+        startDay: 'Select Start Day',
+        endDay: 'Select End Day',
     };
     _navListener: any;
 
@@ -62,7 +71,6 @@ class CreateGroupScreen extends Component<Props, States> {
             })
         }
     }
-
 
     _selectCategoryGroupType(index) {
         switch (index) {
@@ -100,6 +108,76 @@ class CreateGroupScreen extends Component<Props, States> {
                 break;
         }
     }
+
+    // Date time picker start day
+    showDateTimePicker = () => {
+        Keyboard.dismiss();
+        this.setState({ isDateTimePickerVisible: true });
+    };
+
+    hideDateTimePicker = () => {
+        this.setState({ isDateTimePickerVisible: false });
+    };
+
+    handleDatePicked = date => {
+        this.setState({
+            startDay: date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
+
+        })
+        this.hideDateTimePicker();
+    };
+
+    // Date time picker end day
+    showDateTimePicker1 = () => {
+        Keyboard.dismiss();
+        this.setState({ isDateTimePickerVisible1: true });
+    };
+
+    hideDateTimePicker1 = () => {
+        this.setState({ isDateTimePickerVisible1: false });
+    };
+
+    handleDatePicked1 = date => {
+        this.setState({
+            endDay: date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
+        })
+        this.hideDateTimePicker1();
+    };
+
+    checkCondition(){
+        if(this.state.checkInputName){
+            if(this.state.startDay !== 'Select Start Day'){
+                if(this.state.endDay !== 'Select End Day'){
+                    this.props.navigation.navigate("AddMemberGroupScreen", { nameGroup: this.state.name, startDay: this.state.startDay, endDay: this.state.endDay })
+                }else{
+                    ToastAndroid.showWithGravityAndOffset(
+                        'Please select end day!',
+                        ToastAndroid.SHORT,
+                        ToastAndroid.BOTTOM,
+                        25,
+                        50,
+                    );
+                }
+            }else{
+                ToastAndroid.showWithGravityAndOffset(
+                    'Please select start day!',
+                    ToastAndroid.SHORT,
+                    ToastAndroid.BOTTOM,
+                    25,
+                    50,
+                );
+            }
+        }else{
+            ToastAndroid.showWithGravityAndOffset(
+                'Please input name group!',
+                ToastAndroid.SHORT,
+                ToastAndroid.BOTTOM,
+                25,
+                50,
+            );
+        }
+    }
+
     render() {
         const { navigation } = this.props;
         return (
@@ -119,9 +197,7 @@ class CreateGroupScreen extends Component<Props, States> {
                         <TouchableOpacity 
                             activeOpacity={0.5}
                             onPress={() => {
-                                this.state.checkInputName ? 
-                                    navigation.navigate("AddMemberGroupScreen",{nameGroup: this.state.name}) :
-                                    Alert.alert("Please enter name group.")
+                                this.checkCondition();
                             }}
                         >
                             <Text 
@@ -219,6 +295,29 @@ class CreateGroupScreen extends Component<Props, States> {
                             >Order</Text>
                         </TouchableOpacity>
                     </View>
+                </View>
+                <View style={CreateGroupScreenStyles.pickDate}>
+                    <Button 
+                        title={this.state.startDay !== "Select Start Day" ? 'From '+this.state.startDay: this.state.startDay} 
+                        onPress={this.showDateTimePicker} 
+                    />
+                    <DateTimePicker
+                        isVisible={this.state.isDateTimePickerVisible}
+                        onConfirm={this.handleDatePicked}
+                        onCancel={this.hideDateTimePicker}
+                    />
+                </View>
+                <View style={CreateGroupScreenStyles.pickDate1}>
+                    <Button 
+                        title={this.state.endDay !== "Select End Day" ? 'To ' + this.state.endDay : this.state.endDay} 
+                        onPress={this.showDateTimePicker1} 
+                    />
+                    <DateTimePicker
+                        isVisible={this.state.isDateTimePickerVisible1}
+                        onConfirm={this.handleDatePicked1}
+                        onCancel={this.hideDateTimePicker1}
+                        mode={'date'}
+                    />
                 </View>
             </View>
         );

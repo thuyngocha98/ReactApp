@@ -25,6 +25,9 @@ const HeaderTitleComponentStyles = StyleSheet.create({
     },
     btnBack: {
         marginLeft: screenWidth/27.43,
+        paddingRight: 20,
+        paddingLeft: 5,
+        paddingBottom:15 ,
     },
     btnSetting: {
         marginRight: screenWidth/27.43,
@@ -49,13 +52,13 @@ const HeaderTitleComponentStyles = StyleSheet.create({
         marginLeft: -screenWidth/41.1
     },
     numberPeopleAndTime: {
-        marginBottom: screenWidth / 41.14,
+        marginBottom: screenWidth / 100,
         fontSize: 14,
         color: Colors.white
     },
     owesAndMoney: {
         flexDirection: 'row',
-        marginBottom: screenWidth/41.14,
+        marginBottom: screenWidth/60,
     },
     owes: {
         fontSize: 16,
@@ -72,6 +75,10 @@ const HeaderTitleComponentStyles = StyleSheet.create({
         width: screenWidth,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    startEndDay: {
+        fontSize: 12,
+        color: Colors.white
     }
 });
 export default HeaderTitleComponentStyles;

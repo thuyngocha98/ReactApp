@@ -106,6 +106,8 @@ class AddMemberGroupScreen extends Component<Props, States> {
     createTrip = async () => {
         const data = {
             name: this.props.navigation.getParam('nameGroup', 'No name'),
+            startDay: this.props.navigation.getParam('startDay', '0-0-0000'),
+            endDay: this.props.navigation.getParam('endDay', '0-0-0000'),
             author: this.props.user_id,
             list_user: this.state.data,
         };

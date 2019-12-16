@@ -41,6 +41,8 @@ import MainExpenseScreen from '../components/ExpenseScreen/MainExpenseScreen/Mai
 import MainScreenGroup from '../components/GroupScreen/MainScreenGroup/MainScreenGroup';
 import PlanTripScreen from '../components/SearchScreen/PlanTripScreen/PlanTripScreen';
 import EditProfileScreen from '../components/AccountScreen/EditProfileScreen/EditProfileScreen';
+import ShowImagesScreen from '../components/GroupScreen/DetailGroupScreen/ImagesScreen/ShowImagesScreen';
+import AddImagesScreen from '../components/GroupScreen/DetailGroupScreen/ImagesScreen/AddImagesScreen';
 
 const configPlat = Platform.select({
     web: { headerMode: 'screen' },
@@ -177,6 +179,12 @@ const GroupStack = createStackNavigator(
         DetailGroupScreen: {
             screen: DetailGroupScreen
         },
+        ShowImagesScreen: {
+            screen: ShowImagesScreen
+        },
+        AddImagesScreen: {
+            screen: AddImagesScreen
+        },
         DetaiTransactionScreen: {
             screen: DetaiTransactionScreen,
         },
@@ -198,7 +206,8 @@ GroupStack.navigationOptions = ({ navigation }) => {
     let routeName = navigation.state.routes[navigation.state.index].routeName;
     if (routeName == 'CreateGroupScreen' || routeName == 'MainLoginScreen' || routeName == 'MainForgotPasswordScreen' || routeName == 'MainSignUpScreen'
         || routeName == 'verifyScreen' || routeName == 'CreateGroupScreen' || routeName == 'DetailGroupScreen' || routeName == 'BalanceScreen'
-        || routeName == 'TotalScreen' || routeName == 'AddMemberGroupScreen' || routeName == 'DetaiTransactionScreen') {
+        || routeName == 'TotalScreen' || routeName == 'AddMemberGroupScreen' || routeName == 'DetaiTransactionScreen' || routeName == 'ShowImagesScreen'
+        || routeName == 'AddImagesScreen') {
         tabBarVisible = false
     }
     return {

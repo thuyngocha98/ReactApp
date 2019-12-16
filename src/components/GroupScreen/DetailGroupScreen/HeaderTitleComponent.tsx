@@ -32,6 +32,8 @@ type Props = {
     time?: string,
     amount?: number,
     numberUserInTrip?: number,
+    startDay?: string,
+    endDay?: string,
 }
 
 type States = {
@@ -44,7 +46,7 @@ class HeaderTitleComponent extends Component<Props, States> {
         itemSelected: 0,
         opened: false
     };
-    
+
     data = [
         {
             id: 0,
@@ -60,7 +62,7 @@ class HeaderTitleComponent extends Component<Props, States> {
         },
         {
             id: 3,
-            title: "Charts"
+            title: "Images"
         },
         {
             id: 4,
@@ -84,10 +86,10 @@ class HeaderTitleComponent extends Component<Props, States> {
     onBackdropPress() {
         this.setState({ opened: false });
     }
-    
+
     // function delete group
     removeGroup = () => {
-        this.setState({opened: false})
+        this.setState({ opened: false })
         Alert.alert(
             'Are you sure you want to delete this group?',
             "",
@@ -98,7 +100,7 @@ class HeaderTitleComponent extends Component<Props, States> {
                 },
                 {
                     text: 'Cancel',
-                    onPress: () => {this.setState({ opened: false})},
+                    onPress: () => { this.setState({ opened: false }) },
                     style: 'cancel',
                 },
             ],
@@ -142,15 +144,15 @@ class HeaderTitleComponent extends Component<Props, States> {
                         source={{ uri: "https://designroast.org/wp-content/uploads/2014/02/pattern-thepatternlibrary.png" }}
                         style={HeaderTitleComponentStyles.backgroundImage}>
                         <View style={HeaderTitleComponentStyles.header}>
-                            <View style={HeaderTitleComponentStyles.btnBack}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        navigation.goBack();
-                                    }}
-                                >
-                                    <Ionicons name='ios-arrow-back' size={30} color={Colors.white} />
-                                </TouchableOpacity>
-                            </View >
+                            <TouchableOpacity
+                                onPress={() => {
+                                    navigation.goBack();
+                                }}
+                            >
+                                <View style={HeaderTitleComponentStyles.btnBack}>
+                                    <Ionicons name='ios-arrow-back' size={32} color={Colors.white} />
+                                </View >
+                            </TouchableOpacity>
                             <Image
                                 style={HeaderTitleComponentStyles.iconCamera}
                                 source={require("../../../../assets/images/icon_camera.png")}
@@ -162,12 +164,12 @@ class HeaderTitleComponent extends Component<Props, States> {
                                 >
                                     <MenuTrigger
                                         onPress={() => this.onTriggerPress()}
-                                        children={<Ionicons name='ios-settings' size={30} color={Colors.white} />}
+                                        children={<Ionicons name='ios-settings' size={32} color={Colors.white} />}
                                     />
                                     <MenuOptions
                                         customStyles={optionsStyles}
                                     >
-                                        <MenuOption onSelect={() => {alert(`Edit`), this.setState({opened: false})}} text='Edit' />
+                                        <MenuOption onSelect={() => { alert(`Edit`), this.setState({ opened: false }) }} text='Edit' />
                                         <MenuOption onSelect={this.removeGroup} >
                                             <Text style={{ color: Colors.orangered }}>Delete</Text>
                                         </MenuOption>
@@ -178,12 +180,13 @@ class HeaderTitleComponent extends Component<Props, States> {
                         <View style={HeaderTitleComponentStyles.contentText}>
                             <Text style={HeaderTitleComponentStyles.textTitle}>{this.props.nameGroup}</Text>
                             <Text style={HeaderTitleComponentStyles.numberPeopleAndTime}>{this.props.numberUserInTrip} people •	Created thg {time[1]} {time[0]}</Text>
+                            <Text style={HeaderTitleComponentStyles.startEndDay}>From {this.props.startDay.toString().split('-').join(' ')} To {this.props.endDay.toString().split('-').join(' ')}</Text>
                             <View style={HeaderTitleComponentStyles.owesAndMoney}>
                                 <Text style={HeaderTitleComponentStyles.owes}>
                                     {this.props.amount >= 0 ? "You are owned " : "You owe "}
                                 </Text>
                                 <Text style={HeaderTitleComponentStyles.money}>
-                                    {this.props.amount >= 0 ? number2money(this.props.amount) : number2money(this.props.amount*(-1))} VND
+                                    {this.props.amount >= 0 ? number2money(this.props.amount) : number2money(this.props.amount * (-1))} VND
                                 </Text>
                             </View>
                         </View>
@@ -197,10 +200,13 @@ class HeaderTitleComponent extends Component<Props, States> {
                                         onPress={() => {
                                             switch (item.title) {
                                                 case "Balances":
-                                                    navigation.navigate('BalanceScreen',{tripId: this.props.idGroup})
+                                                    navigation.navigate('BalanceScreen', { tripId: this.props.idGroup })
                                                     break;
                                                 case "Totals":
                                                     navigation.navigate('TotalScreen', { nameGroup: this.props.nameGroup })
+                                                    break;
+                                                case "Images":
+                                                    navigation.navigate('ShowImagesScreen', { tripId: this.props.idGroup })
                                                     break;
                                             }
                                         }}

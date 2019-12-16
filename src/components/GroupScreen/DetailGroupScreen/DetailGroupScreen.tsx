@@ -108,6 +108,8 @@ class DetailGroupScreen extends Component<Props, States> {
                         navigation={this.props.navigation}
                         nameGroup={this.dataTrip.name}
                         idGroup={this.dataTrip._id}
+                        startDay={this.dataTrip.startDay}
+                        endDay={this.dataTrip.endDay}
                         time={this.dataTrip.create_date}
                         amount={this.dataTrip.oweUser}
                         numberUserInTrip={this.state.numberUserInTrip}

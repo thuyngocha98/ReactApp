@@ -98,6 +98,15 @@ const CreateGroupScreenStyles = StyleSheet.create({
         borderTopRightRadius: 5,
         borderBottomRightRadius: 5,
         textAlign: 'center'
+    },
+    pickDate: {
+        flexDirection: 'column',
+        marginHorizontal: screenWidth / 20.55,
+    },
+    pickDate1: {
+        marginTop: screenWidth / 20.55,
+        flexDirection: 'column',
+        marginHorizontal: screenWidth / 20.55,
     }
 });
 export default CreateGroupScreenStyles;
