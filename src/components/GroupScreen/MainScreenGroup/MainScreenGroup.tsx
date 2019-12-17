@@ -1,15 +1,15 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {View, Text, FlatList, Image, TouchableOpacity, Alert, StatusBar, ActivityIndicator} from 'react-native';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { View, Text, FlatList, Image, TouchableOpacity, Alert, StatusBar, ActivityIndicator } from 'react-native';
 import MainScreenGroupStyles from '../../../styles/GroupsStyles/MainScreenGroupStyles/MainScreenGroupStyles';
 import ListItemGroup from './ListItemGroup';
 import Colors from '../../../constants/Colors';
-import {MaterialCommunityIcons} from '@expo/vector-icons';
-import {BASEURL} from '../../../api/api';
-import {NavigationEvents} from 'react-navigation';
-import {bindActionCreators} from 'redux';
-import {getApiListTrip} from '../../../actions/action';
-import {number2money, thumbnails} from '../../../constants/FunctionCommon';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { BASEURL } from '../../../api/api';
+import { NavigationEvents } from 'react-navigation';
+import { bindActionCreators } from 'redux';
+import { getApiListTrip } from '../../../actions/action';
+import { number2money, thumbnails } from '../../../constants/FunctionCommon';
 
 function mapStateToProps(state) {
     return {
@@ -25,7 +25,7 @@ type Props = {
     listAllTrip?: [],
     dispatch?: any,
     userId?: any,
-    avatar?: any,
+    avatar?: any[],
     user?: any
 }
 
@@ -51,12 +51,16 @@ class MainScreenGroup extends Component<Props, States> {
     componentWillMount() {
         this.getListAllTrip();
     }
+    thumbnail;
 
     componentDidMount() {
 
         //set barstyle of statusbar
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             StatusBar.setBarStyle('dark-content');
+            if (this.props.userId != undefined) {
+                this.thumbnail = this.props.user.avatar.length > 2 ? { uri: `data:image/png;base64,${this.props.user.avatar}` } : thumbnails["avatar" + this.props.user.avatar]
+            }
             // call api get list group
             this.getListAllTrip();
         });
@@ -103,22 +107,21 @@ class MainScreenGroup extends Component<Props, States> {
 
     _ItemSeparatorComponent = () => {
         return (
-            <View style={{flex: 1, height: 1, backgroundColor: Colors.lightgray}}/>
+            <View style={{ flex: 1, height: 1, backgroundColor: Colors.lightgray }} />
         );
     };
 
     render() {
-        const thumbnail = this.props.user.avatar.length > 2 ? { uri: `data:image/png;base64,${this.props.user.avatar}` } : thumbnails["avatar" + this.props.user.avatar]
         return (
             <View style={MainScreenGroupStyles.container}>
-                <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent/>
+                <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent />
                 <Text style={MainScreenGroupStyles.group}>
                     Groups
                 </Text>
                 <View style={MainScreenGroupStyles.cartExpense}>
                     <Image
                         style={MainScreenGroupStyles.avatar}
-                        source={thumbnail}
+                        source={this.thumbnail}
                     />
                     <View style={MainScreenGroupStyles.text}>
                         <Text style={MainScreenGroupStyles.textTotal}>Total balance</Text>
@@ -132,22 +135,22 @@ class MainScreenGroup extends Component<Props, States> {
                                 this.props.navigation.navigate('ShowImagesScreen');
                             }}
                         >
-                            <MaterialCommunityIcons name='menu' size={25} color={Colors.white}/>
+                            <MaterialCommunityIcons name='menu' size={25} color={Colors.white} />
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{flex: 1}}>{this.state.loading ? (
+                <View style={{ flex: 1 }}>{this.state.loading ? (
                     <View style={MainScreenGroupStyles.activityIndicator}>
-                        <ActivityIndicator animating size="large" color={Colors.tintColor}/>
+                        <ActivityIndicator animating size="large" color={Colors.tintColor} />
                     </View>
                 ) : (
-                    <FlatList
-                        data={this.state.data}
-                        renderItem={({item}) => (
-                            this.isOwned = item.oweUser >= 0 ? true : false,
+                        <FlatList
+                            data={this.state.data}
+                            renderItem={({ item }) => (
+                                this.isOwned = item.oweUser >= 0 ? true : false,
                                 <TouchableOpacity
                                     onPress={() => {
-                                        this.props.navigation.navigate('DetailGroupScreen', {dataTrip: item})
+                                        this.props.navigation.navigate('DetailGroupScreen', { dataTrip: item })
                                     }}
                                 >
                                     <ListItemGroup
@@ -156,11 +159,11 @@ class MainScreenGroup extends Component<Props, States> {
                                         isOwned={this.isOwned}
                                     />
                                 </TouchableOpacity>
-                        )}
-                        keyExtractor={item => item._id.toString()}
-                        ItemSeparatorComponent={this._ItemSeparatorComponent}
-                    />
-                )}
+                            )}
+                            keyExtractor={item => item._id.toString()}
+                            ItemSeparatorComponent={this._ItemSeparatorComponent}
+                        />
+                    )}
                 </View>
             </View>
         );
