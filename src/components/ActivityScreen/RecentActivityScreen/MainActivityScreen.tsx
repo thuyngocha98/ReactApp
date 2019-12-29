@@ -1,5 +1,15 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, FlatList, Image, TouchableOpacity, StatusBar, ActivityIndicator } from "react-native";
+import {
+    View,
+    Text,
+    ScrollView,
+    FlatList,
+    Image,
+    TouchableOpacity,
+    StatusBar,
+    ActivityIndicator,
+    StyleSheet
+} from "react-native";
 import styles from "../../../styles/ActivityScreenStyles/RecentActivityScreenStyle/MainActivityScreenStyle";
 import ListItemActivity from "./ListItemActivity";
 // @ts-ignore
@@ -14,18 +24,22 @@ import wifi from "../../../../assets/images/wifi.png";
 import puzzle from "../../../../assets/images/puzzle.png";
 import { BASEURL } from '../../../api/api';
 import Colors from '../../../constants/Colors';
+import {SearchBar} from "react-native-elements";
+import {screenWidth} from "../../../constants/Dimensions";
 
 type Props = {
     navigation?: any
 }
 
-type State = {
+type States = {
     data?: any[],
     loading?: boolean,
+    value?: string
 }
 
-class MainActivityScreen extends Component<Props> {
+class MainActivityScreen extends Component<Props,States> {
     state = {
+        value: '',
         data: [],
         loading: false,
         data1: [
@@ -167,6 +181,13 @@ class MainActivityScreen extends Component<Props> {
                 })
                 console.log(error);
             });
+    }
+
+    searchFilterFunction = text => {
+        this.setState({
+            value: text,
+        });
+
     };
 
     render() {
@@ -174,6 +195,21 @@ class MainActivityScreen extends Component<Props> {
         return (
             <View>
                 <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent />
+                <View >
+                    <SearchBar
+                        placeholder="Tìm Kiếm..."
+                        lightTheme
+                        clearIcon={{size: 24, name: 'clear'}}
+                        round={true}
+                        searchIcon={{size: 26, name: 'search'}}
+                        onChangeText={text => this.searchFilterFunction(text)}
+                        autoCorrect={false}
+                        value={this.state.value}
+                        inputStyle={Styles.input}
+                        inputContainerStyle={Styles.containerInput}
+                        containerStyle={Styles.containerSearchBar}
+                    />
+                </View>
                 <ScrollView style={styles.scrollView}>
                     <View>
                         <Text style={styles.title}>Recent activity</Text>
@@ -204,5 +240,31 @@ class MainActivityScreen extends Component<Props> {
         );
     }
 }
+
+
+const Styles = StyleSheet.create({
+    containerMain: {
+        flexDirection: 'column',
+        backgroundColor: Colors.background
+    },
+    input: {
+        width: screenWidth / 2.2,
+        height: screenWidth / 9,
+        fontSize: 16,
+        color: Colors.black
+    },
+    containerInput: {
+        backgroundColor: Colors.white,
+        borderRadius: screenWidth / 82.2,
+        elevation: 0,
+    },
+    containerSearchBar: {
+        paddingHorizontal: screenWidth / 27.4,
+        paddingTop: screenWidth / 10,
+        paddingBottom: screenWidth / 41.1,
+        justifyContent: 'center',
+    }
+});
+
 
 export default MainActivityScreen;
