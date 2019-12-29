@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Image, ImageBackground, Alert } from 'react-native';
+import { View, Text, Image, ImageBackground, Alert, ToastAndroid } from 'react-native';
 import HeaderTitleComponentStyles from '../../../styles/GroupsStyles/DetailGroupScreenStyles/HeaderTitleComponentStyles';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import ListItemHeader from './ListItemHeader';
@@ -137,14 +137,25 @@ class HeaderTitleComponent extends Component<Props, States> {
         })
             .then((response) => response.json())
             .then(async (res) => {
-
+                ToastAndroid.showWithGravityAndOffset(
+                    'Export done',
+                    ToastAndroid.SHORT,
+                    ToastAndroid.BOTTOM,
+                    25,
+                    50,
+                );
             })
             .catch((error) => {
-                alert(error);
+                ToastAndroid.showWithGravityAndOffset(
+                    error,
+                    ToastAndroid.SHORT,
+                    ToastAndroid.BOTTOM,
+                    25,
+                    50,
+                );
             });
     };
     render() {
-        console.log(this.props.idGroup);
         const { navigation } = this.props;
         var time = this.props.time.split("-");
         return (

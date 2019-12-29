@@ -141,7 +141,6 @@ class DetailGroupScreen extends Component<Props, States> {
                             )}
                         />
                     )}
-
                 </View>
             </View>
         );

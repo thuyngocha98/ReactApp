@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Colors from '../../../constants/Colors';
-import { View, TouchableOpacity, Text, Image, TextInput, StatusBar, Alert, Keyboard } from 'react-native';
+import { View, TouchableOpacity, Text, Image, TextInput, StatusBar, Alert, Keyboard, ToastAndroid, ScrollView } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import InputExpenseScreenStyles from '../../../styles/ExpenseScreenStyles/InputExpenseScreenStyles/InputExpenseScreenStyles';
 import { bindActionCreators } from 'redux';
 import { getApiListUserInTrip } from '../../../actions/action';
 import { BASEURL } from '../../../api/api';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 function mapStateToProps(state) {
     return {
@@ -33,7 +34,7 @@ type States = {
 
 
 class InputExpenseScreen extends Component<Props, States> {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             description: "",
@@ -42,7 +43,7 @@ class InputExpenseScreen extends Component<Props, States> {
             checkMoney: false,
         }
     }
-    
+
     static navigationOptions = ({ navigation }) => {
         return {
             header: null
@@ -80,15 +81,15 @@ class InputExpenseScreen extends Component<Props, States> {
             }
         });
         await this.props.listUserInTrip.forEach(value => {
-            if (value.user_id._id  == Payer) {
+            if (value.user_id._id == Payer) {
                 userPayer = value;
             }
         });
-        this.props.navigation.navigate("ExpenseMoreOptionScreen", { list_user: list_user, listUser: this.props.listUserInTrip, totalMoney: this.state.money.replace(/,/g, ''), userPayer: userPayer } )
+        this.props.navigation.navigate("ExpenseMoreOptionScreen", { list_user: list_user, listUser: this.props.listUserInTrip, totalMoney: this.state.money.replace(/,/g, ''), userPayer: userPayer })
     }
 
     // send list_user to choose multiple people (input money)
-    async prepareSendListUserToChoose(listTypeUser){
+    async prepareSendListUserToChoose(listTypeUser) {
         let list_user = await this.createListUser(listTypeUser)
         this.props.navigation.navigate("ChoosePayerScreen", { list_user: list_user, listUser: this.props.listUserInTrip, totalMoney: this.state.money.replace(/,/g, '') })
 
@@ -184,10 +185,22 @@ class InputExpenseScreen extends Component<Props, States> {
                             checkDescription: false,
                             checkMoney: false,
                         })
-                        Alert.alert("Save successful")
+                        ToastAndroid.showWithGravityAndOffset(
+                            'Save done!',
+                            ToastAndroid.SHORT,
+                            ToastAndroid.BOTTOM,
+                            25,
+                            50,
+                        );
                         this.props.navigation.navigate("ExpenseScreen")
                     } else {
-                        Alert.alert("Save fail")
+                        ToastAndroid.showWithGravityAndOffset(
+                            'Save error!',
+                            ToastAndroid.SHORT,
+                            ToastAndroid.BOTTOM,
+                            25,
+                            50,
+                        );
                     }
                 })
                 .catch((error) => {
@@ -196,7 +209,13 @@ class InputExpenseScreen extends Component<Props, States> {
 
         } else {
             Keyboard.dismiss()
-            Alert.alert("Please enter full information")
+            ToastAndroid.showWithGravityAndOffset(
+                'Please enter full information!',
+                ToastAndroid.SHORT,
+                ToastAndroid.BOTTOM,
+                25,
+                50,
+            );
         }
     }
 
@@ -321,6 +340,7 @@ class InputExpenseScreen extends Component<Props, States> {
                         </View>
                     </View>
                 </View>
+
             </View>
         );
     }

@@ -143,7 +143,7 @@ class ExpenseByPlusOrMinusScreen extends Component<Props> {
                                 backgroundColor: Colors.tintColor,
                                 color: Colors.white,
                             }]]}
-                        >+/-</Text>
+                        >custom</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={ExpenseByPlusOrMinusStyles.flatlist}>

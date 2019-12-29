@@ -113,7 +113,7 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
                             style={ExpenseMoreOptionScreenStyles.cancel}
                             activeOpacity={0.5}
                             onPress={() => {
-                                navigation.goBack();
+                                navigation.navigate("InputExpenseScreen");
                             }}
                         >
                             <Ionicons name='ios-close' size={45} color={Colors.white} />
@@ -180,7 +180,7 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
                     <TouchableOpacity
                         style={{ flex: 1 }}
                         onPress={() => {
-                            navigation.navigate("ExpenseByNumberSplitScreen")
+                            navigation.navigate("ExpenseByNumberSplitScreen", { listUser: this.listUser, list_user: list_user, totalMoney: totalMoney, userPayer: userPayer, thumbnail: thumbnail })
                         }}
                     >
                         <Text
@@ -203,7 +203,7 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
                                 backgroundColor: Colors.white,
                                 color: Colors.tintColor,
                             }]]}
-                        >+/-</Text>
+                        >custom</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={ExpenseMoreOptionScreenStyles.flatlist}>
@@ -214,7 +214,7 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
                             renderItem={({ item, index }) => (
                                 this.state.arrChecked[index] = this.state.arrChecked[index] === undefined ? true : this.state.arrChecked[index],
                                 <TouchableOpacity
-                                    activeOpacity={0.6}
+                                    activeOpacity={1}
                                     onPress={async () => {
                                         let { arrChecked } = this.state;
                                         if(arrChecked[index] === undefined)
@@ -230,12 +230,12 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
                                         <View style={ExpenseMoreOptionScreenStyles.listMember}>
                                             <View style={ExpenseMoreOptionScreenStyles.imageAvatar}>
                                                 <Image
-                                                    style={ExpenseMoreOptionScreenStyles.avatar}
+                                                    style={[ExpenseMoreOptionScreenStyles.avatar, { opacity: this.state.arrChecked[index] ? 1 : 0.3}]}
                                                     source= {item.user_id.avatar.length > 2 ? {uri: `data:image/png;base64,${item.user_id.avatar}` } : thumbnails["avatar" + item.user_id.avatar]}
                                                 />
                                             </View>
                                             <View style={ExpenseMoreOptionScreenStyles.content}>
-                                                <Text style={ExpenseMoreOptionScreenStyles.txt2}>
+                                                <Text style={[ExpenseMoreOptionScreenStyles.txt2, { color: this.state.arrChecked[index] ? Colors.black : Colors.gray}]}>
                                                     {item.user_id.name}
                                                 </Text>
                                             </View>
