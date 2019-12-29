@@ -56,6 +56,8 @@ class MainScreenGroup extends Component<Props, States> {
         value: ''
     };
 
+    arrayData = [];
+
     isOwned: boolean;
 
     totalMoney: Number;
@@ -105,6 +107,7 @@ class MainScreenGroup extends Component<Props, States> {
                         data: res.data,
                         loading: false,
                     })
+                    this.arrayData = res.data;
                 })
                 .catch((error) => {
                     alert(error);
@@ -130,6 +133,14 @@ class MainScreenGroup extends Component<Props, States> {
         this.setState({
             value: text,
         });
+        const newData = this.arrayData.filter(item => {
+            const itemData = `${item.name.toUpperCase()}`;
+            const textData = text.toUpperCase();
+            return itemData.indexOf(textData) > -1;
+        });
+        this.setState({
+            data: newData,
+        })
 
     };
 

@@ -138,6 +138,8 @@ class MainActivityScreen extends Component<Props,States> {
             },
         ]
     };
+
+    arrayData = [];
     _navListener: any;
 
     componentWillMount() {
@@ -173,21 +175,29 @@ class MainActivityScreen extends Component<Props,States> {
                 this.setState({
                     data: res.data.reverse(),
                     loading: false
-                })
+                });
+                this.arrayData = res.data.reverse()
             })
             .catch((error) => {
                 this.setState({
                     loading: false
-                })
+                });
                 console.log(error);
             });
-    }
+    };
 
     searchFilterFunction = text => {
         this.setState({
             value: text,
         });
-
+        const newData =   this.arrayData.filter(item => {
+            const itemData = `${item.trip_id.name.toUpperCase()}`;
+            const textData = text.toUpperCase();
+            return itemData.indexOf(textData) > -1;
+        });
+        this.setState({
+            data: newData,
+        })
     };
 
     render() {
@@ -223,7 +233,7 @@ class MainActivityScreen extends Component<Props,States> {
                                 <FlatList
                                     data={this.state.data}
                                     renderItem={({ item }) => (
-                                        <TouchableOpacity onPress={() => { }} >
+                                        <TouchableOpacity >
                                             <ListItemActivity
                                                 data={item}
                                             />
