@@ -150,7 +150,7 @@ class MainActivityScreen extends Component<Props,States> {
 
         //set barstyle of statusbar
         this._navListener = this.props.navigation.addListener('didFocus', () => {
-            StatusBar.setBarStyle('dark-content');
+            StatusBar.setBarStyle('light-content');
             // call api get list group
             this.getDataActivity();
         });
@@ -204,7 +204,7 @@ class MainActivityScreen extends Component<Props,States> {
 
         return (
             <View>
-                <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent />
+                <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
                 <View >
                     <SearchBar
                         placeholder="Tìm Kiếm..."
@@ -270,9 +270,11 @@ const Styles = StyleSheet.create({
     },
     containerSearchBar: {
         paddingHorizontal: screenWidth / 27.4,
-        paddingTop: screenWidth / 10,
+        height: screenWidth / 3.7,
+        paddingTop: screenWidth / 13.7,
         paddingBottom: screenWidth / 41.1,
         justifyContent: 'center',
+        backgroundColor: Colors.tintColor,
     }
 });
 

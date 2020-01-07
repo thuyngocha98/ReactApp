@@ -74,7 +74,7 @@ class MainScreenGroup extends Component<Props, States> {
 
         //set barstyle of statusbar
         this._navListener = this.props.navigation.addListener('didFocus', () => {
-            StatusBar.setBarStyle('dark-content');
+            StatusBar.setBarStyle('light-content');
             if (this.props.userId != undefined) {
                 this.thumbnail = this.props.user.avatar.length > 2 ? {uri: `data:image/png;base64,${this.props.user.avatar}`} : thumbnails["avatar" + this.props.user.avatar]
             }
@@ -148,8 +148,8 @@ class MainScreenGroup extends Component<Props, States> {
     render() {
         return (
             <View style={MainScreenGroupStyles.container}>
-                <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent/>
-                <View >
+                <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent/>
+                <View style={styles.container}>
                     <SearchBar
                         placeholder="Tìm Kiếm..."
                         lightTheme
@@ -238,9 +238,14 @@ const styles = StyleSheet.create({
     },
     containerSearchBar: {
         paddingHorizontal: screenWidth / 27.4,
-        paddingTop: screenWidth / 10,
+        height: screenWidth / 3.7,
+        paddingTop: screenWidth / 13.7,
         paddingBottom: screenWidth / 41.1,
         justifyContent: 'center',
+        backgroundColor: Colors.tintColor,
+    },
+    container: {
+        backgroundColor: Colors.tintColor
     }
 });
 
