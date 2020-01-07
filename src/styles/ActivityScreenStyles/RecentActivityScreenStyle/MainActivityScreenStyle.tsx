@@ -10,7 +10,8 @@ const styles = StyleSheet.create({
         fontSize: 26,
         fontWeight: 'bold',
         marginBottom: screenWidth/20.55,
-        marginLeft: screenWidth / 20.55
+        marginLeft: screenWidth / 20.55,
+        opacity: 0.5
     },
     activityIndicator: {
         flex: 1,

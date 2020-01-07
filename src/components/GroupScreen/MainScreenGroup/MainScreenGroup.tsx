@@ -1,15 +1,27 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { View, Text, FlatList, Image, TouchableOpacity, Alert, StatusBar, ActivityIndicator } from 'react-native';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {
+    View,
+    Text,
+    FlatList,
+    Image,
+    TouchableOpacity,
+    Alert,
+    StatusBar,
+    ActivityIndicator,
+    StyleSheet
+} from 'react-native';
 import MainScreenGroupStyles from '../../../styles/GroupsStyles/MainScreenGroupStyles/MainScreenGroupStyles';
 import ListItemGroup from './ListItemGroup';
 import Colors from '../../../constants/Colors';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { BASEURL } from '../../../api/api';
-import { NavigationEvents } from 'react-navigation';
-import { bindActionCreators } from 'redux';
-import { getApiListTrip } from '../../../actions/action';
-import { number2money, thumbnails } from '../../../constants/FunctionCommon';
+import {MaterialCommunityIcons} from '@expo/vector-icons';
+import {BASEURL} from '../../../api/api';
+import {NavigationEvents} from 'react-navigation';
+import {bindActionCreators} from 'redux';
+import {getApiListTrip} from '../../../actions/action';
+import {number2money, thumbnails} from '../../../constants/FunctionCommon';
+import {SearchBar} from "react-native-elements";
+import {screenWidth} from "../../../constants/Dimensions";
 
 function mapStateToProps(state) {
     return {
@@ -33,6 +45,7 @@ type States = {
     data?: any[],
     loading?: boolean,
     total?: Number,
+    value?: string
 }
 
 class MainScreenGroup extends Component<Props, States> {
@@ -40,7 +53,10 @@ class MainScreenGroup extends Component<Props, States> {
         data: [],
         loading: false,
         total: 0,
+        value: ''
     };
+
+    arrayData = [];
 
     isOwned: boolean;
 
@@ -51,6 +67,7 @@ class MainScreenGroup extends Component<Props, States> {
     componentWillMount() {
         this.getListAllTrip();
     }
+
     thumbnail;
 
     componentDidMount() {
@@ -59,7 +76,7 @@ class MainScreenGroup extends Component<Props, States> {
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             StatusBar.setBarStyle('dark-content');
             if (this.props.userId != undefined) {
-                this.thumbnail = this.props.user.avatar.length > 2 ? { uri: `data:image/png;base64,${this.props.user.avatar}` } : thumbnails["avatar" + this.props.user.avatar]
+                this.thumbnail = this.props.user.avatar.length > 2 ? {uri: `data:image/png;base64,${this.props.user.avatar}`} : thumbnails["avatar" + this.props.user.avatar]
             }
             // call api get list group
             this.getListAllTrip();
@@ -74,7 +91,7 @@ class MainScreenGroup extends Component<Props, States> {
 
     getListAllTrip = async () => {
         if (this.props.userId != undefined) {
-            this.setState({ loading: true })
+            this.setState({loading: true})
             fetch(`${BASEURL}/api/transactionUser/get_total_money_user_by_id/${this.props.userId}`, {
                 method: 'POST',
                 headers: {
@@ -90,6 +107,7 @@ class MainScreenGroup extends Component<Props, States> {
                         data: res.data,
                         loading: false,
                     })
+                    this.arrayData = res.data;
                 })
                 .catch((error) => {
                     alert(error);
@@ -102,19 +120,50 @@ class MainScreenGroup extends Component<Props, States> {
         await data.forEach(element => {
             this.totalMoney += element.oweUser;
         });
-        this.setState({ total: this.totalMoney })
+        this.setState({total: this.totalMoney})
     }
 
     _ItemSeparatorComponent = () => {
         return (
-            <View style={{ flex: 1, height: 1, backgroundColor: Colors.lightgray }} />
+            <View style={{flex: 1, height: 1, backgroundColor: Colors.lightgray}}/>
         );
     };
+
+    searchFilterFunction = text => {
+        this.setState({
+            value: text,
+        });
+        const newData = this.arrayData.filter(item => {
+            const itemData = `${item.name.toUpperCase()}`;
+            const textData = text.toUpperCase();
+            return itemData.indexOf(textData) > -1;
+        });
+        this.setState({
+            data: newData,
+        })
+
+    };
+
 
     render() {
         return (
             <View style={MainScreenGroupStyles.container}>
-                <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent />
+                <StatusBar barStyle="dark-content" hidden={false} backgroundColor={"transparent"} translucent/>
+                <View >
+                    <SearchBar
+                        placeholder="Tìm Kiếm..."
+                        lightTheme
+                        clearIcon={{size: 24, name: 'clear'}}
+                        round={true}
+                        searchIcon={{size: 26, name: 'search'}}
+                        onChangeText={text => this.searchFilterFunction(text)}
+                        autoCorrect={false}
+                        value={this.state.value}
+                        inputStyle={styles.input}
+                        inputContainerStyle={styles.containerInput}
+                        containerStyle={styles.containerSearchBar}
+                    />
+                </View>
                 <Text style={MainScreenGroupStyles.group}>
                     Groups
                 </Text>
@@ -126,7 +175,7 @@ class MainScreenGroup extends Component<Props, States> {
                     <View style={MainScreenGroupStyles.text}>
                         <Text style={MainScreenGroupStyles.textTotal}>Total balance</Text>
                         <Text style={MainScreenGroupStyles.textDetail}>
-                            {this.state.total >= 0 ? "You are owned " + number2money(this.state.total) : "You owe " + number2money(this.state.total * (-1))}  VND
+                            {this.state.total >= 0 ? "You are owned " + number2money(this.state.total) : "You owe " + number2money(this.state.total * (-1))} VND
                         </Text>
                     </View>
                     <View style={MainScreenGroupStyles.menu}>
@@ -135,22 +184,22 @@ class MainScreenGroup extends Component<Props, States> {
                                 this.props.navigation.navigate('ShowImagesScreen');
                             }}
                         >
-                            <MaterialCommunityIcons name='menu' size={25} color={Colors.white} />
+                            <MaterialCommunityIcons name='menu' size={25} color={Colors.white}/>
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{ flex: 1 }}>{this.state.loading ? (
+                <View style={{flex: 1}}>{this.state.loading ? (
                     <View style={MainScreenGroupStyles.activityIndicator}>
-                        <ActivityIndicator animating size="large" color={Colors.tintColor} />
+                        <ActivityIndicator animating size="large" color={Colors.tintColor}/>
                     </View>
                 ) : (
-                        <FlatList
-                            data={this.state.data}
-                            renderItem={({ item }) => (
-                                this.isOwned = item.oweUser >= 0 ? true : false,
+                    <FlatList
+                        data={this.state.data}
+                        renderItem={({item}) => (
+                            this.isOwned = item.oweUser >= 0 ? true : false,
                                 <TouchableOpacity
                                     onPress={() => {
-                                        this.props.navigation.navigate('DetailGroupScreen', { dataTrip: item })
+                                        this.props.navigation.navigate('DetailGroupScreen', {dataTrip: item})
                                     }}
                                 >
                                     <ListItemGroup
@@ -159,16 +208,41 @@ class MainScreenGroup extends Component<Props, States> {
                                         isOwned={this.isOwned}
                                     />
                                 </TouchableOpacity>
-                            )}
-                            keyExtractor={item => item._id.toString()}
-                            ItemSeparatorComponent={this._ItemSeparatorComponent}
-                        />
-                    )}
+                        )}
+                        keyExtractor={item => item._id.toString()}
+                        ItemSeparatorComponent={this._ItemSeparatorComponent}
+                    />
+                )}
                 </View>
             </View>
         );
     }
 }
+
+
+const styles = StyleSheet.create({
+    containerMain: {
+        flexDirection: 'column',
+        backgroundColor: Colors.background
+    },
+    input: {
+        width: screenWidth / 2.2,
+        height: screenWidth / 9,
+        fontSize: 16,
+        color: Colors.black
+    },
+    containerInput: {
+        backgroundColor: Colors.white,
+        borderRadius: screenWidth / 82.2,
+        elevation: 0,
+    },
+    containerSearchBar: {
+        paddingHorizontal: screenWidth / 27.4,
+        paddingTop: screenWidth / 10,
+        paddingBottom: screenWidth / 41.1,
+        justifyContent: 'center',
+    }
+});
 
 
 const mapDispatchToProps = dispatch => {

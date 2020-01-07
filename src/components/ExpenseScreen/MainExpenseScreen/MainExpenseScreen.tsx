@@ -50,7 +50,7 @@ class MainExpenseScreen extends Component<Props, States> {
         });
     }
 
-    
+
 
     componentWillUnmount() {
         // remove barstyle
@@ -63,13 +63,14 @@ class MainExpenseScreen extends Component<Props, States> {
         return (
             <View style={MainExpenseScreenStyles.container}>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
+
                 <View style={MainExpenseScreenStyles.containerHeader}>
                     <View style={MainExpenseScreenStyles.header}>
                         <TouchableOpacity
                             style={MainExpenseScreenStyles.cancel}
                             activeOpacity={0.5}
                             onPress={() => {
-                                
+
                             }}
                         >
                             <Ionicons name='ios-close' size={45} color={Colors.white} />
@@ -79,7 +80,7 @@ class MainExpenseScreen extends Component<Props, States> {
                             style={MainExpenseScreenStyles.save}
                             activeOpacity={0.5}
                             onPress={() => {
-                                
+
                             }}
                         >
                             <Text
@@ -120,9 +121,9 @@ class MainExpenseScreen extends Component<Props, States> {
                             <Text>You don't have group yet, please create group first.</Text>
                     </View>
                 )}
-                    
+
                 </View>
-                
+
             </View>
         );
     }

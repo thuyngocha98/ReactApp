@@ -9,28 +9,8 @@ type Props ={
     navigation?:any
 }
 class ActivityScreen extends Component<Props> {
-    static  navigationOptions = ({navigation}) => {
-        return {
-            title: "Recent activity",
-            headerTitleStyle: {
-                textAlign:"center",
-                flex:1,
-            },
-            headerStyle: {
-                elevation: 0,
-                height: APPBAR_HEIGHT
-            },
-            headerRight:
-                (
-                    <View style={{ marginRight: 10}} >
-                    </View>
-                ),
-            headerLeft: (
-                <TouchableOpacity  onPress={ () => alert(' Tính năng đang phát triển') }>
-                    <EvilIcons name='search' size={30} style={{marginLeft: 10}} />
-                </TouchableOpacity>
-            )
-        }
+    static  navigationOptions = {
+      header : null
     };
     render() {
 
