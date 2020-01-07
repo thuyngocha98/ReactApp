@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, TouchableOpacity, Text, Image, FlatList, ScrollView, StatusBar } from 'react-native';
-import { Ionicons, FontAwesome5, Octicons } from '@expo/vector-icons';
-import { APPBAR_HEIGHT } from '../../../../../constants/Dimensions';
+import { View, TouchableOpacity, Text, Image, FlatList, StatusBar, TextInput, ToastAndroid } from 'react-native';
+import { Ionicons, Feather } from '@expo/vector-icons';
 import Colors from '../../../../../constants/Colors';
-import ListItemPlusOrMinus from './ListItemPlusOrMinus';
 import ExpenseByPlusOrMinusStyles from '../../../../../styles/ExpenseScreenStyles/ExpenseDetailScreenStyles/ExpenseMoreOptionScreenStyles/PlusOrMinusSplit/ExpenseByPlusOrMinusStyles';
+import { thumbnails, number2money } from '../../../../../constants/FunctionCommon';
 
 function mapStateToProps(state) {
     return {
@@ -17,96 +16,129 @@ type Props = {
     navigation?: any,
 }
 
+type States = {
+    data1?: any[],
+    data2?: any[],
+    moneyInputs?: any[],
+}
 
-class ExpenseByPlusOrMinusScreen extends Component<Props> {
+
+class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
     static navigationOptions = ({ navigation }) => {
         return {
-            title: "Expense details",
-            headerStyle: {
-                elevation: 0,
-                textAlign: 'center',
-                height: APPBAR_HEIGHT,
-                backgroundColor: Colors.tintColor,
-            },
-            headerTitleStyle: {
-                flex: 1,
-                textAlign: 'center',
-                color: Colors.white
-            },
-            headerRight:
-                (
-                    <View style={{ marginRight: 15 }}>
-                        <Text style={{ fontSize: 17, color: Colors.white }}>Done</Text>
-                    </View>
-                ),
-            headerLeft:
-                (
-                    <View style={{ marginLeft: 15 }}>
+            header: null
+        };
+    };
+
+    state = {
+        data1: [],
+        data2: [],
+        moneyInputs: [],
+    }
+
+    totalMoney: string
+    listUser: any[]
+
+    componentWillMount() {
+        this.totalMoney = this.props.navigation.getParam('totalMoney', '0');
+        this.listUser = this.props.navigation.getParam('listUser', "");
+        this.setState({
+            data2: this.listUser,
+        })
+    }
+
+    deleteFromList(item) {
+        let newData1 = this.state.data1.filter(function (obj) {
+            return obj !== item;
+        })
+        let newData2 = [...this.state.data2, item];
+        this.setState({
+            data1: newData1,
+            data2: newData2
+        })
+    }
+
+    addToList(item) {
+        let newData1 = [...this.state.data1, item];
+        let newData2 = this.state.data2.filter(function (obj) {
+            return obj !== item;
+        })
+        this.setState({
+            data1: newData1,
+            data2: newData2,
+        })
+    }
+
+    createListUser(list_user) {
+        for (let i = 0; i < list_user.length; i++) {
+            list_user[i].amount_user = 0;
+        }
+        let totalInput = 0;
+        for (let i = 0; i < this.state.data1.length; i++) {
+            totalInput += parseInt(this.state.moneyInputs[i]);
+            for (let j = 0; j < list_user.length; j++) {
+                if (this.state.data1[i].user_id._id == list_user[j].user_id) {
+                    list_user[j].amount_user = parseInt(this.state.moneyInputs[i])
+                }
+            }
+        }
+        let remain = parseInt(this.totalMoney) - totalInput
+        if (remain < 0) {
+            ToastAndroid.showWithGravityAndOffset(
+                'The payment value is not equal to the total cost, please enter again!',
+                ToastAndroid.SHORT,
+                ToastAndroid.BOTTOM,
+                25,
+                50,
+            );
+        } else {
+            let amount = Math.round(remain / list_user.length)
+            for (let j = 0; j < list_user.length; j++) {
+                list_user[j].amount_user += amount
+            }
+            this.props.navigation.navigate("InputExpenseScreen", { listTypeUser: list_user });
+        }
+    }
+
+    render() {
+        const { navigation } = this.props
+        const list_user = navigation.getParam('list_user', "")
+        const userPayer = navigation.getParam('userPayer', [])
+        return (
+            <View style={ExpenseByPlusOrMinusStyles.container}>
+                <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
+                <View style={ExpenseByPlusOrMinusStyles.containerHeader}>
+                    <View style={ExpenseByPlusOrMinusStyles.header}>
                         <TouchableOpacity
+                            style={ExpenseByPlusOrMinusStyles.cancel}
+                            activeOpacity={0.5}
                             onPress={() => {
-                                navigation.goBack();
+                                navigation.navigate("InputExpenseScreen");
                             }}
                         >
                             <Ionicons name='ios-close' size={45} color={Colors.white} />
                         </TouchableOpacity>
-                    </View >
-                )
-        };
-    };
-
-
-    data = [
-        {
-            id: 0,
-            uriAvatar: "https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.0-1/p240x240/58727386_1340156482789355_8420310201583796224_n.jpg?_nc_cat=106&_nc_oc=AQlOWDOgSxKl2liWeIiLmsRGw5tijfF7YLQaI2T8oMkIUTtBIoI4HOkrwPDO-cFO20udwMX1pDWm-cBSBWtEa1m0&_nc_ht=scontent.fsgn5-6.fna&oh=efb30afdeee8f77b39d35064970794e2&oe=5E3BD8AB",
-            nameMenber: "Thủy Ngọc Hà",
-        },
-        {
-            id: 1,
-            uriAvatar: "https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.0-1/p240x240/58727386_1340156482789355_8420310201583796224_n.jpg?_nc_cat=106&_nc_oc=AQlOWDOgSxKl2liWeIiLmsRGw5tijfF7YLQaI2T8oMkIUTtBIoI4HOkrwPDO-cFO20udwMX1pDWm-cBSBWtEa1m0&_nc_ht=scontent.fsgn5-6.fna&oh=efb30afdeee8f77b39d35064970794e2&oe=5E3BD8AB",
-            nameMenber: "Thủy Ngọc Hà",
-        },
-    ]
-
-
-    render() {
-        const { navigation } = this.props
-        return (
-            <View style={ExpenseByPlusOrMinusStyles.container}>
-                <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
-                <View style={ExpenseByPlusOrMinusStyles.paidBy}>
-                    <View style={ExpenseByPlusOrMinusStyles.imageAvatar}>
-                        <Image
-                            style={ExpenseByPlusOrMinusStyles.avatar}
-                            source={{ uri: "https://scontent.fsgn5-6.fna.fbcdn.net/v/t1.0-1/p240x240/58727386_1340156482789355_8420310201583796224_n.jpg?_nc_cat=106&_nc_oc=AQlOWDOgSxKl2liWeIiLmsRGw5tijfF7YLQaI2T8oMkIUTtBIoI4HOkrwPDO-cFO20udwMX1pDWm-cBSBWtEa1m0&_nc_ht=scontent.fsgn5-6.fna&oh=efb30afdeee8f77b39d35064970794e2&oe=5E3BD8AB" }}
-                        />
-                    </View>
-                    <View style={ExpenseByPlusOrMinusStyles.content}>
-                        <Text style={ExpenseByPlusOrMinusStyles.txt1}>
-                            Paid by
-                            <Text style={ExpenseByPlusOrMinusStyles.txt2}>
-                                {" Thủy Ngọc Hà"}
+                        <Text style={ExpenseByPlusOrMinusStyles.addContact}>Expense details</Text>
+                        <TouchableOpacity
+                            style={ExpenseByPlusOrMinusStyles.save}
+                            activeOpacity={0.5}
+                            onPress={() => {
+                                this.createListUser(list_user)
+                            }}
+                        >
+                            <Text
+                                style={ExpenseByPlusOrMinusStyles.add}
+                            >
+                                Done
                             </Text>
-                        </Text>
+                        </TouchableOpacity>
                     </View>
-                    <View style={ExpenseByPlusOrMinusStyles.iconRight}>
-                        <Octicons name='chevron-right' size={20} color={Colors.lightgray} />
-                    </View>
-                </View>
-                <View style={ExpenseByPlusOrMinusStyles.underLineInput} />
-                <View style={ExpenseByPlusOrMinusStyles.contentSplit}>
-                    <Text style={ExpenseByPlusOrMinusStyles.title1}>
-                        Split equally
-                    </Text>
-                    <Text style={ExpenseByPlusOrMinusStyles.title2}>
-                        Select which people owe  an equal share.
-                    </Text>
                 </View>
                 <View style={ExpenseByPlusOrMinusStyles.categoryTypeGroup}>
                     <TouchableOpacity
                         style={{ flex: 1 }}
                         onPress={() => {
-                            navigation.navigate("ExpenseMoreOptionScreen")
+                            navigation.navigate("ExpenseMoreOptionScreen", { listUser: this.listUser, list_user: list_user, totalMoney: this.totalMoney, userPayer: userPayer })
                         }}
                     >
                         <Text
@@ -120,7 +152,7 @@ class ExpenseByPlusOrMinusScreen extends Component<Props> {
                     <TouchableOpacity
                         style={{ flex: 1 }}
                         onPress={() => {
-                            navigation.navigate("ExpenseByNumberSplitScreen")
+                            navigation.navigate("ExpenseByNumberSplitScreen", { listUser: this.listUser, list_user: list_user, totalMoney: this.totalMoney, userPayer: userPayer })
                         }}
                     >
                         <Text
@@ -146,25 +178,111 @@ class ExpenseByPlusOrMinusScreen extends Component<Props> {
                         >custom</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={ExpenseByPlusOrMinusStyles.flatlist}>
-                    <ScrollView>
-                        <FlatList
-                            data={this.data}
-                            renderItem={({ item }) => (
-                                <TouchableOpacity
-                                    onPress={() => {
+                <View style={ExpenseByPlusOrMinusStyles.categoryList}>
+                    <View style={ExpenseByPlusOrMinusStyles.flatlist1}>{this.state.data1.length > 0 ?
+                        (
+                            <FlatList
+                                data={this.state.data1}
+                                extraData={this.state}
+                                renderItem={({ item, index }) => {
+                                    const thumbnail = item.user_id.avatar.length > 2 ? { uri: `data:image/png;base64,${item.user_id.avatar}` } : thumbnails["avatar" + item.user_id.avatar]
+                                    return (
+                                        <View style={ExpenseByPlusOrMinusStyles.mainFlatlist}>
+                                            <View style={ExpenseByPlusOrMinusStyles.containerFlatlist}>
+                                                <View style={ExpenseByPlusOrMinusStyles.avatar1}>
+                                                    <Image
+                                                        style={ExpenseByPlusOrMinusStyles.image}
+                                                        source={thumbnail}
+                                                    />
+                                                </View>
+                                                <View style={ExpenseByPlusOrMinusStyles.name}>
+                                                    <Text style={ExpenseByPlusOrMinusStyles.txt}>{item.user_id.name}</Text>
+                                                </View>
+                                                <View style={ExpenseByPlusOrMinusStyles.viewInputMoney}>
+                                                    <View style={ExpenseByPlusOrMinusStyles.viewVND}>
+                                                        <Text style={ExpenseByPlusOrMinusStyles.txtVND}>VND</Text>
+                                                    </View>
+                                                    <View style={ExpenseByPlusOrMinusStyles.viewInput}>
+                                                        <TextInput
+                                                            style={ExpenseByPlusOrMinusStyles.input}
+                                                            onChangeText={async text => {
+                                                                text = text.toString().replace(/,/g, '')
+                                                                let { moneyInputs } = this.state;
+                                                                moneyInputs[index] = text;
+                                                                await this.setState({
+                                                                    moneyInputs,
+                                                                });
+                                                                //this.caculateTotalMoney()
+                                                            }}
+                                                            value={this.state.moneyInputs[index] !== undefined
+                                                                && this.state.moneyInputs[index] !== "" ? number2money(parseInt(this.state.moneyInputs[index])) : ''}
+                                                            placeholder="0,00"
+                                                            keyboardType='number-pad'
+                                                            autoCorrect={false}
+                                                            underlineColorAndroid={'transparent'}
 
+                                                        />
+                                                        <View style={{ height: 1, backgroundColor: Colors.black, }} />
+                                                    </View>
+                                                </View>
+                                                <TouchableOpacity
+                                                    style={ExpenseByPlusOrMinusStyles.delete}
+                                                    onPress={() => { this.deleteFromList(item) }}
+                                                >
+                                                    <Feather name="delete" size={25} />
+                                                </TouchableOpacity>
+                                            </View>
+                                            <View style={ExpenseByPlusOrMinusStyles.underLine} />
+                                        </View>
+                                    );
+                                }}
+                                keyExtractor={item => item.user_id._id.toString()}
+                            />
+                        ) : (null)}
+
+                    </View>
+                    <View style={ExpenseByPlusOrMinusStyles.viewTitle}>
+                        <Text style={ExpenseByPlusOrMinusStyles.txtTitle}>Please select people custom money.</Text>
+                    </View>
+                    <View style={ExpenseByPlusOrMinusStyles.flatlist2}>
+                        <FlatList
+                            data={this.state.data2}
+                            extraData={this.state}
+                            renderItem={({ item, index }) => (
+                                <TouchableOpacity
+                                    activeOpacity={1}
+                                    onPress={async () => {
+                                        this.addToList(item);
                                     }}
                                 >
-                                    <ListItemPlusOrMinus
-                                        uriAvatar={item.uriAvatar}
-                                        nameMember={item.nameMenber}
-                                    />
+                                    <View style={ExpenseByPlusOrMinusStyles.flatlistMember}>
+                                        <View style={ExpenseByPlusOrMinusStyles.listMember}>
+                                            <View style={ExpenseByPlusOrMinusStyles.imageAvatar}>
+                                                <Image
+                                                    style={ExpenseByPlusOrMinusStyles.avatar}
+                                                    source={item.user_id.avatar.length > 2 ? { uri: `data:image/png;base64,${item.user_id.avatar}` } : thumbnails["avatar" + item.user_id.avatar]}
+                                                />
+                                            </View>
+                                            <View style={ExpenseByPlusOrMinusStyles.content}>
+                                                <Text style={ExpenseByPlusOrMinusStyles.txt2}>
+                                                    {item.user_id.name}
+                                                </Text>
+                                            </View>
+                                            <View style={ExpenseByPlusOrMinusStyles.iconRight}>
+                                                <Ionicons
+                                                    name='ios-checkmark-circle'
+                                                    size={35}
+                                                    color={Colors.mediumseagreen}
+                                                />
+                                            </View>
+                                        </View>
+                                        <View style={ExpenseByPlusOrMinusStyles.underLineInput} />
+                                    </View>
                                 </TouchableOpacity>
                             )}
-                            keyExtractor={item => item.id.toString()}
+                            keyExtractor={item => item.user_id._id.toString()}
                         />
-                    </ScrollView>
+                    </View>
                 </View>
             </View>
         );

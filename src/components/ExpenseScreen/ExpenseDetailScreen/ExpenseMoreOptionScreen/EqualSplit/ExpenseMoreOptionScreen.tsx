@@ -84,7 +84,6 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
 
         if (numberPeopleSplit < list_user.length){
             const amount_user = Math.round(totalMoney / numberPeopleSplit)
-
             for (let i = 0; i < list_user.length; i++) {
                 if (this.state.arrChecked[i] == true)
                     list_user[i].amount_user = amount_user;
@@ -94,7 +93,6 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
         }
         
         this.props.navigation.navigate("InputExpenseScreen", { listTypeUser: list_user });
-
     }
 
     render() {
@@ -194,7 +192,7 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
                     <TouchableOpacity
                         style={{ flex: 1 }}
                         onPress={() => {
-                            navigation.navigate("ExpenseByPlusOrMinusScreen")
+                            navigation.navigate("ExpenseByPlusOrMinusScreen", { listUser: this.listUser, list_user: list_user, totalMoney: totalMoney, userPayer: userPayer, thumbnail: thumbnail })
                         }}
                     >
                         <Text

@@ -1,12 +1,46 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, StatusBar } from "react-native";
 import Constants from "expo-constants";
-import { screenWidth } from "../../../../../constants/Dimensions";
+import { screenWidth, APPBAR_HEIGHT } from "../../../../../constants/Dimensions";
 import Colors from "../../../../../constants/Colors";
 
 const ExpenseByPlusOrMinusStyles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column'
+    },
+    containerHeader: {
+        width: screenWidth,
+        height: APPBAR_HEIGHT + StatusBar.currentHeight,
+        backgroundColor: Colors.tabIconSelected
+    },
+    header: {
+        flex: 1,
+        marginTop: StatusBar.currentHeight,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginHorizontal: screenWidth / 27.43,
+    },
+    addContact: {
+        flex: 7,
+        fontSize: 20,
+        fontWeight: '500',
+        color: Colors.white,
+        textAlign: 'center',
+    },
+    cancel: {
+        flex: 1,
+    },
+    add: {
+
+        fontSize: 17,
+        color: Colors.white
+    },
+    save: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'flex-end',
     },
     paidBy: {
         flexDirection: 'row',
@@ -135,5 +169,100 @@ const ExpenseByPlusOrMinusStyles = StyleSheet.create({
     totalMoney: {
         fontSize: 13
     },
+    categoryList: {
+        flex: 1,
+        flexDirection: 'column',
+    },
+    flatlist1: {
+    },
+    viewTitle: {
+        marginVertical: 10,
+        marginHorizontal: 20,
+    },
+    txtTitle: {
+        fontSize: 17,
+        color: Colors.black
+    },
+    flatlist2: {
+        flex:1,
+    },
+    flatlistMember: {
+        flexDirection: 'column',
+        marginHorizontal: screenWidth / 82.5
+    },
+    listMember: {
+        flexDirection: 'row',
+        marginRight: screenWidth / 41.1,
+    },
+
+    // flatlist 1
+    mainFlatlist: {
+        flex: 1,
+        flexDirection: 'column',
+        marginHorizontal: screenWidth / 20.55,
+        marginTop: screenWidth / 27.4,
+    },
+    containerFlatlist: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+
+    },
+    avatar1: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+    },
+    name: {
+        flex: 4,
+        marginLeft: 5,
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
+    txtVND: {
+        color: Colors.gray,
+        fontSize: 14,
+    },
+    viewInputMoney: {
+        flex: 2,
+        flexDirection: 'row',
+    },
+    viewVND: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    viewInput: {
+        flexDirection: 'column',
+        flex: 2,
+    },
+    input: {
+        textAlign: 'right',
+        fontSize: 19,
+    },
+    image: {
+        width: screenWidth / 10,
+        height: screenWidth / 10,
+        borderRadius: screenWidth / 20,
+    },
+    txt: {
+        fontSize: 17
+    },
+    underLine: {
+        marginTop: screenWidth / 80,
+        width: screenWidth - screenWidth / 10.275,
+        height: 0.5,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Colors.lightgray
+    },
+    delete: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+    }
 });
 export default ExpenseByPlusOrMinusStyles;

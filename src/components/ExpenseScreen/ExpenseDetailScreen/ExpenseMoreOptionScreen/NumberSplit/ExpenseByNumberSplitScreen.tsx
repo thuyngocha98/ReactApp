@@ -93,7 +93,6 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
         const { navigation } = this.props
         const list_user = navigation.getParam('list_user', "")
         const userPayer = navigation.getParam('userPayer', [])
-        const thumbnail = userPayer.user_id.avatar.length > 2 ? { uri: `data:image/png;base64,${userPayer.user_id.avatar}` } : thumbnails["avatar" + userPayer.user_id.avatar]
         return (
             <View style={ExpenseByNumberSplitScreenStyles.container}>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
@@ -133,7 +132,7 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
                         <TouchableOpacity
                             style={{ flex: 1 }}
                             onPress={() => {
-                                navigation.navigate("ExpenseMoreOptionScreen")
+                                navigation.navigate("ExpenseMoreOptionScreen", { listUser: this.listUser, list_user: list_user, totalMoney: this.totalMoney, userPayer: userPayer })
                             }}
                         >
                             <Text
@@ -161,7 +160,7 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
                         <TouchableOpacity
                             style={{ flex: 1 }}
                             onPress={() => {
-                                navigation.navigate("ExpenseByPlusOrMinusScreen")
+                                navigation.navigate("ExpenseByPlusOrMinusScreen", { listUser: this.listUser, list_user: list_user, totalMoney: this.totalMoney, userPayer: userPayer })
                             }}
                         >
                             <Text
