@@ -22,7 +22,7 @@ type Props = {
     user?: any[],
 }
 
-class MainAccountScreen extends Component<Props> {
+class MainAccountScreen extends Component<Props> {eat
     _navListener: any;
 
     componentDidMount() {

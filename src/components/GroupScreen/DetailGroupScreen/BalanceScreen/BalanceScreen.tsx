@@ -123,6 +123,7 @@ class BalanceScreen extends Component<Props> {
                     renderItem={({ item }) => (
                         <ListItemBalance
                             data={item}
+                            tripId={this.trip_id}
                         />
                     )}
                     keyExtractor={item => item._id.toString()}
