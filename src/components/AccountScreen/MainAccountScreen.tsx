@@ -50,14 +50,7 @@ class MainAccountScreen extends Component<Props> {
                 <View style={styles.headerContainer}>
                     <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
                     <View style={styles.header}>
-                        <Text style={styles.textAccount}>My Account</Text>
                         <Image source={thumbnail} style={styles.avatar} />
-                        <View style={{ flexDirection: 'row', marginTop: screenWidth / 82.2 }}>
-                            <MaterialCommunityIcons size={20} color={Colors.white} name={'gender-male'}
-                                stype={styles.male} />
-                            <MaterialCommunityIcons size={20} color={Colors.white} name={'gender-male'}
-                                stype={styles.male} />
-                        </View>
                         <Text style={styles.textUser}>{this.props.user.name}</Text>
                         <Text style={styles.email}>{this.props.user.email}</Text>
                     </View>

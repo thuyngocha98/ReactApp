@@ -16,24 +16,25 @@ const styles = StyleSheet.create({
         color: Colors.white
     },
     avatar: {
-        width: screenWidth / 4,
-        height: screenWidth / 4,
-        borderRadius: screenWidth / 8,
+        width: screenWidth / 3.4,
+        height: screenWidth / 3.4,
+        borderRadius: screenWidth / 6.8,
         resizeMode: 'cover',
-        marginTop: screenWidth / 27.4
+        marginTop: screenWidth / 54.8
     },
     male: {
         marginTop: screenWidth / 41.1
     },
     textUser: {
         marginTop: screenWidth / 100,
-        fontSize: 17,
+        fontSize: 20,
+        fontWeight: '500',
         color: Colors.white
     },
     email: {
         opacity: 0.7,
-        fontSize: 15,
-        marginBottom: screenWidth / 41.1,
+        fontSize: 17,
+        marginBottom: screenWidth / 27.4,
         color: Colors.white
     },
     mainContainer: {
