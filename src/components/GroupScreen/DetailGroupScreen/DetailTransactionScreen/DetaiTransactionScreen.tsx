@@ -139,9 +139,6 @@ class DetaiTransactionScreen extends Component<Props, States> {
                                 <Text style={DetailTransactionScreenStyles.iconTravel}>{this.transaction.name}</Text>
                                 <Text style={DetailTransactionScreenStyles.money}>{number2money(this.transaction.amount)} VND</Text>
                             </View>
-                            <TouchableOpacity style={DetailTransactionScreenStyles.camera} activeOpacity={0.5}>
-                                <Image style={{ tintColor: 'gray', width: screenWidth/8.22, height: screenWidth/8.22 }} source={camera} />
-                            </TouchableOpacity>
                         </View>
                     </View>
                     <View style={{ flexDirection: 'row', paddingHorizontal: 20 }}>

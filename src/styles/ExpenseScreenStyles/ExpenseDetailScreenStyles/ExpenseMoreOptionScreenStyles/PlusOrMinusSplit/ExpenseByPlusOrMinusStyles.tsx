@@ -67,8 +67,11 @@ const ExpenseByPlusOrMinusStyles = StyleSheet.create({
         fontSize: 18
     },
     txt2: {
-        fontSize: 18,
-        fontWeight: '500'
+        
+    },
+    contentLeft: {
+        flex: 5.5,
+        flexDirection: 'row',
     },
     iconRight: {
         flex: 0.5,
@@ -225,7 +228,7 @@ const ExpenseByPlusOrMinusStyles = StyleSheet.create({
         fontSize: 14,
     },
     viewInputMoney: {
-        flex: 2,
+        flex: 2.3,
         flexDirection: 'row',
     },
     viewVND: {
@@ -235,7 +238,7 @@ const ExpenseByPlusOrMinusStyles = StyleSheet.create({
     },
     viewInput: {
         flexDirection: 'column',
-        flex: 2,
+        flex: 2.5,
     },
     input: {
         textAlign: 'right',

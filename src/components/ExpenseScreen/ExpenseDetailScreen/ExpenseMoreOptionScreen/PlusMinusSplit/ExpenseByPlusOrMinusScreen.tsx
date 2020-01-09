@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, TouchableOpacity, Text, Image, FlatList, StatusBar, TextInput, ToastAndroid } from 'react-native';
+import { View, TouchableOpacity, Text, Image, FlatList, StatusBar, TextInput, ToastAndroid, ScrollView, Alert } from 'react-native';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import Colors from '../../../../../constants/Colors';
 import ExpenseByPlusOrMinusStyles from '../../../../../styles/ExpenseScreenStyles/ExpenseDetailScreenStyles/ExpenseMoreOptionScreenStyles/PlusOrMinusSplit/ExpenseByPlusOrMinusStyles';
@@ -20,6 +20,7 @@ type States = {
     data1?: any[],
     data2?: any[],
     moneyInputs?: any[],
+    arrChecked?: any[],
 }
 
 
@@ -34,6 +35,7 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
         data1: [],
         data2: [],
         moneyInputs: [],
+        arrChecked: [],
     }
 
     totalMoney: string
@@ -51,22 +53,19 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
         let newData1 = this.state.data1.filter(function (obj) {
             return obj !== item;
         })
-        let newData2 = [...this.state.data2, item];
         this.setState({
             data1: newData1,
-            data2: newData2
         })
     }
 
     addToList(item) {
-        let newData1 = [...this.state.data1, item];
-        let newData2 = this.state.data2.filter(function (obj) {
-            return obj !== item;
-        })
-        this.setState({
-            data1: newData1,
-            data2: newData2,
-        })
+        const find = (user) => user === item;
+        if(!this.state.data1.some(find)){
+            let newData1 = [...this.state.data1, item];
+            this.setState({
+                data1: newData1,
+            })
+        }
     }
 
     createListUser(list_user) {
@@ -92,9 +91,16 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
                 50,
             );
         } else {
-            let amount = Math.round(remain / list_user.length)
+            let numberPeopleSplit = 0;
+            for (let i = 0; i < list_user.length; i++) {
+                if (this.state.arrChecked[i] == true)
+                    numberPeopleSplit++;
+            }
+            let amount = Math.round(remain / numberPeopleSplit)
             for (let j = 0; j < list_user.length; j++) {
-                list_user[j].amount_user += amount
+                if(this.state.arrChecked[j] == true){
+                    list_user[j].amount_user += amount
+                }
             }
             this.props.navigation.navigate("InputExpenseScreen", { listTypeUser: list_user });
         }
@@ -178,7 +184,7 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
                         >custom</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={ExpenseByPlusOrMinusStyles.categoryList}>
+                <ScrollView style={ExpenseByPlusOrMinusStyles.categoryList}>
                     <View style={ExpenseByPlusOrMinusStyles.flatlist1}>{this.state.data1.length > 0 ?
                         (
                             <FlatList
@@ -212,7 +218,6 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
                                                                 await this.setState({
                                                                     moneyInputs,
                                                                 });
-                                                                //this.caculateTotalMoney()
                                                             }}
                                                             value={this.state.moneyInputs[index] !== undefined
                                                                 && this.state.moneyInputs[index] !== "" ? number2money(parseInt(this.state.moneyInputs[index])) : ''}
@@ -239,7 +244,6 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
                                 keyExtractor={item => item.user_id._id.toString()}
                             />
                         ) : (null)}
-
                     </View>
                     <View style={ExpenseByPlusOrMinusStyles.viewTitle}>
                         <Text style={ExpenseByPlusOrMinusStyles.txtTitle}>Please select people custom money.</Text>
@@ -249,41 +253,55 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
                             data={this.state.data2}
                             extraData={this.state}
                             renderItem={({ item, index }) => (
-                                <TouchableOpacity
-                                    activeOpacity={1}
-                                    onPress={async () => {
-                                        this.addToList(item);
-                                    }}
-                                >
-                                    <View style={ExpenseByPlusOrMinusStyles.flatlistMember}>
-                                        <View style={ExpenseByPlusOrMinusStyles.listMember}>
+                                this.state.arrChecked[index] = this.state.arrChecked[index] === undefined ? true : this.state.arrChecked[index],
+                                <View style={ExpenseByPlusOrMinusStyles.flatlistMember}>
+                                    <View style={ExpenseByPlusOrMinusStyles.listMember}>
+                                        <TouchableOpacity 
+                                            activeOpacity={1}
+                                            onPress={async () => {
+                                                let { arrChecked } = this.state;
+                                                if (arrChecked[index] === undefined)
+                                                    arrChecked[index] = true
+                                                arrChecked[index] = !arrChecked[index]
+                                                await this.setState({
+                                                    arrChecked,
+                                                })
+                                            }}
+                                            style={ExpenseByPlusOrMinusStyles.contentLeft}
+                                        >
                                             <View style={ExpenseByPlusOrMinusStyles.imageAvatar}>
                                                 <Image
-                                                    style={ExpenseByPlusOrMinusStyles.avatar}
+                                                    style={[ExpenseByPlusOrMinusStyles.avatar, { opacity: this.state.arrChecked[index] ? 1 : 0.3 }]}
                                                     source={item.user_id.avatar.length > 2 ? { uri: `data:image/png;base64,${item.user_id.avatar}` } : thumbnails["avatar" + item.user_id.avatar]}
                                                 />
                                             </View>
                                             <View style={ExpenseByPlusOrMinusStyles.content}>
-                                                <Text style={ExpenseByPlusOrMinusStyles.txt2}>
+                                                <Text style={[ExpenseByPlusOrMinusStyles.txt2, { color: this.state.arrChecked[index] ? Colors.black : Colors.gray, fontSize: this.state.arrChecked[index] ? 18 : 16, fontWeight: this.state.arrChecked[index] ? "500" : "400" }]}>
                                                     {item.user_id.name}
                                                 </Text>
                                             </View>
-                                            <View style={ExpenseByPlusOrMinusStyles.iconRight}>
-                                                <Ionicons
-                                                    name='ios-checkmark-circle'
-                                                    size={35}
-                                                    color={Colors.mediumseagreen}
-                                                />
-                                            </View>
-                                        </View>
-                                        <View style={ExpenseByPlusOrMinusStyles.underLineInput} />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            activeOpacity={1}
+                                            onPress={async () => {
+                                                this.addToList(item);
+                                            }}
+                                            style={ExpenseByPlusOrMinusStyles.iconRight}
+                                        >
+                                            <Ionicons
+                                                name='md-add-circle-outline'
+                                                size={35}
+                                                color={Colors.mediumseagreen}
+                                            />
+                                        </TouchableOpacity>
                                     </View>
-                                </TouchableOpacity>
+                                    <View style={ExpenseByPlusOrMinusStyles.underLineInput} />
+                                </View>
                             )}
                             keyExtractor={item => item.user_id._id.toString()}
                         />
                     </View>
-                </View>
+                </ScrollView>
             </View>
         );
     }

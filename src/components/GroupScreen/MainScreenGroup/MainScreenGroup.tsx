@@ -27,7 +27,8 @@ function mapStateToProps(state) {
     return {
         user: state.dataUser.dataUser,
         userId: state.dataUser.dataUser._id,
-        avatar: state.dataUser.dataUser.avatar
+        avatar: state.dataUser.dataUser.avatar,
+        saveTripId: state.saveTripId.tripId
     };
 }
 
@@ -38,7 +39,8 @@ type Props = {
     dispatch?: any,
     userId?: any,
     avatar?: any[],
-    user?: any
+    user?: any,
+    saveTripId?: string,
 }
 
 type States = {
@@ -70,18 +72,21 @@ class MainScreenGroup extends Component<Props, States> {
 
     thumbnail;
 
-    componentDidMount() {
+    async componentDidMount() {
 
         //set barstyle of statusbar
-        this._navListener = this.props.navigation.addListener('didFocus', () => {
+        this._navListener = this.props.navigation.addListener('didFocus', async () => {
             StatusBar.setBarStyle('light-content');
             if (this.props.userId != undefined) {
                 this.thumbnail = this.props.user.avatar.length > 2 ? {uri: `data:image/png;base64,${this.props.user.avatar}`} : thumbnails["avatar" + this.props.user.avatar]
             }
             // call api get list group
-            this.getListAllTrip();
+            await this.getListAllTrip();
+            if (this.props.saveTripId !== ""){
+                let items = await this.state.data.find(item => item._id == this.props.saveTripId);
+                this.props.navigation.navigate('DetailGroupScreen', { dataTrip: items })
+            }
         });
-
     }
 
     componentWillUnmount() {
