@@ -5,9 +5,8 @@ import { View, TouchableOpacity, Text, Image, TextInput, StatusBar, Alert, Keybo
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import InputExpenseScreenStyles from '../../../styles/ExpenseScreenStyles/InputExpenseScreenStyles/InputExpenseScreenStyles';
 import { bindActionCreators } from 'redux';
-import { getApiListUserInTrip } from '../../../actions/action';
+import { getApiListUserInTrip, saveTripIdInExpense } from '../../../actions/action';
 import { BASEURL } from '../../../api/api';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 function mapStateToProps(state) {
     return {
@@ -22,7 +21,8 @@ type Props = {
     currenGroup?: any,
     getListUserInTrip?: any,
     listUserInTrip?: any,
-    dataGroup?: any
+    dataGroup?: any,
+    saveTripId?: any,
 }
 
 type States = {
@@ -192,7 +192,8 @@ class InputExpenseScreen extends Component<Props, States> {
                             25,
                             50,
                         );
-                        this.props.navigation.navigate("ExpenseScreen")
+                        await this.props.saveTripId(tripId);
+                        this.props.navigation.navigate("GroupScreen")
                     } else {
                         ToastAndroid.showWithGravityAndOffset(
                             'Save error!',
@@ -348,7 +349,8 @@ class InputExpenseScreen extends Component<Props, States> {
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
-        getListUserInTrip: tripId => getApiListUserInTrip(tripId)
+        getListUserInTrip: tripId => getApiListUserInTrip(tripId),
+        saveTripId: tripId => saveTripIdInExpense(tripId),
     }, dispatch);
 }
 

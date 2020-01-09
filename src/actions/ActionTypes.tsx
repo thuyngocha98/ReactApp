@@ -11,3 +11,5 @@ export const GET_LIST_USER_IN_TRIP = 'GET_LIST_USER_IN_TRIP';
 
 // get list trip id
 export const GET_LIST_TRIP = 'GET_LIST_TRIP';
+
+export const SAVE_TRIP_ID = 'SAVE_TRIP_ID';

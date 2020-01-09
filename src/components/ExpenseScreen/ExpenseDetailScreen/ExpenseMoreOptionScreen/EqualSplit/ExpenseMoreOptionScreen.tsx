@@ -239,7 +239,7 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
                                             </View>
                                             <View style={ExpenseMoreOptionScreenStyles.iconRight}>
                                                 <Ionicons 
-                                                    name='ios-checkmark-circle' 
+                                                    name='ios-checkmark-circle'
                                                     size={35} 
                                                     color={this.state.arrChecked[index] ? Colors.mediumseagreen : Colors.gray } 
                                                 />

@@ -54,3 +54,14 @@ export const getApiListUserInTrip = tripId => async (dispatch) => {
   dispatch(getListUserInTrip(data));
 }
 
+// SAVE TRIP ID
+export const saveTripId = (data: any[]) => ({
+  type: types.SAVE_TRIP_ID,
+  payload: data
+});
+
+export const saveTripIdInExpense = tripId => async (dispatch) => {
+  var data = await api._saveTripId(tripId);
+  dispatch(saveTripId(data));
+}
+

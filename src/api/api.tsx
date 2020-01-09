@@ -112,5 +112,10 @@ export default {
                 alert(error);
             });
         return listUserInTrip;
+    },
+
+     // save trip id
+    _saveTripId: async tripId => {
+        return tripId;
     }
 }

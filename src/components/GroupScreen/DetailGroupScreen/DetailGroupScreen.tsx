@@ -20,6 +20,8 @@ import { screenWidth } from '../../../constants/Dimensions';
 import ListItemContent from './ListItemContent';
 import Constants from 'expo-constants';
 import { BASEURL } from '../../../api/api';
+import { bindActionCreators } from 'redux';
+import { saveTripIdInExpense } from '../../../actions/action';
 
 function mapStateToProps(state) {
     return {
@@ -29,6 +31,7 @@ function mapStateToProps(state) {
 
 type Props = {
     navigation?: any,
+    saveTripId?: any,
 }
 
 type States = {
@@ -60,6 +63,7 @@ class DetailGroupScreen extends Component<Props, States> {
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             StatusBar.setBarStyle('light-content');
             this.getTransactionByTripId();
+            this.props.saveTripId('');
         });
     }
 
@@ -147,4 +151,10 @@ class DetailGroupScreen extends Component<Props, States> {
     }
 }
 
-export default connect(mapStateToProps)(DetailGroupScreen);
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        saveTripId: tripId => saveTripIdInExpense(tripId),
+    }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DetailGroupScreen);
