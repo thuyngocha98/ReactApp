@@ -21,6 +21,7 @@ type States = {
     data2?: any[],
     moneyInputs?: any[],
     arrChecked?: any[],
+    arrAdd?: any[],
 }
 
 
@@ -36,6 +37,7 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
         data2: [],
         moneyInputs: [],
         arrChecked: [],
+        arrAdd: [],
     }
 
     totalMoney: string
@@ -49,18 +51,21 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
         })
     }
 
-    deleteFromList(item) {
+    async deleteFromList(item) {
         let newData1 = this.state.data1.filter(function (obj) {
             return obj !== item;
         })
-        this.setState({
+        let { arrAdd } = this.state;
+        arrAdd[this.state.data2.indexOf(item)] = true
+        await this.setState({
+            arrAdd,
             data1: newData1,
         })
     }
 
     addToList(item) {
         const find = (user) => user === item;
-        if(!this.state.data1.some(find)){
+        if (!this.state.data1.some(find)) {
             let newData1 = [...this.state.data1, item];
             this.setState({
                 data1: newData1,
@@ -98,7 +103,7 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
             }
             let amount = Math.round(remain / numberPeopleSplit)
             for (let j = 0; j < list_user.length; j++) {
-                if(this.state.arrChecked[j] == true){
+                if (this.state.arrChecked[j] == true) {
                     list_user[j].amount_user += amount
                 }
             }
@@ -254,9 +259,10 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
                             extraData={this.state}
                             renderItem={({ item, index }) => (
                                 this.state.arrChecked[index] = this.state.arrChecked[index] === undefined ? true : this.state.arrChecked[index],
+                                this.state.arrAdd[index] = this.state.arrAdd[index] === undefined ? true : this.state.arrAdd[index],
                                 <View style={ExpenseByPlusOrMinusStyles.flatlistMember}>
                                     <View style={ExpenseByPlusOrMinusStyles.listMember}>
-                                        <TouchableOpacity 
+                                        <TouchableOpacity
                                             activeOpacity={1}
                                             onPress={async () => {
                                                 let { arrChecked } = this.state;
@@ -282,17 +288,29 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
                                             </View>
                                         </TouchableOpacity>
                                         <TouchableOpacity
-                                            activeOpacity={1}
+                                            activeOpacity={0.8}
                                             onPress={async () => {
                                                 this.addToList(item);
+                                                let { arrAdd } = this.state;
+                                                if (arrAdd[index] === undefined)
+                                                    arrAdd[index] = true
+                                                arrAdd[index] = false
+                                                await this.setState({
+                                                    arrAdd,
+                                                })
                                             }}
                                             style={ExpenseByPlusOrMinusStyles.iconRight}
                                         >
-                                            <Ionicons
-                                                name='md-add-circle-outline'
-                                                size={35}
-                                                color={Colors.mediumseagreen}
-                                            />
+                                            <View>{this.state.arrAdd[index] ? (
+                                                <Ionicons
+                                                    name='md-add-circle-outline'
+                                                    size={35}
+                                                    color={Colors.mediumseagreen}
+                                                />
+                                            ) : (null)}
+
+                                            </View>
+                                            
                                         </TouchableOpacity>
                                     </View>
                                     <View style={ExpenseByPlusOrMinusStyles.underLineInput} />
