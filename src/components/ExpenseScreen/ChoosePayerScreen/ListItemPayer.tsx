@@ -40,7 +40,7 @@ class ListItemPayer extends Component<Props> {
                 </View>
                 <View style={ListItemPayerStyles.underLine} />
             </View>
-            
+
         );
     }
 }

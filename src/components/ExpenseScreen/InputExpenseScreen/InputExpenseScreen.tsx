@@ -165,7 +165,7 @@ class InputExpenseScreen extends Component<Props, States> {
                 author: this.props.author,
                 amount: Money,
                 trip_id: tripId,
-                list_user: list_user,
+                list_user1: list_user,
             };
             const json = JSON.stringify(data);
             fetch(`${BASEURL}/api/transaction/insert_new_transaction`, {
