@@ -31,6 +31,7 @@ class SplashScreen extends Component<Props, States> {
     };
     receiveToken = async () => {
         try {
+            // AsyncStorage.removeItem('jwt').then(r => console.log(r));
             const value = await AsyncStorage.getItem('jwt');
             return value;
         } catch (error) {
