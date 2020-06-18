@@ -5,7 +5,7 @@ import { AsyncStorage } from 'react-native';
 const TIMEOUT = 100;
 
 // 52.187.177.128
-export const BASEURL = 'http://192.168.1.12:3001';
+export const BASEURL = 'http://192.168.20.106:3001';
 
 axios.defaults.withCredentials = true;
 
@@ -18,7 +18,7 @@ export default {
     //         const response = await axios.get(url, { params: { pageIndex: pageIndex, pageSize: pageSize } });
     //         // handle success
     //         //console.log(response);
-    //         return response.data.data;
+   //         return response.data.data;
     //     }
     //     catch (error) {
     //         // handle error

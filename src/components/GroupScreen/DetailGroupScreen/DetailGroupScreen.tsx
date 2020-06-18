@@ -46,7 +46,7 @@ class DetailGroupScreen extends Component<Props, States> {
         data: [],
         loading: false,
         numberUserInTrip: 0,
-    }
+    };
 
     static navigationOptions = ({ navigation }) => {
         return {
@@ -66,6 +66,7 @@ class DetailGroupScreen extends Component<Props, States> {
             this.props.saveTripId('');
         });
     }
+
 
     componentWillUnmount() {
         // remove barstyle when lead screen
@@ -100,9 +101,10 @@ class DetailGroupScreen extends Component<Props, States> {
         return (
             <View style={{ flex: 1, height: 1, backgroundColor: Colors.lightgray }} />
         );
-    }
+    };
 
     render() {
+        console.log(this.dataTrip);
         var time = this.dataTrip.create_date.split("-");
         return (
             <View style={DetailGroupScreenStyles.mainContainer}>
@@ -134,7 +136,7 @@ class DetailGroupScreen extends Component<Props, States> {
                             renderItem={({ item }) => (
                                 <TouchableOpacity
                                     onPress={() => {
-                                        this.props.navigation.navigate("DetaiTransactionScreen", 
+                                        this.props.navigation.navigate("DetaiTransactionScreen",
                                         { nameGroup: this.dataTrip.name, transaction: item})
                                     }}
                                 >

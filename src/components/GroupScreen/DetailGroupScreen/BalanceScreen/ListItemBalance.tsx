@@ -5,6 +5,7 @@ import { MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 import Colors from '../../../../constants/Colors';
 import ListItemBalanceStyles from '../../../../styles/GroupsStyles/DetailGroupScreenStyles/BalanceScreen/ListItemBalanceStyles';
 import { number2money, thumbnails } from '../../../../constants/FunctionCommon';
+import {BASEURL} from "../../../../api/api";
 
 function mapStateToProps(state) {
     return {
@@ -34,8 +35,30 @@ class ListItemBalance extends Component<Props, States> {
     }
 
     remind = () => {
-        alert('aa')
+        const data = {
+            tripId: this.props.tripId,
+            userIdReminded: this.props.data._id,
+            amountUserRemind: this.props.data.totalBalanceTrip
+        };
+        const json = JSON.stringify(data);
+        fetch(`${BASEURL}/api/user//remind_payment_user`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+            body: json
+        })
+            .then((response) => response.json())
+            .then((res) => {
+                console.log(res)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
+
+
     render() {
         const thumbnail = thumbnails["avatar" + this.props.data.avatar]
         return (
