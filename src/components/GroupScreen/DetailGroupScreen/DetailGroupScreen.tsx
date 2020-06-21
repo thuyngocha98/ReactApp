@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import {
     View,
     TouchableOpacity,
@@ -10,23 +10,25 @@ import {
     FlatList,
     StatusBar,
     SectionList,
-    ActivityIndicator
+    ActivityIndicator, StyleSheet
 } from 'react-native';
 import Colors from '../../../constants/Colors';
 import DetailGroupScreenStyles from '../../../styles/GroupsStyles/DetailGroupScreenStyles/DetailGroupScreenStyles';
-import { Ionicons, EvilIcons, FontAwesome5 } from '@expo/vector-icons';
+import {Ionicons, EvilIcons, FontAwesome5} from '@expo/vector-icons';
 import HeaderTitleComponent from './HeaderTitleComponent';
-import { screenWidth } from '../../../constants/Dimensions';
+import {screenWidth} from '../../../constants/Dimensions';
 import ListItemContent from './ListItemContent';
 import Constants from 'expo-constants';
-import { BASEURL } from '../../../api/api';
-import { bindActionCreators } from 'redux';
-import { saveTripIdInExpense } from '../../../actions/action';
+import {BASEURL} from '../../../api/api';
+import {bindActionCreators} from 'redux';
+import {saveTripIdInExpense} from '../../../actions/action';
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import {colors} from "react-native-elements";
+
 
 function mapStateToProps(state) {
-    return {
-
-    };
+    return {};
 }
 
 type Props = {
@@ -48,7 +50,7 @@ class DetailGroupScreen extends Component<Props, States> {
         numberUserInTrip: 0,
     }
 
-    static navigationOptions = ({ navigation }) => {
+    static navigationOptions = ({navigation}) => {
         return {
             header: null
         };
@@ -74,7 +76,7 @@ class DetailGroupScreen extends Component<Props, States> {
 
 
     getTransactionByTripId = async () => {
-        this.setState({ loading: true })
+        this.setState({loading: true})
         await fetch(`${BASEURL}/api/transaction/get_transaction_by_trip_id/${this.dataTrip._id}`, {
             method: 'POST',
             headers: {
@@ -98,7 +100,7 @@ class DetailGroupScreen extends Component<Props, States> {
 
     _ItemSeparatorComponent = () => {
         return (
-            <View style={{ flex: 1, height: 1, backgroundColor: Colors.lightgray }} />
+            <View style={{flex: 1, height: 1, backgroundColor: Colors.lightgray}}/>
         );
     }
 
@@ -106,55 +108,66 @@ class DetailGroupScreen extends Component<Props, States> {
         var time = this.dataTrip.create_date.split("-");
         return (
             <View style={DetailGroupScreenStyles.mainContainer}>
-                <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
+                <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent/>
                 <View style={DetailGroupScreenStyles.header}>
                     <HeaderTitleComponent
                         navigation={this.props.navigation}
                         nameGroup={this.dataTrip.name}
                         idGroup={this.dataTrip._id}
-                        startDay={this.dataTrip.startDay}
-                        endDay={this.dataTrip.endDay}
+                        // startDay={this.dataTrip.startDay}
+                        // endDay={this.dataTrip.endDay}
                         time={this.dataTrip.create_date}
                         amount={this.dataTrip.oweUser}
                         numberUserInTrip={this.state.numberUserInTrip}
                     />
                 </View>
                 <View style={DetailGroupScreenStyles.dateTitle}>
-                    <Text style={DetailGroupScreenStyles.date}>tháng {time[1]+" "+time[0]}</Text>
+                    <Text style={DetailGroupScreenStyles.date}>tháng {time[1] + " " + time[0]}</Text>
                 </View>
-                <View >{this.state.loading ? (
+                <View>{this.state.loading ? (
                     <View style={DetailGroupScreenStyles.activityIndicator}>
-                        <ActivityIndicator animating size="large" color={Colors.tintColor} />
+                        <ActivityIndicator animating size="large" color={Colors.tintColor}/>
                     </View>
                 ) : (
-                        <FlatList
-                            data={this.state.data}
-                            scrollEnabled
-                            keyExtractor={(item, index) => index.toString()}
-                            renderItem={({ item }) => (
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        this.props.navigation.navigate("DetaiTransactionScreen", 
-                                        { nameGroup: this.dataTrip.name, transaction: item})
-                                    }}
-                                >
-                                    <ListItemContent
-                                        data={item}
-                                    />
-                                </TouchableOpacity>
-                            )}
-                        />
-                    )}
+                    <FlatList
+                        data={this.state.data}
+                        scrollEnabled
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({item}) => (
+                            <TouchableOpacity
+                                onPress={() => {
+                                    this.props.navigation.navigate("DetaiTransactionScreen",
+                                        {nameGroup: this.dataTrip.name, transaction: item})
+                                }}
+                            >
+                                <ListItemContent
+                                    data={item}
+                                />
+                            </TouchableOpacity>
+                        )}
+                    />
+                )}
                 </View>
+                <TouchableOpacity style={DetailGroupScreenStyles.addTrip}
+                                  activeOpacity={0.5}
+                                  onPress={() => this.props.navigation.navigate('ChatGroupScreen', {
+                                      nameGroup: this.dataTrip.name,
+                                      navigation: this.props.navigation
+                                  })}
+                >
+                    <MaterialCommunityIcons name={'wechat'} color={Colors.white}
+                                            size={screenWidth / 9}/>
+                </TouchableOpacity>
             </View>
         );
     }
 }
 
+
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
         saveTripId: tripId => saveTripIdInExpense(tripId),
     }, dispatch);
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetailGroupScreen);

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ListItemDetailTransactionStyles from '../../../../styles/GroupsStyles/DetailGroupScreenStyles/DetailTransactionScreenStyles/ListItemDetailTransactionStyles';
-import { View, Image, Text } from 'react-native';
+import {View, Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Colors from '../../../../constants/Colors';
 import { thumbnails, number2money } from '../../../../constants/FunctionCommon';
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import {screenWidth} from "../../../../constants/Dimensions";
 
 function mapStateToProps(state) {
     return {
@@ -72,6 +74,7 @@ class ListItemDetailTransaction extends Component<Props> {
         );
     }
 }
+
 
 export default connect(
     mapStateToProps,

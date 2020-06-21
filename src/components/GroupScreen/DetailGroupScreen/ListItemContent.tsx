@@ -39,8 +39,8 @@ class ListItemContent extends Component<Props> {
     }
 
     render() {
-        var time = this.props.data.create_date.split(/[\s-T]+/);
-        var name = this.props.data.namePayer.split(/[\s ]+/)
+        const time = this.props.data.create_date.split(/[\s-T]+/);
+        const name = this.props.data.namePayer.split(/[\s ]+/);
         return (
             <View style={ListItemContentStyles.mainContainer}>
                 <View style={ListItemContentStyles.container}>

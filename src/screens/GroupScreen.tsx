@@ -11,6 +11,7 @@ type Props = {
     navigation?: any,
 }
 
+
 class GroupScreen extends Component<Props> {
     static navigationOptions = {
         header: null

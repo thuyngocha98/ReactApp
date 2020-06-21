@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, StatusBar, TouchableOpacity, Text, Image, FlatList, Alert  } from 'react-native';
+import {View, StatusBar, TouchableOpacity, Text, Image, FlatList, Alert, StyleSheet} from 'react-native';
 import Colors from '../../../../constants/Colors';
 import { Ionicons, AntDesign, Entypo } from '@expo/vector-icons';
 import DetailTransactionScreenStyles from '../../../../styles/GroupsStyles/DetailGroupScreenStyles/DetailTransactionScreenStyles/DetailTransactionScreenStyles';
@@ -15,6 +15,7 @@ import ListItemDetailTransaction from './ListItemDetailTransaction';
 import { number2money } from '../../../../constants/FunctionCommon';
 import { BASEURL } from '../../../../api/api';
 import { screenWidth } from '../../../../constants/Dimensions';
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 function mapStateToProps(state) {
     return {
@@ -88,7 +89,7 @@ class DetaiTransactionScreen extends Component<Props, States> {
                 console.log(error);
             });
     };
-    
+
     render() {
         const { navigation } = this.props
         const nameGroup = navigation.getParam('nameGroup', 'No Name')
@@ -113,7 +114,7 @@ class DetaiTransactionScreen extends Component<Props, States> {
                             style={DetailTransactionScreenStyles.save1}
                             activeOpacity={0.5}
                             onPress={() => {
-                                
+
                             }}
                         >
                             <AntDesign name={'delete'} size={25} color={Colors.white} />

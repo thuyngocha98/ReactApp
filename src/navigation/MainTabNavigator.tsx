@@ -43,6 +43,7 @@ import PlanTripScreen from '../components/SearchScreen/PlanTripScreen/PlanTripSc
 import EditProfileScreen from '../components/AccountScreen/EditProfileScreen/EditProfileScreen';
 import ShowImagesScreen from '../components/GroupScreen/DetailGroupScreen/ImagesScreen/ShowImagesScreen';
 import AddImagesScreen from '../components/GroupScreen/DetailGroupScreen/ImagesScreen/AddImagesScreen';
+import ChatGroupScreen from "../components/GroupScreen/Chat/ChatGroupScreen";
 
 const configPlat = Platform.select({
     web: { headerMode: 'screen' },
@@ -193,6 +194,9 @@ const GroupStack = createStackNavigator(
         },
         TotalScreen: {
             screen: TotalScreen
+        },
+        ChatGroupScreen: {
+            screen: ChatGroupScreen
         }
     },
     {
@@ -207,7 +211,7 @@ GroupStack.navigationOptions = ({ navigation }) => {
     if (routeName == 'CreateGroupScreen' || routeName == 'MainLoginScreen' || routeName == 'MainForgotPasswordScreen' || routeName == 'MainSignUpScreen'
         || routeName == 'verifyScreen' || routeName == 'CreateGroupScreen' || routeName == 'DetailGroupScreen' || routeName == 'BalanceScreen'
         || routeName == 'TotalScreen' || routeName == 'AddMemberGroupScreen' || routeName == 'DetaiTransactionScreen' || routeName == 'ShowImagesScreen'
-        || routeName == 'AddImagesScreen') {
+        || routeName == 'AddImagesScreen' || routeName == 'ChatGroupScreen') {
         tabBarVisible = false
     }
     return {

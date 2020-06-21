@@ -201,7 +201,7 @@ class HeaderTitleComponent extends Component<Props, States> {
                         <View style={HeaderTitleComponentStyles.contentText}>
                             <Text style={HeaderTitleComponentStyles.textTitle}>{this.props.nameGroup}</Text>
                             <Text style={HeaderTitleComponentStyles.numberPeopleAndTime}>{this.props.numberUserInTrip} people •	Created thg {time[1]} {time[0]}</Text>
-                            <Text style={HeaderTitleComponentStyles.startEndDay}>From {this.props.startDay.toString().split('-').join(' ')} To {this.props.endDay.toString().split('-').join(' ')}</Text>
+                            {/*<Text style={HeaderTitleComponentStyles.startEndDay}>From {this.props.startDay.toString().split('-').join(' ')} To {this.props.endDay.toString().split('-').join(' ')}</Text>*/}
                             <View style={HeaderTitleComponentStyles.owesAndMoney}>
                                 <Text style={HeaderTitleComponentStyles.owes}>
                                     {this.props.amount >= 0 ? "You are owned " : "You owe "}
@@ -277,6 +277,8 @@ class HeaderTitleComponent extends Component<Props, States> {
 }
 
 export default connect(mapStateToProps)(HeaderTitleComponent);
+
+
 const optionsStyles = {
     optionsContainer: {
         backgroundColor: Colors.white,

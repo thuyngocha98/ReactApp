@@ -39,6 +39,25 @@ const DetailGroupScreenStyles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: Colors.white,
         marginTop: screenWidth/4.11,
+    },
+    addTrip: {
+        position: 'absolute',
+        bottom: 12,
+        right: 12,
+        width: screenWidth / 7.5,
+        height: screenWidth / 7.5,
+        borderRadius: screenWidth / 4,
+        justifyContent:'center',
+        alignItems:'center',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+        elevation: 3,
+        backgroundColor: Colors.tintColor
     }
 });
 export default DetailGroupScreenStyles;

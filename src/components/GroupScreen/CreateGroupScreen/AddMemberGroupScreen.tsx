@@ -106,8 +106,8 @@ class AddMemberGroupScreen extends Component<Props, States> {
     createTrip = async () => {
         const data = {
             name: this.props.navigation.getParam('nameGroup', 'No name'),
-            startDay: this.props.navigation.getParam('startDay', '0-0-0000'),
-            endDay: this.props.navigation.getParam('endDay', '0-0-0000'),
+            // startDay: this.props.navigation.getParam('startDay', '0-0-0000'),
+            // endDay: this.props.navigation.getParam('endDay', '0-0-0000'),
             author: this.props.user_id,
             list_user: this.state.data,
         };
@@ -115,15 +115,15 @@ class AddMemberGroupScreen extends Component<Props, States> {
         fetch(`${BASEURL}/api/trip/insert_new_trip`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json'
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: json
         })
             .then((response) => response.json())
             .then((res) => {
                 if (res.error) {
-                    Keyboard.dismiss()
+                    Keyboard.dismiss();
                     this.dialogbox.tip({
                         title: "Error!",
                         content: [res.error, "Please enter another group name."],
@@ -147,7 +147,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
 
     listenerInputEmail(text) {
         if(text.length <= 2)
-            this.setState({ showUserExists: false })
+            this.setState({ showUserExists: false });
         else if (this.state.dataUserExist.length > 0) {
             if (this.state.dataUserExist[0].email.indexOf(text) < 0) {
                 this.setState({ showUserExists: false })
@@ -156,7 +156,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
                 this.setState({ showUserExists: true })
         }
 
-        this.setState({ email: text })
+        this.setState({ email: text });
         if ((text.indexOf('@') > -1) && text[text.length - 1] === '@') {
             this.checkUserExist(text);
         }
