@@ -50,10 +50,14 @@ const ChatGroupScreenStyles = StyleSheet.create({
         marginTop: 7,
         marginLeft: 5
     },
+    microphone: {
+        marginLeft: 7,
+        marginTop: 7
+    },
     message: {
         marginLeft: 10,
         fontSize: 15,
-        marginBottom:5
+        marginBottom: 5
     },
 });
 export default ChatGroupScreenStyles;

@@ -102,10 +102,10 @@ class DetailGroupScreen extends Component<Props, States> {
         return (
             <View style={{flex: 1, height: 1, backgroundColor: Colors.lightgray}}/>
         );
-    }
+    };
 
     render() {
-        var time = this.dataTrip.create_date.split("-");
+        const time = this.dataTrip.create_date.split("-");
         return (
             <View style={DetailGroupScreenStyles.mainContainer}>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent/>
@@ -151,7 +151,7 @@ class DetailGroupScreen extends Component<Props, States> {
                 <TouchableOpacity style={DetailGroupScreenStyles.addTrip}
                                   activeOpacity={0.5}
                                   onPress={() => this.props.navigation.navigate('ChatGroupScreen', {
-                                      nameGroup: this.dataTrip.name,
+                                      dataTrip: this.dataTrip,
                                       navigation: this.props.navigation
                                   })}
                 >

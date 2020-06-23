@@ -1,22 +1,37 @@
 import React, {Component} from 'react';
-import {Alert, Text, TouchableOpacity, View, TextInput, FlatList} from "react-native";
-import io from "socket.io-client";
+import { connect } from 'react-redux';
+import {Text, TouchableOpacity, View, TextInput, YellowBox} from "react-native";
+
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 import {Ionicons} from "@expo/vector-icons";
 import Colors from "../../../constants/Colors";
 import ChatGroupScreenStyles from "../../../styles/GroupsStyles/ChatGroupScreenStypes/ChatGroupScreenStyles";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Ionicons1 from "react-native-vector-icons/Ionicons";
+import {BASEURL} from "../../../api/api";
+import SocketIOClient from 'socket.io-client';
+import {data} from "../../SearchScreen/MainSearchScreen/dataListitem";
 
 
 type Props = {
+    _id?: any;
     navigation?: any,
-    nameGroup?: any
+    nameGroup?: any,
+    user?: any[],
 }
 
 type States = {
+    user_id?: string,
+    isMessage?: boolean,
     chatMessage?: any,
-    chatMessages?: any
+    chatMessages?: any,
+}
+
+function mapStateToProps(state) {
+    return {
+        user: state.dataUser.dataUser,
+    };
 }
 
 class ChatGroupScreen extends Component<Props, States> {
@@ -25,29 +40,58 @@ class ChatGroupScreen extends Component<Props, States> {
         header: null,//works with createStackNavigator but not with createBottomTabNavigator
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            chatMessage: "",
-            chatMessages: []
-        };
+    socket = SocketIOClient(`${BASEURL}`);
+    state = {
+        isMessage: false,
+        chatMessage: "",
+        chatMessages: []
+    };
+
+    dataTrip = this.props.navigation.getParam('dataTrip');
+
+    componentDidMount(): void {
+        this.socket.on("chat message", msg => {
+            this.setState({
+                chatMessages: this.state.chatMessages.concat(msg[2])
+            });
+        });
+    }
+
+
+    componentWillUnmount() {
+        this.socket.off("chat message")
     }
 
     chatMessage = (text) => {
-        this.setState({
-            chatMessage: text
-        })
+        if (text === "") {
+            this.setState({
+                isMessage: false,
+                chatMessage: text
+            })
+        } else {
+            this.setState({
+                isMessage: true,
+                chatMessage: text
+            })
+        }
     };
 
+
+
+
     submitMessage = () => {
-        this.setState({
-            chatMessages: this.state.chatMessages.concat(this.state.chatMessage),
-            chatMessage: ""
-        })
+        if (this.state.chatMessage.length > 0) {
+            this.socket.emit('chat message', [this.dataTrip._id,this.props.user._id, this.state.chatMessage]);
+            this.setState({chatMessage: ''});
+        }
     };
+
+
 
 
     render() {
+        console.log(this.props.user);
+        const lengthMessage = this.state.chatMessage.length;
         const {navigation} = this.props;
         const messages = this.state.chatMessages.map((message, i) => (
             <Text style={ChatGroupScreenStyles.message} key={i}>
@@ -67,7 +111,7 @@ class ChatGroupScreen extends Component<Props, States> {
                         >
                             <Ionicons name='ios-arrow-back' size={32} color={Colors.white}/>
                         </TouchableOpacity>
-                        <Text style={ChatGroupScreenStyles.nameGroup}>{navigation.getParam('nameGroup')}</Text>
+                        <Text style={ChatGroupScreenStyles.nameGroup}>{this.dataTrip.name}</Text>
                         <View>
                             <TouchableOpacity onPress={() => {
                                 alert('Ok');
@@ -86,7 +130,7 @@ class ChatGroupScreen extends Component<Props, States> {
                             <FontAwesome name={'file-picture-o'} size={25} color={Colors.tintColor}/>
                         </TouchableOpacity>
                     </View>
-                    <View style={{flex: 8, marginLeft: -7}}>
+                    <View style={{flex: 8.5, marginLeft: -5}}>
                         <TextInput
                             style={ChatGroupScreenStyles.input}
                             autoCapitalize={'none'}
@@ -100,17 +144,24 @@ class ChatGroupScreen extends Component<Props, States> {
                         />
                     </View>
                     <View style={{flex: 1}}>
-                        <TouchableOpacity style={ChatGroupScreenStyles.send}
-                                          onPress={this.submitMessage}
-                        >
-                            <Ionicons1 name={'ios-send'} size={20} color={Colors.white}/>
-                        </TouchableOpacity>
+                        {lengthMessage > 0 ?
+                            <TouchableOpacity
+                                style={ChatGroupScreenStyles.send}
+                                onPress={this.submitMessage}
+                            >
+                                < Ionicons1 name={'ios-send'} size={20} color={Colors.white}/>
+                            </TouchableOpacity> :
+                            <TouchableOpacity style={ChatGroupScreenStyles.microphone}>
+                                <FontAwesome name={'microphone'} size={30} color={Colors.tintColor}/>
+                            </TouchableOpacity>
+                        }
                     </View>
                 </View>
             </View>
+
         );
     }
 }
 
 
-export default ChatGroupScreen;
+export default connect(mapStateToProps,null) (ChatGroupScreen);

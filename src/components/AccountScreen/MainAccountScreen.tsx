@@ -20,6 +20,8 @@ function mapStateToProps(state) {
 type Props = {
     navigation?: any,
     user?: any[],
+    avatar?: any,
+    name?: string
 }
 
 class MainAccountScreen extends Component<Props> {
@@ -82,6 +84,4 @@ class MainAccountScreen extends Component<Props> {
     }
 }
 
-export default connect(
-    mapStateToProps,
-    null)(MainAccountScreen);
+export default connect(mapStateToProps,null)(MainAccountScreen);
