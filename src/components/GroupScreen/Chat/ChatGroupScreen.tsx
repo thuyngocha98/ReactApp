@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import {Text, TouchableOpacity, View, TextInput, YellowBox, ScrollView, Image, Keyboard} from "react-native";
+import {Text, TouchableOpacity, View, TextInput, YellowBox, ScrollView, Image, Keyboard, Dimensions} from "react-native";
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 import {Ionicons} from "@expo/vector-icons";
@@ -13,6 +13,7 @@ import {BASEURL} from "../../../api/api";
 import SocketIOClient from 'socket.io-client';
 import {data} from "../../SearchScreen/MainSearchScreen/dataListitem";
 import {thumbnails} from '../../../constants/FunctionCommon';
+import { screenWidth } from '../../../constants/Dimensions';
 
 type Props = {
     _id?: any;
@@ -65,7 +66,8 @@ class ChatGroupScreen extends Component<Props, States> {
             });
 
     };
-    scroll: ScrollView;
+    keyboardDidShowListener: any;
+    scrollView: ScrollView;
 
     componentDidMount(): void {
         this.getTotalMessage();
@@ -78,8 +80,16 @@ class ChatGroupScreen extends Component<Props, States> {
         });
     }
 
+    componentWillMount () {
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+    }
+    
+    _keyboardDidShow = () => {
+    this._scrollToInput();
+    }
 
     componentWillUnmount() {
+        this.keyboardDidShowListener.remove();
         this.socket.off("chat message")
     }
 
@@ -122,6 +132,11 @@ class ChatGroupScreen extends Component<Props, States> {
         return hours+':'+minutes+" "+tmp;
     }
 
+    _scrollToInput() {
+        // Add a 'scroll' ref to your ScrollView
+        this.scrollView.scrollToEnd({animated: true});
+    }
+
     render() {
         const lengthMessage = this.state.chatMessage.length;
         const {navigation} = this.props;
@@ -129,33 +144,33 @@ class ChatGroupScreen extends Component<Props, States> {
         const messages = this.state.chatMessages.map((message, i) => 
             message.user_id_sender._id === this.props.user._id ? 
             (  
-                <View key={message._id} style={{ marginRight: 10,marginTop:3,flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
+                <View key={message._id} style={ChatGroupScreenStyles.viewUser}>
                     <View style={{flex: 0.3}}/>
-                    <View style={{flex: 0.7, flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end'}}>
-                        <View style={{borderRadius: 15, backgroundColor: "rgba(247,189,66,1)", flexDirection: 'column'}}>
-                            <Text style={{textAlign: 'right',color: "#FFFFFF", marginTop: 4, marginHorizontal: 8, fontSize: 15}} >
+                    <View style={ChatGroupScreenStyles.sub1ViewUser}>
+                        <View style={ChatGroupScreenStyles.viewTextUser}>
+                            <Text style={ChatGroupScreenStyles.txtMessageUser} >
                                 {message.message}
                             </Text>
-                            <Text style={{letterSpacing: 0.3,textAlign: 'right',color: "#FFFFFF", marginBottom: 4, marginHorizontal: 8, fontSize: 8}} >
+                            <Text style={ChatGroupScreenStyles.txtMessageTimeUser} >
                                 {this.customTime(message.create_date)}
                             </Text>
                         </View>
                     </View>
                 </View>
         ) : (
-            <View key={message._id} style={{ marginLeft: 10,marginTop:3,flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
-                <View style={{flex: 0.7, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end'}}>
-                    <View style={{marginRight: 3,width: 30, height: 30, borderRadius: 15, overflow: 'hidden'}}>
+            <View key={message._id} style={ChatGroupScreenStyles.viewFriend}>
+                <View style={ChatGroupScreenStyles.sub1ViewFriend}>
+                    <View style={ChatGroupScreenStyles.viewTextFriend}>
                         <Image 
                             source={thumbnail}
-                            style={{width: 30, height: 30}}
+                            style={{width: screenWidth/12, height: screenWidth/12}}
                         />
                     </View>
-                    <View style={{borderRadius: 15, backgroundColor: "#F1F0F0", flexDirection: 'column'}}>
-                        <Text style={{textAlign: 'left',color: "rgba(0, 0, 0, 1)", marginTop: 4, marginHorizontal: 8, fontSize: 15}} >
+                    <View style={ChatGroupScreenStyles.viewMessageFriend}>
+                        <Text style={ChatGroupScreenStyles.txtMessageFriend} >
                             {message.message}
                         </Text>
-                        <Text style={{letterSpacing: 0.3,textAlign: 'right',color: "rgba(0, 0, 0, .40)", marginBottom: 4, marginHorizontal: 8, fontSize: 8}} >
+                        <Text style={ChatGroupScreenStyles.txtMessageTimeFriend} >
                             {this.customTime(message.create_date)}
                         </Text>
                     </View>
@@ -187,9 +202,10 @@ class ChatGroupScreen extends Component<Props, States> {
                             </View>
                         </View>
                     </View>
-                    <ScrollView style={{flex: 1}}
-                        ref={scroll => {this.scroll = scroll}}
-                        onContentSizeChange={() => this.scroll.scrollToEnd({animated: true})}
+                    <ScrollView 
+                        style={{ flex: 1}}
+                        ref={ref => {this.scrollView = ref}}
+                        onContentSizeChange={() => this.scrollView.scrollToEnd({animated: true})}
                     >
                         {messages}
                     </ScrollView>
@@ -226,6 +242,8 @@ class ChatGroupScreen extends Component<Props, States> {
                             }
                         </View>
                     </View>
+                    
+
             </View> 
         );
     }
