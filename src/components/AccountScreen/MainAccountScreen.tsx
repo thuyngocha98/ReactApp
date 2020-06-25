@@ -61,7 +61,11 @@ class MainAccountScreen extends Component<Props> {
                     <TouchableOpacity style={styles.overView}>
                         <MaterialCommunityIcons name={'home-outline'} size={25} color={'gray'}
                                                 style={{marginLeft: screenWidth / 205.5,}}/>
-                        <Text style={styles.textOverview}>Overview</Text>
+                        <Text style={styles.textOverview}
+                        onPress={() => {
+                            this.props.navigation.navigate('AudioRecordingScreen')
+                        }}
+                        >Overview</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.setting}

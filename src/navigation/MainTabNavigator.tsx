@@ -45,62 +45,14 @@ import ShowImagesScreen from '../components/GroupScreen/DetailGroupScreen/Images
 import AddImagesScreen from '../components/GroupScreen/DetailGroupScreen/ImagesScreen/AddImagesScreen';
 import ChatGroupScreen from "../components/GroupScreen/Chat/ChatGroupScreen";
 import MainLocationScreen from "../components/Location/MainLocationScreen";
+import AudioRecordingScreen from "../components/GroupScreen/Chat/AudioRecordingScreen";
 
 const configPlat = Platform.select({
     web: { headerMode: 'screen' },
     default: {},
 });
 
-/*
-const FriendsStack = createStackNavigator(
-    {
-        FriendsScreen,
-        AddFriendsScreen,
-        AddContactScreen,
-        SplitWiseProScreen,
-        HeaderOweTripMemberScreen,
-        HeaderOweTripDetailsMemberScreen,
-        MainDetailsWhoPaidScreen,
-    },
-    {
-        initialRouteName: ''
-    }
-);
 
-
-FriendsStack.navigationOptions = ({ navigation }) => {
-    let tabBarVisible = true;
-    let routeName = navigation.state.routes[navigation.state.index].routeName;
-    if (routeName == 'SplitWiseProScreen') {
-        tabBarVisible = false
-    }
-
-    return {
-        tabBarVisible,
-        tabBarLabel: 'Friends',
-        tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons focused={focused}
-                name={Platform.OS === 'ios'
-                    ? 'ios-home'
-                    : 'account'
-                }
-                size={26}
-                style={{ marginBottom: -3 }}
-                color={focused ? Colors.tabIconSelected : Colors.blackText}
-            />
-        ),
-        tabBarOptions: {
-            activeTintColor: Colors.tintColor,
-            labelStyle: {
-                paddingBottom: Platform.OS === 'ios' ? screenWidth / 41.4 : screenWidth / 80,
-            },
-            style: {
-                height: Platform.OS === 'ios' ? screenWidth / 7.52 : screenWidth / 7.2,
-            },
-        }
-    }
-}
-*/
 
 const SearchStack = createStackNavigator(
     {
@@ -387,7 +339,8 @@ const AccountStack = createStackNavigator(
         EditProfileScreen: {
             screen: EditProfileScreen,
         },
-        MainLocationScreen
+        MainLocationScreen,
+        AudioRecordingScreen
     },
     // config
 );
