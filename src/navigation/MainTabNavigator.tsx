@@ -44,6 +44,7 @@ import EditProfileScreen from '../components/AccountScreen/EditProfileScreen/Edi
 import ShowImagesScreen from '../components/GroupScreen/DetailGroupScreen/ImagesScreen/ShowImagesScreen';
 import AddImagesScreen from '../components/GroupScreen/DetailGroupScreen/ImagesScreen/AddImagesScreen';
 import ChatGroupScreen from "../components/GroupScreen/Chat/ChatGroupScreen";
+import MainLocationScreen from "../components/Location/MainLocationScreen";
 
 const configPlat = Platform.select({
     web: { headerMode: 'screen' },
@@ -386,6 +387,7 @@ const AccountStack = createStackNavigator(
         EditProfileScreen: {
             screen: EditProfileScreen,
         },
+        MainLocationScreen
     },
     // config
 );
@@ -395,6 +397,9 @@ AccountStack.navigationOptions = ({ navigation }) => {
     if (navigation.state.routes.length > 1) {
         navigation.state.routes.map(route => {
             if (route.routeName === "EditProfileScreen") {
+                tabBarVisible = false;
+            }
+            else if (route.routeName === "MainLocationScreen") {
                 tabBarVisible = false;
             }
             else {
