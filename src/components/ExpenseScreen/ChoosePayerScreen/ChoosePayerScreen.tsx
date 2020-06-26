@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, TouchableOpacity, Text, FlatList } from 'react-native';
-import { APPBAR_HEIGHT } from '../../../constants/Dimensions';
 import Colors from '../../../constants/Colors';
 import ChoosePayerScreenStyles from '../../../styles/ExpenseScreenStyles/ChoosePayerScreenStyles/ChoosePayerScreenStyles';
 import ListItemPayer from './ListItemPayer';
-import { Octicons, Ionicons } from '@expo/vector-icons';
+import { Octicons } from '@expo/vector-icons';
 
 function mapStateToProps(state) {
     return {

@@ -51,6 +51,7 @@ class InputExpenseScreen extends Component<Props, States> {
     };
     _navListener: any;
     idPayer = "";
+    listTypeUser = [];
 
     componentDidMount() {
 
@@ -70,8 +71,8 @@ class InputExpenseScreen extends Component<Props, States> {
     }
 
     // send list_user to split screen (output money)
-    async prepareSendListUserToSplit(listTypeUser) {
-        let list_user = await this.createListUser(listTypeUser)
+    async prepareSendListUserToSplit(listTypeUser,idPayer) {
+        let list_user = await this.createListUser(listTypeUser,idPayer)
         //get user payer
         let Payer;
         let userPayer = [];
@@ -89,8 +90,8 @@ class InputExpenseScreen extends Component<Props, States> {
     }
 
     // send list_user to choose multiple people (input money)
-    async prepareSendListUserToChoose(listTypeUser) {
-        let list_user = await this.createListUser(listTypeUser)
+    async prepareSendListUserToChoose(listTypeUser,idPayer) {
+        let list_user = await this.createListUser(listTypeUser,idPayer)
         this.props.navigation.navigate("ChoosePayerScreen", { list_user: list_user, listUser: this.props.listUserInTrip, totalMoney: this.state.money.replace(/,/g, '') })
 
     }
@@ -109,10 +110,9 @@ class InputExpenseScreen extends Component<Props, States> {
         }
     }
 
-    async createListUser(listTypeUser) {
+    async createListUser(listTypeUser, idPayer) {
         const Money = parseInt(this.state.money.replace(/,/g, ''));
-        this.idPayer = this.props.navigation.getParam("IdPayer", "");
-        var Payer = this.idPayer === "" ? this.props.author : this.idPayer;
+        var Payer = idPayer === "" ? this.props.author : idPayer;
         var list_user = [];
         const listUser = this.props.listUserInTrip;
         const amount_user = Math.round(Money / listUser.length)
@@ -154,11 +154,10 @@ class InputExpenseScreen extends Component<Props, States> {
         }
     }
 
-    async createTransaction(tripId, listTypeUser) {
+    async createTransaction(tripId, listTypeUser, idPayer) {
         const Money = parseInt(this.state.money.replace(/,/g, ''));
         const Description = this.state.description;
-        this.idPayer = this.props.navigation.getParam("IdPayer", "");
-        var list_user = await this.createListUser(listTypeUser);
+        var list_user = await this.createListUser(listTypeUser, idPayer);
         if (this.state.checkDescription && this.state.checkMoney) {
             const data = {
                 name: Description,
@@ -193,6 +192,7 @@ class InputExpenseScreen extends Component<Props, States> {
                             50,
                         );
                         await this.props.saveTripId(tripId);
+                        await this.props.navigation.setParams({listTypeUser: [], IdPayer: ''})
                         this.props.navigation.navigate("GroupScreen")
                     } else {
                         ToastAndroid.showWithGravityAndOffset(
@@ -221,11 +221,14 @@ class InputExpenseScreen extends Component<Props, States> {
     }
 
     render() {
-        const { navigation } = this.props
-        const listTypeUser = navigation.getParam('listTypeUser', '');
+        const { navigation } = this.props;
+        this.listTypeUser = navigation.getParam('listTypeUser', []);
+        this.idPayer = this.props.navigation.getParam("IdPayer", "");
         var Group = navigation.getParam('dataGroup', {});
         if (Object.getOwnPropertyNames(Group).length === 0)
             Group = this.props.dataGroup
+        console.log('listTypeUser: '+this.listTypeUser);
+        console.log('idplayer: '+this.idPayer);
         return (
             <View style={InputExpenseScreenStyles.container}>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
@@ -245,7 +248,7 @@ class InputExpenseScreen extends Component<Props, States> {
                             style={InputExpenseScreenStyles.save}
                             activeOpacity={0.5}
                             onPress={() => {
-                                this.createTransaction(Group._id, listTypeUser)
+                                this.createTransaction(Group._id, this.listTypeUser, this.idPayer)
                             }}
                         >
                             <Text
@@ -324,7 +327,7 @@ class InputExpenseScreen extends Component<Props, States> {
                             <Text
                                 style={InputExpenseScreenStyles.text2}
                                 onPress={() => this.state.checkDescription && this.state.checkMoney
-                                    ? this.prepareSendListUserToChoose(listTypeUser)
+                                    ? this.prepareSendListUserToChoose(this.listTypeUser, this.idPayer)
                                     : Alert.alert("Please enter full information")}
                             >
                                 you
@@ -334,7 +337,7 @@ class InputExpenseScreen extends Component<Props, States> {
                         <View style={InputExpenseScreenStyles.button}>
                             <Text
                                 style={InputExpenseScreenStyles.text2}
-                                onPress={() => this.state.checkDescription && this.state.checkMoney ? this.prepareSendListUserToSplit(listTypeUser) : Alert.alert("Please enter full information")}
+                                onPress={() => this.state.checkDescription && this.state.checkMoney ? this.prepareSendListUserToSplit(this.listTypeUser, this.idPayer) : Alert.alert("Please enter full information")}
                             >
                                 equally
                             </Text>

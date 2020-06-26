@@ -25,7 +25,12 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.uit.wego"
+      "package": "com.uit.wego",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyB6P5s_6EJ9BXSVko0n4iQdllCKLc35bN0"
+        }
+      }
     }
   }
 }

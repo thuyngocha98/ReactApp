@@ -21,14 +21,12 @@ class MainLocationScreen extends Component<props> {
         header: null,//works with createStackNavigator but not with createBottomTabNavigator
     };
 
-
-
     render() {
         const navigation = this.props.navigation.getParam('navigation');
         return (
             <View style={styles.container}>
                 <StatusBar hidden={true} />
-                <View style={styles.header}>
+                {/* <View style={styles.header}>
                     <TouchableOpacity
                         activeOpacity={0.5}
                         onPress={() => {
@@ -39,7 +37,7 @@ class MainLocationScreen extends Component<props> {
                         <Ionicons name='ios-arrow-back' size={32} color={Colors.tintColor} />
                         <Text style={styles.back}>Back</Text>
                     </TouchableOpacity>
-                </View>
+                </View> */}
                 <MapView style={styles.mapStyle}
                     provider={PROVIDER_GOOGLE}
                     region={{
@@ -55,11 +53,11 @@ class MainLocationScreen extends Component<props> {
                     >
 
                     </Marker>
-                    <MapViewDirections
+                    {/* <MapViewDirections
                         origin={origin}
                         destination={destination}
                         apikey={GOOGLE_MAPS_APIKEY}
-                    />
+                    /> */}
                 </MapView>
             </View>
         );
@@ -68,7 +66,9 @@ class MainLocationScreen extends Component<props> {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        ...StyleSheet.absoluteFillObject,
+        justifyContent: 'flex-end',
+        alignItems: 'center',
     },
     header: {
         flexDirection: 'row',
@@ -79,8 +79,7 @@ const styles = StyleSheet.create({
         paddingLeft: 10
     },
     mapStyle: {
-        width: screenWidth,
-        height: screenHeight,
+        ...StyleSheet.absoluteFillObject,
     },
     back: {
         color: Colors.tintColor,
