@@ -7,25 +7,24 @@
     "androidStatusBar": {
       "backgroundColor": "#f7bd42"
     },
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
+    "platforms": ["ios", "android", "web"],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "assets/*"
-    ],
+    "assetBundlePatterns": ["assets/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
-      "package": "com.uit.wego"
+      "package": "com.uit.wego",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCbX8iMSRljOdyJEOH_mxVgHS789qbC_7k"
+        }
+      }
     }
   }
 }
