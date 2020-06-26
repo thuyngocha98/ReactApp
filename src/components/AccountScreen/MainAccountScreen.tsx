@@ -46,7 +46,7 @@ class MainAccountScreen extends Component<Props> {
     };
 
     render() {
-        const thumbnail = this.props.user.avatar.length > 2 ? {uri: `data:image/png;base64,${this.props.user.avatar}`} : thumbnails["avatar" + this.props.user.avatar]
+        const thumbnail = this.props.user.avatar.length > 2 ? {uri: `data:image/png;base64,${this.props.user.avatar}`} : thumbnails["avatar" + this.props.user.avatar];
         return (
             <View>
                 <View style={styles.headerContainer}>
@@ -63,7 +63,7 @@ class MainAccountScreen extends Component<Props> {
                                                 style={{marginLeft: screenWidth / 205.5,}}/>
                         <Text style={styles.textOverview}
                         onPress={() => {
-                            this.props.navigation.navigate('AudioRecordingScreen')
+                            this.props.navigation.navigate('MainRecorder')
                         }}
                         >Overview</Text>
                     </TouchableOpacity>

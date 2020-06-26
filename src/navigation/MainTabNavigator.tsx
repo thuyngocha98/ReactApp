@@ -3,23 +3,15 @@ import { Platform, View, Text, Animated, Easing } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import { Feather, MaterialCommunityIcons, Ionicons, EvilIcons, Octicons } from '@expo/vector-icons';
-import TabBarIcon from '../components/TabBarIcon';
-import FriendsScreen from '../screens/FriendsScreen';
 import GroupScreen from '../screens/GroupScreen';
 import SearchScreen from '../screens/SearchScreen';
 import ActivityScreen from "../screens/ActivityScreen";
 import Colors from '../constants/Colors';
 import AccountScreen from "../screens/AccountScreen";
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import CreateGroupScreen from '../components/GroupScreen/CreateGroupScreen/CreateGroupScreen';
 import DetailGroupScreen from '../components/GroupScreen/DetailGroupScreen/DetailGroupScreen';
-import AddFriendsScreen from "../components/FriendsScreen/AddFriendsScreen/AddFriendsScreen";
-import AddContactScreen from "../components/FriendsScreen/AddContactScreen/AddContactScreen";
-import SplitWiseProScreen from "../components/FriendsScreen/SplitWiseProScreen/SplitWiseProScreen";
-import MainDetailsWhoPaidScreen from "../components/FriendsScreen/MainDetailsWhoPaidScreen/MainDetailsWhoPaidScreen";
 import BalanceScreen from '../components/GroupScreen/DetailGroupScreen/BalanceScreen/BalanceScreen';
 import MainActivityDetailsWhoPaidScreen from "../components/ActivityScreen/MainActivityDetailsWhoPaidScreen/MainActivityDetailsWhoPaidScreen";
-import MainActivityScreen from "../components/ActivityScreen/RecentActivityScreen/MainActivityScreen";
 import TotalScreen from '../components/GroupScreen/DetailGroupScreen/TotalScreen/TotalScreen';
 import ExpenseScreen from '../screens/ExpenseScreen';
 import InputExpenseScreen from '../components/ExpenseScreen/InputExpenseScreen/InputExpenseScreen';
@@ -45,7 +37,8 @@ import ShowImagesScreen from '../components/GroupScreen/DetailGroupScreen/Images
 import AddImagesScreen from '../components/GroupScreen/DetailGroupScreen/ImagesScreen/AddImagesScreen';
 import ChatGroupScreen from "../components/GroupScreen/Chat/ChatGroupScreen";
 import MainLocationScreen from "../components/Location/MainLocationScreen";
-import AudioRecordingScreen from "../components/GroupScreen/Chat/AudioRecordingScreen";
+import AudioRecordingScreen from "../components/GroupScreen/Chat/AudioRecording/AudioRecordingScreen";
+import MainRecorder from "../components/GroupScreen/Chat/AudioRecording/MainRecorder";
 
 const configPlat = Platform.select({
     web: { headerMode: 'screen' },
@@ -340,7 +333,9 @@ const AccountStack = createStackNavigator(
             screen: EditProfileScreen,
         },
         MainLocationScreen,
-        AudioRecordingScreen
+        AudioRecordingScreen,
+        MainRecorder
+
     },
     // config
 );

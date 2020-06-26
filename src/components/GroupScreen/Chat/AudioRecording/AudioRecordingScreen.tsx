@@ -3,9 +3,9 @@ import {Recorder, Player} from 'react-native-audio-player-recorder-no-linking';
 import { Audio, FileSystem } from 'expo';
 import * as Permissions from 'expo-permissions'
 import {TouchableOpacity, View, Text, StyleSheet, Slider} from "react-native";
-import ChatGroupScreenStyles from "../../../styles/GroupsStyles/ChatGroupScreenStypes/ChatGroupScreenStyles";
+import ChatGroupScreenStyles from "../../../../styles/GroupsStyles/ChatGroupScreenStypes/ChatGroupScreenStyles";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Colors from "../../../constants/Colors";
+import Colors from "../../../../constants/Colors";
 import {Button} from 'native-base';
 
 type Props = {};
