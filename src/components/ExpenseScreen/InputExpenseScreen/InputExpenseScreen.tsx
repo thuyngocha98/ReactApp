@@ -9,7 +9,8 @@ import { getApiListUserInTrip, saveTripIdInExpense } from '../../../actions/acti
 import { BASEURL } from '../../../api/api';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
-import { CheckBox } from 'react-native-elements';
+import { CheckBox,Input  } from 'react-native-elements';
+import { screenWidth } from '../../../constants/Dimensions';
 
 function mapStateToProps(state) {
     return {
@@ -34,7 +35,8 @@ type States = {
     checkDescription?: boolean,
     checkMoney?: boolean,
     location?: any[],
-    checked?: boolean
+    checked?: boolean,
+    txtLocation?: string,
 }
 
 
@@ -48,6 +50,7 @@ class InputExpenseScreen extends Component<Props, States> {
             checkMoney: false,
             location: [],
             checked: false,
+            txtLocation: "",
         }
     }
 
@@ -77,27 +80,17 @@ class InputExpenseScreen extends Component<Props, States> {
           alert("Hey! You don't enable location ");
           this.setState({checked: false})
         }else{
-            let location = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
-            let name = await Location.reverseGeocodeAsync({latitude:location.coords.latitude, longitude: location.coords.longitude})
-            await this.setState({
-                location: [{
-                    address: name[0],
-                    location: location.coords,
-                }]
-            })
+            let data = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
+            await this.setState({location : [data.coords]})
             this.setState({checked: true})
         }
     }
 
     addLocation() {
-        if(!this.state.checked){
-            if(this.state.location.length == 0)
-                this.permissionAndGetLocation();
-            else
-            this.setState({checked: true})
-        }
+        if(this.state.location.length == 0)
+            this.permissionAndGetLocation();
         else
-            this.setState({checked: false})
+            this.setState({checked: !this.state.checked})
     }
 
     componentWillUnmount() {
@@ -200,7 +193,8 @@ class InputExpenseScreen extends Component<Props, States> {
                 amount: Money,
                 trip_id: tripId,
                 list_user: list_user,
-                location: this.state.location,
+                location: this.state.txtLocation.length > 0 ? this.state.location : [],
+                address: this.state.txtLocation,
             };
             const json = JSON.stringify(data);
             fetch(`${BASEURL}/api/transaction/insert_new_transaction`, {
@@ -228,7 +222,7 @@ class InputExpenseScreen extends Component<Props, States> {
                             50,
                         );
                         await this.props.saveTripId(tripId);
-                        await this.setState({location: [], checked: false})
+                        await this.setState({location: [], checked: false, txtLocation: ""})
                         await this.props.navigation.setParams({listTypeUser: [], IdPayer: ""})
                         this.props.navigation.navigate("GroupScreen")
                     } else {
@@ -340,7 +334,6 @@ class InputExpenseScreen extends Component<Props, States> {
                         </View>
                         <View style={InputExpenseScreenStyles.sectionMoney}>
                             <View style={InputExpenseScreenStyles.iconMoney}>
-                                {/* <Ionicons name="logo-usd" size={40} color={Colors.blackText} style={{ paddingLeft: 13, paddingRight: 13, padding: 5 }} /> */}
                                 <Text style={InputExpenseScreenStyles.iconvnd}>đ</Text>
                             </View>
                             <View style={InputExpenseScreenStyles.inputMoney}>
@@ -378,15 +371,31 @@ class InputExpenseScreen extends Component<Props, States> {
                                 </Text>
                             </View>
                         </View>
-                        <View style={{flexDirection: 'row', marginVertical: 5}}> 
-                        <CheckBox
-                            size={18}
-                            containerStyle={{backgroundColor: "#ffffff",borderColor: "#ffffff", elevation: 3}}
-                            checkedColor='rgba(247,189,66,1)'
-                            title='Add Location'
-                            checked={this.state.checked}
-                            onPress={() => this.addLocation()}
-                        />
+                        <View style={{flexDirection: 'column', marginVertical: screenWidth/36, marginBottom: screenWidth/24}}> 
+                            <CheckBox
+                                size={18}
+                                containerStyle={{backgroundColor: "#ffffff",borderColor: "#ffffff", elevation: 3}}
+                                checkedColor='rgba(247,189,66,1)'
+                                title='Add Location'
+                                checked={this.state.txtLocation.length > 0 ? true : false}
+                                onPress={() => this.addLocation()}
+                            />
+                            {this.state.checked ? (
+                                <Input
+                                inputContainerStyle={{width: screenWidth/1.8}}
+                                onChangeText={value => this.setState({ txtLocation: value })}
+                                value={this.state.txtLocation}
+                                keyboardType='visible-password'
+                                placeholder='Enter a location'
+                                rightIcon={
+                                    <MaterialIcons
+                                    name='add-location'
+                                    size={24}
+                                    color={this.state.txtLocation.length > 0 ? Colors.tintColor : Colors.blackText}
+                                    />
+                                }
+                                />
+                            ) : (null)}
                         </View>
                     </View>
                 </ScrollView>
