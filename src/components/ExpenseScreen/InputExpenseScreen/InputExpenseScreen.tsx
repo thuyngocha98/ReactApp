@@ -7,6 +7,9 @@ import InputExpenseScreenStyles from '../../../styles/ExpenseScreenStyles/InputE
 import { bindActionCreators } from 'redux';
 import { getApiListUserInTrip, saveTripIdInExpense } from '../../../actions/action';
 import { BASEURL } from '../../../api/api';
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+import { CheckBox } from 'react-native-elements';
 
 function mapStateToProps(state) {
     return {
@@ -30,6 +33,8 @@ type States = {
     money?: string,
     checkDescription?: boolean,
     checkMoney?: boolean,
+    location?: any[],
+    checked?: boolean
 }
 
 
@@ -41,6 +46,8 @@ class InputExpenseScreen extends Component<Props, States> {
             money: "",
             checkDescription: false,
             checkMoney: false,
+            location: [],
+            checked: false,
         }
     }
 
@@ -53,8 +60,7 @@ class InputExpenseScreen extends Component<Props, States> {
     idPayer = "";
     listTypeUser = [];
 
-    componentDidMount() {
-
+    async componentDidMount() {
         // set barstyle of statusbar
         this._navListener = this.props.navigation.addListener('didFocus', async () => {
             StatusBar.setBarStyle('light-content');
@@ -63,6 +69,35 @@ class InputExpenseScreen extends Component<Props, States> {
                 data = this.props.dataGroup
             this.props.getListUserInTrip(data._id)
         });
+    }
+
+    async permissionAndGetLocation() {
+        const { status } = await Permissions.askAsync(Permissions.LOCATION);
+        if (status !== 'granted') {
+          alert("Hey! You don't enable location ");
+          this.setState({checked: false})
+        }else{
+            let location = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
+            let name = await Location.reverseGeocodeAsync({latitude:location.coords.latitude, longitude: location.coords.longitude})
+            await this.setState({
+                location: [{
+                    address: name[0],
+                    location: location.coords,
+                }]
+            })
+            this.setState({checked: true})
+        }
+    }
+
+    addLocation() {
+        if(!this.state.checked){
+            if(this.state.location.length == 0)
+                this.permissionAndGetLocation();
+            else
+            this.setState({checked: true})
+        }
+        else
+            this.setState({checked: false})
     }
 
     componentWillUnmount() {
@@ -165,6 +200,7 @@ class InputExpenseScreen extends Component<Props, States> {
                 amount: Money,
                 trip_id: tripId,
                 list_user: list_user,
+                location: this.state.location,
             };
             const json = JSON.stringify(data);
             fetch(`${BASEURL}/api/transaction/insert_new_transaction`, {
@@ -192,7 +228,8 @@ class InputExpenseScreen extends Component<Props, States> {
                             50,
                         );
                         await this.props.saveTripId(tripId);
-                        await this.props.navigation.setParams({listTypeUser: [], IdPayer: ''})
+                        await this.setState({location: [], checked: false})
+                        await this.props.navigation.setParams({listTypeUser: [], IdPayer: ""})
                         this.props.navigation.navigate("GroupScreen")
                     } else {
                         ToastAndroid.showWithGravityAndOffset(
@@ -227,8 +264,6 @@ class InputExpenseScreen extends Component<Props, States> {
         var Group = navigation.getParam('dataGroup', {});
         if (Object.getOwnPropertyNames(Group).length === 0)
             Group = this.props.dataGroup
-        console.log('listTypeUser: '+this.listTypeUser);
-        console.log('idplayer: '+this.idPayer);
         return (
             <View style={InputExpenseScreenStyles.container}>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
@@ -281,70 +316,80 @@ class InputExpenseScreen extends Component<Props, States> {
                     </TouchableOpacity>
                 </View>
                 <View style={InputExpenseScreenStyles.underLine} />
-                <View style={InputExpenseScreenStyles.sectionInput}>
-                    <View style={InputExpenseScreenStyles.sectionDescription}>
-                        <View style={InputExpenseScreenStyles.iconDescription}>
-                            <MaterialIcons name="description" size={38} color={Colors.blackText} style={{ padding: 5, }} />
-                        </View>
-                        <View style={InputExpenseScreenStyles.inputDescription}>
-                            <TextInput
-                                onChangeText={text => this.checkDescription(text)}
-                                style={InputExpenseScreenStyles.txtInputDescription}
-                                placeholder="Enter a description"
-                                value={this.state.description}
-                                keyboardType='default'
-                                autoCorrect={false}
-                                autoCapitalize={'words'}
-                                autoFocus
-                                underlineColorAndroid={'transparent'}
-                            />
-                            <View style={InputExpenseScreenStyles.underLineInput} />
-                        </View>
+                <ScrollView keyboardShouldPersistTaps="always">
+                    <View style={InputExpenseScreenStyles.sectionInput}>
+                        <View style={InputExpenseScreenStyles.sectionDescription}>
+                            <View style={InputExpenseScreenStyles.iconDescription}>
+                                <MaterialIcons name="description" size={38} color={Colors.blackText} style={{ padding: 5, }} />
+                            </View>
+                            <View style={InputExpenseScreenStyles.inputDescription}>
+                                <TextInput
+                                    onChangeText={text => this.checkDescription(text)}
+                                    style={InputExpenseScreenStyles.txtInputDescription}
+                                    placeholder="Enter a description"
+                                    value={this.state.description}
+                                    keyboardType='visible-password'
+                                    autoCorrect={false}
+                                    autoCapitalize={'words'}
+                                    autoFocus
+                                    underlineColorAndroid={'transparent'}
+                                />
+                                <View style={InputExpenseScreenStyles.underLineInput} />
+                            </View>
 
+                        </View>
+                        <View style={InputExpenseScreenStyles.sectionMoney}>
+                            <View style={InputExpenseScreenStyles.iconMoney}>
+                                {/* <Ionicons name="logo-usd" size={40} color={Colors.blackText} style={{ paddingLeft: 13, paddingRight: 13, padding: 5 }} /> */}
+                                <Text style={InputExpenseScreenStyles.iconvnd}>đ</Text>
+                            </View>
+                            <View style={InputExpenseScreenStyles.inputMoney}>
+                                <TextInput
+                                    onChangeText={text => this.checkMoney(text)}
+                                    style={InputExpenseScreenStyles.txtInputMoney}
+                                    value={this.state.money}
+                                    keyboardType='number-pad'
+                                    placeholder="0,00"
+                                    underlineColorAndroid={'transparent'}
+                                    onSubmitEditing={Keyboard.dismiss}
+                                />
+                                <View style={InputExpenseScreenStyles.underLineInput} />
+                            </View>
+                        </View>
+                        <View style={InputExpenseScreenStyles.btnSubmit}>
+                            <Text style={InputExpenseScreenStyles.text1}>{"Paid by "}</Text>
+                            <View style={InputExpenseScreenStyles.button}>
+                                <Text
+                                    style={InputExpenseScreenStyles.text2}
+                                    onPress={() => this.state.checkDescription && this.state.checkMoney
+                                        ? this.prepareSendListUserToChoose(this.listTypeUser, this.idPayer)
+                                        : Alert.alert("Please enter full information")}
+                                >
+                                    you
+                                </Text>
+                            </View>
+                            <Text style={InputExpenseScreenStyles.text1}>{" and split "}</Text>
+                            <View style={InputExpenseScreenStyles.button}>
+                                <Text
+                                    style={InputExpenseScreenStyles.text2}
+                                    onPress={() => this.state.checkDescription && this.state.checkMoney ? this.prepareSendListUserToSplit(this.listTypeUser, this.idPayer) : Alert.alert("Please enter full information")}
+                                >
+                                    equally
+                                </Text>
+                            </View>
+                        </View>
+                        <View style={{flexDirection: 'row', marginVertical: 5}}> 
+                        <CheckBox
+                            size={18}
+                            containerStyle={{backgroundColor: "#ffffff",borderColor: "#ffffff", elevation: 3}}
+                            checkedColor='rgba(247,189,66,1)'
+                            title='Add Location'
+                            checked={this.state.checked}
+                            onPress={() => this.addLocation()}
+                        />
+                        </View>
                     </View>
-                    <View style={InputExpenseScreenStyles.sectionMoney}>
-                        <View style={InputExpenseScreenStyles.iconMoney}>
-                            {/* <Ionicons name="logo-usd" size={40} color={Colors.blackText} style={{ paddingLeft: 13, paddingRight: 13, padding: 5 }} /> */}
-                            <Text style={InputExpenseScreenStyles.iconvnd}>đ</Text>
-                        </View>
-                        <View style={InputExpenseScreenStyles.inputMoney}>
-                            <TextInput
-                                onChangeText={text => this.checkMoney(text)}
-                                style={InputExpenseScreenStyles.txtInputMoney}
-                                value={this.state.money}
-                                keyboardType='number-pad'
-                                placeholder="0,00"
-                                underlineColorAndroid={'transparent'}
-                                onSubmitEditing={Keyboard.dismiss}
-                            />
-                            <View style={InputExpenseScreenStyles.underLineInput} />
-                        </View>
-
-                    </View>
-                    <View style={InputExpenseScreenStyles.btnSubmit}>
-                        <Text style={InputExpenseScreenStyles.text1}>{"Paid by "}</Text>
-                        <View style={InputExpenseScreenStyles.button}>
-                            <Text
-                                style={InputExpenseScreenStyles.text2}
-                                onPress={() => this.state.checkDescription && this.state.checkMoney
-                                    ? this.prepareSendListUserToChoose(this.listTypeUser, this.idPayer)
-                                    : Alert.alert("Please enter full information")}
-                            >
-                                you
-                            </Text>
-                        </View>
-                        <Text style={InputExpenseScreenStyles.text1}>{" and split "}</Text>
-                        <View style={InputExpenseScreenStyles.button}>
-                            <Text
-                                style={InputExpenseScreenStyles.text2}
-                                onPress={() => this.state.checkDescription && this.state.checkMoney ? this.prepareSendListUserToSplit(this.listTypeUser, this.idPayer) : Alert.alert("Please enter full information")}
-                            >
-                                equally
-                            </Text>
-                        </View>
-                    </View>
-                </View>
-
+                </ScrollView>
             </View>
         );
     }
