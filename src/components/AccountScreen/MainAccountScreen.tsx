@@ -8,6 +8,8 @@ import {connect} from 'react-redux';
 // @ts-ignore
 import {thumbnails} from '../../constants/FunctionCommon';
 import {screenWidth} from '../../constants/Dimensions';
+import * as Location from 'expo-location';
+
 
 
 function mapStateToProps(state) {
@@ -27,13 +29,18 @@ class MainAccountScreen extends Component<Props> {
     _navListener: any;
 
     componentDidMount() {
-
+        this.getPosition().then(r => console.log(r));
         //set barstyle of statusbar
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             StatusBar.setBarStyle('light-content');
             // call api get list group
         });
     }
+
+    getPosition = async () => {
+      const location = await Location.getCurrentPositionAsync({});
+      console.log(location);
+    };
 
     componentWillUnmount() {
         // remove barstyle when lead screen
@@ -61,7 +68,11 @@ class MainAccountScreen extends Component<Props> {
                     <TouchableOpacity style={styles.overView}>
                         <MaterialCommunityIcons name={'home-outline'} size={25} color={'gray'}
                                                 style={{marginLeft: screenWidth / 205.5,}}/>
-                        <Text style={styles.textOverview}>Overview</Text>
+                        <Text style={styles.textOverview}
+                        onPress={() => {
+                            this.props.navigation.navigate('AudioRecordingScreen')
+                        }}
+                        >Overview</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.setting}
