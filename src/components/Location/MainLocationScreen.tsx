@@ -1,26 +1,22 @@
 import React, {Component} from 'react';
-import MapView, {
-    PROVIDER_GOOGLE,
-    Marker,
-    Polygon,
-} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker, Polygon} from 'react-native-maps';
 import {StyleSheet, View, Text, StatusBar, TouchableOpacity} from 'react-native';
 import {screenHeight, screenWidth} from '../../constants/Dimensions';
 import Colors from '../../constants/Colors';
-import {Ionicons} from '@expo/vector-icons';
+import {BASEURL} from '../../api/api';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
-
+import moment from "moment";
 
 type Props = {
     navigation?: any;
 };
 
 type States = {
+    initialLocation?: any;
     location?: any;
-    coordinates?: any
-}
-
+    coordinates?: any;
+};
 
 class MainLocationScreen extends Component<Props, States> {
     static navigationOptions = {
@@ -30,74 +26,75 @@ class MainLocationScreen extends Component<Props, States> {
     constructor(props) {
         super(props);
         this.state = {
+            initialLocation: null,
             location: null,
-            coordinates: [
-                {latitude: 37.8025259, longitude: -122.4351431},
-                {latitude: 37.7896386, longitude: -122.421646},
-                {latitude: 37.7665248, longitude: -122.4161628},
-                {latitude: 37.7734153, longitude: -122.4577787},
-                {latitude: 37.7948605, longitude: -122.4596065},
-                {latitude: 37.8025259, longitude: -122.4351431}
-            ]
-        }
+            coordinates: [],
+        };
     }
 
-    // componentDidMount = () => {
-    //     this.getMyLocation().then(r => console.log(r));
-    // };
-    //
-    // getMyLocation = async () => {
-    //     // let { status } = await Permissions.askAsync(Permissions.LOCATION);
-    //     // if (status !== 'granted') {
-    //     //     this.setState({
-    //     //         location: 'Permission denied',
-    //     //     });
-    //     //     return ;
-    //     // }
-    //     let location = await Location.getCurrentPositionAsync({});
-    //     console.log(location);
-    //     // this.setState({
-    //     //     location: JSON.stringify(location)
-    //     // });
-    // };
+    componentDidMount() {
+        this.permissionAndGetLocation();
+        this.getLocationTrip();
+    }
+
+    permissionAndGetLocation = async () => {
+        const {status} = await Permissions.askAsync(Permissions.LOCATION);
+        if (status !== 'granted') {
+            alert("Hey! You don't enable location ");
+        } else {
+            let data = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
+            let region = {
+                latitude: 37.8025259, //data.coords.latitude,
+                longitude: -122.4351431, //data.coords.longitude,
+                latitudeDelta: 0.15,
+                longitudeDelta: 0.05,
+            };
+            this.setState({
+                initialLocation: region,
+            });
+        }
+    };
+
+    getLocationTrip = async () => {
+        const tripId = this.props.navigation.getParam('tripId');
+        await fetch(`${BASEURL}/api/placeLocation/get_placeLocation_by_trip_id/${tripId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then(async (res) => {
+                this.setState({coordinates: res.data});
+            })
+            .catch((error) => {
+                alert(error);
+            });
+    };
 
     render() {
-        const navigation = this.props.navigation.getParam('navigation');
+        const length = this.state.coordinates.length;
         return (
             <View style={styles.container}>
                 <StatusBar hidden={true}/>
-                <View style={styles.header}>
-                    <TouchableOpacity
-                        activeOpacity={0.5}
-                        onPress={() => {
-                            navigation.navigate('AccountScreen');
-                        }}
-                        style={{flexDirection: 'row'}}
-                    >
-                        <Ionicons name="ios-arrow-back" size={32} color={Colors.tintColor}/>
-                        <Text style={styles.back}>Back</Text>
-                    </TouchableOpacity>
-                </View>
-                <MapView
-                    style={styles.mapStyle}
-                    provider={PROVIDER_GOOGLE}
-                    region={{
-                        latitude: 37.8025259,
-                        longitude: -122.4351431,
-                        latitudeDelta: 0.15,
-                        longitudeDelta: 0.05,
-                    }}
-                >
-                    <Polygon coordinates={this.state.coordinates}
-                             strokeColor={Colors.lightgray}
-                             strokeWidth={1}
-                             fillColor={'rgba(100,100,200,0.3)'}
-                    />
-                    {this.state.coordinates.map((marker, i) => (
+                <MapView style={styles.mapStyle} provider={PROVIDER_GOOGLE} region={this.state.initialLocation}>
+                    {length > 1 && (
+                        <Polygon
+                            coordinates={this.state.coordinates}
+                            strokeColor={Colors.lightgray}
+                            strokeWidth={1}
+                            fillColor={'rgba(100,100,200,0.3)'}
+                        />
+                    )}
+
+                    {length > 0 &&
+                    this.state.coordinates.map((marker, i) => (
                         <Marker
                             key={i}
                             coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
-                            title={'San Francisco'}
+                            title={marker.address}
+                            description={`${moment(marker.create_date).format('dddd')}, ${moment(marker.create_date).format('MMMM Do YYYY, h:mm:ss a')}`}
                         >
                         </Marker>
                     ))}
