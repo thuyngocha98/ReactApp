@@ -98,6 +98,7 @@ const InputExpenseScreenStyles = StyleSheet.create({
         justifyContent: 'flex-end'
     },
     txtInputDescription: {
+        width: screenWidth*0.5,
         fontSize: 21,
         marginBottom: screenWidth/82.2
     },

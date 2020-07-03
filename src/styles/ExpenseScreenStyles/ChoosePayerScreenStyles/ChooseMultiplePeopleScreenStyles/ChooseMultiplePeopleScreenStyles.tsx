@@ -73,7 +73,7 @@ const ChooseMultiplePeopleScreenStyles = StyleSheet.create({
         alignItems: 'flex-start',
     },
     name: {
-        flex: 4,
+        flex: 3,
         flexDirection: 'column',
         justifyContent: 'center',
     },

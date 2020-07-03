@@ -22,7 +22,7 @@ const ExpenseByPlusOrMinusStyles = StyleSheet.create({
         marginHorizontal: screenWidth / 27.43,
     },
     addContact: {
-        flex: 7,
+        flex: 5,
         fontSize: 20,
         fontWeight: '500',
         color: Colors.white,
@@ -218,14 +218,14 @@ const ExpenseByPlusOrMinusStyles = StyleSheet.create({
         alignItems: 'flex-start',
     },
     name: {
-        flex: 4,
+        flex: 3.5,
         marginLeft: 5,
         flexDirection: 'column',
         justifyContent: 'center',
     },
     txtVND: {
         color: Colors.gray,
-        fontSize: 14,
+        fontSize: 13,
     },
     viewInputMoney: {
         flex: 2.3,

@@ -322,6 +322,7 @@ class InputExpenseScreen extends Component<Props, States> {
                   value={this.state.description}
                   keyboardType="visible-password"
                   autoCorrect={false}
+                  maxLength={100}
                   autoCapitalize={'words'}
                   autoFocus
                   underlineColorAndroid={'transparent'}
@@ -340,6 +341,7 @@ class InputExpenseScreen extends Component<Props, States> {
                   value={this.state.money}
                   keyboardType="number-pad"
                   placeholder="0,00"
+                  maxLength={13}
                   underlineColorAndroid={'transparent'}
                   onSubmitEditing={Keyboard.dismiss}
                 />

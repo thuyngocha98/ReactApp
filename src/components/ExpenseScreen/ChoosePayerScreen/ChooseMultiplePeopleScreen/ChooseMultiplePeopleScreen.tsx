@@ -144,6 +144,7 @@ class ChooseMultiplePeopleScreen extends Component<Props, States> {
                                                     value={this.state.moneyInputs[index] !== undefined
                                                         && this.state.moneyInputs[index] !== "" ? number2money(parseInt(this.state.moneyInputs[index])) : ''}
                                                     placeholder="0,00"
+                                                    maxLength={13}
                                                     keyboardType='number-pad'
                                                     autoCorrect={false}
                                                     underlineColorAndroid={'transparent'}

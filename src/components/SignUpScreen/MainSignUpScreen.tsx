@@ -159,6 +159,7 @@ class MainSignUpScreen extends Component<Props> {
                                         placeholder={'Name'}
                                         autoCapitalize={'words'}
                                         returnKeyType={'next'}
+                                        maxLength={30}
                                         keyboardType='default'
                                         autoCorrect={false}
                                         placeholderTextColor={Colors.lightgray}

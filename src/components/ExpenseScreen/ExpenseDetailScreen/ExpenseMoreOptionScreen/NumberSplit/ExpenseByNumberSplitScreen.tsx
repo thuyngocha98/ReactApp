@@ -70,6 +70,7 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
                     list_user[i].amount_user = 0;
                 }
             }
+            this.props.navigation.navigate("InputExpenseScreen", { listTypeUser: list_user });
         } else {
             ToastAndroid.showWithGravityAndOffset(
                 'The payment value is not equal to the total cost!',
@@ -79,7 +80,6 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
                 50,
             );
         }
-        this.props.navigation.navigate("InputExpenseScreen", { listTypeUser: list_user });
     }
 
     scroll: JSX.Element;

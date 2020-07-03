@@ -23,7 +23,7 @@ const ExpenseMoreOptionScreenStyles = StyleSheet.create({
         marginHorizontal: screenWidth / 27.43,
     },
     addContact: {
-        flex: 7,
+        flex: 5,
         fontSize: 20,
         fontWeight: '500',
         color: Colors.white,

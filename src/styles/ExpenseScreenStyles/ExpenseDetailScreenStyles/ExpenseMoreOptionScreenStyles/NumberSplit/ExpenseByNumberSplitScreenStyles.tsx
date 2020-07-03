@@ -22,7 +22,7 @@ const ExpenseByNumberSplitScreenStyles = StyleSheet.create({
         marginHorizontal: screenWidth / 27.43,
     },
     addContact: {
-        flex: 7,
+        flex: 5,
         fontSize: 20,
         fontWeight: '500',
         color: Colors.white,
@@ -32,7 +32,6 @@ const ExpenseByNumberSplitScreenStyles = StyleSheet.create({
         flex: 1,
     },
     add: {
-
         fontSize: 17,
         color: Colors.white
     },
@@ -177,7 +176,7 @@ const ExpenseByNumberSplitScreenStyles = StyleSheet.create({
         alignItems: 'flex-start',
     },
     name: {
-        flex: 4,
+        flex: 3,
         marginLeft: 5,
         flexDirection: 'column',
         justifyContent: 'center',
