@@ -6,16 +6,19 @@ import styles from "../../../styles/GroupsStyles/CreateGroupScreenStyles/AddMemb
 import { MaterialCommunityIcons, AntDesign, Feather, FontAwesome } from "@expo/vector-icons";
 import { BASEURL } from '../../../api/api';
 import DialogBox from 'react-native-dialogbox';
+import { screenWidth } from '../../../constants/Dimensions';
 
 function mapStateToProps(state) {
     return {
-        user_id: state.dataUser.dataUser._id
+        user_id: state.dataUser.dataUser._id,
+        user: state.dataUser.dataUser,
     };
 }
 
 type Props = {
     navigation?: any,
-    user_id?: any[]
+    user_id?: string,
+    user?: any[],
 }
 
 type States = {
@@ -23,7 +26,8 @@ type States = {
     data?: any[],
     email?: string,
     name?: string,
-    showUserExists?: boolean
+    showUserExists?: boolean,
+    idLeader?: string,
 }
 class AddMemberGroupScreen extends Component<Props, States> {
     static navigationOptions = {
@@ -36,10 +40,11 @@ class AddMemberGroupScreen extends Component<Props, States> {
         super(props);
         this.state = {
             dataUserExist: [],
-            data: [],
+            data: [{ name: this.props.user.name, email: this.props.user.email, isCustom: false }],
             email: '',
             name: '',
             showUserExists: false,
+            idLeader: this.props.user.email,
         };
     }
 
@@ -90,7 +95,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
                 this.handleOnPress("Error!", ["Name or Email already exists!", "Please check again."])
             } else {
                 if (this.validateEmail(email)) {
-                    let newData = [...this.state.data, { name: name, email: email }];
+                    let newData = [...this.state.data, { name: name, email: email, isCustom: false }];
                     this.setState({
                         data: newData,
                         email: "",
@@ -104,12 +109,19 @@ class AddMemberGroupScreen extends Component<Props, States> {
     }
 
     createTrip = async () => {
+        let newData = [];
+        this.state.data.forEach(element => {
+            if(element.email === this.state.idLeader)
+                newData.push({name: element.name, email: element.email, isCustom: true});
+            else
+                newData.push(element);
+        });
         const data = {
             name: this.props.navigation.getParam('nameGroup', 'No name'),
             // startDay: this.props.navigation.getParam('startDay', '0-0-0000'),
             // endDay: this.props.navigation.getParam('endDay', '0-0-0000'),
             author: this.props.user_id,
-            list_user: this.state.data,
+            list_user: newData,
         };
         const json = JSON.stringify(data);
         fetch(`${BASEURL}/api/trip/insert_new_trip`, {
@@ -232,7 +244,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
                         </View>
                         <TextInput
                             style={{ flex: 8 }}
-                            keyboardType='default'
+                            keyboardType="visible-password"
                             onChangeText={(text) => this.setState({ name: text })}
                             value={this.state.name}
                             ref={(input) => { this.emailTextInput = input; }}
@@ -273,8 +285,10 @@ class AddMemberGroupScreen extends Component<Props, States> {
                     </View>
                 </View>
                 <View style={styles.viewContent}>
+                
                     <FlatList
                         scrollEnabled
+                        extraData={this.state}
                         showsVerticalScrollIndicator={false}
                         keyboardShouldPersistTaps='always'
                         data={this.state.data}
@@ -284,13 +298,23 @@ class AddMemberGroupScreen extends Component<Props, States> {
                                     <Text style={styles.textName}>{item.name}</Text>
                                     <Text style={styles.textEmail}>{item.email}</Text>
                                 </View>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        this.deleteEmailFromList(item.email)
-                                    }}
-                                >
-                                    <Feather name="delete" size={25} />
-                                </TouchableOpacity>
+                                <View style={{flexDirection: 'row'}}>
+                                    <TouchableOpacity 
+                                        style={{marginRight: screenWidth/40}}
+                                        onPress={() => this.setState({idLeader: item.email})}
+                                    >
+                                        <MaterialCommunityIcons name="crown" size={25} 
+                                        color={this.state.idLeader == item.email ? Colors.tintColor : Colors.gray}/>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={{opacity: item.email !== this.props.user.email ? 1 : 0.05}}
+                                        onPress={() => {
+                                            item.email !== this.props.user.email && this.deleteEmailFromList(item.email)
+                                        }}
+                                    >
+                                        <Feather name="delete" size={25} />
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         )}
                         keyExtractor={item => item.email}

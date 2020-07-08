@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.5,
     },
     nameAndMail: {
+        flex: 1,
         flexDirection: 'column',
         paddingVertical: screenWidth/41.1,
     },

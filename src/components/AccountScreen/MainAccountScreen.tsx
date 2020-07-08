@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, Text, Image, TouchableOpacity, AsyncStorage, StatusBar } from 'react-native';
-import Colors from '../../constants/Colors';
 import styles from '../../styles/AccountScreenStyle/MainAccountScreenStyle';
 import { MaterialCommunityIcons, EvilIcons, AntDesign } from '@expo/vector-icons';
 import { connect } from 'react-redux';
