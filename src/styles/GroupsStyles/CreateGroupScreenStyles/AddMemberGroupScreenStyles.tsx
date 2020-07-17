@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import Colors from "../../../constants/Colors";
-import { screenWidth } from "../../../constants/Dimensions";
+import { screenWidth, screenHeight } from "../../../constants/Dimensions";
 
 const styles = StyleSheet.create({
     container: {
@@ -85,12 +85,14 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: screenWidth - screenWidth/15,
         position: 'absolute',
-        
+        zIndex: 10,
         marginTop: screenWidth/3.1615,
         backgroundColor: Colors.white,
         borderRadius: 5,
     },
     userExists: {
+        zIndex: 10,
+        backgroundColor: Colors.white,
         flexDirection: 'column',
         borderWidth: 0.5,
         borderColor: Colors.gray,
@@ -104,7 +106,20 @@ const styles = StyleSheet.create({
     email: {
         color: Colors.tintColor,
         fontSize: 16,
-    }
-
+    },
+    txtChooseLeader: {
+        marginTop: screenWidth/60,
+        marginHorizontal: screenWidth/31.6,
+        color: Colors.black,
+        fontSize: 14,
+        textAlign: 'center',
+    },
+    activityIndicator: {
+        zIndex: 30,
+        position: 'absolute',
+        marginTop: screenHeight/2,
+        left: 0,
+        right: 0,
+    },
 });
 export default styles;

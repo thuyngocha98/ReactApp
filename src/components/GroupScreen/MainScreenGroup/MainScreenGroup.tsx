@@ -128,12 +128,6 @@ class MainScreenGroup extends Component<Props, States> {
         this.setState({total: this.totalMoney})
     }
 
-    _ItemSeparatorComponent = () => {
-        return (
-            <View style={{flex: 1, height: 1, backgroundColor: Colors.lightgray}}/>
-        );
-    };
-
     searchFilterFunction = text => {
         this.setState({
             value: text,
@@ -207,15 +201,16 @@ class MainScreenGroup extends Component<Props, States> {
                                         this.props.navigation.navigate('DetailGroupScreen', {dataTrip: item})
                                     }}
                                 >
-                                    <ListItemGroup
-                                        nameGroup={item.name}
-                                        price={item.oweUser}
-                                        isOwned={this.isOwned}
-                                    />
+                                    {item.isDelete ? null : (
+                                        <ListItemGroup
+                                            nameGroup={item.name}
+                                            price={item.oweUser}
+                                            isOwned={this.isOwned}
+                                        />
+                                    )}
                                 </TouchableOpacity>
                         )}
                         keyExtractor={item => item._id.toString()}
-                        ItemSeparatorComponent={this._ItemSeparatorComponent}
                     />
                 )}
                 </View>

@@ -103,7 +103,7 @@ class DetailGroupScreen extends Component<Props, States> {
             <View style={{flex: 1, height: 1, backgroundColor: Colors.lightgray}}/>
         );
     };
-
+    
     render() {
         const time = this.dataTrip.create_date.split("-");
         return (

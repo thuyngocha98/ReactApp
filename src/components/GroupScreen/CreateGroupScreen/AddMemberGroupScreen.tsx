@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StatusBar, FlatList, Alert, ScrollView, Keyboard, TouchableWithoutFeedback } from "react-native";
+import { View, Text, TextInput, StatusBar, FlatList, Keyboard, ActivityIndicator } from "react-native";
 import Colors from "../../../constants/Colors";
 import { connect } from 'react-redux';
 import styles from "../../../styles/GroupsStyles/CreateGroupScreenStyles/AddMemberGroupScreenStyles";
@@ -7,6 +7,7 @@ import { MaterialCommunityIcons, AntDesign, Feather, FontAwesome } from "@expo/v
 import { BASEURL } from '../../../api/api';
 import DialogBox from 'react-native-dialogbox';
 import { screenWidth } from '../../../constants/Dimensions';
+import {TouchableOpacity} from 'react-native-gesture-handler'
 
 function mapStateToProps(state) {
     return {
@@ -28,6 +29,7 @@ type States = {
     name?: string,
     showUserExists?: boolean,
     idLeader?: string,
+    isLoading?: boolean,
 }
 class AddMemberGroupScreen extends Component<Props, States> {
     static navigationOptions = {
@@ -45,6 +47,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
             name: '',
             showUserExists: false,
             idLeader: this.props.user.email,
+            isLoading: false,
         };
     }
 
@@ -109,6 +112,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
     }
 
     createTrip = async () => {
+        this.setState({isLoading: true});
         let newData = [];
         this.state.data.forEach(element => {
             if(element.email === this.state.idLeader)
@@ -135,6 +139,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
             .then((response) => response.json())
             .then((res) => {
                 if (res.error) {
+                    this.setState({isLoading: false});
                     Keyboard.dismiss();
                     this.dialogbox.tip({
                         title: "Error!",
@@ -148,11 +153,13 @@ class AddMemberGroupScreen extends Component<Props, States> {
                         },
                     });
                 } else {
+                    this.setState({isLoading: false});
                     Keyboard.dismiss()
                     this.props.navigation.navigate("GroupScreen")
                 }
             })
             .catch((error) => {
+                this.setState({isLoading: false});
                 console.log(error);
             });
     };
@@ -206,7 +213,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
         return (
             <View style={styles.container} >
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
-                <View style={{ backgroundColor: Colors.tabIconSelected }} >
+                <View style={{ zIndex: 10, backgroundColor: Colors.tabIconSelected }} >
                     <View style={styles.header}>
                         <TouchableOpacity activeOpacity={0.5} onPress={this.goBackFriendsScreen}>
                             <Text style={styles.cancel}>Cancel</Text>
@@ -271,7 +278,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
                                 data={this.state.dataUserExist}
                                 renderItem={({ item }) => (
                                     <TouchableOpacity
-                                        onPress={() => { this.addEmailToList(item.name, item.email),this.setState({ showUserExists: false }) }}
+                                        onPressIn={() => { this.addEmailToList(item.name, item.email),this.setState({ showUserExists: false }) }}
                                     >
                                         <View style={styles.userExists}>
                                             <Text style={styles.username}>{item.name}</Text>
@@ -284,8 +291,8 @@ class AddMemberGroupScreen extends Component<Props, States> {
                         ) : (null)}
                     </View>
                 </View>
+                {this.state.data?.length > 1 && <Text style={styles.txtChooseLeader}>Choose a leader for your group, the default is you</Text>}
                 <View style={styles.viewContent}>
-                
                     <FlatList
                         scrollEnabled
                         extraData={this.state}
@@ -320,7 +327,12 @@ class AddMemberGroupScreen extends Component<Props, States> {
                         keyExtractor={item => item.email}
                     />
                 </View>
-                <DialogBox ref={dialogbox => { this.dialogbox = dialogbox }} isOverlayClickClose={false} style={{ backgroundColor: "#333" }} />
+                {this.state.isLoading ?(
+                    <View style={styles.activityIndicator}>
+                        <ActivityIndicator animating size="large" color={Colors.tintColor}/>
+                    </View>
+                ) :(null) }
+                <DialogBox ref={dialogbox => { this.dialogbox = dialogbox }} isOverlayClickClose={false} style={{ zIndex: 20, backgroundColor: "#333" }} />
             </View>
         );
     }

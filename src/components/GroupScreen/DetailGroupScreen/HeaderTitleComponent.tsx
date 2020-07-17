@@ -106,7 +106,7 @@ class HeaderTitleComponent extends Component<Props, States> {
       user_id: this.props.userId,
     };
     const json = JSON.stringify(data);
-    fetch(`${BASEURL}/api/trip/delete_a_trip/${this.props.idGroup}`, {
+    fetch(`${BASEURL}/api/trip/delete_a_trip/${this.props.idGroup}/${this.props.userId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -116,8 +116,8 @@ class HeaderTitleComponent extends Component<Props, States> {
     })
       .then((response) => response.json())
       .then((res) => {
-        if (res.result === 'failed') {
-          Alert.alert(res.message);
+        if (res == "You don't have permission to delete") {
+          Alert.alert("You don't have permission to delete");
         } else {
           this.props.navigation.navigate('GroupScreen');
         }

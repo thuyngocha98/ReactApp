@@ -1,12 +1,16 @@
 import { StyleSheet } from "react-native";
 import { screenWidth } from "../../../constants/Dimensions";
+import Colors from "../../../constants/Colors";
 
 const ListItemGroupStyles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         flexDirection: 'column',
         marginHorizontal: screenWidth/20.55,
-        marginVertical: screenWidth/41.1,
+        marginTop: screenWidth/41.1,
+        paddingBottom: screenWidth/41.1,
+        borderBottomWidth: 0.5,
+        borderBottomColor: Colors.lightgray
     },
     container1: {
         flexDirection: 'row',
