@@ -9,7 +9,6 @@ import {
   ScrollView,
   Image,
   Keyboard,
-  Dimensions,
 } from 'react-native';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
@@ -21,9 +20,9 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons1 from 'react-native-vector-icons/Ionicons';
 import { BASEURL } from '../../../api/api';
 import SocketIOClient from 'socket.io-client';
-import { data } from '../../SearchScreen/MainSearchScreen/dataListitem';
 import { thumbnails } from '../../../constants/FunctionCommon';
 import { screenWidth } from '../../../constants/Dimensions';
+import styles from '../../../styles/FriendsScreenStyles/MainFriendsOweScreenStyle/MainFriendsOweScreenStyle';
 
 type Props = {
   _id?: any;
@@ -147,7 +146,6 @@ class ChatGroupScreen extends Component<Props, States> {
   render() {
     const lengthMessage = this.state.chatMessage.length;
     const { navigation } = this.props;
-    const thumbnail = thumbnails['avatar1'];
     const messages = this.state.chatMessages.map((message, i) =>
       message.user_id_sender._id === this.props.user._id ? (
         <View key={message._id} style={ChatGroupScreenStyles.viewUser}>
@@ -160,17 +158,20 @@ class ChatGroupScreen extends Component<Props, States> {
           </View>
         </View>
       ) : (
-        <View key={message._id} style={ChatGroupScreenStyles.viewFriend}>
-          <View style={ChatGroupScreenStyles.sub1ViewFriend}>
-            <View style={ChatGroupScreenStyles.viewTextFriend}>
-              <Image source={thumbnail} style={{ width: screenWidth / 12, height: screenWidth / 12 }} />
+        <View key={message._id} style={ChatGroupScreenStyles.mainViewFriend}>
+          <Text style={ChatGroupScreenStyles.txtNameFriend}>{message?.user_id_sender?.name.split(' ')[0]}</Text>
+          <View style={ChatGroupScreenStyles.viewFriend}>
+            <View style={ChatGroupScreenStyles.sub1ViewFriend}>
+              <View style={ChatGroupScreenStyles.viewTextFriend}>
+                <Image source={thumbnails['avatar'+message?.user_id_sender?.avatar]} style={{ width: screenWidth / 12, height: screenWidth / 12 }} />
+              </View>
+              <View style={ChatGroupScreenStyles.viewMessageFriend}>
+                <Text style={ChatGroupScreenStyles.txtMessageFriend}>{message.message}</Text>
+                <Text style={ChatGroupScreenStyles.txtMessageTimeFriend}>{this.customTime(message.create_date)}</Text>
+              </View>
             </View>
-            <View style={ChatGroupScreenStyles.viewMessageFriend}>
-              <Text style={ChatGroupScreenStyles.txtMessageFriend}>{message.message}</Text>
-              <Text style={ChatGroupScreenStyles.txtMessageTimeFriend}>{this.customTime(message.create_date)}</Text>
-            </View>
+            <View style={{ flex: 0.3 }} />
           </View>
-          <View style={{ flex: 0.3 }} />
         </View>
       ),
     );

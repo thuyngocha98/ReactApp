@@ -81,7 +81,7 @@ const ChatGroupScreenStyles = StyleSheet.create({
         color: "#FFFFFF", 
         marginTop: screenWidth/90, 
         marginHorizontal: screenWidth/45, 
-        fontSize: 15,
+        fontSize: 14,
     },
     txtMessageTimeUser: {
         letterSpacing: 0.3,
@@ -90,6 +90,15 @@ const ChatGroupScreenStyles = StyleSheet.create({
         marginBottom: screenWidth/90, 
         marginHorizontal: screenWidth/45, 
         fontSize: 8,
+    },
+    mainViewFriend: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
+    txtNameFriend: {
+        marginLeft: screenWidth / 7,
+        fontSize: 9,
+        color: "rgba(0, 0, 0, .40)",
     },
     viewFriend: {
         marginLeft: screenWidth/36,
@@ -102,7 +111,7 @@ const ChatGroupScreenStyles = StyleSheet.create({
         flex: 0.7, 
         flexDirection: 'row', 
         justifyContent: 'flex-start', 
-        alignItems: 'flex-end',
+        alignItems: 'flex-start',
     },
     viewTextFriend: {
         marginRight: screenWidth/120,
@@ -112,7 +121,7 @@ const ChatGroupScreenStyles = StyleSheet.create({
         overflow: 'hidden',
     },
     viewMessageFriend: {
-        borderRadius: 15, 
+        borderRadius: 14, 
         backgroundColor: "#F1F0F0", 
         flexDirection: 'column',
     },

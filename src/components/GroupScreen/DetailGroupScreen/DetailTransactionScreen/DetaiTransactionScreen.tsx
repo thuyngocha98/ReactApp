@@ -157,11 +157,11 @@ class DetaiTransactionScreen extends Component<Props, States> {
                             </View>
                             <View style={{ flexDirection: 'row', marginLeft: 10, }}>
                                 <Text style={{ fontSize: 14, marginBottom: 5, opacity: 0.5 }}>Added by you on </Text>
-                                <Text style={{ fontSize: 14, opacity: 0.5 }}>ngày {time[2]} tháng {time[1]}, {time[0]}</Text>
+                                <Text style={{ fontSize: 14, opacity: 0.5 }}>{time[2]}-{time[1]}-{time[0]}</Text>
                             </View>
                             <View style={{ flexDirection: 'row', marginLeft: 10, }}>
                                 <Text style={{ fontSize: 14, marginBottom: 5, opacity: 0.5 }}>Last updated by you on </Text>
-                                <Text style={{ fontSize: 14, opacity: 0.5 }}>ngày {time[2]} tháng {time[1]}, {time[0]}</Text>
+                                <Text style={{ fontSize: 14, opacity: 0.5 }}>{time[2]}-{time[1]}-{time[0]}</Text>
                             </View>
                         </View>
                     </View>
