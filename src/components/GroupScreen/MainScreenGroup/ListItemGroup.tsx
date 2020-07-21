@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { View, FlatList, Image, Text } from 'react-native';
 import ListItemGroupStyles from '../../../styles/GroupsStyles/MainScreenGroupStyles/ListItemGroupStyles';
 import Colors from '../../../constants/Colors';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5, Entypo, Octicons } from '@expo/vector-icons';
 import ListItemDetail from './ListItemDetail';
+import { number2money } from '../../../constants/FunctionCommon';
 
 function mapStateToProps(state) {
     return {
@@ -16,11 +17,18 @@ type Props = {
     nameGroup?: string,
     detail?: string,
     price?: string,
-    data?: any[]
+    isOwned?: boolean,
+    data?: any[],
+
 }
 
 class ListItemGroup extends Component<Props> {
     render() {
+        var money = this.props.price;
+        if (parseInt(money) < 0){
+            money = money.toString().replace('-','');
+        }
+        money = number2money(money)
         return (
             <View style={ListItemGroupStyles.mainContainer}>
                 <View style={ListItemGroupStyles.container1}>
@@ -30,31 +38,24 @@ class ListItemGroup extends Component<Props> {
                     />
                     <View style={ListItemGroupStyles.texts}>
                         <View style={ListItemGroupStyles.nameGroup}>
-                            <Text style={ListItemGroupStyles.name}>{this.props.nameGroup}</Text>
-
+                            <Text style={ListItemGroupStyles.name}>
+                                {this.props.nameGroup}
+                            </Text>
                         </View>
                         <View style={ListItemGroupStyles.textDetail}>
-                            <Text>{this.props.detail}</Text>
-                            <Text>{this.props.price}</Text>
+                            <Text style={{ color: this.props.isOwned ? Colors.mediumseagreen : Colors.orangered}}>
+                                {this.props.isOwned ? "you are owned" : "you owe"}
+                            </Text>
+                            <Text style={{ color: this.props.isOwned ? Colors.mediumseagreen : Colors.orangered }}>
+                                {money} VND
+                            </Text>
                         </View>
                     </View>
-                    <FontAwesome5 name='chevron-right' size={20} color={Colors.lightgray} />
-
-                </View>
-                <View>
-                    <FlatList
-                        data={this.props.data}
-                        renderItem={({ item }) => (
-                            <ListItemDetail
-                                text={item.text}
-                            />
-                        )}
-                        keyExtractor={item => item.id.toString()}
-                    />
+                    <Octicons name='chevron-right' size={25} color={Colors.lightgray} />
                 </View>
             </View>
         );
     }
 }
 
-export default connect(mapStateToProps,)(ListItemGroup);
+export default connect(mapStateToProps)(ListItemGroup);

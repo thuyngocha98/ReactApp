@@ -1,13 +1,25 @@
-import React , {Component} from 'react';
-import { ExpoConfigView } from '@expo/samples';
+import React, {Component} from 'react';
+import {StatusBar, View} from "react-native";
+import MainAccountScreen from "../components/AccountScreen/MainAccountScreen";
 
-class AccountScreen extends Component {
+type Props = {
+    navigation?: any
+}
+
+class AccountScreen extends Component<Props> {
     static navigationOptions = {
-      header: null
+        header: null
     };
+
     render() {
+        const {navigation} = this.props;
         return (
-           <ExpoConfigView/>
+            <View>
+                <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent/>
+                <MainAccountScreen
+                navigation={navigation}
+                />
+            </View>
         );
     }
 }

@@ -1,5 +1,6 @@
-import { StyleSheet } from "react-native";
+import {StyleSheet} from "react-native";
 import Colors from "../../../constants/Colors";
+import {screenWidth} from "../../../constants/Dimensions";
 
 const MainScreenGroupStyles = StyleSheet.create({
     container: {
@@ -7,41 +8,51 @@ const MainScreenGroupStyles = StyleSheet.create({
         flexDirection: 'column'
     },
     group: {
-        marginLeft: 20,
-        marginTop: 15,
+        marginLeft: screenWidth / 20.55,
+        marginTop: screenWidth / 60,
         fontWeight: '500',
-        fontSize: 25
+        fontSize: 25,
+        opacity: 0.5
     },
     cartExpense: {
         flexDirection: 'row',
-        height: 80,
+        height: screenWidth / 5.1375,
         backgroundColor: Colors.tintColor,
-        marginHorizontal: 20,
-        marginTop: 20,
-        borderRadius: 20,
+        marginHorizontal: screenWidth / 20.55,
+        marginTop: screenWidth / 40,
+        borderRadius: screenWidth / 35,
         alignItems: 'center'
     },
     avatar: {
-        width: 60,
-        height: 60,
+        width: screenWidth / 6.85,
+        height: screenWidth / 6.85,
         resizeMode: 'cover',
-        borderRadius: 30,
-        marginLeft: 15
+        borderRadius: screenWidth / 13.7,
+        marginLeft: screenWidth / 27.4
     },
     text: {
         flex: 6,
         flexDirection: 'column',
         justifyContent: 'center',
-        marginLeft: 10,
+        marginLeft: screenWidth / 41.1,
     },
     textTotal: {
-
+        color: Colors.white,
+        fontSize: 17,
     },
     textDetail: {
-        color: Colors.mediumseagreen
+        color: Colors.white,
+        fontSize: 16,
+
     },
     menu: {
         flex: 1
     },
+    activityIndicator: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Colors.white
+    }
 });
 export default MainScreenGroupStyles;

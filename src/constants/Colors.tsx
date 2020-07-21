@@ -16,5 +16,11 @@ export default {
     noticeText: '#fff',
     white: '#ffffff',
     blackText: 'rgba(0,0,0,0.55)',
-    splitWise:'rgba(179,38,255,1)'
+    splitWise:'rgba(179,38,255,1)',
+    black: '#000000',
+    LightCyan: '#E0FFFF',
+    orangered: '#ff4500',
+    gainsboro: '#dcdcdc',
+    background: '#f2f5f8',
+    lavender: '#e6e6fa'
 };

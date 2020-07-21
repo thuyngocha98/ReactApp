@@ -5,11 +5,11 @@ import Colors from "../../../constants/Colors";
 const ListItemDetailStyles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        marginLeft: 20,
+        marginLeft: screenWidth/20.55,
         alignItems: 'center',
     },
     text: {
-        marginLeft: 15,
+        marginLeft: screenWidth/27.4,
         alignItems: 'center',
         fontSize: 15,
         color: Colors.gray

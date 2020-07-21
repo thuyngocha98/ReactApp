@@ -1,60 +1,75 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, StatusBar } from "react-native";
 import Colors from "../../../constants/Colors";
+import { screenWidth, APPBAR_HEIGHT } from "../../../constants/Dimensions";
 
 const CreateGroupScreenStyles = StyleSheet.create({
-    headerRight: {
-        marginRight: 15
-    },
-    textHeaderRight: {
-        fontSize: 17,
-        color: Colors.white
-    },
-    headerLeft: {
-        marginLeft: 15,
-    },
-    textHeaderLeft: {
-        fontSize: 17,
-        color: Colors.white
-    },
     container: {
         flex: 1,
         flexDirection: 'column'
     },
+    containerHeader: {
+        width: screenWidth,
+        height: APPBAR_HEIGHT + StatusBar.currentHeight,
+        backgroundColor: Colors.tabIconSelected
+    },
+    header: {
+        flex: 1,
+        marginTop: StatusBar.currentHeight,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginHorizontal: screenWidth / 27.43,
+    },
+    cancel: {
+        fontSize: 17,
+        color: Colors.white,
+    },
+    addContact: {
+        fontSize: 20,
+        fontWeight: '500',
+        color: Colors.white,
+        textAlign: 'center',
+        flex: 1,
+    },
+    add: {
+        fontSize: 17,
+        color: Colors.white
+    },
     categoryGroupName: {
         flexDirection: 'row',
-        margin: 20
+        margin: screenWidth/20.55
     },
     iconCamera: {
-        width: 80,
-        height: 80
+        width: screenWidth/5.1375,
+        height: screenWidth/5.1375
     },
     nameAndDetail: {
         flexDirection: 'column',
         justifyContent: 'center',
-        marginLeft: 15
+        marginLeft: screenWidth/27.4
     },
     groupName: {
         fontWeight: "500",
         fontSize: 18,
-        marginBottom: 5,
+        marginBottom: screenWidth/82.2,
     },
     
     detail: {
 
     },
     categoryGroupType: {
-        margin: 20,
+        margin: screenWidth/20.55,
     },
     groupType: {
         fontWeight: "500",
         fontSize: 18,
-        marginBottom: 10,
+        marginBottom: screenWidth/41.1,
     },
     categoryTypeGroup: {
         flexDirection: 'row',
     },
     apartment: {
-        padding: 5,
+        padding: screenWidth/82.2,
         borderWidth: 1,
         borderRightWidth: -1,
         borderColor: Colors.tintColor,
@@ -63,26 +78,35 @@ const CreateGroupScreenStyles = StyleSheet.create({
         textAlign: 'center'
     },
     house: {
-        padding: 5,
+        padding: screenWidth/82.2,
         borderWidth: 1,
         borderRightWidth: -1,
         borderColor: Colors.tintColor,
         textAlign: 'center'
     },
     trip: {
-        padding: 5,
+        padding: screenWidth/82.2,
         borderWidth: 1,
         borderRightWidth: -1,
         borderColor: Colors.tintColor,
         textAlign: 'center'
     },
     order: {
-        padding: 5,
+        padding: screenWidth/82.2,
         borderWidth: 1,
         borderColor: Colors.tintColor,
         borderTopRightRadius: 5,
         borderBottomRightRadius: 5,
         textAlign: 'center'
+    },
+    pickDate: {
+        flexDirection: 'column',
+        marginHorizontal: screenWidth / 20.55,
+    },
+    pickDate1: {
+        marginTop: screenWidth / 20.55,
+        flexDirection: 'column',
+        marginHorizontal: screenWidth / 20.55,
     }
 });
 export default CreateGroupScreenStyles;

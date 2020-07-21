@@ -6,6 +6,7 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import AppNavigator from './AppNavigator';
+import Colors from '../constants/Colors';
 
 export default function AppNavigation(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -21,7 +22,6 @@ export default function AppNavigation(props) {
   } else {
     return (
       <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <AppNavigator />
       </View>
     );
@@ -31,8 +31,8 @@ export default function AppNavigation(props) {
 async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([
-      require('../../assets/images/robot-dev.png'),
-      require('../../assets/images/robot-prod.png'),
+      require('../../assets/images/wego.png'),
+      require('../../assets/images/wallpaper.png'),
     ]),
     Font.loadAsync({
       // This is the font that we are using for our tab bar
@@ -57,6 +57,6 @@ function handleFinishLoading(setLoadingComplete) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
   },
 });

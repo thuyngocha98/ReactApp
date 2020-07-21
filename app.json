@@ -1,9 +1,12 @@
 {
   "expo": {
-    "name": "ChoCayXanh",
-    "slug": "ReactApp",
+    "name": "WeGo",
+    "slug": "we-go",
     "privacy": "public",
     "sdkVersion": "33.0.0",
+    "androidStatusBar": {
+      "backgroundColor": "#f7bd42"
+    },
     "platforms": [
       "ios",
       "android",
@@ -12,19 +15,26 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
-      "**/*"
+      "assets/*"
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.uit.wego",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyB6P5s_6EJ9BXSVko0n4iQdllCKLc35bN0"
+        }
+      },
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ]
     }
   }
 }
