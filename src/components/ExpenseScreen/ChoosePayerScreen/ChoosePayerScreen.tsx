@@ -46,13 +46,25 @@ class ChoosePayerScreen extends Component<Props, States> {
                             style={ChoosePayerScreenStyles.cancel}
                             activeOpacity={0.5}
                             onPress={() => {
-                                navigation.navigate("InputExpenseScreen", { IdPayer: this.listUser[this.state.indexCheck].user_id._id});
+                                navigation.goBack();
                             }}
                         >
                             <Text style={ChoosePayerScreenStyles.textHeaderLeft}>Cancel</Text>
                         </TouchableOpacity>
                         <Text style={ChoosePayerScreenStyles.addContact}>Choose Payer</Text>
-                        <View style={ChoosePayerScreenStyles.save} />
+                        <TouchableOpacity
+                            style={ChoosePayerScreenStyles.save}
+                            activeOpacity={0.5}
+                            onPress={() => {
+                                navigation.navigate("InputExpenseScreen", { IdPayer: this.listUser[this.state.indexCheck].user_id._id});
+                            }}
+                        >
+                            <Text
+                                style={ChoosePayerScreenStyles.add}
+                            >
+                                Done
+                            </Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={ChoosePayerScreenStyles.flatlist}>

@@ -31,6 +31,10 @@ const ChoosePayerScreenStyles = StyleSheet.create({
     cancel: {
         flex: 2,
     },
+    add: {
+        fontSize: 16,
+        color: Colors.white
+    },
     save: {
         flex: 2,
         flexDirection: 'column',

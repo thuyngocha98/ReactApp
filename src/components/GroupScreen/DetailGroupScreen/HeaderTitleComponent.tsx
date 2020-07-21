@@ -44,7 +44,7 @@ class HeaderTitleComponent extends Component<Props, States> {
   data = [
     {
       id: 0,
-      title: 'Settle up',
+      title: 'Overview',
     },
     {
       id: 1,
