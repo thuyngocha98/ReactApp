@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MapView, { PROVIDER_GOOGLE, Marker, Polygon } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker, Polyline, Heatmap } from 'react-native-maps';
 import { StyleSheet, View, Text, StatusBar, TouchableOpacity } from 'react-native';
 import { screenHeight, screenWidth } from '../../constants/Dimensions';
 import Colors from '../../constants/Colors';
@@ -39,36 +39,8 @@ class MainLocationScreen extends Component<Props, States> {
   }
 
   componentDidMount() {
-    this.permissionAndGetLocation();
     this.getLocationTrip();
   }
-
-  permissionAndGetLocation = async () => {
-    const { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== 'granted') {
-      alert("Hey! You don't enable location ");
-    } else {
-      let data = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
-      let currentPosition = {
-        latitude: data.coords.latitude,
-        longitude: data.coords.longitude,
-        latitudeDelta: 0.15,
-        longitudeDelta: 0.05,
-      };
-      let region = {
-        latitude: 37.8025259, //data.coords.latitude,
-        longitude: -122.4351431, //data.coords.longitude,
-        latitudeDelta: 0.15,
-        longitudeDelta: 0.05,
-      };
-      this.setState({
-        initialLocation: region,
-        currentPosition,
-        currentPositionLatitude: data.coords.latitude,
-        currentPositionLongtitude: data.coords.longitude,
-      });
-    }
-  };
 
   getLocationTrip = async () => {
     const tripId = this.props.navigation.getParam('tripId');
@@ -86,6 +58,20 @@ class MainLocationScreen extends Component<Props, States> {
       .catch((error) => {
         alert(error);
       });
+    let location = await this.state.coordinates[0];
+    let currentPosition = {
+      latitude: location.latitude,
+      longitude: location.longitude,
+      latitudeDelta: 0.15,
+      longitudeDelta: 0.05,
+    };
+    let currentPositionLatitude = location.latitude;
+    let currentPositionLongtitude = location.longtitude;
+    this.setState({
+      currentPosition,
+      currentPositionLatitude,
+      currentPositionLongtitude,
+    });
   };
 
   render() {
@@ -94,24 +80,31 @@ class MainLocationScreen extends Component<Props, States> {
       <View style={styles.container}>
         <StatusBar hidden={true} />
         {length > 0 ? (
-          <MapView style={styles.mapStyle} provider={PROVIDER_GOOGLE} region={this.state.initialLocation}>
+          <MapView
+            zoomEnabled={true}
+            style={styles.mapStyle}
+            provider={PROVIDER_GOOGLE}
+            region={this.state.currentPosition}
+          >
             {length > 1 && (
-              <Polygon
-                coordinates={this.state.coordinates}
-                strokeColor={Colors.lightgray}
-                strokeWidth={1}
-                fillColor={'rgba(100,100,200,0.3)'}
-              />
+              <Polyline coordinates={this.state.coordinates} strokeColor={Colors.tintColor} strokeWidth={4} />
             )}
             {this.state.coordinates.map((marker, i) => (
               <Marker
+                anchor={{ x: 0.5, y: 0.5 }}
                 key={i}
                 coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
                 title={marker.address}
                 description={`${moment(marker.create_date).format('dddd')}, ${moment(marker.create_date).format(
                   'MMMM Do YYYY, h:mm:ss a',
                 )}`}
-              ></Marker>
+              >
+                <View>
+                  <View style={styles.backgroundMarker}>
+                    <Text style={styles.customMarker}>{i + 1}</Text>
+                  </View>
+                </View>
+              </Marker>
             ))}
           </MapView>
         ) : (
@@ -151,6 +144,22 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginLeft: 7,
     marginTop: 2,
+  },
+  backgroundMarker: {
+    width: screenWidth / 12,
+    height: screenWidth / 12,
+    borderRadius: screenWidth / 24,
+    backgroundColor: Colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: 'rgba(247,189,66,0.8)',
+    borderWidth: 3,
+  },
+  customMarker: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: Colors.tintColor,
+    textAlign: 'center',
   },
 });
 
