@@ -4,28 +4,21 @@ import {
     View,
     TouchableOpacity,
     Text,
-    Animated,
-    ScrollView,
-    Alert,
     FlatList,
     StatusBar,
-    SectionList,
-    ActivityIndicator, StyleSheet
+    ActivityIndicator,
+    Dimensions,
 } from 'react-native';
 import Colors from '../../../constants/Colors';
 import DetailGroupScreenStyles from '../../../styles/GroupsStyles/DetailGroupScreenStyles/DetailGroupScreenStyles';
-import {Ionicons, EvilIcons, FontAwesome5} from '@expo/vector-icons';
 import HeaderTitleComponent from './HeaderTitleComponent';
 import {screenWidth} from '../../../constants/Dimensions';
 import ListItemContent from './ListItemContent';
-import Constants from 'expo-constants';
 import {BASEURL} from '../../../api/api';
 import {bindActionCreators} from 'redux';
 import {saveTripIdInExpense} from '../../../actions/action';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import {colors} from "react-native-elements";
-
+import Modal from 'react-native-modal';
 
 function mapStateToProps(state) {
     return {};
@@ -40,6 +33,7 @@ type States = {
     data?: any[],
     loading?: boolean,
     numberUserInTrip?: number,
+    modalVisible?: boolean,
 }
 
 class DetailGroupScreen extends Component<Props, States> {
@@ -48,6 +42,7 @@ class DetailGroupScreen extends Component<Props, States> {
         data: [],
         loading: false,
         numberUserInTrip: 0,
+        modalVisible: false,
     }
 
     static navigationOptions = ({navigation}) => {
@@ -72,6 +67,11 @@ class DetailGroupScreen extends Component<Props, States> {
     componentWillUnmount() {
         // remove barstyle when lead screen
         this._navListener.remove();
+    }
+
+    addImage() {
+        this.setState({modalVisible: !this.state.modalVisible});
+        this.props.navigation.navigate('AddImagesScreen', { tripId: this.dataTrip._id })
     }
 
 
@@ -108,6 +108,31 @@ class DetailGroupScreen extends Component<Props, States> {
         const time = this.dataTrip.create_date.split("-");
         return (
             <View style={DetailGroupScreenStyles.mainContainer}>
+                {/* view modal */}
+                <Modal
+                isVisible={this.state.modalVisible}
+                style={DetailGroupScreenStyles.mainModal}
+                coverScreen={false}
+                deviceHeight={Dimensions.get('screen').height}
+                onBackdropPress={() => this.setState({modalVisible: !this.state.modalVisible})}
+                >
+                    <View style={DetailGroupScreenStyles.viewModal}>
+                        <TouchableOpacity style={DetailGroupScreenStyles.viewItemModal}>
+                            <MaterialIcons name={'note-add'} color={Colors.tintColor} size={screenWidth / 14}/>
+                            <Text style={DetailGroupScreenStyles.txtItemModal}>Expense</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={DetailGroupScreenStyles.viewItemModal}>
+                            <MaterialIcons name={'add-location'} color={Colors.splitWise} size={screenWidth / 14}/>
+                            <Text style={DetailGroupScreenStyles.txtItemModal}>Location</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                        onPress={() => this.addImage()}
+                        style={DetailGroupScreenStyles.viewItemModal}>
+                            <MaterialIcons name={'library-add'} color={Colors.mediumseagreen} size={screenWidth / 14}/>
+                            <Text style={DetailGroupScreenStyles.txtItemModal}>Image</Text>
+                        </TouchableOpacity>
+                    </View>
+                </Modal>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent/>
                 <View style={DetailGroupScreenStyles.header}>
                     <HeaderTitleComponent
@@ -148,7 +173,7 @@ class DetailGroupScreen extends Component<Props, States> {
                     />
                 )}
                 </View>
-                <TouchableOpacity style={DetailGroupScreenStyles.addTrip}
+                {/* <TouchableOpacity style={DetailGroupScreenStyles.addTrip}
                                   activeOpacity={0.5}
                                   onPress={() => this.props.navigation.navigate('ChatGroupScreen', {
                                       dataTrip: this.dataTrip,
@@ -157,7 +182,15 @@ class DetailGroupScreen extends Component<Props, States> {
                 >
                     <MaterialCommunityIcons name={'wechat'} color={Colors.white}
                                             size={screenWidth / 9}/>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+                {this.state.modalVisible ? (null) : (
+                    <TouchableOpacity style={DetailGroupScreenStyles.addTrip}
+                    activeOpacity={0.5}
+                    onPress={() => this.setState({modalVisible: !this.state.modalVisible})}
+                    >
+                        <MaterialIcons name={'add'} color={Colors.white} size={screenWidth / 9}/>
+                    </TouchableOpacity>
+                )}
             </View>
         );
     }

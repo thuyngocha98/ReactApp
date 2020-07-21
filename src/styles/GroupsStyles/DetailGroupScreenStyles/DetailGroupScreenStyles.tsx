@@ -4,6 +4,28 @@ import { screenWidth } from "../../../constants/Dimensions";
 import  Constants  from "expo-constants";
 
 const DetailGroupScreenStyles = StyleSheet.create({
+    mainModal: {
+        justifyContent: 'flex-end',
+        margin: 0,
+    },
+    viewModal: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        backgroundColor: Colors.white,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        padding: screenWidth/36,
+    },
+    viewItemModal: {
+        flexDirection: 'column', 
+        justifyContent: 'center', 
+        alignItems: 'center'
+    },
+    txtItemModal: {
+        marginVertical: screenWidth/72,
+        fontSize: 13,
+    },
     headerRight: {
         marginRight: screenWidth /20.57,
         marginTop: screenWidth /41.14,
