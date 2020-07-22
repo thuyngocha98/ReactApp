@@ -62,8 +62,8 @@ class MainLocationScreen extends Component<Props, States> {
     let currentPosition = {
       latitude: location.latitude,
       longitude: location.longitude,
-      latitudeDelta: 0.15,
-      longitudeDelta: 0.05,
+      latitudeDelta: 0.1,
+      longitudeDelta: 0.1,
     };
     let currentPositionLatitude = location.latitude;
     let currentPositionLongtitude = location.longtitude;

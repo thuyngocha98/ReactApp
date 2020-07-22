@@ -50,10 +50,10 @@ class HeaderTitleComponent extends Component<Props, States> {
       id: 1,
       title: 'Balances',
     },
-    {
-      id: 2,
-      title: 'Totals',
-    },
+    // {
+    //   id: 2,
+    //   title: 'Totals',
+    // },
     {
       id: 3,
       title: 'Images',
@@ -215,9 +215,9 @@ class HeaderTitleComponent extends Component<Props, States> {
                         case 'Balances':
                           navigation.navigate('BalanceScreen', { tripId: this.props.idGroup });
                           break;
-                        case 'Totals':
-                          navigation.navigate('TotalScreen', { nameGroup: this.props.nameGroup });
-                          break;
+                        // case 'Totals':
+                        //   navigation.navigate('TotalScreen', { nameGroup: this.props.nameGroup });
+                        //   break;
                         case 'Images':
                           navigation.navigate('ShowImagesScreen', { tripId: this.props.idGroup });
                           break;
