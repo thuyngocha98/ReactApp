@@ -103,6 +103,11 @@ class DetailGroupScreen extends Component<Props, States> {
             <View style={{flex: 1, height: 1, backgroundColor: Colors.lightgray}}/>
         );
     };
+
+    goToAddScreen(isCheck) {
+        this.setState({modalVisible: !this.state.modalVisible});
+        this.props.navigation.navigate('InputExpenseScreen', {dataGroup: this.dataTrip, isCheck: isCheck});
+    }
     
     render() {
         const time = this.dataTrip.create_date.split("-");
@@ -117,16 +122,20 @@ class DetailGroupScreen extends Component<Props, States> {
                 onBackdropPress={() => this.setState({modalVisible: !this.state.modalVisible})}
                 >
                     <View style={DetailGroupScreenStyles.viewModal}>
-                        <TouchableOpacity style={DetailGroupScreenStyles.viewItemModal}>
+                        <TouchableOpacity 
+                        onPress={() => this.goToAddScreen('1')}
+                        style={DetailGroupScreenStyles.viewItemModal}>
                             <MaterialIcons name={'note-add'} color={Colors.tintColor} size={screenWidth / 14}/>
                             <Text style={DetailGroupScreenStyles.txtItemModal}>Expense</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={DetailGroupScreenStyles.viewItemModal}>
+                        <TouchableOpacity 
+                        onPress={() => this.goToAddScreen('2')}
+                        style={DetailGroupScreenStyles.viewItemModal}>
                             <MaterialIcons name={'add-location'} color={Colors.splitWise} size={screenWidth / 14}/>
                             <Text style={DetailGroupScreenStyles.txtItemModal}>Location</Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
-                        onPress={() => this.addImage()}
+                        onPress={() => this.goToAddScreen('3')}
                         style={DetailGroupScreenStyles.viewItemModal}>
                             <MaterialIcons name={'library-add'} color={Colors.mediumseagreen} size={screenWidth / 14}/>
                             <Text style={DetailGroupScreenStyles.txtItemModal}>Image</Text>
@@ -173,16 +182,6 @@ class DetailGroupScreen extends Component<Props, States> {
                     />
                 )}
                 </View>
-                {/* <TouchableOpacity style={DetailGroupScreenStyles.addTrip}
-                                  activeOpacity={0.5}
-                                  onPress={() => this.props.navigation.navigate('ChatGroupScreen', {
-                                      dataTrip: this.dataTrip,
-                                      navigation: this.props.navigation
-                                  })}
-                >
-                    <MaterialCommunityIcons name={'wechat'} color={Colors.white}
-                                            size={screenWidth / 9}/>
-                </TouchableOpacity> */}
                 {this.state.modalVisible ? (null) : (
                     <TouchableOpacity style={DetailGroupScreenStyles.addTrip}
                     activeOpacity={0.5}

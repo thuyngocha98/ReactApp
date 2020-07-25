@@ -23,7 +23,8 @@ const DetailGroupScreenStyles = StyleSheet.create({
         alignItems: 'center'
     },
     txtItemModal: {
-        marginVertical: screenWidth/72,
+        marginTop: screenWidth/72,
+        marginBottom: screenWidth/36,
         fontSize: 13,
     },
     headerRight: {

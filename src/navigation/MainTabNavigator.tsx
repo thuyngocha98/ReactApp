@@ -1,25 +1,17 @@
 import React from 'react';
-import { Platform, View, Text, Animated, Easing } from 'react-native';
+import { Platform, Animated, Easing } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import { Feather, MaterialCommunityIcons, Ionicons, EvilIcons, Octicons } from '@expo/vector-icons';
-import TabBarIcon from '../components/TabBarIcon';
-import FriendsScreen from '../screens/FriendsScreen';
 import GroupScreen from '../screens/GroupScreen';
 import SearchScreen from '../screens/SearchScreen';
 import ActivityScreen from '../screens/ActivityScreen';
 import Colors from '../constants/Colors';
 import AccountScreen from '../screens/AccountScreen';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import CreateGroupScreen from '../components/GroupScreen/CreateGroupScreen/CreateGroupScreen';
 import DetailGroupScreen from '../components/GroupScreen/DetailGroupScreen/DetailGroupScreen';
-import AddFriendsScreen from '../components/FriendsScreen/AddFriendsScreen/AddFriendsScreen';
-import AddContactScreen from '../components/FriendsScreen/AddContactScreen/AddContactScreen';
-import SplitWiseProScreen from '../components/FriendsScreen/SplitWiseProScreen/SplitWiseProScreen';
-import MainDetailsWhoPaidScreen from '../components/FriendsScreen/MainDetailsWhoPaidScreen/MainDetailsWhoPaidScreen';
 import BalanceScreen from '../components/GroupScreen/DetailGroupScreen/BalanceScreen/BalanceScreen';
 import MainActivityDetailsWhoPaidScreen from '../components/ActivityScreen/MainActivityDetailsWhoPaidScreen/MainActivityDetailsWhoPaidScreen';
-import MainActivityScreen from '../components/ActivityScreen/RecentActivityScreen/MainActivityScreen';
 import TotalScreen from '../components/GroupScreen/DetailGroupScreen/TotalScreen/TotalScreen';
 import ExpenseScreen from '../screens/ExpenseScreen';
 import InputExpenseScreen from '../components/ExpenseScreen/InputExpenseScreen/InputExpenseScreen';
@@ -143,6 +135,27 @@ const GroupStack = createStackNavigator(
     ChatGroupScreen: {
       screen: ChatGroupScreen,
     },
+    InputExpenseScreen: {
+      screen: InputExpenseScreen,
+    },
+    ChoosePayerScreen: {
+      screen: ChoosePayerScreen,
+    },
+    ChooseMultiplePeopleScreen: {
+      screen: ChooseMultiplePeopleScreen,
+    },
+    ExpenseDetailScreen: {
+      screen: ExpenseDetailScreen,
+    },
+    ExpenseMoreOptionScreen: {
+      screen: ExpenseMoreOptionScreen,
+    },
+    ExpenseByNumberSplitScreen: {
+      screen: ExpenseByNumberSplitScreen,
+    },
+    ExpenseByPlusOrMinusScreen: {
+      screen: ExpenseByPlusOrMinusScreen,
+    },
     MainLocationScreen,
   },
   {
@@ -169,7 +182,14 @@ GroupStack.navigationOptions = ({ navigation }) => {
     routeName == 'ShowImagesScreen' ||
     routeName == 'AddImagesScreen' ||
     routeName == 'ChatGroupScreen' ||
-    routeName == 'MainLocationScreen'
+    routeName == 'MainLocationScreen' ||
+    routeName == 'InputExpenseScreen' ||
+    routeName == 'ChoosePayerScreen' ||
+    routeName == 'ChooseMultiplePeopleScreen' ||
+    routeName == 'ExpenseDetailScreen' ||
+    routeName == 'ExpenseMoreOptionScreen' ||
+    routeName == 'ExpenseByNumberSplitScreen' ||
+    routeName == 'ExpenseByPlusOrMinusScreen'
   ) {
     tabBarVisible = false;
   }
@@ -372,7 +392,7 @@ const tabNavigator = createBottomTabNavigator({
   //FriendsStack,
   SearchStack,
   GroupStack,
-  ExpenseStack,
+  // ExpenseStack,
   ActivityStack,
   AccountStack,
 });

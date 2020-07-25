@@ -1,6 +1,6 @@
 import { StyleSheet, StatusBar } from "react-native";
 import Constants from "expo-constants";
-import { screenWidth, APPBAR_HEIGHT } from "../../../constants/Dimensions";
+import { screenWidth, APPBAR_HEIGHT, screenHeight } from "../../../constants/Dimensions";
 import Colors from "../../../constants/Colors";
 
 const InputExpenseScreenStyles = StyleSheet.create({
@@ -82,7 +82,28 @@ const InputExpenseScreenStyles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        marginTop: screenWidth/13.7,
+    },
+    viewSetAgain: {
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    btnSetAgain: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: screenWidth/24,
+        paddingHorizontal: screenWidth/72,
+        paddingVertical: screenWidth/144,
+        backgroundColor: Colors.white,
+        borderColor: Colors.gray,
+        elevation: 3,
+        borderRadius: screenWidth / 72
+    },
+    txtSetAgain: {
+        fontSize: 10,
+        marginRight: screenWidth/72,
     },
     sectionDescription: {
         flexDirection: 'row',
@@ -90,6 +111,8 @@ const InputExpenseScreenStyles = StyleSheet.create({
     iconDescription: {
         borderColor: Colors.lightgray,
         elevation: 2,
+        justifyContent: 'center',
+        alignItems: 'center',
         borderRadius: screenWidth/82.2
     },
     inputDescription: {
@@ -97,13 +120,20 @@ const InputExpenseScreenStyles = StyleSheet.create({
         margin: screenWidth/82.2,
         justifyContent: 'flex-end'
     },
+    inputLocation: {
+        paddingVertical: 0,
+    },
     txtInputDescription: {
         width: screenWidth*0.5,
-        fontSize: 21,
+        fontSize: 17,
         marginBottom: screenWidth/82.2
     },
     underLineInput: {
         width: screenWidth*0.5,
+        height: 1.5,
+        backgroundColor: Colors.blackText
+    },
+    underLineInput1: {
         height: 1.5,
         backgroundColor: Colors.blackText
     },
@@ -121,10 +151,10 @@ const InputExpenseScreenStyles = StyleSheet.create({
         borderRadius: screenWidth/82.2
     },
     iconvnd: {
-        fontSize: 30,
+        fontSize: 24,
         fontWeight: '600',
-        paddingHorizontal: screenWidth/27.4,
-        paddingVertical: screenWidth/82.2,
+        paddingHorizontal: screenWidth/35,
+        paddingVertical: screenWidth/90,
         color: Colors.gray
     },
     inputMoney: {
@@ -133,8 +163,7 @@ const InputExpenseScreenStyles = StyleSheet.create({
         justifyContent: 'flex-end'
     },
     txtInputMoney: {
-        fontSize: 23,
-        fontWeight: "500",
+        fontSize: 20,
         marginBottom: screenWidth/82.2
     },
     btnSubmit: {
@@ -142,13 +171,14 @@ const InputExpenseScreenStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: screenWidth/20.55,
+        marginBottom: screenWidth/24
     },
     text1: {
-        fontSize: 17,
+        fontSize: 15,
         fontWeight: '400',
     },
     text2: {
-        fontSize: 17,
+        fontSize: 15,
         fontWeight: '300',
         padding: screenWidth/82.2,
     },
@@ -157,6 +187,95 @@ const InputExpenseScreenStyles = StyleSheet.create({
         borderColor: Colors.gray,
         elevation: 3,
         borderRadius: screenWidth / 82.2
+    },
+    viewRowItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginHorizontal: screenWidth/24,
+        paddingVertical: screenWidth/ 24,
+    },
+    line: {
+        borderTopWidth: 1,
+        borderTopColor: Colors.lightgray,
+        height: 1,
+        marginHorizontal: screenWidth/24,
+    },
+    viewIconAndTitleItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    txtTitleItem: {
+        fontSize: 15,
+        marginLeft: screenWidth/36,
+    },
+    viewIconRightItem: {
+        transform: [
+            {rotate: '90deg'}
+        ]
+    },
+    // =========== location ========
+    viewMainAddLocation: {
+        flexDirection: 'column',
+    },
+    viewAddLocation: {
+        width: '100%',
+        height: screenHeight/1.97,
+    },
+    mapStyle: {
+        margin: screenWidth/24,
+        flex: 1,
+        ...StyleSheet.absoluteFillObject,
+    },
+    viewGetCurrentLocation: {
+        width: screenWidth/12,
+        height: screenWidth/12,
+        borderRadius: screenWidth/24,
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 10,
+        marginRight: screenWidth/18,
+        marginBottom: screenWidth/18,
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+        backgroundColor: Colors.white,
+    },
+    viewHeaderAddLocation: {
+        flexDirection: 'column',
+        marginHorizontal: screenWidth/24,
+    },
+    viewEnableLocation: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    viewNoneEnableSwitch: {
+        width: screenWidth/13.85,
+        height: screenWidth/20,
+        borderRadius: screenWidth/40,
+        backgroundColor: Colors.gray,
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        paddingHorizontal: screenWidth/180,
+    },
+    viewEnableSwitch: {
+        width: screenWidth/13.85,
+        height: screenWidth/20,
+        borderRadius: screenWidth/40,
+        backgroundColor: Colors.tintColor,
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+        paddingHorizontal: screenWidth/180,
+    },
+    viewCircleSwitch: {
+        width: screenWidth/25.7,
+        height: screenWidth/25.7,
+        borderRadius: screenWidth/51.43,
+        backgroundColor: Colors.white,
+    },
+    viewInputTitleLocation: {
+
     }
 });
 export default InputExpenseScreenStyles;

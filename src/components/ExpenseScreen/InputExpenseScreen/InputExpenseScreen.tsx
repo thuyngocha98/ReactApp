@@ -5,7 +5,6 @@ import {
   View,
   TouchableOpacity,
   Text,
-  Image,
   TextInput,
   StatusBar,
   Alert,
@@ -13,7 +12,7 @@ import {
   ToastAndroid,
   ScrollView,
 } from 'react-native';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import InputExpenseScreenStyles from '../../../styles/ExpenseScreenStyles/InputExpenseScreenStyles/InputExpenseScreenStyles';
 import { bindActionCreators } from 'redux';
 import { getApiListUserInTrip, saveTripIdInExpense } from '../../../actions/action';
@@ -21,7 +20,8 @@ import { BASEURL } from '../../../api/api';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { CheckBox, Input } from 'react-native-elements';
-import { screenWidth } from '../../../constants/Dimensions';
+import { screenWidth, screenHeight } from '../../../constants/Dimensions';
+import MapView, {Marker} from 'react-native-maps';
 
 function mapStateToProps(state) {
   return {
@@ -33,10 +33,8 @@ function mapStateToProps(state) {
 type Props = {
   author?: any;
   navigation?: any;
-  currenGroup?: any;
   getListUserInTrip?: any;
   listUserInTrip?: any;
-  dataGroup?: any;
   saveTripId?: any;
 };
 
@@ -45,10 +43,21 @@ type States = {
   money?: string;
   checkDescription?: boolean;
   checkMoney?: boolean;
-  location?: any[];
   checked?: boolean;
-  txtLocation?: string;
+  isCheckExpense?: boolean;
+  isCheckLocation?: boolean;
+  isCheckImage?: boolean;
+  latMarker?: number;
+  longMarker?: number;
+  isEnableAddLocation?: boolean;
+  titleLocation?: string;
 };
+
+const ASPECT_RATIO = screenWidth / (screenHeight/1.97);
+const LATITUDE = 10.8720441;
+const LONGITUDE = 106.7555692;
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 class InputExpenseScreen extends Component<Props, States> {
   constructor(props) {
@@ -58,13 +67,18 @@ class InputExpenseScreen extends Component<Props, States> {
       money: '',
       checkDescription: false,
       checkMoney: false,
-      location: [],
       checked: false,
-      txtLocation: '',
+      isCheckExpense: false,
+      isCheckLocation: false,
+      isCheckImage: false,
+      latMarker: 0,
+      longMarker: 0,
+      isEnableAddLocation: false,
+      titleLocation: '',
     };
   }
 
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = () => {
     return {
       header: null,
     };
@@ -78,26 +92,14 @@ class InputExpenseScreen extends Component<Props, States> {
     this._navListener = this.props.navigation.addListener('didFocus', async () => {
       StatusBar.setBarStyle('light-content');
       let data = this.props.navigation.getParam('dataGroup', {});
-      if (Object.getOwnPropertyNames(data).length === 0) data = this.props.dataGroup;
       this.props.getListUserInTrip(data._id);
+      let isCheck = this.props.navigation.getParam('isCheck', '1');
+      if(isCheck === '1') this.setState({isCheckExpense: true})
+      else if(isCheck === '2'){
+        this.onGetMyCurrentLocation();
+      }
+      else this.setState({isCheckImage: true});
     });
-  }
-
-  async permissionAndGetLocation() {
-    const { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== 'granted') {
-      alert("Hey! You don't enable location ");
-      this.setState({ checked: false });
-    } else {
-      let data = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
-      await this.setState({ location: [data.coords] });
-      this.setState({ checked: true });
-    }
-  }
-
-  addLocation() {
-    if (this.state.location.length == 0) this.permissionAndGetLocation();
-    else this.setState({ checked: !this.state.checked });
   }
 
   componentWillUnmount() {
@@ -153,6 +155,21 @@ class InputExpenseScreen extends Component<Props, States> {
     }
   }
 
+  checkMoney(text) {
+    if (text === '') {
+      this.setState({
+        money: text,
+        checkMoney: false,
+      });
+    } else {
+      text = text.toString().replace(/,/g, '');
+      this.setState({
+        money: text.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+        checkMoney: true,
+      });
+    }
+  }
+
   async createListUser(listTypeUser, idPayer) {
     const Money = parseInt(this.state.money.replace(/,/g, ''));
     var Payer = idPayer === '' ? this.props.author : idPayer;
@@ -181,37 +198,56 @@ class InputExpenseScreen extends Component<Props, States> {
     return list_user;
   }
 
-  checkMoney(text) {
-    if (text === '') {
-      this.setState({
-        money: text,
-        checkMoney: false,
-      });
-    } else {
-      text = text.toString().replace(/,/g, '');
-      this.setState({
-        money: text.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-        checkMoney: true,
-      });
-    }
-  }
-
   async createTransaction(tripId, listTypeUser, idPayer) {
     const Money = parseInt(this.state.money.replace(/,/g, ''));
     const Description = this.state.description;
     var list_user = await this.createListUser(listTypeUser, idPayer);
-    if (this.state.checkDescription && this.state.checkMoney) {
+    if(this.state.checkDescription !== this.state.checkMoney){
+      Keyboard.dismiss();
+      ToastAndroid.showWithGravityAndOffset(
+        'Please enter the full expense information !',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        25,
+        50,
+      );
+    }
+    else{
+      if(!this.state.checkDescription && !this.state.isEnableAddLocation){
+        Keyboard.dismiss();
+        ToastAndroid.showWithGravityAndOffset(
+          'Please enter additional information !',
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+          25,
+          50,
+        );
+        return;
+      }
+      var dataExpense = {};
+      var dataLocation = {};
+      if(this.state.checkDescription){
+        dataExpense = {
+          name: Description,
+          author: this.props.author,
+          amount: Money,
+          trip_id: tripId,
+          list_user: list_user,
+        }
+      }
+      if(this.state.isEnableAddLocation){
+        dataLocation = {
+          latitude: this.state.latMarker,
+          longitude: this.state.longMarker,
+          titleLocation : this.state.titleLocation,
+        }
+      }
       const data = {
-        name: Description,
-        author: this.props.author,
-        amount: Money,
-        trip_id: tripId,
-        list_user: list_user,
-        location: this.state.txtLocation.length > 0 ? this.state.location : [],
-        address: this.state.txtLocation,
+        dataExpense: dataExpense,
+        dataLocation: dataLocation,
       };
       const json = JSON.stringify(data);
-      fetch(`${BASEURL}/api/transaction/insert_new_transaction`, {
+       fetch(`${BASEURL}/api/transaction/insert_new_transaction`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -222,17 +258,10 @@ class InputExpenseScreen extends Component<Props, States> {
         .then((response) => response.json())
         .then(async (res) => {
           if (res.result === 'ok') {
-            this.setState({
-              description: '',
-              money: '',
-              checkDescription: false,
-              checkMoney: false,
-            });
+            this.setInputExpenseAgain();
             ToastAndroid.showWithGravityAndOffset('Save done!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
             await this.props.saveTripId(tripId);
-            await this.setState({ location: [], checked: false, txtLocation: '' });
-            await this.props.navigation.setParams({ listTypeUser: [], IdPayer: '' });
-            this.props.navigation.navigate('GroupScreen');
+            this.props.navigation.goBack();
           } else {
             ToastAndroid.showWithGravityAndOffset('Save error!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
           }
@@ -240,14 +269,56 @@ class InputExpenseScreen extends Component<Props, States> {
         .catch((error) => {
           console.log(error);
         });
+    }
+  }
+
+  async setInputExpenseAgain() {
+    this.setState({
+      description: '',
+      money: '',
+      checkDescription: false,
+      checkMoney: false,
+    });
+    await this.props.navigation.setParams({ listTypeUser: [], IdPayer: '' });
+  }
+
+
+  async onChangeMarker(e) {
+    await this.setState({latMarker: e.nativeEvent.coordinate.latitude, 
+      longMarker: e.nativeEvent.coordinate.longitude });
+  }
+
+  async onShowHideViewLocation() {
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      alert("Hey! You don't enable location ");
+    }else{
+      if(this.state.isCheckLocation)
+        this.setState({isCheckLocation: false})
+      else{
+        if(!this.state.latMarker){
+          let currentPosition = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
+          this.setState({
+            isCheckLocation: true, 
+            latMarker: currentPosition.coords.latitude, 
+            longMarker: currentPosition.coords.longitude}
+          );
+        }else
+          this.setState({isCheckLocation: true});
+      }
+    }
+  }
+
+  async onGetMyCurrentLocation() {
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      alert("Hey! You don't enable location ");
     } else {
-      Keyboard.dismiss();
-      ToastAndroid.showWithGravityAndOffset(
-        'Please enter full information!',
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-        25,
-        50,
+      let currentPosition = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
+      this.setState({
+        isCheckLocation: true, 
+        latMarker: currentPosition.coords.latitude, 
+        longMarker: currentPosition.coords.longitude}
       );
     }
   }
@@ -257,17 +328,18 @@ class InputExpenseScreen extends Component<Props, States> {
     this.listTypeUser = navigation.getParam('listTypeUser', []);
     this.idPayer = this.props.navigation.getParam('IdPayer', '');
     var Group = navigation.getParam('dataGroup', {});
-    if (Object.getOwnPropertyNames(Group).length === 0) Group = this.props.dataGroup;
     return (
       <View style={InputExpenseScreenStyles.container}>
         <StatusBar barStyle="light-content" hidden={false} backgroundColor={'transparent'} translucent />
+        {/* view header */}
         <View style={InputExpenseScreenStyles.containerHeader}>
           <View style={InputExpenseScreenStyles.header}>
             <TouchableOpacity
               style={InputExpenseScreenStyles.cancel}
               activeOpacity={0.5}
-              onPress={() => {
-                navigation.navigate('MainExpenseScreen', { currentGroup: Group.name });
+              onPress={async () => {
+                await this.props.navigation.setParams({ listTypeUser: [], IdPayer: '' });
+                navigation.goBack();
               }}
             >
               <Ionicons name="ios-close" size={45} color={Colors.white} />
@@ -291,28 +363,36 @@ class InputExpenseScreen extends Component<Props, States> {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={InputExpenseScreenStyles.header1}>
-          <Text style={InputExpenseScreenStyles.txt1}>
-            With
-            <Text style={InputExpenseScreenStyles.txt2}>{' you '}</Text>
-            and:
-          </Text>
+        <ScrollView keyboardShouldPersistTaps="handled">
+          {/* view add expense */}
           <TouchableOpacity
-            style={InputExpenseScreenStyles.nameGroup}
-            onPress={() => {
-              navigation.navigate('MainExpenseScreen', { currentGroup: Group.name });
-            }}
-          >
-            <Image style={InputExpenseScreenStyles.image} source={require('../../../../assets/images/icon-home.png')} />
-            <Text style={InputExpenseScreenStyles.txtAllOf}>All of {Group.name}</Text>
+          onPress={() => this.setState({isCheckExpense: !this.state.isCheckExpense})}
+          style={InputExpenseScreenStyles.viewRowItem}>
+            <View style={InputExpenseScreenStyles.viewIconAndTitleItem}>
+              <MaterialIcons name={'note-add'} color={Colors.tintColor} size={screenWidth / 14}/>
+              <Text style={InputExpenseScreenStyles.txtTitleItem}>Add Expense</Text>
+            </View>
+            <View style={this.state.isCheckExpense ? InputExpenseScreenStyles.viewIconRightItem : null}>
+              <FontAwesome 
+                name={'angle-right'} 
+                color={this.state.checkDescription && this.state.checkMoney ? Colors.tintColor : Colors.gray} 
+                size={screenWidth / 12}
+              />
+            </View>
           </TouchableOpacity>
-        </View>
-        <View style={InputExpenseScreenStyles.underLine} />
-        <ScrollView keyboardShouldPersistTaps="always">
+          {this.state.isCheckExpense ? (
           <View style={InputExpenseScreenStyles.sectionInput}>
+            <View style={InputExpenseScreenStyles.viewSetAgain}>
+              <TouchableOpacity
+              onPress={() => this.setInputExpenseAgain()}
+              style={InputExpenseScreenStyles.btnSetAgain}>
+                <Text style={InputExpenseScreenStyles.txtSetAgain}>Set again</Text>
+                <FontAwesome name="repeat" size={10} color={Colors.gray} />
+              </TouchableOpacity>
+            </View>
             <View style={InputExpenseScreenStyles.sectionDescription}>
               <View style={InputExpenseScreenStyles.iconDescription}>
-                <MaterialIcons name="description" size={38} color={Colors.blackText} style={{ padding: 5 }} />
+                <MaterialIcons name="description" size={26} color={Colors.blackText} style={{ padding: 5 }} />
               </View>
               <View style={InputExpenseScreenStyles.inputDescription}>
                 <TextInput
@@ -324,7 +404,6 @@ class InputExpenseScreen extends Component<Props, States> {
                   autoCorrect={false}
                   maxLength={100}
                   autoCapitalize={'words'}
-                  autoFocus
                   underlineColorAndroid={'transparent'}
                 />
                 <View style={InputExpenseScreenStyles.underLineInput} />
@@ -376,33 +455,87 @@ class InputExpenseScreen extends Component<Props, States> {
                 </Text>
               </View>
             </View>
-            <View style={{ flexDirection: 'column', marginVertical: screenWidth / 36, marginBottom: screenWidth / 24 }}>
-              <CheckBox
-                size={18}
-                containerStyle={{ backgroundColor: '#ffffff', borderColor: '#ffffff', elevation: 3 }}
-                checkedColor="rgba(247,189,66,1)"
-                title="Add Location"
-                checked={this.state.txtLocation.length > 0 ? true : false}
-                onPress={() => this.addLocation()}
-              />
-              {this.state.checked ? (
-                <Input
-                  inputContainerStyle={{ width: screenWidth / 1.8 }}
-                  onChangeText={(value) => this.setState({ txtLocation: value })}
-                  value={this.state.txtLocation}
-                  keyboardType="visible-password"
-                  placeholder="Enter a location"
-                  rightIcon={
-                    <MaterialIcons
-                      name="add-location"
-                      size={24}
-                      color={this.state.txtLocation.length > 0 ? Colors.tintColor : Colors.blackText}
-                    />
-                  }
-                />
-              ) : null}
-            </View>
           </View>
+          ) : (null)}
+          <View style={InputExpenseScreenStyles.line} />
+          {/* view add location */}
+          <TouchableOpacity
+          onPress={() => this.onShowHideViewLocation()}
+          style={InputExpenseScreenStyles.viewRowItem}>
+            <View style={InputExpenseScreenStyles.viewIconAndTitleItem}>
+              <MaterialIcons name={'add-location'} color={Colors.splitWise} size={screenWidth / 14}/>
+              <Text style={InputExpenseScreenStyles.txtTitleItem}>Add Location</Text>
+            </View>
+            <View style={this.state.isCheckLocation ? InputExpenseScreenStyles.viewIconRightItem : null}>
+              <FontAwesome 
+                name={'angle-right'} 
+                color={this.state.isEnableAddLocation ? Colors.tintColor : Colors.gray} 
+                size={screenWidth / 12}
+              />
+            </View>
+          </TouchableOpacity>
+          {this.state.isCheckLocation ? (
+            <View style={InputExpenseScreenStyles.viewMainAddLocation}>
+              <View style={InputExpenseScreenStyles.viewHeaderAddLocation}>
+                <View style={InputExpenseScreenStyles.viewEnableLocation}>
+                  <Text style={InputExpenseScreenStyles.txtSetAgain}>Enable add location</Text>
+                  <TouchableOpacity 
+                  onPress={() => this.setState({isEnableAddLocation: !this.state.isEnableAddLocation})}
+                  style={this.state.isEnableAddLocation ?
+                    InputExpenseScreenStyles.viewEnableSwitch : InputExpenseScreenStyles.viewNoneEnableSwitch}>
+                    <View style={InputExpenseScreenStyles.viewCircleSwitch} />
+                  </TouchableOpacity>
+                </View>
+                <View style={InputExpenseScreenStyles.viewInputTitleLocation}>
+                  <TextInput 
+                    style={InputExpenseScreenStyles.inputLocation}
+                    placeholder="Enter title location"
+                    value={this.state.titleLocation}
+                  />
+                  <View style={InputExpenseScreenStyles.underLineInput1} />
+                </View>
+              </View>
+              <View style={InputExpenseScreenStyles.viewAddLocation}>
+                <TouchableOpacity 
+                onPress={() => this.onGetMyCurrentLocation()}
+                style={InputExpenseScreenStyles.viewGetCurrentLocation}>
+                  <MaterialIcons name={'my-location'} color={Colors.black} size={screenWidth / 25}/>
+                </TouchableOpacity>
+                <MapView
+                  style={InputExpenseScreenStyles.mapStyle}
+                  initialRegion={{
+                    latitude: this.state.latMarker,
+                    longitude: this.state.longMarker,
+                    latitudeDelta: LATITUDE_DELTA,
+                    longitudeDelta: LONGITUDE_DELTA,
+                  }}
+                  onPress={e => this.onChangeMarker(e)}
+                >
+                  <Marker
+                    draggable
+                    onDragEnd={e => this.onChangeMarker(e)}
+                    coordinate={{latitude: this.state.latMarker, longitude: this.state.longMarker}}
+                  >
+                    <MaterialIcons name={'location-on'} color={Colors.splitWise} size={screenWidth / 12}/>
+                  </Marker>
+                </MapView>
+              </View>
+            </View>
+          ) : (null)}
+          <View style={InputExpenseScreenStyles.line} />
+          {/* view add image */}
+          <TouchableOpacity
+          onPress={() => this.setState({isCheckImage: !this.state.isCheckImage})}
+          style={InputExpenseScreenStyles.viewRowItem}>
+            <View style={InputExpenseScreenStyles.viewIconAndTitleItem}>
+              <MaterialIcons name={'library-add'} color={Colors.mediumseagreen} size={screenWidth / 14}/>
+              <Text style={InputExpenseScreenStyles.txtTitleItem}>Add Image</Text>
+            </View>
+            <View style={this.state.isCheckImage ? InputExpenseScreenStyles.viewIconRightItem : null}>
+              <FontAwesome name={'angle-right'} color={Colors.gray} size={screenWidth / 12}/>
+            </View>
+          </TouchableOpacity>
+          <View style={InputExpenseScreenStyles.line} />
         </ScrollView>
       </View>
     );
