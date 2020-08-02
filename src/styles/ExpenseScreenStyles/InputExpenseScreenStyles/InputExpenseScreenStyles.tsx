@@ -276,6 +276,43 @@ const InputExpenseScreenStyles = StyleSheet.create({
     },
     viewInputTitleLocation: {
 
-    }
+    },
+    viewAddImage: {
+        paddingHorizontal: screenWidth/24,
+        marginBottom: screenWidth/24,
+    },
+    viewIconAdd: {
+
+    },
+    iconAdd: {
+        width: screenWidth/6,
+        height: screenWidth/6,
+        borderRadius: 8,
+    },
+    viewShowImage: {
+        flexDirection: 'row',
+    },
+    showImage: {
+        paddingTop: screenWidth/48,
+        marginRight: screenWidth/30,
+    },
+    imageAdd: {
+        resizeMode: 'stretch',
+        width: screenWidth/4.5,
+        height: screenWidth/4,
+        borderRadius: 8,
+    },
+    viewDeleteImage: {
+        zIndex: 10,
+        backgroundColor: Colors.lightgray,
+        width: screenWidth/24,
+        height: screenWidth/24,
+        borderRadius: screenWidth/48,
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        right: -screenWidth/48,
+        top: 0,
+    },
 });
 export default InputExpenseScreenStyles;

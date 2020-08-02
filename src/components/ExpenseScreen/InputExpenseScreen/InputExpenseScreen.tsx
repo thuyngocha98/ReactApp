@@ -11,17 +11,21 @@ import {
   Keyboard,
   ToastAndroid,
   ScrollView,
+  Image,
+  FlatList,
+  Modal,
 } from 'react-native';
-import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons, FontAwesome, Feather } from '@expo/vector-icons';
 import InputExpenseScreenStyles from '../../../styles/ExpenseScreenStyles/InputExpenseScreenStyles/InputExpenseScreenStyles';
 import { bindActionCreators } from 'redux';
 import { getApiListUserInTrip, saveTripIdInExpense } from '../../../actions/action';
 import { BASEURL } from '../../../api/api';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
-import { CheckBox, Input } from 'react-native-elements';
 import { screenWidth, screenHeight } from '../../../constants/Dimensions';
 import MapView, {Marker} from 'react-native-maps';
+import * as ImagePicker from 'expo-image-picker';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 function mapStateToProps(state) {
   return {
@@ -50,12 +54,12 @@ type States = {
   latMarker?: number;
   longMarker?: number;
   isEnableAddLocation?: boolean;
-  titleLocation?: string;
+  address?: string;
+  listImageAdd?: any[];
+  isModelVisible?: boolean;
 };
 
 const ASPECT_RATIO = screenWidth / (screenHeight/1.97);
-const LATITUDE = 10.8720441;
-const LONGITUDE = 106.7555692;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
@@ -74,7 +78,9 @@ class InputExpenseScreen extends Component<Props, States> {
       latMarker: 0,
       longMarker: 0,
       isEnableAddLocation: false,
-      titleLocation: '',
+      address: '',
+      listImageAdd: [],
+      isModelVisible: false,
     };
   }
 
@@ -213,7 +219,7 @@ class InputExpenseScreen extends Component<Props, States> {
       );
     }
     else{
-      if(!this.state.checkDescription && !this.state.isEnableAddLocation){
+      if(!this.state.checkDescription && !this.state.isEnableAddLocation && this.state.listImageAdd?.length === 0){
         Keyboard.dismiss();
         ToastAndroid.showWithGravityAndOffset(
           'Please enter additional information !',
@@ -224,6 +230,7 @@ class InputExpenseScreen extends Component<Props, States> {
         );
         return;
       }
+      var bodyFormData = new FormData();
       var dataExpense = {};
       var dataLocation = {};
       if(this.state.checkDescription){
@@ -239,32 +246,40 @@ class InputExpenseScreen extends Component<Props, States> {
         dataLocation = {
           latitude: this.state.latMarker,
           longitude: this.state.longMarker,
-          titleLocation : this.state.titleLocation,
+          address : this.state.address,
         }
       }
-      const data = {
-        dataExpense: dataExpense,
-        dataLocation: dataLocation,
-      };
-      const json = JSON.stringify(data);
-       fetch(`${BASEURL}/api/transaction/insert_new_transaction`, {
+      if(this.state.listImageAdd?.length > 0){
+        this.state.listImageAdd.forEach(image => {
+          let photo = {
+            uri: image.url,
+            name: image.name,
+            type: image.type
+          }
+          bodyFormData.append('image', photo)
+        });
+      }
+
+      bodyFormData.append('dataExpense', JSON.stringify(dataExpense));
+      bodyFormData.append('dataLocation', JSON.stringify(dataLocation));
+      console.log(bodyFormData);
+      fetch(`${BASEURL}/api/transaction/insert_new_transaction`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
-        body: json,
+        body: bodyFormData,
       })
         .then((response) => response.json())
         .then(async (res) => {
-          if (res.result === 'ok') {
-            this.setInputExpenseAgain();
-            ToastAndroid.showWithGravityAndOffset('Save done!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
-            await this.props.saveTripId(tripId);
-            this.props.navigation.goBack();
-          } else {
-            ToastAndroid.showWithGravityAndOffset('Save error!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
-          }
+          // if (res.result === 'ok') {
+          //   this.setInputExpenseAgain();
+          //   ToastAndroid.showWithGravityAndOffset('Save done!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+          //   await this.props.saveTripId(tripId);
+          //   this.props.navigation.goBack();
+          // } else {
+          //   ToastAndroid.showWithGravityAndOffset('Save error!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+          // }
         })
         .catch((error) => {
           console.log(error);
@@ -284,8 +299,15 @@ class InputExpenseScreen extends Component<Props, States> {
 
 
   async onChangeMarker(e) {
-    await this.setState({latMarker: e.nativeEvent.coordinate.latitude, 
-      longMarker: e.nativeEvent.coordinate.longitude });
+    await this.setState({
+      latMarker: e.nativeEvent.coordinate.latitude, 
+      longMarker: e.nativeEvent.coordinate.longitude,
+    });
+    let address = await Location.reverseGeocodeAsync({latitude: this.state.latMarker, 
+      longitude: this.state.longMarker});
+    this.setState({
+      address: (address[0]?.street ? address[0]?.street + ", " : '') + (address[0]?.city ? address[0]?.city+ ", " : '')  + (address[0]?.region ? address[0]?.region : ''),
+    })
   }
 
   async onShowHideViewLocation() {
@@ -298,11 +320,14 @@ class InputExpenseScreen extends Component<Props, States> {
       else{
         if(!this.state.latMarker){
           let currentPosition = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
+          let address = await Location.reverseGeocodeAsync({latitude: currentPosition.coords.latitude, longitude: currentPosition.coords.longitude});
           this.setState({
             isCheckLocation: true, 
+            isEnableAddLocation: true, 
             latMarker: currentPosition.coords.latitude, 
-            longMarker: currentPosition.coords.longitude}
-          );
+            longMarker: currentPosition.coords.longitude,
+            address: (address[0]?.street ? address[0]?.street + ", " : '') + (address[0]?.city ? address[0]?.city+ ", " : '')  + (address[0]?.region ? address[0]?.region : ''),
+          });
         }else
           this.setState({isCheckLocation: true});
       }
@@ -315,12 +340,51 @@ class InputExpenseScreen extends Component<Props, States> {
       alert("Hey! You don't enable location ");
     } else {
       let currentPosition = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
+      let address = await Location.reverseGeocodeAsync({latitude: currentPosition.coords.latitude, longitude: currentPosition.coords.longitude});
       this.setState({
-        isCheckLocation: true, 
+        isCheckLocation: true,
+        isEnableAddLocation: true,
         latMarker: currentPosition.coords.latitude, 
-        longMarker: currentPosition.coords.longitude}
-      );
+        longMarker: currentPosition.coords.longitude,
+        address: (address[0]?.street ? address[0]?.street + ", " : '') + (address[0]?.city ? address[0]?.city+ ", " : '')  + (address[0]?.region ? address[0]?.region : ''),
+      });
     }
+  }
+
+
+  _pickImage = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          quality: 1,
+      });
+      if (!result.cancelled) {
+        // ImagePicker saves the taken photo to disk and returns a local URI to it
+        let localUri = result.uri;
+        let filename = localUri.split('/').pop();
+
+        // Infer the type of the image
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
+
+        let listImage = this.state.listImageAdd.concat({
+          id: this.state.listImageAdd?.length + 1,
+          url: localUri,
+          name: filename,
+          type,
+        });
+        this.setState({ listImageAdd: listImage});
+      }
+  };
+
+  _deleteImage = index => {
+    let listImage = [...this.state.listImageAdd];
+    listImage.splice(index, 1);
+    this.setState({listImageAdd: listImage});
+  }
+
+  toggleModal = () => {
+    this.setState({ isModelVisible: !this.state.isModelVisible });
   }
 
   render() {
@@ -331,6 +395,12 @@ class InputExpenseScreen extends Component<Props, States> {
     return (
       <View style={InputExpenseScreenStyles.container}>
         <StatusBar barStyle="light-content" hidden={false} backgroundColor={'transparent'} translucent />
+        <Modal
+          visible={this.state.isModelVisible}
+          transparent={false}
+          onRequestClose={() => this.toggleModal()}>
+          <ImageViewer imageUrls={this.state.listImageAdd} />
+        </Modal>
         {/* view header */}
         <View style={InputExpenseScreenStyles.containerHeader}>
           <View style={InputExpenseScreenStyles.header}>
@@ -490,7 +560,7 @@ class InputExpenseScreen extends Component<Props, States> {
                   <TextInput 
                     style={InputExpenseScreenStyles.inputLocation}
                     placeholder="Enter title location"
-                    value={this.state.titleLocation}
+                    value={this.state.address}
                   />
                   <View style={InputExpenseScreenStyles.underLineInput1} />
                 </View>
@@ -532,9 +602,48 @@ class InputExpenseScreen extends Component<Props, States> {
               <Text style={InputExpenseScreenStyles.txtTitleItem}>Add Image</Text>
             </View>
             <View style={this.state.isCheckImage ? InputExpenseScreenStyles.viewIconRightItem : null}>
-              <FontAwesome name={'angle-right'} color={Colors.gray} size={screenWidth / 12}/>
+              <FontAwesome 
+                name={'angle-right'} 
+                color={this.state.listImageAdd?.length > 0 ? Colors.tintColor : Colors.gray} 
+                size={screenWidth / 12}/>
             </View>
           </TouchableOpacity>
+          {this.state.isCheckImage ? (
+            <View style={InputExpenseScreenStyles.viewAddImage}>
+              <TouchableOpacity
+              onPress={() => this._pickImage()} 
+              style={InputExpenseScreenStyles.viewIconAdd}>
+                <Image 
+                  source={{uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Icons8_flat_add_image.svg/1024px-Icons8_flat_add_image.svg.png'}}
+                  style={InputExpenseScreenStyles.iconAdd} />
+              </TouchableOpacity>
+              <View style={InputExpenseScreenStyles.viewShowImage}>
+                <FlatList 
+                  data={this.state.listImageAdd}
+                  extraData={this.state}
+                  horizontal
+                  renderItem={({item, index}) => (
+                    <View style={InputExpenseScreenStyles.showImage}>
+                      <TouchableOpacity 
+                      onPress={() => this._deleteImage(index)}
+                      style={InputExpenseScreenStyles.viewDeleteImage}>
+                        <Feather 
+                          name={'x'} 
+                          color={Colors.black}
+                          size={11} />                      
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => this.toggleModal()}>
+                        <Image
+                          source={{uri: item.url}}
+                          style={InputExpenseScreenStyles.imageAdd} />
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                  keyExtractor={item => item.id.toString()}
+                />
+              </View>
+            </View>
+          ) : (null)}
           <View style={InputExpenseScreenStyles.line} />
         </ScrollView>
       </View>
