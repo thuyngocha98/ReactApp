@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native';
 const TIMEOUT = 100;
 
 // 52.187.177.128
-export const BASEURL = 'http://192.168.1.6:3001';
+export const BASEURL = 'http://192.168.1.26:3001';
 
 axios.defaults.withCredentials = true;
 
