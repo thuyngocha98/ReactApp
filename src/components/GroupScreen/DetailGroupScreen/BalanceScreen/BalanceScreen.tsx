@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Colors from '../../../../constants/Colors';
-import { View, TouchableOpacity, Text, StatusBar, Image, Button, Alert, FlatList } from 'react-native';
+import { View, TouchableOpacity, Text, ToastAndroid, Image, Button, Alert, FlatList } from 'react-native';
 import BalanceScreenStyles from '../../../../styles/GroupsStyles/DetailGroupScreenStyles/BalanceScreen/BalanceScreenStyles';
 import { MaterialCommunityIcons, FontAwesome5, Entypo } from '@expo/vector-icons';
 import ListItemBalance from './ListItemBalance';
-import { APPBAR_HEIGHT } from '../../../../constants/Dimensions';
+import { APPBAR_HEIGHT, screenHeight, screenWidth } from '../../../../constants/Dimensions';
 import { BASEURL } from '../../../../api/api';
 
 function mapStateToProps(state) {
@@ -22,6 +22,7 @@ type States = {
 };
 
 class BalanceScreen extends Component<Props> {
+  
   static navigationOptions = ({ navigation }) => {
     return {
       title: 'Group balances',
@@ -63,6 +64,24 @@ class BalanceScreen extends Component<Props> {
 
   trip_id = this.props.navigation.getParam('tripId', '');
 
+  sendMoney = () => {
+    fetch(`${BASEURL}/api/user/send_money_all_mail/${this.trip_id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: null,
+    })
+      .then((response) => response.json())
+      .then(async (res) => {
+        ToastAndroid.showWithGravityAndOffset('Export done', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+      })
+      .catch((error) => {
+        ToastAndroid.showWithGravityAndOffset(error, ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+      });
+  };
+
   getTotalMoneyAllUserInOneTrip = async () => {
     console.log(this.trip_id);
     this.setState({ loading: true });
@@ -89,11 +108,19 @@ class BalanceScreen extends Component<Props> {
     console.log(this.state.data);
     return (
       <View style={BalanceScreenStyles.container}>
-        <FlatList
-          data={this.state.data}
-          renderItem={({ item }) => <ListItemBalance data={item} tripId={this.trip_id} />}
-          keyExtractor={(item) => item._id.toString()}
-        />
+        <View style={{flex: 1}}>
+          <FlatList
+            data={this.state.data}
+            renderItem={({ item }) => <ListItemBalance data={item} tripId={this.trip_id} />}
+            keyExtractor={(item) => item._id.toString()}
+          />
+        </View>
+        <View style={{width: '100%', height: screenHeight/8}}>
+          <TouchableOpacity onPress={() => this.sendMoney()} style={{flex: 1, margin: screenWidth/24, justifyContent: 'center', alignItems: 'center',
+        borderRadius: 8, backgroundColor: Colors.tintColor}}>
+            <Text style={{fontSize: 18, color: Colors.white, fontWeight: 'bold'}}>Remind to all member</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {View, StatusBar, TouchableOpacity, Text, Image, FlatList, Alert, StyleSheet} from 'react-native';
+import {View, StatusBar, TouchableOpacity, Text, Image, FlatList, Modal, StyleSheet, ScrollView} from 'react-native';
 import Colors from '../../../../constants/Colors';
 import { Ionicons, AntDesign, Entypo } from '@expo/vector-icons';
 import DetailTransactionScreenStyles from '../../../../styles/GroupsStyles/DetailGroupScreenStyles/DetailTransactionScreenStyles/DetailTransactionScreenStyles';
@@ -16,6 +16,7 @@ import { number2money } from '../../../../constants/FunctionCommon';
 import { BASEURL } from '../../../../api/api';
 import { screenWidth } from '../../../../constants/Dimensions';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 function mapStateToProps(state) {
     return {
@@ -29,12 +30,14 @@ type Props = {
 
 type States = {
     data?: any[],
-    loading?: boolean
+    loading?: boolean,
+    isModelVisible?: boolean,
 }
 class DetaiTransactionScreen extends Component<Props, States> {
     state ={
         data: [],
         loading: false,
+        isModelVisible: false,
     }
     static navigationOptions = ({ navigation }) => {
         return {
@@ -90,14 +93,24 @@ class DetaiTransactionScreen extends Component<Props, States> {
             });
     };
 
+    toggleModal = () => {
+        this.setState({ isModelVisible: !this.state.isModelVisible });
+    };
+
     render() {
         const { navigation } = this.props
         const nameGroup = navigation.getParam('nameGroup', 'No Name')
         const date = this.transaction.create_date
         var time = date.split(/[\s-T]+/)
+        const images = [{
+            url: `${BASEURL}/images/uploads/${this.transaction?.imageURL}`,
+        }]
         return (
             <View style={DetailTransactionScreenStyles.container}>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
+                <Modal visible={this.state.isModelVisible} transparent={false} onRequestClose={() => this.toggleModal()}>
+                    <ImageViewer imageUrls={images} />
+                </Modal>
                 <View style={DetailTransactionScreenStyles.containerHeader}>
                     <View style={DetailTransactionScreenStyles.header}>
                         <TouchableOpacity
@@ -130,56 +143,93 @@ class DetaiTransactionScreen extends Component<Props, States> {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View>
-                    <View style={DetailTransactionScreenStyles.details}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <View style={DetailTransactionScreenStyles.icons}>
-                                <Image source={list} />
-                            </View>
-                            <View style={DetailTransactionScreenStyles.contentDetails}>
-                                <Text style={DetailTransactionScreenStyles.iconTravel}>{this.transaction.name}</Text>
-                                <Text style={DetailTransactionScreenStyles.money}>{number2money(this.transaction.amount)} VND</Text>
-                            </View>
-                        </View>
-                    </View>
-                    <View style={{ flexDirection: 'row', paddingHorizontal: 20 }}>
-                        <View style={DetailTransactionScreenStyles.personAdd}>
-                            <View style={DetailTransactionScreenStyles.person}>
-                                <View style={DetailTransactionScreenStyles.nameGroup}>
-                                    <Image
-                                        style={DetailTransactionScreenStyles.image}
-                                        source={require("../../../../../assets/images/icon-home.png")}
-                                    />
-                                    <Text style={DetailTransactionScreenStyles.txtAllOf}>
-                                        All of {nameGroup}
-                                    </Text>
+                <ScrollView>
+                   {this.transaction?.amount &&
+                        <View>
+                            <View>
+                                <View style={DetailTransactionScreenStyles.details}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <View style={DetailTransactionScreenStyles.icons}>
+                                            <Image source={list} />
+                                        </View>
+                                        <View style={DetailTransactionScreenStyles.contentDetails}>
+                                            <Text style={DetailTransactionScreenStyles.iconTravel}>{this.transaction?.name}</Text>
+                                            <Text style={DetailTransactionScreenStyles.money}>{number2money(this.transaction?.amount)} VND</Text>
+                                        </View>
+                                    </View>
+                                </View>
+                                <View style={{ flexDirection: 'row', paddingHorizontal: 20 }}>
+                                    <View style={DetailTransactionScreenStyles.personAdd}>
+                                        <View style={DetailTransactionScreenStyles.person}>
+                                            <View style={DetailTransactionScreenStyles.nameGroup}>
+                                                <Image
+                                                    style={DetailTransactionScreenStyles.image}
+                                                    source={require("../../../../../assets/images/icon-home.png")}
+                                                />
+                                                <Text style={DetailTransactionScreenStyles.txtAllOf}>
+                                                    All of {nameGroup}
+                                                </Text>
+                                            </View>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', marginLeft: 10, }}>
+                                            <Text style={{ fontSize: 14, marginBottom: 5, opacity: 0.5 }}>Added by you on </Text>
+                                            <Text style={{ fontSize: 14, opacity: 0.5 }}>{time[2]}-{time[1]}-{time[0]}</Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', marginLeft: 10, }}>
+                                            <Text style={{ fontSize: 14, marginBottom: 5, opacity: 0.5 }}>Last updated by you on </Text>
+                                            <Text style={{ fontSize: 14, opacity: 0.5 }}>{time[2]}-{time[1]}-{time[0]}</Text>
+                                        </View>
+                                    </View>
+                                </View>
+                                <View style={DetailTransactionScreenStyles.hr}>
                                 </View>
                             </View>
-                            <View style={{ flexDirection: 'row', marginLeft: 10, }}>
-                                <Text style={{ fontSize: 14, marginBottom: 5, opacity: 0.5 }}>Added by you on </Text>
-                                <Text style={{ fontSize: 14, opacity: 0.5 }}>{time[2]}-{time[1]}-{time[0]}</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', marginLeft: 10, }}>
-                                <Text style={{ fontSize: 14, marginBottom: 5, opacity: 0.5 }}>Last updated by you on </Text>
-                                <Text style={{ fontSize: 14, opacity: 0.5 }}>{time[2]}-{time[1]}-{time[0]}</Text>
+                            <View style={{flex: 1}}>
+                                <FlatList
+                                    scrollEnabled
+                                    data={this.state.data}
+                                    renderItem={({ item }) => (
+                                        <ListItemDetailTransaction
+                                            data={item}
+                                        />
+                                    )}
+                                    keyExtractor={item => item._id.toString()}
+                                />
                             </View>
                         </View>
-                    </View>
-                    <View style={DetailTransactionScreenStyles.hr}>
-                    </View>
-                </View>
-                <View style={{flex: 1}}>
-                    <FlatList
-                        scrollEnabled
-                        data={this.state.data}
-                        renderItem={({ item }) => (
-                            <ListItemDetailTransaction
-                                data={item}
-                            />
-                        )}
-                        keyExtractor={item => item._id.toString()}
-                    />
-                </View>
+                    }
+                    {this.transaction?.address && 
+                        <View 
+                        style={{borderTopWidth: 1, borderTopColor: Colors.gray,
+                             paddingVertical: screenWidth/24, paddingHorizontal: screenWidth/24,
+                            marginTop: -2,
+                        }}>
+                            <Text style={{fontSize: 15, fontWeight: 'bold'}}>Địa điểm</Text>
+                            <Text style={{fontSize: 15, color: Colors.gray, marginLeft: screenWidth/36}}>{this.transaction?.address}</Text>
+                        </View>
+                    }
+                     {this.transaction?.imageURL && 
+                        <View 
+                        style={{borderTopWidth: 1, borderTopColor: Colors.gray,
+                             paddingVertical: screenWidth/24, paddingHorizontal: screenWidth/24,
+                        }}>
+                            <Text style={{fontSize: 15, fontWeight: 'bold'}}>Hình ảnh</Text>
+                           <TouchableOpacity onPress={() => this.toggleModal()}>
+                                <Image 
+                                    source={{uri: `${BASEURL}/images/uploads/${this.transaction?.imageURL}`}}
+                                    style={{
+                                        marginTop: screenWidth/72,
+                                        marginLeft: screenWidth/36,
+                                        resizeMode: 'stretch',
+                                        width: screenWidth/4,
+                                        height: screenWidth/3.6,
+                                        borderRadius: 8,
+                                    }}
+                                />
+                           </TouchableOpacity>
+                        </View>
+                    }
+                </ScrollView>
             </View>
         );
     }

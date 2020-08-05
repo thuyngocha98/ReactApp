@@ -58,10 +58,9 @@ const DetailGroupScreenStyles = StyleSheet.create({
     },
     activityIndicator: {
         flex: 1,
-        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: Colors.white,
-        marginTop: screenWidth/4.11,
+        marginTop: screenWidth/6,
     },
     addTrip: {
         position: 'absolute',

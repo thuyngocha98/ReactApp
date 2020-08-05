@@ -56,10 +56,11 @@ class ChatGroupScreen extends Component<Props, States> {
     chatMessages: [],
   };
 
-  dataTrip = this.props.navigation.getParam('dataTrip');
+  tripId = this.props.navigation.getParam('tripId', '');
+  nameTrip = this.props.navigation.getParam('nameTrip', '');
 
   getTotalMessage = async () => {
-    await fetch(`${BASEURL}/api/chat/get_messages_by_trip_id/${this.dataTrip._id}`, {
+    await fetch(`${BASEURL}/api/chat/get_messages_by_trip_id/${this.tripId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -80,7 +81,7 @@ class ChatGroupScreen extends Component<Props, States> {
   componentDidMount(): void {
     this.getTotalMessage();
     this.socket.on('chat message', (msg) => {
-      if (msg[0].trip_id === this.dataTrip._id) {
+      if (msg[0].trip_id === this.tripId) {
         this.setState({
           chatMessages: this.state.chatMessages.concat(msg),
         });
@@ -117,7 +118,7 @@ class ChatGroupScreen extends Component<Props, States> {
 
   submitMessage = () => {
     if (this.state.chatMessage.length > 0) {
-      this.socket.emit('chat message', [this.dataTrip._id, this.props.user._id, this.state.chatMessage]);
+      this.socket.emit('chat message', [this.tripId, this.props.user._id, this.state.chatMessage]);
       this.setState({ chatMessage: '' });
     }
   };
@@ -188,7 +189,7 @@ class ChatGroupScreen extends Component<Props, States> {
             >
               <Ionicons name="ios-arrow-back" size={32} color={Colors.white} />
             </TouchableOpacity>
-            <Text style={ChatGroupScreenStyles.nameGroup}>{this.dataTrip.name}</Text>
+            <Text style={ChatGroupScreenStyles.nameGroup}>{this.nameTrip}</Text>
             <View>
               <TouchableOpacity
                 onPress={() => {

@@ -124,8 +124,9 @@ const DetailTransactionScreenStyles = StyleSheet.create({
     },
     hr: {
         marginTop: 15,
-        borderColor: Colors.gray,
-        borderWidth: 0.5,
+        marginHorizontal: screenWidth/15,
+        borderTopWidth: 1,
+        borderTopColor: Colors.gray,
     }
 });
 export default DetailTransactionScreenStyles;

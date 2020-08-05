@@ -42,8 +42,9 @@ const ListItemContentStyles = StyleSheet.create({
     },
     totalMoney: {
         flex: 2,
-        flexDirection: 'column',
-        alignItems: 'flex-end',
+        flexDirection: 'row',
+        justifyContent:'space-evenly',
+        alignItems: 'center',
     },
     titleMoney: {
         fontSize: 14,

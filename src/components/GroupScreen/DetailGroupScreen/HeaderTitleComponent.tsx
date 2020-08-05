@@ -50,17 +50,9 @@ class HeaderTitleComponent extends Component<Props, States> {
       id: 1,
       title: 'Balances',
     },
-    // {
-    //   id: 2,
-    //   title: 'Totals',
-    // },
-    // {
-    //   id: 3,
-    //   title: 'Images',
-    // },
     {
       id: 4,
-      title: 'Exports Money Send Mail',
+      title: 'Chat',
     },
 
     {
@@ -124,23 +116,6 @@ class HeaderTitleComponent extends Component<Props, States> {
       })
       .catch((error) => {
         console.log(error);
-      });
-  };
-  sendMoney = () => {
-    fetch(`${BASEURL}/api/user/send_money_all_mail/${this.props.idGroup}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: null,
-    })
-      .then((response) => response.json())
-      .then(async (res) => {
-        ToastAndroid.showWithGravityAndOffset('Export done', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
-      })
-      .catch((error) => {
-        ToastAndroid.showWithGravityAndOffset(error, ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
       });
   };
 
@@ -221,8 +196,12 @@ class HeaderTitleComponent extends Component<Props, States> {
                         // case 'Images':
                         //   navigation.navigate('ShowImagesScreen', { tripId: this.props.idGroup });
                         //   break;
-                        case 'Exports Money Send Mail':
-                          this.sendMoney();
+                        case 'Chat':
+                          this.props.navigation.navigate('ChatGroupScreen', {
+                            tripId: this.props.idGroup,
+                            nameTrip: this.props.nameGroup,
+                            navigation: this.props.navigation
+                        })
                           break;
                         case 'See the schedule of the trip':
                           navigation.navigate('MainLocationScreen', { tripId: this.props.idGroup });

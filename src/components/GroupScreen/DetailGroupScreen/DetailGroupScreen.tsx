@@ -158,7 +158,7 @@ class DetailGroupScreen extends Component<Props, States> {
                 <View style={DetailGroupScreenStyles.dateTitle}>
                     <Text style={DetailGroupScreenStyles.date}>tháng {time[1] + " " + time[0]}</Text>
                 </View>
-                <View>{this.state.loading ? (
+                {this.state.loading ? (
                     <View style={DetailGroupScreenStyles.activityIndicator}>
                         <ActivityIndicator animating size="large" color={Colors.tintColor}/>
                     </View>
@@ -181,7 +181,6 @@ class DetailGroupScreen extends Component<Props, States> {
                         )}
                     />
                 )}
-                </View>
                 {this.state.modalVisible ? (null) : (
                     <TouchableOpacity style={DetailGroupScreenStyles.addTrip}
                     activeOpacity={0.5}

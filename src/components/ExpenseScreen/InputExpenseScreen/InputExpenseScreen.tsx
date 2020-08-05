@@ -261,7 +261,6 @@ class InputExpenseScreen extends Component<Props, States> {
       bodyFormData.append('dataExpense', JSON.stringify(dataExpense));
       bodyFormData.append('dataLocation', JSON.stringify(dataLocation));
       bodyFormData.append('trip_id', tripId);
-      console.log(bodyFormData);
       fetch(`${BASEURL}/api/transaction/insert_new_transaction`, {
         method: 'POST',
         headers: {
@@ -271,14 +270,14 @@ class InputExpenseScreen extends Component<Props, States> {
       })
         .then((response) => response.json())
         .then(async (res) => {
-          // if (res.result === 'ok') {
-          //   this.setInputExpenseAgain();
-          //   ToastAndroid.showWithGravityAndOffset('Save done!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
-          //   await this.props.saveTripId(tripId);
-          //   this.props.navigation.goBack();
-          // } else {
-          //   ToastAndroid.showWithGravityAndOffset('Save error!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
-          // }
+          if (res.result === 'ok') {
+            this.setInputExpenseAgain();
+            ToastAndroid.showWithGravityAndOffset('Save done!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+            await this.props.saveTripId(tripId);
+            this.props.navigation.goBack();
+          } else {
+            ToastAndroid.showWithGravityAndOffset('Save error!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -434,7 +433,9 @@ class InputExpenseScreen extends Component<Props, States> {
               <Text
                 style={[
                   InputExpenseScreenStyles.add,
-                  { opacity: this.state.checkDescription && this.state.checkMoney ? 1 : 0.6 },
+                  { opacity: (this.state.checkDescription && this.state.checkMoney) || 
+                    this.state.isEnableAddLocation || 
+                    this.state.listImageAdd.length > 0 ? 1 : 0.6 },
                 ]}
               >
                 Save
