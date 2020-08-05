@@ -23,7 +23,7 @@ import { BASEURL } from '../../../api/api';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { screenWidth, screenHeight } from '../../../constants/Dimensions';
-import MapView, {Marker} from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import * as ImagePicker from 'expo-image-picker';
 import ImageViewer from 'react-native-image-zoom-viewer';
 
@@ -59,7 +59,7 @@ type States = {
   isModelVisible?: boolean;
 };
 
-const ASPECT_RATIO = screenWidth / (screenHeight/1.97);
+const ASPECT_RATIO = screenWidth / (screenHeight / 1.97);
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
@@ -100,11 +100,10 @@ class InputExpenseScreen extends Component<Props, States> {
       let data = this.props.navigation.getParam('dataGroup', {});
       this.props.getListUserInTrip(data._id);
       let isCheck = this.props.navigation.getParam('isCheck', '1');
-      if(isCheck === '1') this.setState({isCheckExpense: true})
-      else if(isCheck === '2'){
+      if (isCheck === '1') this.setState({ isCheckExpense: true });
+      else if (isCheck === '2') {
         this.onGetMyCurrentLocation();
-      }
-      else this.setState({isCheckImage: true});
+      } else this.setState({ isCheckImage: true });
     });
   }
 
@@ -208,7 +207,7 @@ class InputExpenseScreen extends Component<Props, States> {
     const Money = parseInt(this.state.money.replace(/,/g, ''));
     const Description = this.state.description;
     var list_user = await this.createListUser(listTypeUser, idPayer);
-    if(this.state.checkDescription !== this.state.checkMoney){
+    if (this.state.checkDescription !== this.state.checkMoney) {
       Keyboard.dismiss();
       ToastAndroid.showWithGravityAndOffset(
         'Please enter the full expense information !',
@@ -217,9 +216,8 @@ class InputExpenseScreen extends Component<Props, States> {
         25,
         50,
       );
-    }
-    else{
-      if(!this.state.checkDescription && !this.state.isEnableAddLocation && this.state.listImageAdd?.length === 0){
+    } else {
+      if (!this.state.checkDescription && !this.state.isEnableAddLocation && this.state.listImageAdd?.length === 0) {
         Keyboard.dismiss();
         ToastAndroid.showWithGravityAndOffset(
           'Please enter additional information !',
@@ -233,35 +231,36 @@ class InputExpenseScreen extends Component<Props, States> {
       var bodyFormData = new FormData();
       var dataExpense = {};
       var dataLocation = {};
-      if(this.state.checkDescription){
+      if (this.state.checkDescription) {
         dataExpense = {
           name: Description,
           author: this.props.author,
           amount: Money,
           trip_id: tripId,
           list_user: list_user,
-        }
+        };
       }
-      if(this.state.isEnableAddLocation){
+      if (this.state.isEnableAddLocation) {
         dataLocation = {
           latitude: this.state.latMarker,
           longitude: this.state.longMarker,
-          address : this.state.address,
-        }
+          address: this.state.address,
+        };
       }
-      if(this.state.listImageAdd?.length > 0){
-        this.state.listImageAdd.forEach(image => {
+      if (this.state.listImageAdd?.length > 0) {
+        this.state.listImageAdd.forEach((image) => {
           let photo = {
             uri: image.url,
             name: image.name,
-            type: image.type
-          }
-          bodyFormData.append('image', photo)
+            type: image.type,
+          };
+          bodyFormData.append('image', photo);
         });
       }
 
       bodyFormData.append('dataExpense', JSON.stringify(dataExpense));
       bodyFormData.append('dataLocation', JSON.stringify(dataLocation));
+      bodyFormData.append('trip_id', tripId);
       console.log(bodyFormData);
       fetch(`${BASEURL}/api/transaction/insert_new_transaction`, {
         method: 'POST',
@@ -297,39 +296,47 @@ class InputExpenseScreen extends Component<Props, States> {
     await this.props.navigation.setParams({ listTypeUser: [], IdPayer: '' });
   }
 
-
   async onChangeMarker(e) {
     await this.setState({
-      latMarker: e.nativeEvent.coordinate.latitude, 
+      latMarker: e.nativeEvent.coordinate.latitude,
       longMarker: e.nativeEvent.coordinate.longitude,
     });
-    let address = await Location.reverseGeocodeAsync({latitude: this.state.latMarker, 
-      longitude: this.state.longMarker});
+    let address = await Location.reverseGeocodeAsync({
+      latitude: this.state.latMarker,
+      longitude: this.state.longMarker,
+    });
     this.setState({
-      address: (address[0]?.street ? address[0]?.street + ", " : '') + (address[0]?.city ? address[0]?.city+ ", " : '')  + (address[0]?.region ? address[0]?.region : ''),
-    })
+      address:
+        (address[0]?.street ? address[0]?.street + ', ' : '') +
+        (address[0]?.city ? address[0]?.city + ', ' : '') +
+        (address[0]?.region ? address[0]?.region : ''),
+    });
   }
 
   async onShowHideViewLocation() {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
       alert("Hey! You don't enable location ");
-    }else{
-      if(this.state.isCheckLocation)
-        this.setState({isCheckLocation: false})
-      else{
-        if(!this.state.latMarker){
+    } else {
+      if (this.state.isCheckLocation) this.setState({ isCheckLocation: false });
+      else {
+        if (!this.state.latMarker) {
           let currentPosition = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
-          let address = await Location.reverseGeocodeAsync({latitude: currentPosition.coords.latitude, longitude: currentPosition.coords.longitude});
-          this.setState({
-            isCheckLocation: true, 
-            isEnableAddLocation: true, 
-            latMarker: currentPosition.coords.latitude, 
-            longMarker: currentPosition.coords.longitude,
-            address: (address[0]?.street ? address[0]?.street + ", " : '') + (address[0]?.city ? address[0]?.city+ ", " : '')  + (address[0]?.region ? address[0]?.region : ''),
+          let address = await Location.reverseGeocodeAsync({
+            latitude: currentPosition.coords.latitude,
+            longitude: currentPosition.coords.longitude,
           });
-        }else
-          this.setState({isCheckLocation: true});
+          this.setState({
+            isCheckLocation: true,
+            isEnableAddLocation: true,
+            latMarker: currentPosition.coords.latitude,
+            longMarker: currentPosition.coords.longitude,
+            address:
+              (address[0]?.street ? address[0]?.street + ', ' : '') +
+              (address[0]?.city ? address[0]?.city + ', ' : '') +
+              (address[0]?.region ? address[0]?.region : ''),
+          });
+        } else this.setState({ isCheckLocation: true });
       }
     }
   }
@@ -340,52 +347,57 @@ class InputExpenseScreen extends Component<Props, States> {
       alert("Hey! You don't enable location ");
     } else {
       let currentPosition = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
-      let address = await Location.reverseGeocodeAsync({latitude: currentPosition.coords.latitude, longitude: currentPosition.coords.longitude});
+      let address = await Location.reverseGeocodeAsync({
+        latitude: currentPosition.coords.latitude,
+        longitude: currentPosition.coords.longitude,
+      });
       this.setState({
         isCheckLocation: true,
         isEnableAddLocation: true,
-        latMarker: currentPosition.coords.latitude, 
+        latMarker: currentPosition.coords.latitude,
         longMarker: currentPosition.coords.longitude,
-        address: (address[0]?.street ? address[0]?.street + ", " : '') + (address[0]?.city ? address[0]?.city+ ", " : '')  + (address[0]?.region ? address[0]?.region : ''),
+        address:
+          (address[0]?.street ? address[0]?.street + ', ' : '') +
+          (address[0]?.city ? address[0]?.city + ', ' : '') +
+          (address[0]?.region ? address[0]?.region : ''),
       });
     }
   }
 
-
   _pickImage = async () => {
-      let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          allowsEditing: true,
-          quality: 1,
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+    if (!result.cancelled) {
+      // ImagePicker saves the taken photo to disk and returns a local URI to it
+      let localUri = result.uri;
+      let filename = localUri.split('/').pop();
+
+      // Infer the type of the image
+      let match = /\.(\w+)$/.exec(filename);
+      let type = match ? `image/${match[1]}` : `image`;
+
+      let listImage = this.state.listImageAdd.concat({
+        id: this.state.listImageAdd?.length + 1,
+        url: localUri,
+        name: filename,
+        type,
       });
-      if (!result.cancelled) {
-        // ImagePicker saves the taken photo to disk and returns a local URI to it
-        let localUri = result.uri;
-        let filename = localUri.split('/').pop();
-
-        // Infer the type of the image
-        let match = /\.(\w+)$/.exec(filename);
-        let type = match ? `image/${match[1]}` : `image`;
-
-        let listImage = this.state.listImageAdd.concat({
-          id: this.state.listImageAdd?.length + 1,
-          url: localUri,
-          name: filename,
-          type,
-        });
-        this.setState({ listImageAdd: listImage});
-      }
+      this.setState({ listImageAdd: listImage });
+    }
   };
 
-  _deleteImage = index => {
+  _deleteImage = (index) => {
     let listImage = [...this.state.listImageAdd];
     listImage.splice(index, 1);
-    this.setState({listImageAdd: listImage});
-  }
+    this.setState({ listImageAdd: listImage });
+  };
 
   toggleModal = () => {
     this.setState({ isModelVisible: !this.state.isModelVisible });
-  }
+  };
 
   render() {
     const { navigation } = this.props;
@@ -395,10 +407,7 @@ class InputExpenseScreen extends Component<Props, States> {
     return (
       <View style={InputExpenseScreenStyles.container}>
         <StatusBar barStyle="light-content" hidden={false} backgroundColor={'transparent'} translucent />
-        <Modal
-          visible={this.state.isModelVisible}
-          transparent={false}
-          onRequestClose={() => this.toggleModal()}>
+        <Modal visible={this.state.isModelVisible} transparent={false} onRequestClose={() => this.toggleModal()}>
           <ImageViewer imageUrls={this.state.listImageAdd} />
         </Modal>
         {/* view header */}
@@ -414,7 +423,7 @@ class InputExpenseScreen extends Component<Props, States> {
             >
               <Ionicons name="ios-close" size={45} color={Colors.white} />
             </TouchableOpacity>
-            <Text style={InputExpenseScreenStyles.addContact}>Add an expense</Text>
+            <Text style={InputExpenseScreenStyles.addContact}>Add categories</Text>
             <TouchableOpacity
               style={InputExpenseScreenStyles.save}
               activeOpacity={0.5}
@@ -436,110 +445,110 @@ class InputExpenseScreen extends Component<Props, States> {
         <ScrollView keyboardShouldPersistTaps="handled">
           {/* view add expense */}
           <TouchableOpacity
-          onPress={() => this.setState({isCheckExpense: !this.state.isCheckExpense})}
-          style={InputExpenseScreenStyles.viewRowItem}>
+            onPress={() => this.setState({ isCheckExpense: !this.state.isCheckExpense })}
+            style={InputExpenseScreenStyles.viewRowItem}
+          >
             <View style={InputExpenseScreenStyles.viewIconAndTitleItem}>
-              <MaterialIcons name={'note-add'} color={Colors.tintColor} size={screenWidth / 14}/>
+              <MaterialIcons name={'note-add'} color={Colors.tintColor} size={screenWidth / 14} />
               <Text style={InputExpenseScreenStyles.txtTitleItem}>Add Expense</Text>
             </View>
             <View style={this.state.isCheckExpense ? InputExpenseScreenStyles.viewIconRightItem : null}>
-              <FontAwesome 
-                name={'angle-right'} 
-                color={this.state.checkDescription && this.state.checkMoney ? Colors.tintColor : Colors.gray} 
+              <FontAwesome
+                name={'angle-right'}
+                color={this.state.checkDescription && this.state.checkMoney ? Colors.tintColor : Colors.gray}
                 size={screenWidth / 12}
               />
             </View>
           </TouchableOpacity>
           {this.state.isCheckExpense ? (
-          <View style={InputExpenseScreenStyles.sectionInput}>
-            <View style={InputExpenseScreenStyles.viewSetAgain}>
-              <TouchableOpacity
-              onPress={() => this.setInputExpenseAgain()}
-              style={InputExpenseScreenStyles.btnSetAgain}>
-                <Text style={InputExpenseScreenStyles.txtSetAgain}>Set again</Text>
-                <FontAwesome name="repeat" size={10} color={Colors.gray} />
-              </TouchableOpacity>
-            </View>
-            <View style={InputExpenseScreenStyles.sectionDescription}>
-              <View style={InputExpenseScreenStyles.iconDescription}>
-                <MaterialIcons name="description" size={26} color={Colors.blackText} style={{ padding: 5 }} />
-              </View>
-              <View style={InputExpenseScreenStyles.inputDescription}>
-                <TextInput
-                  onChangeText={(text) => this.checkDescription(text)}
-                  style={InputExpenseScreenStyles.txtInputDescription}
-                  placeholder="Enter a description"
-                  value={this.state.description}
-                  keyboardType="visible-password"
-                  autoCorrect={false}
-                  maxLength={100}
-                  autoCapitalize={'words'}
-                  underlineColorAndroid={'transparent'}
-                />
-                <View style={InputExpenseScreenStyles.underLineInput} />
-              </View>
-            </View>
-            <View style={InputExpenseScreenStyles.sectionMoney}>
-              <View style={InputExpenseScreenStyles.iconMoney}>
-                <Text style={InputExpenseScreenStyles.iconvnd}>đ</Text>
-              </View>
-              <View style={InputExpenseScreenStyles.inputMoney}>
-                <TextInput
-                  onChangeText={(text) => this.checkMoney(text)}
-                  style={InputExpenseScreenStyles.txtInputMoney}
-                  value={this.state.money}
-                  keyboardType="number-pad"
-                  placeholder="0,00"
-                  maxLength={13}
-                  underlineColorAndroid={'transparent'}
-                  onSubmitEditing={Keyboard.dismiss}
-                />
-                <View style={InputExpenseScreenStyles.underLineInput} />
-              </View>
-            </View>
-            <View style={InputExpenseScreenStyles.btnSubmit}>
-              <Text style={InputExpenseScreenStyles.text1}>{'Paid by '}</Text>
-              <View style={InputExpenseScreenStyles.button}>
-                <Text
-                  style={InputExpenseScreenStyles.text2}
-                  onPress={() =>
-                    this.state.checkDescription && this.state.checkMoney
-                      ? this.prepareSendListUserToChoose(this.listTypeUser, this.idPayer)
-                      : Alert.alert('Please enter full information')
-                  }
+            <View style={InputExpenseScreenStyles.sectionInput}>
+              <View style={InputExpenseScreenStyles.viewSetAgain}>
+                <TouchableOpacity
+                  onPress={() => this.setInputExpenseAgain()}
+                  style={InputExpenseScreenStyles.btnSetAgain}
                 >
-                  you
-                </Text>
+                  <Text style={InputExpenseScreenStyles.txtSetAgain}>Set again</Text>
+                  <FontAwesome name="repeat" size={10} color={Colors.gray} />
+                </TouchableOpacity>
               </View>
-              <Text style={InputExpenseScreenStyles.text1}>{' and split '}</Text>
-              <View style={InputExpenseScreenStyles.button}>
-                <Text
-                  style={InputExpenseScreenStyles.text2}
-                  onPress={() =>
-                    this.state.checkDescription && this.state.checkMoney
-                      ? this.prepareSendListUserToSplit(this.listTypeUser, this.idPayer)
-                      : Alert.alert('Please enter full information')
-                  }
-                >
-                  equally
-                </Text>
+              <View style={InputExpenseScreenStyles.sectionDescription}>
+                <View style={InputExpenseScreenStyles.iconDescription}>
+                  <MaterialIcons name="description" size={26} color={Colors.blackText} style={{ padding: 5 }} />
+                </View>
+                <View style={InputExpenseScreenStyles.inputDescription}>
+                  <TextInput
+                    onChangeText={(text) => this.checkDescription(text)}
+                    style={InputExpenseScreenStyles.txtInputDescription}
+                    placeholder="Enter a description"
+                    value={this.state.description}
+                    keyboardType="visible-password"
+                    autoCorrect={false}
+                    maxLength={100}
+                    autoCapitalize={'words'}
+                    underlineColorAndroid={'transparent'}
+                  />
+                  <View style={InputExpenseScreenStyles.underLineInput} />
+                </View>
+              </View>
+              <View style={InputExpenseScreenStyles.sectionMoney}>
+                <View style={InputExpenseScreenStyles.iconMoney}>
+                  <Text style={InputExpenseScreenStyles.iconvnd}>đ</Text>
+                </View>
+                <View style={InputExpenseScreenStyles.inputMoney}>
+                  <TextInput
+                    onChangeText={(text) => this.checkMoney(text)}
+                    style={InputExpenseScreenStyles.txtInputMoney}
+                    value={this.state.money}
+                    keyboardType="number-pad"
+                    placeholder="0,00"
+                    maxLength={13}
+                    underlineColorAndroid={'transparent'}
+                    onSubmitEditing={Keyboard.dismiss}
+                  />
+                  <View style={InputExpenseScreenStyles.underLineInput} />
+                </View>
+              </View>
+              <View style={InputExpenseScreenStyles.btnSubmit}>
+                <Text style={InputExpenseScreenStyles.text1}>{'Paid by '}</Text>
+                <View style={InputExpenseScreenStyles.button}>
+                  <Text
+                    style={InputExpenseScreenStyles.text2}
+                    onPress={() =>
+                      this.state.checkDescription && this.state.checkMoney
+                        ? this.prepareSendListUserToChoose(this.listTypeUser, this.idPayer)
+                        : Alert.alert('Please enter full information')
+                    }
+                  >
+                    you
+                  </Text>
+                </View>
+                <Text style={InputExpenseScreenStyles.text1}>{' and split '}</Text>
+                <View style={InputExpenseScreenStyles.button}>
+                  <Text
+                    style={InputExpenseScreenStyles.text2}
+                    onPress={() =>
+                      this.state.checkDescription && this.state.checkMoney
+                        ? this.prepareSendListUserToSplit(this.listTypeUser, this.idPayer)
+                        : Alert.alert('Please enter full information')
+                    }
+                  >
+                    equally
+                  </Text>
+                </View>
               </View>
             </View>
-          </View>
-          ) : (null)}
+          ) : null}
           <View style={InputExpenseScreenStyles.line} />
           {/* view add location */}
-          <TouchableOpacity
-          onPress={() => this.onShowHideViewLocation()}
-          style={InputExpenseScreenStyles.viewRowItem}>
+          <TouchableOpacity onPress={() => this.onShowHideViewLocation()} style={InputExpenseScreenStyles.viewRowItem}>
             <View style={InputExpenseScreenStyles.viewIconAndTitleItem}>
-              <MaterialIcons name={'add-location'} color={Colors.splitWise} size={screenWidth / 14}/>
+              <MaterialIcons name={'add-location'} color={Colors.splitWise} size={screenWidth / 14} />
               <Text style={InputExpenseScreenStyles.txtTitleItem}>Add Location</Text>
             </View>
             <View style={this.state.isCheckLocation ? InputExpenseScreenStyles.viewIconRightItem : null}>
-              <FontAwesome 
-                name={'angle-right'} 
-                color={this.state.isEnableAddLocation ? Colors.tintColor : Colors.gray} 
+              <FontAwesome
+                name={'angle-right'}
+                color={this.state.isEnableAddLocation ? Colors.tintColor : Colors.gray}
                 size={screenWidth / 12}
               />
             </View>
@@ -549,15 +558,19 @@ class InputExpenseScreen extends Component<Props, States> {
               <View style={InputExpenseScreenStyles.viewHeaderAddLocation}>
                 <View style={InputExpenseScreenStyles.viewEnableLocation}>
                   <Text style={InputExpenseScreenStyles.txtSetAgain}>Enable add location</Text>
-                  <TouchableOpacity 
-                  onPress={() => this.setState({isEnableAddLocation: !this.state.isEnableAddLocation})}
-                  style={this.state.isEnableAddLocation ?
-                    InputExpenseScreenStyles.viewEnableSwitch : InputExpenseScreenStyles.viewNoneEnableSwitch}>
+                  <TouchableOpacity
+                    onPress={() => this.setState({ isEnableAddLocation: !this.state.isEnableAddLocation })}
+                    style={
+                      this.state.isEnableAddLocation
+                        ? InputExpenseScreenStyles.viewEnableSwitch
+                        : InputExpenseScreenStyles.viewNoneEnableSwitch
+                    }
+                  >
                     <View style={InputExpenseScreenStyles.viewCircleSwitch} />
                   </TouchableOpacity>
                 </View>
                 <View style={InputExpenseScreenStyles.viewInputTitleLocation}>
-                  <TextInput 
+                  <TextInput
                     style={InputExpenseScreenStyles.inputLocation}
                     placeholder="Enter title location"
                     value={this.state.address}
@@ -566,10 +579,11 @@ class InputExpenseScreen extends Component<Props, States> {
                 </View>
               </View>
               <View style={InputExpenseScreenStyles.viewAddLocation}>
-                <TouchableOpacity 
-                onPress={() => this.onGetMyCurrentLocation()}
-                style={InputExpenseScreenStyles.viewGetCurrentLocation}>
-                  <MaterialIcons name={'my-location'} color={Colors.black} size={screenWidth / 25}/>
+                <TouchableOpacity
+                  onPress={() => this.onGetMyCurrentLocation()}
+                  style={InputExpenseScreenStyles.viewGetCurrentLocation}
+                >
+                  <MaterialIcons name={'my-location'} color={Colors.black} size={screenWidth / 25} />
                 </TouchableOpacity>
                 <MapView
                   style={InputExpenseScreenStyles.mapStyle}
@@ -579,71 +593,71 @@ class InputExpenseScreen extends Component<Props, States> {
                     latitudeDelta: LATITUDE_DELTA,
                     longitudeDelta: LONGITUDE_DELTA,
                   }}
-                  onPress={e => this.onChangeMarker(e)}
+                  onPress={(e) => this.onChangeMarker(e)}
                 >
                   <Marker
                     draggable
-                    onDragEnd={e => this.onChangeMarker(e)}
-                    coordinate={{latitude: this.state.latMarker, longitude: this.state.longMarker}}
+                    onDragEnd={(e) => this.onChangeMarker(e)}
+                    coordinate={{ latitude: this.state.latMarker, longitude: this.state.longMarker }}
                   >
-                    <MaterialIcons name={'location-on'} color={Colors.splitWise} size={screenWidth / 12}/>
+                    <MaterialIcons name={'location-on'} color={Colors.splitWise} size={screenWidth / 12} />
                   </Marker>
                 </MapView>
               </View>
             </View>
-          ) : (null)}
+          ) : null}
           <View style={InputExpenseScreenStyles.line} />
           {/* view add image */}
           <TouchableOpacity
-          onPress={() => this.setState({isCheckImage: !this.state.isCheckImage})}
-          style={InputExpenseScreenStyles.viewRowItem}>
+            onPress={() => this.setState({ isCheckImage: !this.state.isCheckImage })}
+            style={InputExpenseScreenStyles.viewRowItem}
+          >
             <View style={InputExpenseScreenStyles.viewIconAndTitleItem}>
-              <MaterialIcons name={'library-add'} color={Colors.mediumseagreen} size={screenWidth / 14}/>
+              <MaterialIcons name={'library-add'} color={Colors.mediumseagreen} size={screenWidth / 14} />
               <Text style={InputExpenseScreenStyles.txtTitleItem}>Add Image</Text>
             </View>
             <View style={this.state.isCheckImage ? InputExpenseScreenStyles.viewIconRightItem : null}>
-              <FontAwesome 
-                name={'angle-right'} 
-                color={this.state.listImageAdd?.length > 0 ? Colors.tintColor : Colors.gray} 
-                size={screenWidth / 12}/>
+              <FontAwesome
+                name={'angle-right'}
+                color={this.state.listImageAdd?.length > 0 ? Colors.tintColor : Colors.gray}
+                size={screenWidth / 12}
+              />
             </View>
           </TouchableOpacity>
           {this.state.isCheckImage ? (
             <View style={InputExpenseScreenStyles.viewAddImage}>
-              <TouchableOpacity
-              onPress={() => this._pickImage()} 
-              style={InputExpenseScreenStyles.viewIconAdd}>
-                <Image 
-                  source={{uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Icons8_flat_add_image.svg/1024px-Icons8_flat_add_image.svg.png'}}
-                  style={InputExpenseScreenStyles.iconAdd} />
+              <TouchableOpacity onPress={() => this._pickImage()} style={InputExpenseScreenStyles.viewIconAdd}>
+                <Image
+                  source={{
+                    uri:
+                      'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Icons8_flat_add_image.svg/1024px-Icons8_flat_add_image.svg.png',
+                  }}
+                  style={InputExpenseScreenStyles.iconAdd}
+                />
               </TouchableOpacity>
               <View style={InputExpenseScreenStyles.viewShowImage}>
-                <FlatList 
+                <FlatList
                   data={this.state.listImageAdd}
                   extraData={this.state}
                   horizontal
-                  renderItem={({item, index}) => (
+                  renderItem={({ item, index }) => (
                     <View style={InputExpenseScreenStyles.showImage}>
-                      <TouchableOpacity 
-                      onPress={() => this._deleteImage(index)}
-                      style={InputExpenseScreenStyles.viewDeleteImage}>
-                        <Feather 
-                          name={'x'} 
-                          color={Colors.black}
-                          size={11} />                      
+                      <TouchableOpacity
+                        onPress={() => this._deleteImage(index)}
+                        style={InputExpenseScreenStyles.viewDeleteImage}
+                      >
+                        <Feather name={'x'} color={Colors.black} size={11} />
                       </TouchableOpacity>
                       <TouchableOpacity onPress={() => this.toggleModal()}>
-                        <Image
-                          source={{uri: item.url}}
-                          style={InputExpenseScreenStyles.imageAdd} />
+                        <Image source={{ uri: item.url }} style={InputExpenseScreenStyles.imageAdd} />
                       </TouchableOpacity>
                     </View>
                   )}
-                  keyExtractor={item => item.id.toString()}
+                  keyExtractor={(item) => item.id.toString()}
                 />
               </View>
             </View>
-          ) : (null)}
+          ) : null}
           <View style={InputExpenseScreenStyles.line} />
         </ScrollView>
       </View>
