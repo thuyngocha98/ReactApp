@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, TouchableOpacity, Text, StyleSheet, StatusBar, ToastAndroid, Image, Button } from 'react-native';
+import { 
+    View, 
+    TouchableOpacity, 
+    Text, StyleSheet, 
+    StatusBar, 
+    FlatList, 
+    Image, 
+    ScrollView,
+    Modal,
+} from 'react-native';
 import Colors from '../../../../constants/Colors';
 import { APPBAR_HEIGHT, screenWidth } from '../../../../constants/Dimensions';
-import { FlatList } from 'react-native-gesture-handler';
 import { BASEURL } from '../../../../api/api';
-import { Video } from 'expo-av';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 function mapStateToProps(state) {
     return {
@@ -18,9 +26,9 @@ type Props = {
 }
 
 type States = {
-    data?: any,
-    isPlay?: any[],
-    dataVideo?: any,
+    listImage?: any,
+    isModelVisible?: boolean;
+    imageModal?: string;
 }
 
 class ShowImagesScreen extends Component<Props, States> {
@@ -30,20 +38,18 @@ class ShowImagesScreen extends Component<Props, States> {
         };
     };
     state = {
-        data: [],
-        isPlay: [],
-        dataVideo: [],
+        listImage: [],
+        isModelVisible: false,
+        imageModal: '',
     }
     tripId = '';
     _navListener: any;
 
     componentDidMount() {
-
         //set barstyle of statusbar
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             this.tripId = this.props.navigation.getParam('tripId', '');
             this.getImage(this.tripId);
-            this.getVideo();
         });
     }
 
@@ -53,7 +59,7 @@ class ShowImagesScreen extends Component<Props, States> {
     }
 
     getImage = async tripId => {
-        fetch(`${BASEURL}/api/trip/get_image_in_trip/${tripId}`, {
+        fetch(`${BASEURL}/api/image/get_images_by_tripId/${tripId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -64,46 +70,30 @@ class ShowImagesScreen extends Component<Props, States> {
             .then((res) => {
                 if (res.data.length > 0) {
                     this.setState({
-                        data: res.data
-                    })
-                } else {
-                    this.setState({
-                        data: []
-                    })
-               }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-    getVideo = async () => {
-        fetch(`${BASEURL}/api/trip/get_video`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json'
-            },
-        })
-            .then((response) => response.json())
-            .then((res) => {
-                if (res.data.length > 0) {
-                    this.setState({
-                        dataVideo: res.data
-                    })
-                } else {
-                    this.setState({
-                        dataVideo: []
+                        listImage: res.data.reverse()
                     })
                 }
             })
             .catch((error) => {
                 console.log(error);
             });
+    };
+
+    toggleModal = () => {
+        this.setState({ isModelVisible: !this.state.isModelVisible });
+    };
+
+    onZoomImage = item => {
+        this.setState({imageModal: item});
+        this.toggleModal();
     }
 
     render() {
         return (
             <View style={styles.mainContainer}>
+                <Modal visible={this.state.isModelVisible} transparent={false} onRequestClose={() => this.toggleModal()}>
+                    <ImageViewer imageUrls={[{url: `${BASEURL}/images/uploads/${this.state.imageModal}`}]} />
+                </Modal>
                 <View style={styles.containerHeader}>
                     <View style={styles.header}>
                         <TouchableOpacity
@@ -115,93 +105,48 @@ class ShowImagesScreen extends Component<Props, States> {
                         >
                             <Text style={styles.textHeaderLeft}>Cancel</Text>
                         </TouchableOpacity>
-                        <Text style={styles.addContact}>Travel Memories</Text>
-                        <TouchableOpacity
-                            style={styles.save}
-                            activeOpacity={0.5}
-                            onPress={() => {
-                                this.props.navigation.navigate('AddImagesScreen', { tripId: this.tripId })
-                            }}
-                        >
-                            <Text
-                                style={styles.add}
-                            >
-                                upload
-                            </Text>
-                        </TouchableOpacity>
+                        <Text style={styles.addContact}>Picture Memories</Text>
+                        <View style={styles.save}>
+                            <Text style={styles.add}>upload</Text>
+                        </View>
                     </View>
                 </View>
-                <View style={{flex:1, flexDirection: 'column'}}>
-                    <View style={styles.showImage}>
-                        <View style={styles.title}>
-                            <Button
-                                title='Image Gallery'
-                                onPress={() => { }}
-                            />
-                        </View>
-                        <View style={styles.flatlist}>
-                            <FlatList
-                                scrollEnabled
-                                data={this.state.data}
-                                extraData={this.state}
-                                numColumns={3}
-                                renderItem={({ item }) => (
-                                    <View style={styles.viewImage}>
-                                        <Image
-                                            resizeMode='cover'
-                                            source={{ uri: `data:image/png;base64,${item}` }}
-                                            style={styles.image}
-                                        />
-                                    </View>
-                                )}
-                                keyExtractor={item => item.toString()}
-                            />
-                        </View>
-                    </View>
-                    <View style={styles.showImage}>
-                        <View style={styles.title1}>
-                            <Button
-                                title='Video Gallery'
-                                onPress={() => { }}
-                            />
-                        </View>
-                        <View style={styles.flatlist}>
-                            <FlatList
-                                scrollEnabled
-                                data={this.state.dataVideo}
-                                extraData={this.state}
-                                numColumns={3}
-                                renderItem={({ item, index }) => (
-                                    <View style={styles.viewImage}>
-                                        <TouchableOpacity
-                                            onPress={async () => {
-                                                let { isPlay } = this.state;
-                                                isPlay[index] = !this.state.isPlay[index];
-                                                await this.setState({
-                                                    isPlay,
-                                                });
-                                            }}
-                                        >
-                                            <Video
-                                                source={{ uri: `${BASEURL}/video/${item}` }}
-                                                rate={1.0}
-                                                volume={1.0}
-                                                isMuted={false}
-                                                resizeMode='cover'
-                                                shouldPlay={this.state.isPlay[index]}
-                                                isLooping={false}
-                                                style={{ width: screenWidth / 3 - 2, height: screenWidth / 3 - 2, marginTop: 5 }}
+                <ScrollView style={{flex:1, flexDirection: 'column'}}>
+                    {this.state.listImage.map(images => (
+                        <View key={images._id} style={{
+                            padding: screenWidth/24,
+                            borderBottomWidth: 1,
+                            borderBottomColor: Colors.lightgray,
+                        }}>
+                            <Text>{images.create_date.split('T')[0]}</Text>
+                            <FlatList 
+                                horizontal
+                                data={images.imageURL}
+                                renderItem={({item}) => (
+                                    <View style={{
+                                        marginTop: screenWidth/72,
+                                        marginRight: screenWidth/36,
+                                        width: screenWidth/4.5,
+                                        height: screenWidth/4,
+                                    }}>
+                                        <TouchableOpacity onPress={() => this.onZoomImage(item)}>
+                                            <Image 
+                                                source={{uri: `${BASEURL}/images/uploads/${item}`}}
+                                                style={{
+                                                    resizeMode: 'stretch',
+                                                    width: screenWidth/4.5,
+                                                    height: screenWidth/4,
+                                                    borderRadius: 8,
+                                                }}
                                             />
                                         </TouchableOpacity>
-
                                     </View>
                                 )}
                                 keyExtractor={item => item.toString()}
                             />
                         </View>
-                </View>
-
-                </View>
+                    ))}
+                </ScrollView>
             </View>
         );
     }
@@ -243,7 +188,7 @@ const styles = StyleSheet.create({
     add: {
 
         fontSize: 17,
-        color: Colors.white
+        color: Colors.tintColor
     },
     save: {
         flex: 2,

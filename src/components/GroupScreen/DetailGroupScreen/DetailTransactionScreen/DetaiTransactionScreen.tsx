@@ -100,14 +100,9 @@ class DetaiTransactionScreen extends Component<Props, States> {
     const nameGroup = navigation.getParam('nameGroup', 'No Name');
     const date = this.transaction.create_date;
     var time = date.split(/[\s-T]+/);
-    const images = [
-      {
-        url: `${BASEURL}/images/uploads/${this.transaction?.imageURL}`,
-      },
-    ];
 
-    let url = this.transaction?.imageURL ? (this.transaction?.imageURL).replace('public/', '') : '';
-    let urlImage = `${BASEURL}/${url}`;
+    const images = this.transaction?.imageURL.map(url => 
+      {return {url: `${BASEURL}/images/uploads/${url}`}})
 
     return (
       <View style={DetailTransactionScreenStyles.container}>
@@ -215,19 +210,23 @@ class DetaiTransactionScreen extends Component<Props, States> {
               }}
             >
               <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Hình ảnh</Text>
-              <TouchableOpacity onPress={() => this.toggleModal()}>
-                <Image
-                  source={{ uri: `${urlImage}` }}
-                  style={{
-                    marginTop: screenWidth / 72,
-                    marginLeft: screenWidth / 36,
-                    resizeMode: 'stretch',
-                    width: screenWidth / 4,
-                    height: screenWidth / 3.6,
-                    borderRadius: 8,
-                  }}
-                />
-              </TouchableOpacity>
+              <View style={{flexDirection: 'row'}}>
+                {this.transaction?.imageURL.map(url => (
+                  <TouchableOpacity key={url} onPress={() => this.toggleModal()}>
+                    <Image
+                      source={{ uri: `${BASEURL}/images/uploads/${url}` }}
+                      style={{
+                        marginTop: screenWidth / 72,
+                        marginLeft: screenWidth / 36,
+                        resizeMode: 'stretch',
+                        width: screenWidth / 4,
+                        height: screenWidth / 3.6,
+                        borderRadius: 8,
+                      }}
+                    />
+                </TouchableOpacity>
+                ))}
+              </View>
             </View>
           )}
         </ScrollView>

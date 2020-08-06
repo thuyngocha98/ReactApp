@@ -59,6 +59,10 @@ class HeaderTitleComponent extends Component<Props, States> {
       id: 5,
       title: 'See the schedule of the trip',
     },
+    {
+      id: 6,
+      title: 'Picture Memories',
+    },
   ];
 
   // click icon setting => open menu
@@ -193,9 +197,9 @@ class HeaderTitleComponent extends Component<Props, States> {
                         // case 'Totals':
                         //   navigation.navigate('TotalScreen', { nameGroup: this.props.nameGroup });
                         //   break;
-                        // case 'Images':
-                        //   navigation.navigate('ShowImagesScreen', { tripId: this.props.idGroup });
-                        //   break;
+                        case 'Picture Memories':
+                          navigation.navigate('ShowImagesScreen', { tripId: this.props.idGroup });
+                          break;
                         case 'Chat':
                           this.props.navigation.navigate('ChatGroupScreen', {
                             tripId: this.props.idGroup,

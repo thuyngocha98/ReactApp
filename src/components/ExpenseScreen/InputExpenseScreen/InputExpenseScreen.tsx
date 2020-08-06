@@ -572,6 +572,7 @@ class InputExpenseScreen extends Component<Props, States> {
                 </View>
                 <View style={InputExpenseScreenStyles.viewInputTitleLocation}>
                   <TextInput
+                    onChangeText={text => this.setState({address: text})}
                     style={InputExpenseScreenStyles.inputLocation}
                     placeholder="Enter title location"
                     value={this.state.address}
