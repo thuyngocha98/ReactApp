@@ -101,8 +101,9 @@ class DetaiTransactionScreen extends Component<Props, States> {
     const date = this.transaction.create_date;
     var time = date.split(/[\s-T]+/);
 
-    const images = this.transaction?.imageURL.map(url => 
-      {return {url: `${BASEURL}/images/uploads/${url}`}})
+    const images = this.transaction?.imageURL.map((url) => {
+      return { url: `${BASEURL}/images/uploads/${url}` };
+    });
 
     return (
       <View style={DetailTransactionScreenStyles.container}>
@@ -200,7 +201,7 @@ class DetaiTransactionScreen extends Component<Props, States> {
               </Text>
             </View>
           )}
-          {this.transaction?.imageURL && (
+          {this.transaction?.imageURL.length > 0 && (
             <View
               style={{
                 borderTopWidth: 1,
@@ -210,8 +211,8 @@ class DetaiTransactionScreen extends Component<Props, States> {
               }}
             >
               <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Hình ảnh</Text>
-              <View style={{flexDirection: 'row'}}>
-                {this.transaction?.imageURL.map(url => (
+              <View style={{ flexDirection: 'row' }}>
+                {this.transaction?.imageURL.map((url) => (
                   <TouchableOpacity key={url} onPress={() => this.toggleModal()}>
                     <Image
                       source={{ uri: `${BASEURL}/images/uploads/${url}` }}
@@ -224,7 +225,7 @@ class DetaiTransactionScreen extends Component<Props, States> {
                         borderRadius: 8,
                       }}
                     />
-                </TouchableOpacity>
+                  </TouchableOpacity>
                 ))}
               </View>
             </View>

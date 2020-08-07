@@ -257,6 +257,7 @@ class InputExpenseScreen extends Component<Props, States> {
           bodyFormData.append('image', photo);
         });
       }
+      console.log(this.state.listImageAdd);
 
       bodyFormData.append('dataExpense', JSON.stringify(dataExpense));
       bodyFormData.append('dataLocation', JSON.stringify(dataLocation));
@@ -433,9 +434,14 @@ class InputExpenseScreen extends Component<Props, States> {
               <Text
                 style={[
                   InputExpenseScreenStyles.add,
-                  { opacity: (this.state.checkDescription && this.state.checkMoney) || 
-                    this.state.isEnableAddLocation || 
-                    this.state.listImageAdd.length > 0 ? 1 : 0.6 },
+                  {
+                    opacity:
+                      (this.state.checkDescription && this.state.checkMoney) ||
+                      this.state.isEnableAddLocation ||
+                      this.state.listImageAdd.length > 0
+                        ? 1
+                        : 0.6,
+                  },
                 ]}
               >
                 Save
@@ -572,7 +578,7 @@ class InputExpenseScreen extends Component<Props, States> {
                 </View>
                 <View style={InputExpenseScreenStyles.viewInputTitleLocation}>
                   <TextInput
-                    onChangeText={text => this.setState({address: text})}
+                    onChangeText={(text) => this.setState({ address: text })}
                     style={InputExpenseScreenStyles.inputLocation}
                     placeholder="Enter title location"
                     value={this.state.address}
