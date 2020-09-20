@@ -69,7 +69,7 @@ SearchStack.navigationOptions = ({ navigation }) => {
     tabBarIcon: ({ focused }) => (
       <Octicons
         focused={focused}
-        name={Platform.OS === 'ios' ? 'ios-home' : 'search'}
+        name={'search'}
         size={22}
         style={{ marginBottom: -3 }}
         color={focused ? Colors.tabIconSelected : Colors.blackText}
@@ -199,7 +199,7 @@ GroupStack.navigationOptions = ({ navigation }) => {
     tabBarIcon: ({ focused }) => (
       <MaterialCommunityIcons
         focused={focused}
-        name={Platform.OS === 'ios' ? 'ios-home' : 'account-group'}
+        name={Platform.OS === 'ios' ? 'account-group' : 'account-group'}
         size={28}
         style={{ marginBottom: -3 }}
         color={focused ? Colors.tabIconSelected : Colors.blackText}
@@ -287,7 +287,7 @@ ExpenseStack.navigationOptions = ({ navigation }) => {
     tabBarIcon: ({ focused }) => (
       <Ionicons
         focused={focused}
-        name={Platform.OS === 'ios' ? 'ios-home' : 'ios-add-circle-outline'}
+        name={Platform.OS === 'ios' ? 'ios-add-circle-outline' : 'ios-add-circle-outline'}
         size={26}
         style={{ marginBottom: -3 }}
         color={focused ? Colors.tabIconSelected : Colors.blackText}
@@ -322,7 +322,7 @@ ActivityStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <Feather
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-home' : 'activity'}
+      name={Platform.OS === 'ios' ? 'activity' : 'activity'}
       size={26}
       style={{ marginBottom: -3 }}
       color={focused ? Colors.tabIconSelected : Colors.blackText}
@@ -369,7 +369,7 @@ AccountStack.navigationOptions = ({ navigation }) => {
     tabBarIcon: ({ focused }) => (
       <MaterialCommunityIcons
         focused={focused}
-        name={Platform.OS === 'ios' ? 'ios-home' : 'account-circle'}
+        name={Platform.OS === 'ios' ? 'account-circle' : 'account-circle'}
         size={26}
         style={{ marginBottom: -3 }}
         color={focused ? Colors.tabIconSelected : Colors.blackText}

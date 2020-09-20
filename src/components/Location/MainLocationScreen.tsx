@@ -53,25 +53,27 @@ class MainLocationScreen extends Component<Props, States> {
     })
       .then((response) => response.json())
       .then(async (res) => {
-        this.setState({ coordinates: res.data });
+        res.data.lenght > 0 && this.setState({ coordinates: res.data });
       })
       .catch((error) => {
         alert(error);
       });
-    let location = await this.state.coordinates[0];
-    let currentPosition = {
-      latitude: location.latitude,
-      longitude: location.longitude,
-      latitudeDelta: 0.1,
-      longitudeDelta: 0.1,
-    };
-    let currentPositionLatitude = location.latitude;
-    let currentPositionLongtitude = location.longtitude;
-    this.setState({
-      currentPosition,
-      currentPositionLatitude,
-      currentPositionLongtitude,
-    });
+    if (this.state.coordinates[0]) {
+      let location = await this.state.coordinates[0];
+      let currentPosition = {
+        latitude: location.latitude,
+        longitude: location.longitude,
+        latitudeDelta: 0.1,
+        longitudeDelta: 0.1,
+      };
+      let currentPositionLatitude = location.latitude;
+      let currentPositionLongtitude = location.longtitude;
+      this.setState({
+        currentPosition,
+        currentPositionLatitude,
+        currentPositionLongtitude,
+      });
+    }
   };
 
   render() {
@@ -109,12 +111,12 @@ class MainLocationScreen extends Component<Props, States> {
           </MapView>
         ) : (
           <MapView style={styles.mapStyle} provider={PROVIDER_GOOGLE} region={this.state.currentPosition}>
-            <Marker
+            {/* <Marker
               coordinate={{
                 latitude: Number(this.state.currentPositionLatitude),
                 longitude: Number(this.state.currentPositionLongtitude),
               }}
-            ></Marker>
+            ></Marker> */}
           </MapView>
         )}
       </View>
