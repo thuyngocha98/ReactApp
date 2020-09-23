@@ -32,6 +32,11 @@ type States = {
   isModelVisible?: boolean;
 };
 class DetaiTransactionScreen extends Component<Props, States> {
+  constructor(props){
+    super(props);
+    this.transaction = this.props.navigation.getParam('transaction', '');
+
+  }
   state = {
     data: [],
     loading: false,
@@ -43,10 +48,6 @@ class DetaiTransactionScreen extends Component<Props, States> {
     };
   };
   transaction: any[];
-
-  componentWillMount() {
-    this.transaction = this.props.navigation.getParam('transaction', '');
-  }
 
   componentDidMount() {
     this.getDataTransaction();

@@ -66,7 +66,7 @@ class MainScreenGroup extends Component<Props, States> {
 
     _navListener: any;
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.getListAllTrip();
     }
 

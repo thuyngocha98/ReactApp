@@ -34,7 +34,7 @@ class SplashScreen extends Component<Props, States> {
     }
   };
 
-  async componentWillMount() {
+  async UNSAFE_componentWillMount() {
     const data = await this.performTimeConsumingTask();
     if (data !== null) {
       const dataUser = await this.props.getDataUser();

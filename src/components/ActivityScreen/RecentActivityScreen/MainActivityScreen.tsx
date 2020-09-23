@@ -142,17 +142,12 @@ class MainActivityScreen extends Component<Props,States> {
     arrayData = [];
     _navListener: any;
 
-    componentWillMount() {
-        this.getDataActivity();
-    }
-
     componentDidMount() {
-
+        this.getDataActivity();
         //set barstyle of statusbar
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             StatusBar.setBarStyle('light-content');
             // call api get list group
-            this.getDataActivity();
         });
     }
 
@@ -201,7 +196,6 @@ class MainActivityScreen extends Component<Props,States> {
     };
 
     render() {
-
         return (
             <View>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
@@ -220,7 +214,7 @@ class MainActivityScreen extends Component<Props,States> {
                         containerStyle={Styles.containerSearchBar}
                     />
                 </View>
-                <ScrollView style={styles.scrollView}>
+                <View style={styles.scrollView}>
                     <View>
                         <Text style={styles.title}>Recent activity</Text>
                     </View>
@@ -231,6 +225,7 @@ class MainActivityScreen extends Component<Props,States> {
                     ) : (
                             <View>
                                 <FlatList
+                                    scrollEnabled
                                     data={this.state.data}
                                     renderItem={({ item }) => (
                                         <TouchableOpacity >
@@ -245,7 +240,7 @@ class MainActivityScreen extends Component<Props,States> {
                         )}
 
                     </View>
-                </ScrollView>
+                </View>
             </View >
         );
     }
