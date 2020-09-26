@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-  Text,
-  TouchableOpacity,
-  View,
-  TextInput,
-  YellowBox,
-  ScrollView,
-  Image,
-  Keyboard,
-} from 'react-native';
+import { Text, TouchableOpacity, View, TextInput, YellowBox, ScrollView, Image, Keyboard } from 'react-native';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 import { Ionicons } from '@expo/vector-icons';
@@ -164,7 +155,10 @@ class ChatGroupScreen extends Component<Props, States> {
           <View style={ChatGroupScreenStyles.viewFriend}>
             <View style={ChatGroupScreenStyles.sub1ViewFriend}>
               <View style={ChatGroupScreenStyles.viewTextFriend}>
-                <Image source={thumbnails['avatar'+message?.user_id_sender?.avatar]} style={{ width: screenWidth / 12, height: screenWidth / 12 }} />
+                <Image
+                  source={thumbnails['avatar' + message?.user_id_sender?.avatar]}
+                  style={{ width: screenWidth / 12, height: screenWidth / 12 }}
+                />
               </View>
               <View style={ChatGroupScreenStyles.viewMessageFriend}>
                 <Text style={ChatGroupScreenStyles.txtMessageFriend}>{message.message}</Text>

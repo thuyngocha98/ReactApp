@@ -8,7 +8,9 @@ import { number2money, thumbnails } from '../../../../constants/FunctionCommon';
 import { BASEURL } from '../../../../api/api';
 
 function mapStateToProps(state) {
-  return {};
+  return {
+    user: state.dataUser.dataUser,
+  };
 }
 
 type Props = {
@@ -55,7 +57,10 @@ class ListItemBalance extends Component<Props, States> {
       });
   };
   render() {
-    const thumbnail = thumbnails['avatar' + this.props.data.avatar];
+    const thumbnail =
+      this.props.user.avatar.length > 2
+        ? { uri: `${BASEURL}/images/avatars/${this.props.user.avatar}` }
+        : thumbnails['avatar' + this.props.data.avatar];
     return (
       <View style={ListItemBalanceStyles.container}>
         <View style={ListItemBalanceStyles.firtItem}>
@@ -159,4 +164,4 @@ class ListItemBalance extends Component<Props, States> {
   }
 }
 
-export default connect(mapStateToProps)(ListItemBalance);
+export default connect(mapStateToProps, null)(ListItemBalance);

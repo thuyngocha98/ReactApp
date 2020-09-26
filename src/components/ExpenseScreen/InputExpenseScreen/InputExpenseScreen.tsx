@@ -262,6 +262,7 @@ class InputExpenseScreen extends Component<Props, States> {
       bodyFormData.append('dataExpense', JSON.stringify(dataExpense));
       bodyFormData.append('dataLocation', JSON.stringify(dataLocation));
       bodyFormData.append('trip_id', tripId);
+      console.log(bodyFormData);
       fetch(`${BASEURL}/api/transaction/insert_new_transaction`, {
         method: 'POST',
         headers: {
