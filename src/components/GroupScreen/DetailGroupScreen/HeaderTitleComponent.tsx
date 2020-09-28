@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Image, ImageBackground, Alert, ToastAndroid } from 'react-native';
+import { View, Text, Image, ImageBackground, Alert, Platform } from 'react-native';
 import HeaderTitleComponentStyles from '../../../styles/GroupsStyles/DetailGroupScreenStyles/HeaderTitleComponentStyles';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import ListItemHeader from './ListItemHeader';
@@ -12,6 +12,8 @@ import { MenuProvider } from 'react-native-popup-menu';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import { BASEURL } from '../../../api/api';
 import { number2money } from '../../../constants/FunctionCommon';
+import DialogInput from 'react-native-dialog-input';
+
 function mapStateToProps(state) {
   return {
     userId: state.dataUser.dataUser._id,
@@ -32,14 +34,22 @@ type Props = {
 };
 
 type States = {
+  itemSelected?: any;
   opened?: boolean;
+  isDialogVisible?: boolean;
+  nameGroup?: any;
 };
 
 class HeaderTitleComponent extends Component<Props, States> {
-  state = {
-    itemSelected: 0,
-    opened: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      itemSelected: 0,
+      opened: false,
+      isDialogVisible: false,
+      nameGroup: '',
+    };
+  }
 
   data = [
     {
@@ -64,7 +74,6 @@ class HeaderTitleComponent extends Component<Props, States> {
       title: 'Picture Memories',
     },
   ];
-
   // click icon setting => open menu
   onTriggerPress() {
     this.setState({ opened: true });
@@ -73,7 +82,55 @@ class HeaderTitleComponent extends Component<Props, States> {
   onBackdropPress() {
     this.setState({ opened: false });
   }
+  editGroup = () => {
+    this.setState({
+      opened: !this.state.opened,
+      isDialogVisible: !this.state.isDialogVisible,
+    });
+  };
 
+  changeNameGroup = async (text) => {
+    if (text.length >= 2) {
+      await this.setState({
+        nameGroup: text,
+        isDialogVisible: !this.state.isDialogVisible,
+      });
+      this.callApiChangeNameGroup();
+    } else {
+      alert('the group name must least 2 character ');
+    }
+  };
+
+  callApiChangeNameGroup = async () => {
+    let data = await {
+      name: this.state.nameGroup,
+    };
+    const json = JSON.stringify(data);
+    fetch(`${BASEURL}/api/trip/update_a_trip/${this.props.idGroup}/${this.props.userId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: json,
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        Alert.alert(
+          res.message,
+          '',
+          [
+            {
+              text: 'OK',
+            },
+          ],
+          { cancelable: false },
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   // function delete group
   removeGroup = () => {
     this.setState({ opened: false });
@@ -95,6 +152,12 @@ class HeaderTitleComponent extends Component<Props, States> {
       ],
       { cancelable: false },
     );
+  };
+
+  hideDialogInput = () => {
+    this.setState({
+      isDialogVisible: !this.state.isDialogVisible,
+    });
   };
 
   callApiRemoveGroup = async () => {
@@ -128,6 +191,21 @@ class HeaderTitleComponent extends Component<Props, States> {
     var time = this.props.time.split('-');
     return (
       <MenuProvider>
+        <DialogInput
+          isDialogVisible={this.state.isDialogVisible}
+          title={'Edit The Group'}
+          message={'Enter the group name you want to change'}
+          hintInput={'Enter the group name...'}
+          submitInput={(inputText) => {
+            this.changeNameGroup(inputText);
+          }}
+          closeDialog={this.hideDialogInput}
+          modalStyle={
+            Platform.OS === 'ios'
+              ? { backgroundColor: 'rgba(0,0,0,0.9)', position: 'relative', top: -screenWidth / 3.5 }
+              : ''
+          }
+        ></DialogInput>
         <View style={HeaderTitleComponentStyles.container}>
           <ImageBackground
             source={{ uri: 'https://designroast.org/wp-content/uploads/2014/02/pattern-thepatternlibrary.png' }}
@@ -154,12 +232,9 @@ class HeaderTitleComponent extends Component<Props, States> {
                     children={<Ionicons name="ios-settings" size={32} color={Colors.white} />}
                   />
                   <MenuOptions customStyles={optionsStyles}>
-                    <MenuOption
-                      onSelect={() => {
-                        alert(`Edit`), this.setState({ opened: false });
-                      }}
-                      text="Edit"
-                    />
+                    <MenuOption onSelect={this.editGroup}>
+                      <Text style={{ color: '#ff9933' }}>Edit</Text>
+                    </MenuOption>
                     <MenuOption onSelect={this.removeGroup}>
                       <Text style={{ color: Colors.orangered }}>Delete</Text>
                     </MenuOption>
@@ -204,8 +279,8 @@ class HeaderTitleComponent extends Component<Props, States> {
                           this.props.navigation.navigate('ChatGroupScreen', {
                             tripId: this.props.idGroup,
                             nameTrip: this.props.nameGroup,
-                            navigation: this.props.navigation
-                        })
+                            navigation: this.props.navigation,
+                          });
                           break;
                         case 'See the schedule of the trip':
                           navigation.navigate('MainLocationScreen', { tripId: this.props.idGroup });

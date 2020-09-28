@@ -208,24 +208,24 @@ class InputExpenseScreen extends Component<Props, States> {
     const Description = this.state.description;
     var list_user = await this.createListUser(listTypeUser, idPayer);
     if (this.state.checkDescription !== this.state.checkMoney) {
-      Keyboard.dismiss();
-      ToastAndroid.showWithGravityAndOffset(
-        'Please enter the full expense information !',
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-        25,
-        50,
-      );
+      // Keyboard.dismiss();
+      // ToastAndroid.showWithGravityAndOffset(
+      //   'Please enter the full expense information !',
+      //   ToastAndroid.SHORT,
+      //   ToastAndroid.BOTTOM,
+      //   25,
+      //   50,
+      // );
     } else {
       if (!this.state.checkDescription && !this.state.isEnableAddLocation && this.state.listImageAdd?.length === 0) {
-        Keyboard.dismiss();
-        ToastAndroid.showWithGravityAndOffset(
-          'Please enter additional information !',
-          ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM,
-          25,
-          50,
-        );
+        // Keyboard.dismiss();
+        // ToastAndroid.showWithGravityAndOffset(
+        //   'Please enter additional information !',
+        //   ToastAndroid.SHORT,
+        //   ToastAndroid.BOTTOM,
+        //   25,
+        //   50,
+        // );
         return;
       }
       var bodyFormData = new FormData();
