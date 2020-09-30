@@ -30,10 +30,11 @@ type Props = {
 
 class ListItemActivity extends Component<Props> {
   render() {
+    console.log(this.props.data);
     if (this.props.data.type === 'created_trip') {
       const thumbnail =
-        this.props.user.avatar.length > 2
-          ? { uri: `${BASEURL}/images/avatars/${this.props.user.avatar}` }
+        this.props.data.user_id.avatar.length > 2
+          ? { uri: `${BASEURL}/images/avatars/${this.props.data.user_id.avatar}` }
           : thumbnails['avatar' + this.props.data.user_id.avatar];
       const date = this.props.data.create_date;
       var time = date.split(/[\s-T:]+/);
@@ -71,8 +72,8 @@ class ListItemActivity extends Component<Props> {
       );
     } else if (this.props.data.type === 'created_transaction') {
       const thumbnail =
-        this.props.user.avatar.length > 2
-          ? { uri: `${BASEURL}/images/avatars/${this.props.user.avatar}` }
+        this.props.data.user_id.avatar.length > 2
+          ? { uri: `${BASEURL}/images/avatars/${this.props.data.user_id.avatar}` }
           : thumbnails['avatar' + this.props.data.user_id.avatar];
       const date = this.props.data.create_date;
       var time = date.split(/[\s-T:]+/);
@@ -117,8 +118,8 @@ class ListItemActivity extends Component<Props> {
       );
     } else if (this.props.data.type === 'deleted_trip') {
       const thumbnail =
-        this.props.user.avatar.length > 2
-          ? { uri: `${BASEURL}/images/avatars/${this.props.user.avatar}` }
+        this.props.data.user_id.avatar.length > 2
+          ? { uri: `${BASEURL}/images/avatars/${this.props.data.user_id.avatar}` }
           : thumbnails['avatar' + this.props.data.user_id.avatar];
       const date = this.props.data.delete_date;
       var time = date.split(/[\s-T:]+/);
@@ -156,8 +157,8 @@ class ListItemActivity extends Component<Props> {
       );
     } else if (this.props.data.type === 'updated') {
       const thumbnail =
-        this.props.user.avatar.length > 2
-          ? { uri: `${BASEURL}/images/avatars/${this.props.user.avatar}` }
+        this.props.data.user_id.avatar.length > 2
+          ? { uri: `${BASEURL}/images/avatars/${this.props.data.user_id.avatar}` }
           : thumbnails['avatar' + this.props.data.user_id.avatar];
       const date = this.props.data.update_date;
       var time = date.split(/[\s-T:]+/);
