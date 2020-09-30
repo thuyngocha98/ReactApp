@@ -22,13 +22,21 @@ import car from '../../../../assets/images/car.png';
 import wifi from '../../../../assets/images/wifi.png';
 // @ts-ignore
 import puzzle from '../../../../assets/images/puzzle.png';
-import { BASEURL } from '../../../api/api';
 import Colors from '../../../constants/Colors';
 import { SearchBar } from 'react-native-elements';
 import { screenWidth } from '../../../constants/Dimensions';
+import { connect } from 'react-redux';
+import { BASEURL } from '../../../api/api';
+
+function mapStateToProps(state) {
+  return {
+    user: state.dataUser.dataUser,
+  };
+}
 
 type Props = {
   navigation?: any;
+  user?: any;
 };
 
 type States = {
@@ -42,113 +50,18 @@ class MainActivityScreen extends Component<Props, States> {
     value: '',
     data: [],
     loading: false,
-    data1: [
-      {
-        type: 'addItem',
-        id: 0,
-        typeImage: toast,
-        avatar: avatar,
-        name: 'You',
-        method: 'added',
-        nameItem: 'Drink',
-        group: 'Hotel',
-        owe: 'You get back $',
-        money: '30,000.00',
-        date: 'ngày 18 thg 9, 2019',
-        time: '19:57',
-      },
-      {
-        type: 'addItem',
-        id: 1,
-        avatar: avatar,
-        name: 'Ha T.',
-        method: 'added',
-        nameItem: 'Resort',
-        group: 'Hotel',
-        owe: 'You owe $',
-        money: '25.00',
-        date: 'ngày 18 thg 9, 2019',
-        time: '19:57',
-      },
-      {
-        type: 'addItem',
-        id: 2,
-        typeImage: wifi,
-        avatar: avatar,
-        name: 'You',
-        method: 'added',
-        nameItem: 'wifi',
-        group: 'Hotel',
-        owe: 'You do not owe any thing',
-        money: '',
-        date: 'ngày 18 thg 9, 2019',
-        time: '19:57',
-      },
-      {
-        type: 'addMembers',
-        id: 3,
-        typeImage: puzzle,
-        avatar: avatar,
-        name: 'You',
-        method: 'added',
-        nameItem: '',
-        nameFriend: 'Ha T.',
-        group: 'Hotel',
-        date: 'ngày 18 thg 9, 2019',
-        time: '19:57',
-      },
-      {
-        type: 'create',
-        id: 4,
-        typeImage: puzzle,
-        avatar: avatar,
-        name: 'You',
-        method: 'create',
-        group: 'We Go',
-        date: 'ngày 18 thg 9, 2019',
-        time: '19:57',
-      },
-      {
-        type: 'update',
-        id: 5,
-        typeImage: puzzle,
-        avatar: avatar,
-        name: 'You',
-        method: 'update',
-        nameItem: '',
-        nameFriend: 'Ha T.',
-        group: 'Hotel',
-        owe: 'You get back $',
-        money: '30,000.00',
-        date: 'ngày 18 thg 9, 2019',
-        time: '19:57',
-      },
-      {
-        type: 'delete',
-        id: 6,
-        typeImage: puzzle,
-        avatar: avatar,
-        name: 'You',
-        method: 'delete',
-        nameItem: '',
-        nameFriend: 'Ha T.',
-        group: 'Hotel',
-        date: 'ngày 18 thg 9, 2019',
-        time: '19:57',
-      },
-    ],
   };
 
   arrayData = [];
   _navListener: any;
 
   componentDidMount() {
+    this.getDataActivity();
     //set barstyle of statusbar
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('light-content');
       // call api get list group
     });
-    this.getDataActivity();
   }
 
   componentWillUnmount() {
@@ -158,7 +71,7 @@ class MainActivityScreen extends Component<Props, States> {
 
   getDataActivity = async () => {
     this.setState({ loading: true });
-    fetch(`${BASEURL}/api/userActivity/get_list_all_user_activity`, {
+    fetch(`${BASEURL}/api/userActivity/get_list_all_user_activity/${this.props.user._id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -270,4 +183,4 @@ const Styles = StyleSheet.create({
   },
 });
 
-export default MainActivityScreen;
+export default connect(mapStateToProps, null)(MainActivityScreen);

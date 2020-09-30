@@ -274,11 +274,11 @@ class InputExpenseScreen extends Component<Props, States> {
         .then(async (res) => {
           if (res.result === 'ok') {
             this.setInputExpenseAgain();
-            ToastAndroid.showWithGravityAndOffset('Save done!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+            // ToastAndroid.showWithGravityAndOffset('Save done!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
             await this.props.saveTripId(tripId);
             this.props.navigation.goBack();
           } else {
-            ToastAndroid.showWithGravityAndOffset('Save error!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+            // ToastAndroid.showWithGravityAndOffset('Save error!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
           }
         })
         .catch((error) => {
