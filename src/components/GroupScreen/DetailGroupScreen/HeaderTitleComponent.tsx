@@ -116,16 +116,20 @@ class HeaderTitleComponent extends Component<Props, States> {
     })
       .then((response) => response.json())
       .then((res) => {
-        Alert.alert(
-          res.message,
-          '',
-          [
-            {
-              text: 'OK',
-            },
-          ],
-          { cancelable: false },
-        );
+        if (res.result == 'Failed') {
+          Alert.alert(res.message);
+        } else {
+          Alert.alert(
+            res.message,
+            '',
+            [
+              {
+                text: 'OK',
+              },
+            ],
+            { cancelable: false },
+          );
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -175,8 +179,8 @@ class HeaderTitleComponent extends Component<Props, States> {
     })
       .then((response) => response.json())
       .then((res) => {
-        if (res == "You don't have permission to delete") {
-          Alert.alert("You don't have permission to delete");
+        if (res.result == 'Failed') {
+          Alert.alert(res.message);
         } else {
           this.props.navigation.navigate('GroupScreen');
         }

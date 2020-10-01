@@ -34,7 +34,7 @@ const ChatGroupScreenStyles = StyleSheet.create({
   },
   input: {
     paddingLeft: 12,
-    height: 40,
+    height: 38,
     borderWidth: 1,
     borderColor: Colors.lightgray,
     borderRadius: screenWidth / 20,
@@ -47,12 +47,23 @@ const ChatGroupScreenStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.tintColor,
+    marginTop: 3,
+    marginLeft: screenWidth / 60,
+  },
+  location: {
+    marginTop: 4,
+  },
+  camera: {
     marginTop: 7,
     marginLeft: 5,
   },
-  microphone: {
-    marginLeft: 7,
+  image: {
     marginTop: 7,
+    marginLeft: 13,
+  },
+  microphone: {
+    marginLeft: screenWidth / 45,
+    marginTop: 6,
   },
   message: {
     marginLeft: screenWidth / 36,

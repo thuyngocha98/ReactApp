@@ -30,7 +30,6 @@ type Props = {
 
 class ListItemActivity extends Component<Props> {
   render() {
-    console.log(this.props.data);
     if (this.props.data.type === 'created_trip') {
       const thumbnail =
         this.props.data.user_id.avatar.length > 2

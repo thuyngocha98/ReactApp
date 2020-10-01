@@ -9,6 +9,7 @@ import ChatGroupScreenStyles from '../../../styles/GroupsStyles/ChatGroupScreenS
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons1 from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { BASEURL } from '../../../api/api';
 import SocketIOClient from 'socket.io-client';
 import { thumbnails } from '../../../constants/FunctionCommon';
@@ -205,12 +206,22 @@ class ChatGroupScreen extends Component<Props, States> {
           {messages}
         </ScrollView>
         <View style={ChatGroupScreenStyles.footer}>
-          <View style={{ flex: 1 }}>
-            <TouchableOpacity style={{ marginTop: 7, marginLeft: 5 }}>
-              <FontAwesome name={'file-picture-o'} size={25} color={Colors.tintColor} />
-            </TouchableOpacity>
-          </View>
-          <View style={{ flex: 8.5, marginLeft: -5 }}>
+          {lengthMessage < 1 ? (
+            <View style={{ flex: 1, flexDirection: 'row' }}>
+              <TouchableOpacity style={ChatGroupScreenStyles.location} onPress={this.submitMessage}>
+                <MaterialIcons name={'location-on'} size={31} color={Colors.tintColor} />
+              </TouchableOpacity>
+              <TouchableOpacity style={ChatGroupScreenStyles.camera} onPress={this.submitMessage}>
+                <FontAwesome name={'camera'} size={26} color={Colors.tintColor} />
+              </TouchableOpacity>
+              <TouchableOpacity style={ChatGroupScreenStyles.image}>
+                <FontAwesome name={'photo'} size={25} color={Colors.tintColor} />
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View></View>
+          )}
+          <View style={lengthMessage > 0 ? { flex: 8.5, marginLeft: 10 } : { flex: 6, marginLeft: screenWidth / 5.5 }}>
             <TextInput
               style={ChatGroupScreenStyles.input}
               autoCapitalize={'none'}
@@ -230,7 +241,7 @@ class ChatGroupScreen extends Component<Props, States> {
               </TouchableOpacity>
             ) : (
               <TouchableOpacity style={ChatGroupScreenStyles.microphone}>
-                <FontAwesome name={'microphone'} size={30} color={Colors.tintColor} />
+                <FontAwesome name={'microphone'} size={28} color={Colors.tintColor} />
               </TouchableOpacity>
             )}
           </View>
