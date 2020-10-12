@@ -135,10 +135,6 @@ class EditProfileScreen extends Component<Props, States> {
       quality: 1,
     });
 
-    // await this.setState({
-    //   imageToBase64: result.base64,
-    // });
-
     if (!result.cancelled) {
       let localUri = result.uri;
       let filename = localUri.split('/').pop();

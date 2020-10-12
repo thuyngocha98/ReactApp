@@ -103,6 +103,25 @@ const ChatGroupScreenStyles = StyleSheet.create({
     marginHorizontal: screenWidth / 45,
     fontSize: 8,
   },
+  backgroundImageChat: {
+    flex: 1,
+    flexDirection: 'row',
+    // marginVertical: screenWidth / 60,
+  },
+  imageChat: {
+    width: screenWidth / 3.5,
+    height: screenWidth / 5,
+    marginBottom: 2,
+    borderRadius: 5,
+    resizeMode: 'cover',
+  },
+  timeImageChat: {
+    textAlign: 'right',
+    fontSize: screenWidth / 45,
+    marginRight: 2,
+    opacity: 0.9,
+    marginBottom: screenWidth / 50,
+  },
   mainViewFriend: {
     flexDirection: 'column',
     justifyContent: 'center',

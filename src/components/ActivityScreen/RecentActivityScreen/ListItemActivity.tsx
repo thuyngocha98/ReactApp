@@ -169,7 +169,7 @@ class ListItemActivity extends Component<Props> {
               <Image style={styles.toast} source={update} />
               <Image style={styles.avatar} source={thumbnail} />
             </View>
-            <View>
+            <View style={{ flex: 7 }}>
               <View style={styles.flexRow}>
                 <Text style={styles.bold}>
                   {name[name.length - 1]} {this.props.data.user_id.name[0]}.{' '}
