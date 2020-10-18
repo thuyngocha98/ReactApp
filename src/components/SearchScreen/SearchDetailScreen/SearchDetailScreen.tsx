@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TouchableOpacity, StyleSheet, StatusBar, Image, ImageBackground, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList } from 'react-native';
 import Colors from '../../../constants/Colors';
 import { APPBAR_HEIGHT, screenWidth } from '../../../constants/Dimensions';
 import { Ionicons } from '@expo/vector-icons';
 import ListItem from './Listitem';
-import { ScrollView } from 'react-native-gesture-handler';
 import { BASEURL } from '../../../api/api';
+import Constants from 'expo-constants';
 
 function mapStateToProps(state) {
     return {
@@ -14,18 +14,78 @@ function mapStateToProps(state) {
     };
 }
 
+
+type States = {
+    data?: any[],
+    loading?: boolean
+}
+
 type Props = {
     navigation?: any,
 }
 
-class SearchDetailScreen extends Component<Props> {
+class SearchDetailScreen extends Component<Props, States> {
     static navigationOptions = {
         header: null
     };
+
+    state = {
+        data: [],
+        loading: false
+    }
+
+    componentDidMount() {
+        const data = this.props.navigation.getParam('data', '');
+        this.callApiGetDetail(data.code);
+    }
+
+    callApiGetDetail = code => {
+        this.setState({ loading: true })
+        fetch(`${BASEURL}/api/search/get_detail_location/${code}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+        })
+            .then((response) => response.json())
+            .then((res) => {
+                this.setState({
+                    data: res.data,
+                    loading: false
+                })
+            })
+            .catch((error) => {
+                this.setState({
+                    loading: false
+                })
+                console.log(error);
+            });
+    }
+
+    renderListHeader = data => (
+        <View>
+            <View style={styles.imageHeader}>
+                <Image
+                    style={styles.image}
+                    source={{ uri: BASEURL + "/images/main/" + data.url }}
+                />
+            </View>
+            <View style={styles.viewTitle}>
+                <Text style={styles.textRecommend}>Introduce</Text>
+                <Text style={styles.textDesc}>{data.desc}...</Text>
+            </View>
+            <View style={styles.underLine} />
+            <View style={{ marginHorizontal: screenWidth / 20.55, marginVertical: screenWidth / 41.1, }}>
+                <Text style={styles.textRecommend}>Top sights</Text>
+            </View>
+        </View>
+    )
+    
     render() {
         const data = this.props.navigation.getParam('data', '');
         return (
-            <ScrollView style={styles.container}>
+            <View style={styles.container}>
                 <View style={styles.containerHeader}>
                     <View style={styles.header}>
                         <TouchableOpacity
@@ -35,50 +95,41 @@ class SearchDetailScreen extends Component<Props> {
                                 this.props.navigation.navigate('SearchScreen');
                             }}
                         >
-                            <Ionicons name='md-arrow-back' size={30} color={Colors.white} />
+                            <Ionicons name='md-arrow-back' size={28} color={Colors.white} />
                         </TouchableOpacity>
-                        <Text style={styles.addContact}>{data.title}</Text>
+                        <Text numberOfLines={1} style={styles.addContact}>{data.title}</Text>
                         <TouchableOpacity
                             style={styles.save}
                             activeOpacity={0.5}
                             onPress={() => {
-                                this.props.navigation.navigate('PlanTripScreen', { plantrip: data.plantrip, title: data.title});
+                                this.props.navigation.navigate('PlanTripScreen', {data: this.state.data, code: data.code});
                             }}
                         >
-                            <Text style={styles.textHeaderLeft}>Plan a trip</Text>
+                            <Text style={styles.textHeaderLeft}>Plan trip</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={styles.imageHeader}>
-                    <Image
-                        style={styles.image}
-                        source={{ uri: BASEURL + "/" + data.image }}
-                    />
-                </View>
-                <View style={styles.viewTitle}>
-                    <Text style={styles.textRecommend}>Giới Thiệu</Text>
-                    <Text style={styles.textDesc}>{data.desc}...</Text>
-                </View>
-                <View style={styles.underLine} />
-                <View style={{ marginHorizontal: screenWidth / 20.55, marginVertical: screenWidth / 41.1, }}>
-                    <Text style={styles.textRecommend}>Địa điểm nổi bật</Text>
-                </View>
                 <View style={styles.listItem}>
                     <FlatList
-                        showsVerticalScrollIndicator={false}
-                        data={data.data}
+                        ListHeaderComponent={this.renderListHeader(data)}
+                        ListFooterComponent={() => (
+                            <View style={{height: screenWidth/36}} />
+                        )}
+                        data={this.state.data}
                         numColumns={2}
                         removeClippedSubviews={true}
                         renderItem={({ item }) => (
-                            <ListItem
-                                data={item}
-                            />
+                            <TouchableOpacity 
+                             onPress={() => this.props.navigation.navigate('DescriptionLocationScreen', {data: item})}>
+                                <ListItem
+                                    data={item}
+                                />
+                            </TouchableOpacity>
                         )}
-                        keyExtractor={item => item.title.toString()}
+                        keyExtractor={item => item._id.toString()}
                     />
                 </View>
-                <View style={styles.underLine} />
-            </ScrollView>
+            </View>
         )
     };
 }
@@ -89,37 +140,36 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
     },
     textHeaderLeft: {
-        fontSize: 16,
+        fontSize: 17,
         color: Colors.white
     },
     containerHeader: {
         width: screenWidth,
-        height: APPBAR_HEIGHT + StatusBar.currentHeight,
+        height: APPBAR_HEIGHT + Constants.statusBarHeight,
         backgroundColor: Colors.tabIconSelected
     },
     header: {
         flex: 1,
-        marginTop: StatusBar.currentHeight,
+        marginTop: Constants.statusBarHeight,
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
-        marginHorizontal: screenWidth / 27.43,
     },
     addContact: {
-        flex: screenWidth / 82.2,
+        flex: 1,
         fontSize: 20,
         fontWeight: '500',
         color: Colors.white,
         textAlign: 'center',
     },
     cancel: {
-        flex: 2,
+        paddingLeft: screenWidth/27,
+        paddingRight: screenWidth/24,
+        paddingVertical: screenWidth/72,
     },
     save: {
-        flex: 2,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'flex-end',
+        paddingRight: screenWidth/27,
+        paddingLeft: screenWidth/27,
+        paddingVertical: screenWidth/72,
     },
     imageHeader: {
 
@@ -139,7 +189,7 @@ const styles = StyleSheet.create({
     },
     textDesc: {
         fontSize: 15,
-        color: Colors.black
+        color: Colors.blackText
     },
     underLine: {
         width: screenWidth,
@@ -147,6 +197,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.lavender
     },
     listItem: {
+        flex: 1,
         backgroundColor: Colors.white,
     },
 

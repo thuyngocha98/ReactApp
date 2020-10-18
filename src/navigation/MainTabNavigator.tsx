@@ -2,7 +2,7 @@ import React from 'react';
 import { Platform, Animated, Easing } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
-import { Feather, MaterialCommunityIcons, Ionicons, EvilIcons, Octicons } from '@expo/vector-icons';
+import { Feather, MaterialCommunityIcons, Ionicons, Octicons } from '@expo/vector-icons';
 import GroupScreen from '../screens/GroupScreen';
 import SearchScreen from '../screens/SearchScreen';
 import ActivityScreen from '../screens/ActivityScreen';
@@ -29,9 +29,12 @@ import ChooseMultiplePeopleScreen from '../components/ExpenseScreen/ChoosePayerS
 import DetaiTransactionScreen from '../components/GroupScreen/DetailGroupScreen/DetailTransactionScreen/DetaiTransactionScreen';
 import { screenWidth } from '../constants/Dimensions';
 import SearchDetailScreen from '../components/SearchScreen/SearchDetailScreen/SearchDetailScreen';
+import DescriptionLocationScreen from '../components/SearchScreen/SearchDetailScreen/DescriptionLocationScreen';
 import MainExpenseScreen from '../components/ExpenseScreen/MainExpenseScreen/MainExpenseScreen';
 import MainScreenGroup from '../components/GroupScreen/MainScreenGroup/MainScreenGroup';
 import PlanTripScreen from '../components/SearchScreen/PlanTripScreen/PlanTripScreen';
+import MapPlanScreen from '../components/SearchScreen/PlanTripScreen/MapPlanScreen';
+import AddDestinationScreen from '../components/SearchScreen/PlanTripScreen/AddDestinationScreen';
 import EditProfileScreen from '../components/AccountScreen/EditProfileScreen/EditProfileScreen';
 import ShowImagesScreen from '../components/GroupScreen/DetailGroupScreen/ImagesScreen/ShowImagesScreen';
 import AddImagesScreen from '../components/GroupScreen/DetailGroupScreen/ImagesScreen/AddImagesScreen';
@@ -54,12 +57,26 @@ const SearchStack = createStackNavigator({
   PlanTripScreen: {
     screen: PlanTripScreen,
   },
+  AddDestinationScreen: {
+    screen: AddDestinationScreen,
+  },
+  MapPlanScreen: {
+    screen: MapPlanScreen
+  },
+  DescriptionLocationScreen: {
+    screen: DescriptionLocationScreen
+  }
 });
 
 SearchStack.navigationOptions = ({ navigation }) => {
   let tabBarVisible = true;
   let routeName = navigation.state.routes[navigation.state.index].routeName;
-  if (routeName == 'SearchDetailScreen' || routeName == 'PlanTripScreen') {
+  if (routeName == 'SearchDetailScreen' 
+      || routeName == 'PlanTripScreen' 
+      || routeName == 'AddDestinationScreen'
+      || routeName == 'MapPlanScreen'
+      || routeName == 'DescriptionLocationScreen'
+  ) {
     tabBarVisible = false;
   }
 

@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, StatusBar, FlatList, TouchableOpacity, Animated, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Colors from '../../../constants/Colors';
 import { screenWidth } from '../../../constants/Dimensions';
 // @ts-ignore
 import { SearchBar } from 'react-native-elements';
 import ListItems from './Listitem';
-import { data } from './dataListitem';
 import { BASEURL } from '../../../api/api';
 
 function mapStateToProps(state) {
@@ -16,9 +15,7 @@ function mapStateToProps(state) {
 }
 
 const NAVBAR_HEIGHT = screenWidth / 3.7;
-const STATUS_BAR_HEIGHT = 0;
 
-const AnimatedFlatlist = Animated.createAnimatedComponent(FlatList); // create animation
 
 type States = {
     values?: string,
@@ -29,7 +26,6 @@ type States = {
 type Props = {
     navigation?: any
 }
-
 
 
 class MainSearchScreen extends Component<Props, States> {
@@ -60,7 +56,7 @@ class MainSearchScreen extends Component<Props, States> {
 
     getDataSearch = async () => {
         this.setState({ loading: true })
-        fetch(`${BASEURL}/api/search/get_data_search`, {
+        fetch(`${BASEURL}/api/search/get_main_location`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -83,25 +79,48 @@ class MainSearchScreen extends Component<Props, States> {
             });
     };
 
+    callApiSearch = text => {
+        this.setState({ loading: true })
+        fetch(`${BASEURL}/api/search/search_location/${text}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+        })
+            .then((response) => response.json())
+            .then((res) => {
+                this.setState({
+                    data: res.data,
+                    loading: false
+                })
+            })
+            .catch((error) => {
+                this.setState({
+                    loading: false
+                })
+                console.log(error);
+            });
+    }
+
     searchFilterFunction = text => {
         this.setState({
             values: text,
         });
-        const newData = this.arrayData.filter(item => {
-            const itemData = `${item.title.toUpperCase()}`;
-            const textData = text.toUpperCase();
-            return itemData.indexOf(textData) > -1;
-        });
-        this.setState({
-            data: newData,
-        })
+        if(text == ""){
+            this.setState({
+                data: this.arrayData
+            })
+        }else {
+            this.callApiSearch(text);
+        }
+        
     };
 
     render() {
         return (
             <View style={styles.containerMain}>
-                <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent />
-
+                <StatusBar barStyle="light-content" hidden={false} backgroundColor={Colors.tintColor} translucent />
                 <View style={styles.container}>
                     <SearchBar
                         placeholder="Điểm đến..."
@@ -134,7 +153,7 @@ class MainSearchScreen extends Component<Props, States> {
                                     <ListItems
                                         title={item.title}
                                         description={item.desc}
-                                        img={BASEURL+"/"+item.image}
+                                        img={BASEURL+"/images/main/"+item.url}
                                     />
                                 </TouchableOpacity>
                             )}
@@ -142,7 +161,6 @@ class MainSearchScreen extends Component<Props, States> {
                             initialNumToRender={4}
                             onEndReachedThreshold={0.4}
                         />
-
                     )}
                 </View>
             </View>
@@ -152,7 +170,7 @@ class MainSearchScreen extends Component<Props, States> {
 
 const styles = StyleSheet.create({
     containerMain: {
-        flexDirection: 'column',
+        flex: 1,
         backgroundColor: Colors.background
     },
     container: {
@@ -178,22 +196,8 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.tintColor,
     },
     listItem: {
-        backgroundColor: Colors.background,
-    },
-    containerCategory: {
         flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        margin: screenWidth / 27.7,
-        backgroundColor: Colors.tintColor
-    },
-    line1: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-    },
-    line2: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
+        backgroundColor: Colors.background,
     },
     activityIndicator: {
         flex: 1,

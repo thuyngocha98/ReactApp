@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, {PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { View, ImageBackground, Text, StyleSheet } from 'react-native';
 import Colors from '../../../constants/Colors';
-import { APPBAR_HEIGHT, screenWidth } from '../../../constants/Dimensions';
+import { screenWidth } from '../../../constants/Dimensions';
 import { BASEURL } from '../../../api/api';
 
 function mapStateToProps(state) {
@@ -15,11 +15,11 @@ type Props = {
     data?: any[]
 }
 
-class Listitem extends Component<Props> {
+class Listitem extends PureComponent<Props> {
     render() {
         return (
             <View style={styles.listItem}>
-                <ImageBackground source={{ uri: BASEURL + "/" +  this.props.data.image }} style={styles.imageBg}>
+                <ImageBackground source={{ uri: BASEURL + "/images/main/" +  this.props.data.url }} style={styles.imageBg}>
                     <View style={{ flex: 3 }} />
                     <View style={{ flex: 2, backgroundColor: Colors.black, opacity: 0.5 }} />
                     <View style={styles.viewText}>

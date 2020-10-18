@@ -22,5 +22,6 @@ export default {
     orangered: '#ff4500',
     gainsboro: '#dcdcdc',
     background: '#f2f5f8',
-    lavender: '#e6e6fa'
+    lavender: '#e6e6fa',
+    backgroundColor: '#f0f3f8',
 };

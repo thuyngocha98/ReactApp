@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import MainFriendsOweScreen from "../components/FriendsScreen/MainFriendsOweScreen/MainFriendsOweScreen";
-import {StatusBar, Text, TouchableOpacity, View} from "react-native";
-import {EvilIcons} from "@expo/vector-icons";
+import {StatusBar, View} from "react-native";
+import Colors from "../constants/Colors";
 import MainSearchScreen from '../components/SearchScreen/MainSearchScreen/MainSearchScreen';
 
 type Props ={
@@ -15,8 +14,8 @@ class SearchScreen extends Component<Props> {
 
     render() {
         return (
-           <View>
-               <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent/>
+           <View style={{flex: 1}}>
+               <StatusBar barStyle="light-content" hidden={false} backgroundColor={Colors.tintColor} translucent/>
                 <MainSearchScreen navigation={this.props.navigation}/>
            </View>
         );
