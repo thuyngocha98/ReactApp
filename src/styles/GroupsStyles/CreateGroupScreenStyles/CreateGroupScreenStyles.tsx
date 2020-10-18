@@ -107,5 +107,23 @@ const CreateGroupScreenStyles = StyleSheet.create({
     flexDirection: 'column',
     marginHorizontal: screenWidth / 20.55,
   },
+  chooseDay: {
+    backgroundColor: Colors.tintColor,
+    height: screenWidth / 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
+  },
+  contentChooseDay: {
+    color: Colors.white,
+    fontSize: screenWidth / 25,
+    opacity: 0.9,
+  },
+  overlayStyle: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'flex-end',
+    backgroundColor: '#00000066',
+  },
 });
 export default CreateGroupScreenStyles;

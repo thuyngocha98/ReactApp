@@ -22,7 +22,6 @@ type States = {
 };
 
 class BalanceScreen extends Component<Props> {
-  
   static navigationOptions = ({ navigation }) => {
     return {
       title: 'Group balances',
@@ -75,10 +74,10 @@ class BalanceScreen extends Component<Props> {
     })
       .then((response) => response.json())
       .then(async (res) => {
-        ToastAndroid.showWithGravityAndOffset('Export done', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+        // ToastAndroid.showWithGravityAndOffset('Export done', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
       })
       .catch((error) => {
-        ToastAndroid.showWithGravityAndOffset(error, ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+        // ToastAndroid.showWithGravityAndOffset(error, ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
       });
   };
 
@@ -108,17 +107,26 @@ class BalanceScreen extends Component<Props> {
     console.log(this.state.data);
     return (
       <View style={BalanceScreenStyles.container}>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <FlatList
             data={this.state.data}
             renderItem={({ item }) => <ListItemBalance data={item} tripId={this.trip_id} />}
             keyExtractor={(item) => item._id.toString()}
           />
         </View>
-        <View style={{width: '100%', height: screenHeight/8}}>
-          <TouchableOpacity onPress={() => this.sendMoney()} style={{flex: 1, margin: screenWidth/24, justifyContent: 'center', alignItems: 'center',
-        borderRadius: 8, backgroundColor: Colors.tintColor}}>
-            <Text style={{fontSize: 18, color: Colors.white, fontWeight: 'bold'}}>Remind to all member</Text>
+        <View style={{ width: '100%', height: screenHeight / 8 }}>
+          <TouchableOpacity
+            onPress={() => this.sendMoney()}
+            style={{
+              flex: 1,
+              margin: screenWidth / 24,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 8,
+              backgroundColor: Colors.tintColor,
+            }}
+          >
+            <Text style={{ fontSize: 18, color: Colors.white, fontWeight: 'bold' }}>Remind to all member</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -208,24 +208,24 @@ class InputExpenseScreen extends Component<Props, States> {
     const Description = this.state.description;
     var list_user = await this.createListUser(listTypeUser, idPayer);
     if (this.state.checkDescription !== this.state.checkMoney) {
-      Keyboard.dismiss();
-      ToastAndroid.showWithGravityAndOffset(
-        'Please enter the full expense information !',
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-        25,
-        50,
-      );
+      // Keyboard.dismiss();
+      // ToastAndroid.showWithGravityAndOffset(
+      //   'Please enter the full expense information !',
+      //   ToastAndroid.SHORT,
+      //   ToastAndroid.BOTTOM,
+      //   25,
+      //   50,
+      // );
     } else {
       if (!this.state.checkDescription && !this.state.isEnableAddLocation && this.state.listImageAdd?.length === 0) {
-        Keyboard.dismiss();
-        ToastAndroid.showWithGravityAndOffset(
-          'Please enter additional information !',
-          ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM,
-          25,
-          50,
-        );
+        // Keyboard.dismiss();
+        // ToastAndroid.showWithGravityAndOffset(
+        //   'Please enter additional information !',
+        //   ToastAndroid.SHORT,
+        //   ToastAndroid.BOTTOM,
+        //   25,
+        //   50,
+        // );
         return;
       }
       var bodyFormData = new FormData();
@@ -262,6 +262,7 @@ class InputExpenseScreen extends Component<Props, States> {
       bodyFormData.append('dataExpense', JSON.stringify(dataExpense));
       bodyFormData.append('dataLocation', JSON.stringify(dataLocation));
       bodyFormData.append('trip_id', tripId);
+      console.log(bodyFormData);
       fetch(`${BASEURL}/api/transaction/insert_new_transaction`, {
         method: 'POST',
         headers: {
@@ -273,11 +274,11 @@ class InputExpenseScreen extends Component<Props, States> {
         .then(async (res) => {
           if (res.result === 'ok') {
             this.setInputExpenseAgain();
-            ToastAndroid.showWithGravityAndOffset('Save done!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+            // ToastAndroid.showWithGravityAndOffset('Save done!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
             await this.props.saveTripId(tripId);
             this.props.navigation.goBack();
           } else {
-            ToastAndroid.showWithGravityAndOffset('Save error!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+            // ToastAndroid.showWithGravityAndOffset('Save error!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
           }
         })
         .catch((error) => {

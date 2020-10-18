@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, AsyncStorage, StatusBar } from 're
 import styles from '../../styles/AccountScreenStyle/MainAccountScreenStyle';
 import { MaterialCommunityIcons, EvilIcons, AntDesign } from '@expo/vector-icons';
 import { connect } from 'react-redux';
+import { BASEURL } from '../../api/api';
 
 // @ts-ignore
 import { thumbnails } from '../../constants/FunctionCommon';
@@ -45,8 +46,9 @@ class MainAccountScreen extends Component<Props> {
   render() {
     const thumbnail =
       this.props.user.avatar.length > 2
-        ? { uri: `data:image/png;base64,${this.props.user.avatar}` }
+        ? { uri: `${BASEURL}/images/avatars/${this.props.user.avatar}` }
         : thumbnails['avatar' + this.props.user.avatar];
+    console.log(thumbnail);
     return (
       <View>
         <View style={styles.headerContainer}>
@@ -83,6 +85,7 @@ class MainAccountScreen extends Component<Props> {
                 email: this.props.user.email,
                 userId: this.props.user._id,
                 avatar: this.props.user.avatar,
+                navigation: this.props.navigation,
               });
             }}
           >

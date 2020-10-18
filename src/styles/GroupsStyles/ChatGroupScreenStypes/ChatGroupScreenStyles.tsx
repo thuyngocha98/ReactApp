@@ -34,7 +34,7 @@ const ChatGroupScreenStyles = StyleSheet.create({
   },
   input: {
     paddingLeft: 12,
-    height: 40,
+    height: 38,
     borderWidth: 1,
     borderColor: Colors.lightgray,
     borderRadius: screenWidth / 20,
@@ -47,12 +47,23 @@ const ChatGroupScreenStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.tintColor,
+    marginTop: 3,
+    marginLeft: screenWidth / 60,
+  },
+  location: {
+    marginTop: 4,
+  },
+  camera: {
     marginTop: 7,
     marginLeft: 5,
   },
-  microphone: {
-    marginLeft: 7,
+  image: {
     marginTop: 7,
+    marginLeft: 13,
+  },
+  microphone: {
+    marginLeft: screenWidth / 45,
+    marginTop: 6,
   },
   message: {
     marginLeft: screenWidth / 36,
@@ -91,6 +102,25 @@ const ChatGroupScreenStyles = StyleSheet.create({
     marginBottom: screenWidth / 90,
     marginHorizontal: screenWidth / 45,
     fontSize: 8,
+  },
+  backgroundImageChat: {
+    flex: 1,
+    flexDirection: 'row',
+    // marginVertical: screenWidth / 60,
+  },
+  imageChat: {
+    width: screenWidth / 3.5,
+    height: screenWidth / 5,
+    marginBottom: 2,
+    borderRadius: 5,
+    resizeMode: 'cover',
+  },
+  timeImageChat: {
+    textAlign: 'right',
+    fontSize: screenWidth / 45,
+    marginRight: 2,
+    opacity: 0.9,
+    marginBottom: screenWidth / 50,
   },
   mainViewFriend: {
     flexDirection: 'column',

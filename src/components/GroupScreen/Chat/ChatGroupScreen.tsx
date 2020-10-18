@@ -9,6 +9,8 @@ import {
   ScrollView,
   Image,
   Keyboard,
+  Alert,
+  Modal,
 } from 'react-native';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
@@ -18,11 +20,14 @@ import ChatGroupScreenStyles from '../../../styles/GroupsStyles/ChatGroupScreenS
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons1 from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { BASEURL } from '../../../api/api';
 import SocketIOClient from 'socket.io-client';
 import { thumbnails } from '../../../constants/FunctionCommon';
-import { screenWidth } from '../../../constants/Dimensions';
-import styles from '../../../styles/FriendsScreenStyles/MainFriendsOweScreenStyle/MainFriendsOweScreenStyle';
+import { screenWidth, screenHeight } from '../../../constants/Dimensions';
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
+import ImageZoom from 'react-native-image-pan-zoom';
 
 type Props = {
   _id?: any;
@@ -36,6 +41,7 @@ type States = {
   isMessage?: boolean;
   chatMessage?: any;
   chatMessages?: any;
+  imageMessage?: any;
 };
 
 function mapStateToProps(state) {
@@ -54,6 +60,7 @@ class ChatGroupScreen extends Component<Props, States> {
     isMessage: false,
     chatMessage: '',
     chatMessages: [],
+    imageMessage: '',
   };
 
   tripId = this.props.navigation.getParam('tripId', '');
@@ -81,7 +88,7 @@ class ChatGroupScreen extends Component<Props, States> {
   componentDidMount(): void {
     this.getTotalMessage();
     this.socket.on('chat message', (msg) => {
-      if (msg[0].trip_id === this.tripId) {
+      if (msg.trip_id === this.tripId) {
         this.setState({
           chatMessages: this.state.chatMessages.concat(msg),
         });
@@ -89,7 +96,7 @@ class ChatGroupScreen extends Component<Props, States> {
     });
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
   }
 
@@ -123,6 +130,91 @@ class ChatGroupScreen extends Component<Props, States> {
     }
   };
 
+  imagePhoto = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status !== 'granted') {
+      alert('Sorry, we need camera roll permissions to make this work!');
+    } else {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+      });
+      if (!result.cancelled) {
+        let localUri = result.uri;
+        let filename = localUri.split('/').pop();
+
+        // Infer the type of the image
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
+        let image = {
+          url: localUri,
+          name: filename,
+          type,
+        };
+        this.setState({ imageMessage: image });
+      }
+      this.saveImagePhoto();
+    }
+  };
+
+  imageCamera = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    if (status !== 'granted') {
+      alert('Sorry, we need camera permissions to make this work!');
+    } else {
+      let result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+      });
+      if (!result.cancelled) {
+        let localUri = result.uri;
+        let filename = localUri.split('/').pop();
+
+        // Infer the type of the image
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
+        let image = {
+          url: localUri,
+          name: filename,
+          type,
+        };
+        this.setState({ imageMessage: image });
+      }
+      this.saveImagePhoto();
+    }
+  };
+
+  saveImagePhoto = async () => {
+    let bodyFormData = new FormData();
+    if (this.state.imageMessage !== '') {
+      let photo = {
+        uri: this.state.imageMessage.url,
+        name: this.state.imageMessage.name,
+        type: this.state.imageMessage.type,
+      };
+      bodyFormData.append('image', photo);
+      bodyFormData.append('tripId', this.tripId);
+      bodyFormData.append('userId', this.props.user._id);
+      await fetch(`${BASEURL}/api/chat/save_image_chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        body: bodyFormData,
+      })
+        .then((response) => response.json())
+        .then((res) => {
+          this.socket.emit('image message', res.data);
+          this.setState({
+            imageMessage: '',
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
   customTime(time) {
     let date = new Date(time);
     let hours = '' + date.getHours();
@@ -151,12 +243,26 @@ class ChatGroupScreen extends Component<Props, States> {
       message.user_id_sender._id === this.props.user._id ? (
         <View key={message._id} style={ChatGroupScreenStyles.viewUser}>
           <View style={{ flex: 0.3 }} />
-          <View style={ChatGroupScreenStyles.sub1ViewUser}>
-            <View style={ChatGroupScreenStyles.viewTextUser}>
-              <Text style={ChatGroupScreenStyles.txtMessageUser}>{message.message}</Text>
-              <Text style={ChatGroupScreenStyles.txtMessageTimeUser}>{this.customTime(message.create_date)}</Text>
+          {message.message.length > 0 ? (
+            <View style={ChatGroupScreenStyles.sub1ViewUser}>
+              <View style={ChatGroupScreenStyles.viewTextUser}>
+                <Text style={ChatGroupScreenStyles.txtMessageUser}>{message.message}</Text>
+                <Text style={ChatGroupScreenStyles.txtMessageTimeUser}>{this.customTime(message.create_date)}</Text>
+              </View>
             </View>
-          </View>
+          ) : (
+            <View>
+              <View style={ChatGroupScreenStyles.backgroundImageChat}>
+                <Image
+                  source={{ uri: `${BASEURL}/images/chatImages/${message.imageURL}` }}
+                  style={ChatGroupScreenStyles.imageChat}
+                />
+              </View>
+              <View>
+                <Text style={ChatGroupScreenStyles.timeImageChat}>{this.customTime(message.create_date)}</Text>
+              </View>
+            </View>
+          )}
         </View>
       ) : (
         <View key={message._id} style={ChatGroupScreenStyles.mainViewFriend}>
@@ -164,12 +270,28 @@ class ChatGroupScreen extends Component<Props, States> {
           <View style={ChatGroupScreenStyles.viewFriend}>
             <View style={ChatGroupScreenStyles.sub1ViewFriend}>
               <View style={ChatGroupScreenStyles.viewTextFriend}>
-                <Image source={thumbnails['avatar'+message?.user_id_sender?.avatar]} style={{ width: screenWidth / 12, height: screenWidth / 12 }} />
+                <Image
+                  source={thumbnails['avatar' + message?.user_id_sender?.avatar]}
+                  style={{ width: screenWidth / 12, height: screenWidth / 12 }}
+                />
               </View>
-              <View style={ChatGroupScreenStyles.viewMessageFriend}>
-                <Text style={ChatGroupScreenStyles.txtMessageFriend}>{message.message}</Text>
-                <Text style={ChatGroupScreenStyles.txtMessageTimeFriend}>{this.customTime(message.create_date)}</Text>
-              </View>
+              {message.message.length > 0 ? (
+                <View style={ChatGroupScreenStyles.viewMessageFriend}>
+                  <Text style={ChatGroupScreenStyles.txtMessageFriend}>{message.message}</Text>
+                  <Text style={ChatGroupScreenStyles.txtMessageTimeFriend}>{this.customTime(message.create_date)}</Text>
+                </View>
+              ) : (
+                <View>
+                  <Image
+                    source={{ uri: `${BASEURL}/images/chatImages/${message.imageURL}` }}
+                    style={ChatGroupScreenStyles.imageChat}
+                  />
+
+                  <View>
+                    <Text style={ChatGroupScreenStyles.timeImageChat}>{this.customTime(message.create_date)}</Text>
+                  </View>
+                </View>
+              )}
             </View>
             <View style={{ flex: 0.3 }} />
           </View>
@@ -211,12 +333,22 @@ class ChatGroupScreen extends Component<Props, States> {
           {messages}
         </ScrollView>
         <View style={ChatGroupScreenStyles.footer}>
-          <View style={{ flex: 1 }}>
-            <TouchableOpacity style={{ marginTop: 7, marginLeft: 5 }}>
-              <FontAwesome name={'file-picture-o'} size={25} color={Colors.tintColor} />
-            </TouchableOpacity>
-          </View>
-          <View style={{ flex: 8.5, marginLeft: -5 }}>
+          {lengthMessage < 1 ? (
+            <View style={{ flex: 1, flexDirection: 'row' }}>
+              <TouchableOpacity style={ChatGroupScreenStyles.location} onPress={this.submitMessage}>
+                <MaterialIcons name={'location-on'} size={31} color={Colors.tintColor} />
+              </TouchableOpacity>
+              <TouchableOpacity style={ChatGroupScreenStyles.camera} onPress={this.imageCamera}>
+                <FontAwesome name={'camera'} size={26} color={Colors.tintColor} />
+              </TouchableOpacity>
+              <TouchableOpacity style={ChatGroupScreenStyles.image} onPress={this.imagePhoto}>
+                <FontAwesome name={'photo'} size={25} color={Colors.tintColor} />
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View></View>
+          )}
+          <View style={lengthMessage > 0 ? { flex: 8.5, marginLeft: 10 } : { flex: 6, marginLeft: screenWidth / 5.5 }}>
             <TextInput
               style={ChatGroupScreenStyles.input}
               autoCapitalize={'none'}
@@ -236,7 +368,7 @@ class ChatGroupScreen extends Component<Props, States> {
               </TouchableOpacity>
             ) : (
               <TouchableOpacity style={ChatGroupScreenStyles.microphone}>
-                <FontAwesome name={'microphone'} size={30} color={Colors.tintColor} />
+                <FontAwesome name={'microphone'} size={28} color={Colors.tintColor} />
               </TouchableOpacity>
             )}
           </View>

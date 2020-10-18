@@ -5,13 +5,14 @@ import Colors from '../../../constants/Colors';
 import { screenWidth, APPBAR_HEIGHT } from '../../../constants/Dimensions';
 import { Ionicons } from '@expo/vector-icons';
 import { TextInput } from 'react-native-gesture-handler';
-import { BASEURL } from '../../../api/api';
 import { bindActionCreators } from 'redux';
 import { getApiDataUser } from '../../../actions/action';
 import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 import { thumbnails } from '../../../constants/FunctionCommon';
 import * as Permissions from 'expo-permissions';
+import { data } from '../../SearchScreen/MainSearchScreen/dataListitem';
+import { BASEURL } from '../../../api/api';
 
 function mapStateToProps(state) {
   return {};
@@ -25,7 +26,7 @@ type Props = {
 type States = {
   name?: string;
   email?: string;
-  imageToBase64?: string;
+  // imageToBase64?: string;
   image?: any;
 };
 
@@ -57,7 +58,7 @@ class EditProfileScreen extends Component<Props, States> {
     this.state = {
       name: '',
       email: '',
-      imageToBase64: '',
+      // imageToBase64: '',
       image: null,
     };
   }
@@ -73,33 +74,45 @@ class EditProfileScreen extends Component<Props, States> {
     const email = this.state.email;
     if (!this.validateEmail(email)) {
       Alert.alert('Email invalid, please enter again!');
-    } else if (name.length < 2) {
-      Alert.alert('Name must be at least 2 characters.');
     } else {
-      const data = {
-        name: name,
-        email: email,
-        avatar: this.state.imageToBase64.toString() != '' ? this.state.imageToBase64.toString() : avatar,
-      };
-      const json = JSON.stringify(data);
-      fetch(`${BASEURL}/api/user/update_a_user/${userId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: json,
-      })
-        .then((response) => response.json())
-        .then((res) => {
-          if (res.result == 'ok') {
-            this.getDataUserForRedux();
-          }
-          Alert.alert(res.message);
+      if (name.length < 2) {
+        Alert.alert('Name must be at least 2 characters.');
+      } else {
+        let bodyFormData = new FormData();
+        if (!this.state.image) {
+          bodyFormData.append('name', name);
+          bodyFormData.append('isCheck', '0');
+          bodyFormData.append('email', email);
+        } else {
+          let photo = {
+            uri: this.state.image.url,
+            name: this.state.image.name,
+            type: this.state.image.type,
+          };
+
+          bodyFormData.append('image', photo);
+          bodyFormData.append('isCheck', '1');
+          bodyFormData.append('name', name);
+          bodyFormData.append('email', email);
+        }
+        fetch(`${BASEURL}/api/user/update_a_user/${userId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          body: bodyFormData,
         })
-        .catch((error) => {
-          console.log(error);
-        });
+          .then((response) => response.json())
+          .then((res) => {
+            if (res.result == 'ok') {
+              this.getDataUserForRedux();
+            }
+            Alert.alert(res.message);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     }
   }
 
@@ -118,17 +131,23 @@ class EditProfileScreen extends Component<Props, States> {
 
   _pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
-      base64: true,
-    });
-
-    await this.setState({
-      imageToBase64: result.base64,
     });
 
     if (!result.cancelled) {
-      this.setState({ image: result.uri });
+      let localUri = result.uri;
+      let filename = localUri.split('/').pop();
+
+      // Infer the type of the image
+      let match = /\.(\w+)$/.exec(filename);
+      let type = match ? `image/${match[1]}` : `image`;
+      let image = {
+        url: localUri,
+        name: filename,
+        type,
+      };
+      this.setState({ image: image });
     }
   };
 
@@ -141,7 +160,8 @@ class EditProfileScreen extends Component<Props, States> {
     const email = this.props.navigation.getParam('email', 'youremail@gmail.com');
     const avatar = this.props.navigation.getParam('avatar', '');
     const userId = this.props.navigation.getParam('userId', '');
-    const thumbnail = avatar.length > 2 ? { uri: `data:image/png;base64,${avatar}` } : thumbnails['avatar' + avatar];
+    const thumbnail =
+      avatar.length > 2 ? { uri: `${BASEURL}/images/avatars/${avatar}` } : thumbnails['avatar' + avatar];
     return (
       <View style={styles.container}>
         <View style={styles.background1} />
@@ -207,7 +227,7 @@ class EditProfileScreen extends Component<Props, States> {
           <TouchableOpacity onPress={this._pickImage} activeOpacity={0.6}>
             <Image
               style={styles.avatar}
-              source={this.state.image ? { uri: this.state.image } : thumbnail}
+              source={this.state.image ? { uri: this.state.image.url } : thumbnail}
               resizeMode="cover"
             />
           </TouchableOpacity>
