@@ -38,6 +38,7 @@ import AddImagesScreen from '../components/GroupScreen/DetailGroupScreen/ImagesS
 import ChatGroupScreen from '../components/GroupScreen/Chat/ChatGroupScreen';
 import MainLocationScreen from '../components/Location/MainLocationScreen';
 import AudioRecordingScreen from '../components/GroupScreen/Chat/AudioRecordingScreen';
+import MainDirectionScreen from '../components/Direction/MainDirectionScreen';
 
 const configPlat = Platform.select({
   web: { headerMode: 'screen' },
@@ -157,6 +158,7 @@ const GroupStack = createStackNavigator(
       screen: ExpenseByPlusOrMinusScreen,
     },
     MainLocationScreen,
+    MainDirectionScreen,
   },
   {
     initialRouteName: 'GroupScreen',
@@ -183,6 +185,7 @@ GroupStack.navigationOptions = ({ navigation }) => {
     routeName == 'AddImagesScreen' ||
     routeName == 'ChatGroupScreen' ||
     routeName == 'MainLocationScreen' ||
+    routeName == 'MainDirectionScreen' ||
     routeName == 'InputExpenseScreen' ||
     routeName == 'ChoosePayerScreen' ||
     routeName == 'ChooseMultiplePeopleScreen' ||
