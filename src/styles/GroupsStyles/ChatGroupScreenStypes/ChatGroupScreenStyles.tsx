@@ -2,12 +2,27 @@ import { StatusBar, StyleSheet } from 'react-native';
 import { APPBAR_HEIGHT, screenWidth } from '../../../constants/Dimensions';
 import Colors from '../../../constants/Colors';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { colors } from 'react-native-elements';
 
 const ChatGroupScreenStyles = StyleSheet.create({
   containerHeader: {
     width: screenWidth,
     height: APPBAR_HEIGHT + getStatusBarHeight(),
     backgroundColor: Colors.tabIconSelected,
+  },
+  bgShareLocation: {
+    backgroundColor: '#F1F0F0',
+    padding: screenWidth / 40,
+    borderRadius: 10,
+    marginTop: 7,
+  },
+  endLocation: {
+    backgroundColor: '#F1F0F0',
+    marginVertical: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    padding: 10,
   },
   header: {
     flex: 1,
@@ -24,8 +39,59 @@ const ChatGroupScreenStyles = StyleSheet.create({
     color: Colors.white,
     textAlign: 'center',
   },
+  seeLocation: {
+    backgroundColor: Colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: screenWidth / 50,
+    marginTop: 10,
+    borderRadius: 5,
+  },
+  keyboardAwareScrollView: {
+    flex: 1,
+    flexDirection: 'column',
+    height: screenWidth / 10,
+  },
+  audioRecording: {
+    flex: 0.3,
+    backgroundColor: 'red',
+  },
   cancel: {
     flex: 1,
+  },
+  shareLocation: {
+    height: screenWidth / 10,
+    backgroundColor: Colors.tintColor,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: screenWidth / 30,
+    marginVertical: screenWidth / 30,
+    borderRadius: 10,
+  },
+  send1: {
+    width: screenWidth / 13,
+    height: screenWidth / 13,
+    borderRadius: screenWidth / 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.tintColor,
+    marginTop: 3,
+    marginRight: 10,
+  },
+  bgAudio: {
+    backgroundColor: 'red',
+    height: screenWidth / 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    opacity: 0.9,
+    marginHorizontal: screenWidth / 25,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  textAudio: {
+    color: Colors.white,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   footer: {
     flexDirection: 'row',
@@ -52,14 +118,15 @@ const ChatGroupScreenStyles = StyleSheet.create({
   },
   location: {
     marginTop: 4,
+    marginLeft: 5,
   },
   camera: {
     marginTop: 7,
-    marginLeft: 5,
+    marginLeft: 3,
   },
   image: {
     marginTop: 7,
-    marginLeft: 13,
+    marginLeft: screenWidth / 40,
   },
   microphone: {
     marginLeft: screenWidth / 45,

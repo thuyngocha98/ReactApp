@@ -4,9 +4,7 @@ import { StyleSheet, View, Text, StatusBar, TouchableOpacity } from 'react-nativ
 import { screenHeight, screenWidth } from '../../constants/Dimensions';
 import Colors from '../../constants/Colors';
 import { BASEURL } from '../../api/api';
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
-import moment, { lang } from 'moment';
+import moment from 'moment';
 
 type Props = {
   navigation?: any;
