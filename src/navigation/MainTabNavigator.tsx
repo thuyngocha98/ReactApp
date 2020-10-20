@@ -33,6 +33,7 @@ import DescriptionLocationScreen from '../components/SearchScreen/SearchDetailSc
 import MainExpenseScreen from '../components/ExpenseScreen/MainExpenseScreen/MainExpenseScreen';
 import MainScreenGroup from '../components/GroupScreen/MainScreenGroup/MainScreenGroup';
 import PlanTripScreen from '../components/SearchScreen/PlanTripScreen/PlanTripScreen';
+import SelectPlanTripScreen from '../components/SearchScreen/PlanTripScreen/SelectPlanTripScreen';
 import MapPlanScreen from '../components/SearchScreen/PlanTripScreen/MapPlanScreen';
 import AddDestinationScreen from '../components/SearchScreen/PlanTripScreen/AddDestinationScreen';
 import EditProfileScreen from '../components/AccountScreen/EditProfileScreen/EditProfileScreen';
@@ -65,6 +66,9 @@ const SearchStack = createStackNavigator({
   },
   DescriptionLocationScreen: {
     screen: DescriptionLocationScreen
+  },
+  SelectPlanTripScreen: {
+    screen: SelectPlanTripScreen
   }
 });
 
@@ -76,6 +80,7 @@ SearchStack.navigationOptions = ({ navigation }) => {
       || routeName == 'AddDestinationScreen'
       || routeName == 'MapPlanScreen'
       || routeName == 'DescriptionLocationScreen'
+      || routeName == 'SelectPlanTripScreen'
   ) {
     tabBarVisible = false;
   }

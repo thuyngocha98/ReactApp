@@ -35,26 +35,28 @@ export class MapPlanScreen extends Component<Props, States> {
 
     componentDidMount() {
         const data = this.props.navigation.getParam('data', '');
-        let latitude = (data.data.route.bounds.north + data.data.route.bounds.south) / 2;
-        let longitude = (data.data.route.bounds.east + data.data.route.bounds.west) / 2;
-        let latDelta = data.data.route.bounds.north - data.data.route.bounds.south;
-        let lngDelta = data.data.route.bounds.east - data.data.route.bounds.west;
-        let latitudeDelta = 0;
-        let longitudeDelta = 0;
-        if(latDelta > lngDelta){
-            latitudeDelta = latDelta * 1.3;
-            longitudeDelta = latitudeDelta * ASPECT_RATIO;
-        }else{
-            longitudeDelta = lngDelta * 1.3;
-            latitudeDelta = longitudeDelta / ASPECT_RATIO;
+        if(data?.data){
+            let latitude = (data.data.route.bounds.north + data.data.route.bounds.south) / 2;
+            let longitude = (data.data.route.bounds.east + data.data.route.bounds.west) / 2;
+            let latDelta = data.data.route.bounds.north - data.data.route.bounds.south;
+            let lngDelta = data.data.route.bounds.east - data.data.route.bounds.west;
+            let latitudeDelta = 0;
+            let longitudeDelta = 0;
+            if(latDelta > lngDelta){
+                latitudeDelta = latDelta * 1.3;
+                longitudeDelta = latitudeDelta * ASPECT_RATIO;
+            }else{
+                longitudeDelta = lngDelta * 1.3;
+                latitudeDelta = longitudeDelta / ASPECT_RATIO;
+            }
+            
+            this.setState({
+                latitude,
+                longitude,
+                latitudeDelta,
+                longitudeDelta
+            })
         }
-        
-        this.setState({
-            latitude,
-            longitude,
-            latitudeDelta,
-            longitudeDelta
-        })
     }
 
     render() {
@@ -72,7 +74,7 @@ export class MapPlanScreen extends Component<Props, States> {
                     longitudeDelta: this.state.longitudeDelta,
                   }}
                 >
-                {data.location.map((marker,i) => (
+                {data?.location && data.location.map((marker,i) => (
                     <Marker
                         anchor={{ x: 0.5, y: 0.5 }}
                         title={marker.title}

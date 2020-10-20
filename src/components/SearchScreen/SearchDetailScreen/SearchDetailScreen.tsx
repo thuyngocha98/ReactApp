@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList, ActivityIndicator } from 'react-native';
 import Colors from '../../../constants/Colors';
 import { APPBAR_HEIGHT, screenWidth } from '../../../constants/Dimensions';
 import { Ionicons } from '@expo/vector-icons';
@@ -102,7 +102,11 @@ class SearchDetailScreen extends Component<Props, States> {
                             style={styles.save}
                             activeOpacity={0.5}
                             onPress={() => {
-                                this.props.navigation.navigate('PlanTripScreen', {data: this.state.data, code: data.code});
+                                this.props.navigation.navigate('SelectPlanTripScreen', {
+                                    data: this.state.data,
+                                    title: data.title,
+                                    code: data.code
+                                });
                             }}
                         >
                             <Text style={styles.textHeaderLeft}>Plan trip</Text>
@@ -113,7 +117,11 @@ class SearchDetailScreen extends Component<Props, States> {
                     <FlatList
                         ListHeaderComponent={this.renderListHeader(data)}
                         ListFooterComponent={() => (
-                            <View style={{height: screenWidth/36}} />
+                            <View style={styles.activityIndicator}>
+                                {this.state.loading && (
+                                    <ActivityIndicator animating size="large" color={Colors.tintColor} />
+                                )}
+                            </View>
                         )}
                         data={this.state.data}
                         numColumns={2}
@@ -128,6 +136,7 @@ class SearchDetailScreen extends Component<Props, States> {
                         )}
                         keyExtractor={item => item._id.toString()}
                     />
+                    
                 </View>
             </View>
         )
@@ -200,7 +209,12 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.white,
     },
-
+    activityIndicator: {
+        marginTop: screenWidth/24,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 });
 
 export default connect(

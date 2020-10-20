@@ -7,13 +7,15 @@ import {
     Image, 
     ScrollView,
     ActivityIndicator,
-    StatusBar
+    StatusBar,
+    Dimensions
 } from 'react-native';
 import Colors from '../../../constants/Colors';
 import { APPBAR_HEIGHT, screenWidth } from '../../../constants/Dimensions';
 import { Ionicons, FontAwesome5, AntDesign } from '@expo/vector-icons';
 import { BASEURL } from '../../../api/api';
 import Constants from 'expo-constants';
+import Modal from 'react-native-modal';
 
 function mapStateToProps(state) {
     return {
@@ -29,6 +31,9 @@ type States = {
     data?: any[],
     loading?: boolean,
     destination?: any[]
+    modalVisible?: boolean,
+    indexDelete?: number,
+    nameDelete?: string,
 }
 
 class PlanTripScreen extends Component<Props, States> {
@@ -39,19 +44,27 @@ class PlanTripScreen extends Component<Props, States> {
     state = {
         data: [],
         loading: true,
-        destination: []
+        destination: [],
+        modalVisible: false,
+        indexDelete: -1,
+        nameDelete: ""
     }
 
     focusListener: any;
 
     componentDidMount() {
         const code = this.props.navigation.getParam('code', '');
-        this.callApiGetPlan(code);
+        if(code != -1)
+            this.callApiGetPlan(code);
+        else
+            this.setState({loading: false})
         this.focusListener = this.props.navigation.addListener("didFocus",() => {
             // Update your data
             const destination = this.props.navigation.getParam('destination', '');
             if(destination){
-                let location = this.state.data.location.concat(destination);
+                let location = destination;
+                if(this.state.data?.location)
+                    location = this.state.data.location.concat(destination);
                 this.callApiOptimize(location);
             }
         });
@@ -86,11 +99,22 @@ class PlanTripScreen extends Component<Props, States> {
             });
     }
 
+    onToggleModal = () => {
+        this.setState({modalVisible: !this.state.modalVisible})
+    }
 
-    removeDestination = (location,index) => {
-        let newArr = [...location];
-        newArr.splice(index,1);
-        this.callApiOptimize(newArr);
+    onRemoveDestination = () => {
+        this.onToggleModal()
+        let newArr = [...this.state.data.location];
+        newArr.splice(this.state.indexDelete,1);
+        if(newArr.length > 0)
+            this.callApiOptimize(newArr);
+    }
+
+    onPressDeleteDestination = (index, title) => {
+        this.setState({nameDelete: title})
+        this.onToggleModal()
+        this.setState({indexDelete: index}) 
     }
 
     callApiOptimize = location => {
@@ -121,8 +145,19 @@ class PlanTripScreen extends Component<Props, States> {
             });
     }
 
+    navigateToDetail = (data, title) => {
+        let item = {}
+        for(let i = 0; i < data.length; i++){
+            if(data[i].title == title){
+                item = data[i];
+                break;
+            }
+        }
+        this.props.navigation.navigate('DescriptionLocationScreen', {data: item})
+    }
+
     render() {
-        const RenderItem = ({index,title, desc, url}) => (
+        const RenderItem = ({index, title, desc, url, data}) => (
             <View style={styles.viewItem}>
                 <View style={styles.indexItem}>
                     <View style={styles.viewNumber}>
@@ -130,18 +165,22 @@ class PlanTripScreen extends Component<Props, States> {
                     </View>
                     <View style={styles.lineNumber} />
                 </View>
-                <View style={styles.viewTitleItem}>
-                    <Text numberOfLines={1} style={styles.txtTitleItem}>{title}</Text>
-                    <Text numberOfLines={3} style={styles.txtDescItem}>{desc == "null" ? "Not yet description" : desc}</Text>
-                </View>
-                <View style={styles.viewImage}>
-                    <Image
-                        style={styles.image}
-                        source={{uri: BASEURL + "/images/main/" +  url}} 
-                    />
-                </View>
                 <TouchableOpacity
-                 onPress={() => this.removeDestination(this.state.data.location,index)}
+                 onPress={() => this.navigateToDetail(data, title)}
+                 style={styles.viewTitleAndImage}>
+                    <View style={styles.viewTitleItem}>
+                        <Text numberOfLines={1} style={styles.txtTitleItem}>{title}</Text>
+                        <Text numberOfLines={3} style={styles.txtDescItem}>{desc == "null" ? "Not yet description" : desc}</Text>
+                    </View>
+                    <View style={styles.viewImage}>
+                        <Image
+                            style={styles.image}
+                            source={{uri: BASEURL + "/images/main/" +  url}} 
+                        />
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                 onPress={() => this.onPressDeleteDestination(index, title)}
                  style={styles.viewRemove}>
                     <AntDesign name='delete' size={18} color={Colors.gray}/>
                 </TouchableOpacity>
@@ -165,6 +204,32 @@ class PlanTripScreen extends Component<Props, States> {
         return (
             <View style={styles.container}>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor={Colors.tintColor} translucent />
+                {/* view modal */}
+                <Modal
+                isVisible={this.state.modalVisible}
+                style={styles.mainModal}
+                coverScreen={false}
+                deviceHeight={Dimensions.get('screen').height}
+                onBackdropPress={this.onToggleModal}
+                >
+                    <View style={styles.viewModal}>
+                        <Text style={styles.txtTitleModal}>
+                            {`Are you sure you want to remove ${this.state.nameDelete} ?`}
+                        </Text>
+                        <View style={styles.viewBtnModal}>
+                            <TouchableOpacity
+                             onPress={this.onToggleModal}
+                             style={styles.btnModal}>
+                                <Text style={styles.txtBtnModal}>Cancel</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                             onPress={this.onRemoveDestination}
+                             style={styles.btnModal}>
+                                <Text style={styles.txtBtnModal}>OK</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
                 <View style={styles.containerHeader}>
                     <View style={styles.header}>
                         <TouchableOpacity
@@ -206,13 +271,14 @@ class PlanTripScreen extends Component<Props, States> {
                         </View>
                     ) : (
                         <>
-                            {this.state.data?.location.map((item, index) => (
+                            {this.state.data?.location && this.state.data?.location.map((item, index) => (
                                 <View key={item._id}>
                                     <RenderItem
                                         index={index}
                                         title={item.title}
                                         desc={item.desc}
-                                        url={item.url} />
+                                        url={item.url}
+                                        data={data} />
                                     {this.state.data?.data?.route?.legs[index] ? (
                                         <RenderTimeAndDistance
                                             key={this.state.data?.data.route.legs[index].distance}
@@ -245,6 +311,45 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
+    },
+    mainModal: {
+        justifyContent: 'flex-end',
+        margin: 0,
+    },
+    viewModal: {
+        flexDirection: 'column',
+        backgroundColor: Colors.white,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        padding: screenWidth/36,
+    },
+    txtTitleModal: {
+        fontSize: 16,
+        color: Colors.blackText,
+        paddingBottom: screenWidth/36,
+        paddingHorizontal: screenWidth/11,
+        textAlign: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: Colors.lavender
+    },
+    viewItemModal: {
+        flexDirection: 'column', 
+        justifyContent: 'center', 
+        alignItems: 'center'
+    },
+    viewBtnModal: {
+        flexDirection: 'row',
+    },
+    txtBtnModal: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: Colors.blackText,
+        textAlign: 'center',
+        paddingVertical: screenWidth/36
+    },
+    btnModal: {
+        flex: 1,
+        backgroundColor: Colors.white
     },
     containerHeader: {
         width: screenWidth,
@@ -335,7 +440,7 @@ const styles = StyleSheet.create({
         width: 1,
     },
     viewTitleItem: {
-        flex: 2,
+        flex: 1,
     },
     txtTitleItem: {
         color: Colors.blackText,
@@ -401,6 +506,11 @@ const styles = StyleSheet.create({
     },
     viewMap: {
         padding: screenWidth/ 30,
+    },
+    viewTitleAndImage: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
     }
 });
 
