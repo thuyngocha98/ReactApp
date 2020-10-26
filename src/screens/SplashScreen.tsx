@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, ActivityIndicator, Image, AsyncStorage } from 'react-native';
+import { View, ActivityIndicator, Image, AsyncStorage, StatusBar } from 'react-native';
 import SplashScreenStyles from '../styles/SplashScreen/SplashScreenStyles';
 import Colors from '../constants/Colors';
 import { bindActionCreators } from 'redux';
 import { getApiDataUser } from '../actions/action';
-import { BASEURL } from '../api/api';
 import { screenWidth } from '../constants/Dimensions';
 
 function mapStateToProps(state) {
@@ -42,7 +41,7 @@ class SplashScreen extends Component<Props, States> {
         this.props.navigation.navigate('GroupScreen');
       }
     } else {
-      this.props.navigation.navigate('MainLoginScreen');
+        this.props.navigation.navigate('MainLoginScreen');
     }
   }
 
@@ -57,6 +56,7 @@ class SplashScreen extends Component<Props, States> {
   render() {
     return (
       <View style={SplashScreenStyles.viewStyles}>
+        <StatusBar barStyle="dark-content" hidden={false} backgroundColor="transparent" translucent />
         <View style={SplashScreenStyles.logo}>
           <Image
             style={{

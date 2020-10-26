@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
-  ScrollView,
+  Platform,
   FlatList,
   Image,
   TouchableOpacity,
@@ -60,6 +60,8 @@ class MainActivityScreen extends Component<Props, States> {
     //set barstyle of statusbar
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('light-content');
+      StatusBar.setBackgroundColor("transparent");
+      StatusBar.setTranslucent(true);
       // call api get list group
     });
   }
@@ -111,11 +113,12 @@ class MainActivityScreen extends Component<Props, States> {
   render() {
     return (
       <View>
-        <StatusBar barStyle="light-content" hidden={false} backgroundColor={'transparent'} translucent />
+        <StatusBar barStyle="light-content" hidden={false} backgroundColor="transparent" translucent />
         <View>
           <SearchBar
             placeholder="Tìm Kiếm..."
             lightTheme
+            platform={Platform.OS == 'android' ? 'android' : 'default'}
             clearIcon={{ size: 24, name: 'clear' }}
             round={true}
             searchIcon={{ size: 26, name: 'search' }}

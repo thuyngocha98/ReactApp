@@ -2,50 +2,63 @@ import React, { PureComponent } from 'react'
 import { View, StyleSheet, Text, Image } from 'react-native'
 import { screenWidth } from '../../../constants/Dimensions';
 import Colors from '../../../constants/Colors';
+import { BASEURL } from '../../../api/api';
 
 
 type Props = {
-    title?: string,
-    description?: string,
-    img?: string,
+    item?: {
+        title?: string,
+        desc?: string,
+        url?: string,
+        resultSearch?: string,
+    }
 }
 
 export default class ListItems extends PureComponent<Props>{
     render() {
-        const { title, description, img } = this.props;
+        const { item } = this.props;
         return (
-            <View style={styles.container}>
-                <View style={styles.styleImage}>
-                    <Image
-                        style={styles.photo}
-                        source={{ uri: img }}
-                    />
+            <View style={styles.mainContainer}>
+                <View style={styles.container}>
+                    <View style={styles.styleImage}>
+                        <Image
+                            style={styles.photo}
+                            source={{ uri: BASEURL+"/images/main/"+ item.url }}
+                        />
+                    </View>
+                    <View style={styles.container_text}>
+                        <Text style={styles.title}>
+                            {item.title}
+                        </Text>
+                        <Text style={styles.description} numberOfLines={2}>
+                            {item.desc}
+                        </Text>
+                    </View>
                 </View>
-                <View style={styles.container_text}>
-                    <Text style={styles.title}>
-                        {title}
+                {item?.resultSearch && (
+                    <Text style={styles.txtResultSearch} numberOfLines={1}>
+                        {item.resultSearch}
                     </Text>
-                    <Text style={styles.description} numberOfLines={2}>
-                        {description}
-                    </Text>
-                </View>
-
+                )}
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1,
+        marginHorizontal: screenWidth/24,
+        padding: screenWidth / 36,
+        backgroundColor: Colors.white,
+        marginTop: screenWidth / 36,
+        borderRadius: screenWidth / 45,
+    },
     container: {
         flex: 1,
         flexDirection: 'row',
-        padding: screenWidth / 36,
-        marginHorizontal: '4%',
-        marginVertical: '2%',
-        borderRadius: screenWidth / 45,
-        backgroundColor: Colors.white,
+        alignItems: 'center',
         marginBottom: screenWidth / 72,
-        marginTop: screenWidth / 36,
     },
     styleImage: {
         borderTopLeftRadius: screenWidth/82.2,
@@ -75,6 +88,11 @@ const styles = StyleSheet.create({
     description: {
         fontSize: 14,
         fontStyle: 'italic',
-        color: '#777777'
+        color: Colors.gray
     },
+    txtResultSearch: {
+        fontSize: 12,
+        color: Colors.tintColor,
+        fontStyle: 'italic'
+    }
 });

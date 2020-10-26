@@ -6,7 +6,7 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
-  Alert,
+  Platform,
   StatusBar,
   ActivityIndicator,
   StyleSheet,
@@ -76,6 +76,8 @@ class MainScreenGroup extends Component<Props, States> {
     //set barstyle of statusbar
     this._navListener = this.props.navigation.addListener('didFocus', async () => {
       StatusBar.setBarStyle('light-content');
+      StatusBar.setBackgroundColor("transparent");
+      StatusBar.setTranslucent(true);
       if (this.props.userId != undefined) {
         this.thumbnail =
           this.props.user.avatar.length > 2
@@ -147,11 +149,12 @@ class MainScreenGroup extends Component<Props, States> {
   render() {
     return (
       <View style={MainScreenGroupStyles.container}>
-        <StatusBar barStyle="light-content" hidden={false} backgroundColor={'transparent'} translucent />
+        <StatusBar barStyle="light-content" hidden={false} backgroundColor="transparent" translucent />
         <View style={styles.container}>
           <SearchBar
             placeholder="Tìm Kiếm..."
             lightTheme
+            platform={Platform.OS == 'android' ? 'android' : 'default'}
             clearIcon={{ size: 24, name: 'clear' }}
             round={true}
             searchIcon={{ size: 26, name: 'search' }}

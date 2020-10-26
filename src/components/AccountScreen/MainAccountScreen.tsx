@@ -4,6 +4,7 @@ import styles from '../../styles/AccountScreenStyle/MainAccountScreenStyle';
 import { MaterialCommunityIcons, EvilIcons, AntDesign } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { BASEURL } from '../../api/api';
+import Colors from '../../constants/Colors';
 
 // @ts-ignore
 import { thumbnails } from '../../constants/FunctionCommon';
@@ -29,6 +30,8 @@ class MainAccountScreen extends Component<Props> {
     //set barstyle of statusbar
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('light-content');
+      StatusBar.setBackgroundColor("transparent");
+      StatusBar.setTranslucent(true)
       // call api get list group
     });
   }
@@ -48,11 +51,10 @@ class MainAccountScreen extends Component<Props> {
       this.props.user.avatar.length > 2
         ? { uri: `${BASEURL}/images/avatars/${this.props.user.avatar}` }
         : thumbnails['avatar' + this.props.user.avatar];
-    console.log(thumbnail);
     return (
       <View>
         <View style={styles.headerContainer}>
-          <StatusBar barStyle="light-content" hidden={false} backgroundColor={'transparent'} translucent />
+          <StatusBar barStyle="light-content" hidden={false} backgroundColor="transparent" translucent />
           <View style={styles.header}>
             <Image source={thumbnail} style={styles.avatar} />
             <Text style={styles.textUser}>{this.props.user.name}</Text>

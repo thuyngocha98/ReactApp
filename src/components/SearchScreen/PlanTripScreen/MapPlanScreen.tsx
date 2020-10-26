@@ -35,7 +35,7 @@ export class MapPlanScreen extends Component<Props, States> {
 
     componentDidMount() {
         const data = this.props.navigation.getParam('data', '');
-        if(data?.data){
+        if(data?.data && data.data?.route){
             let latitude = (data.data.route.bounds.north + data.data.route.bounds.south) / 2;
             let longitude = (data.data.route.bounds.east + data.data.route.bounds.west) / 2;
             let latDelta = data.data.route.bounds.north - data.data.route.bounds.south;
@@ -56,6 +56,15 @@ export class MapPlanScreen extends Component<Props, States> {
                 latitudeDelta,
                 longitudeDelta
             })
+        }else{
+            if(data?.location[0]){
+                this.setState({
+                    latitude: data?.location[0].latitude,
+                    longitude: data?.location[0].longitude,
+                    latitudeDelta: 1,
+                    longitudeDelta: ASPECT_RATIO
+                })
+            }
         }
     }
 
@@ -79,7 +88,7 @@ export class MapPlanScreen extends Component<Props, States> {
                         anchor={{ x: 0.5, y: 0.5 }}
                         title={marker.title}
                         description={marker.desc}
-                        key={marker._id}
+                        key={marker._id+i}
                         coordinate={{
                             latitude: marker.latitude,
                             longitude: marker.longitude

@@ -15,7 +15,6 @@ class AccountScreen extends Component<Props> {
         const {navigation} = this.props;
         return (
             <View>
-                <StatusBar barStyle="light-content" hidden={false} backgroundColor={"transparent"} translucent/>
                 <MainAccountScreen
                 navigation={navigation}
                 />

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, StatusBar, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, StatusBar, FlatList, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import Colors from '../../../constants/Colors';
 import { screenWidth } from '../../../constants/Dimensions';
 // @ts-ignore
@@ -14,9 +14,6 @@ function mapStateToProps(state) {
     };
 }
 
-const NAVBAR_HEIGHT = screenWidth / 3.7;
-
-
 type States = {
     values?: string,
     data?: any[],
@@ -29,7 +26,7 @@ type Props = {
 
 
 class MainSearchScreen extends Component<Props, States> {
-
+    
     state = {
         values: '',
         data: [],
@@ -40,11 +37,12 @@ class MainSearchScreen extends Component<Props, States> {
     _navListener: any;
 
     componentDidMount() {
-
         this.getDataSearch();
         //set barstyle of statusbar
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             StatusBar.setBarStyle('light-content');
+            StatusBar.setBackgroundColor("transparent");
+            StatusBar.setTranslucent(true);
             // call api get list group
         });
     }
@@ -103,29 +101,32 @@ class MainSearchScreen extends Component<Props, States> {
             });
     }
 
+    timeout?: any;
+
     searchFilterFunction = text => {
-        this.setState({
-            values: text,
-        });
-        if(text == ""){
-            this.setState({
-                data: this.arrayData
-            })
-        }else {
-            this.callApiSearch(text);
-        }
-        
+        this.setState({values: text})
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => {
+            if(text == ""){
+                this.setState({
+                    data: this.arrayData
+                })
+            }else {
+               this.callApiSearch(text);
+            }
+        }, 800); // await 0.8s after stop input then call api
     };
 
     render() {
         return (
             <View style={styles.containerMain}>
-                <StatusBar barStyle="light-content" hidden={false} backgroundColor={Colors.tintColor} translucent />
+                <StatusBar barStyle="light-content" hidden={false} backgroundColor="transparent" translucent />
                 <View style={styles.container}>
                     <SearchBar
                         placeholder="Điểm đến..."
-                        lightTheme
                         clearIcon={{ size: 24, name: 'clear' }}
+                        platform={Platform.OS == 'android' ? 'android' : 'default'}
+                        lightTheme
                         round={true}
                         searchIcon={{ size: 26, name: 'search' }}
                         onChangeText={text => this.searchFilterFunction(text)}
@@ -150,14 +151,10 @@ class MainSearchScreen extends Component<Props, States> {
                                         this.props.navigation.navigate("SearchDetailScreen", { data: item });
                                     }}
                                 >
-                                    <ListItems
-                                        title={item.title}
-                                        description={item.desc}
-                                        img={BASEURL+"/images/main/"+item.url}
-                                    />
+                                    <ListItems item={item}/>
                                 </TouchableOpacity>
                             )}
-                            keyExtractor={item => item.title.toString()}
+                            keyExtractor={item => item._id.toString()}
                             initialNumToRender={4}
                             onEndReachedThreshold={0.4}
                         />
@@ -194,6 +191,7 @@ const styles = StyleSheet.create({
         paddingBottom: screenWidth / 41.1,
         justifyContent: 'center',
         backgroundColor: Colors.tintColor,
+        elevation: 0
     },
     listItem: {
         flex: 1,

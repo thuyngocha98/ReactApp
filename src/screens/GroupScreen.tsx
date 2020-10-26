@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, StatusBar, TouchableOpacity, StyleSheet} from 'react-native';
 import MainScreenGroup from '../components/GroupScreen/MainScreenGroup/MainScreenGroup';
-import {EvilIcons} from '@expo/vector-icons';
-import {APPBAR_HEIGHT} from '../constants/Dimensions';
 import {screenWidth} from "../constants/Dimensions";
 import Colors from "../constants/Colors";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
