@@ -73,6 +73,10 @@ class HeaderTitleComponent extends Component<Props, States> {
       id: 6,
       title: 'Picture Memories',
     },
+    {
+      id: 7,
+      title: 'Plan Trip',
+    },
   ];
   // click icon setting => open menu
   onTriggerPress() {
@@ -273,9 +277,9 @@ class HeaderTitleComponent extends Component<Props, States> {
                         case 'Balances':
                           navigation.navigate('BalanceScreen', { tripId: this.props.idGroup });
                           break;
-                        // case 'Totals':
-                        //   navigation.navigate('TotalScreen', { nameGroup: this.props.nameGroup });
-                        //   break;
+                        case 'Plan Trip':
+                          navigation.navigate('MainPlanInTripScreen', { tripId: this.props.idGroup });
+                          break;
                         case 'Picture Memories':
                           navigation.navigate('ShowImagesScreen', { tripId: this.props.idGroup });
                           break;

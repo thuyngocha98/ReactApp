@@ -3,13 +3,11 @@ import { View, Text, TextInput, StatusBar, FlatList, Keyboard, ActivityIndicator
 import Colors from '../../../constants/Colors';
 import { connect } from 'react-redux';
 import styles from '../../../styles/GroupsStyles/CreateGroupScreenStyles/AddMemberGroupScreenStyles';
-import { MaterialCommunityIcons, AntDesign, Feather, FontAwesome } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Feather, FontAwesome } from '@expo/vector-icons';
 import { BASEURL } from '../../../api/api';
 import DialogBox from 'react-native-dialogbox';
 import { screenWidth } from '../../../constants/Dimensions';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { CONTACTS } from 'expo-permissions';
-import { colors } from 'react-native-elements';
 
 function mapStateToProps(state) {
   return {
@@ -21,7 +19,10 @@ function mapStateToProps(state) {
 type Props = {
   navigation?: any;
   user_id?: string;
-  user?: any[];
+  user?: {
+    name?: string,
+    email?: string,
+  }
 };
 
 type States = {
@@ -125,6 +126,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
       // endDay: this.props.navigation.getParam('endDay', '0-0-0000'),
       author: this.props.user_id,
       list_user: newData,
+      listPlan: this.props.navigation.getParam('listPlan', []),
     };
     const json = JSON.stringify(data);
     fetch(`${BASEURL}/api/trip/insert_new_trip`, {

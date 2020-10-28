@@ -5,11 +5,11 @@ import Colors from '../../../constants/Colors';
 import { screenWidth } from '../../../constants/Dimensions';
 import { BASEURL } from '../../../api/api';
 
-const ListItemSelectDestination = ({item, navigation, onPressAdd}) => {
+const ListItemSelectDestination = ({item, onPressAdd, onNavigate}) => {
     return (
         <View style={styles.viewItem}>
             <TouchableOpacity
-             onPress={() => navigation.navigate('DescriptionLocationScreen', {data: item})}
+             onPress={onNavigate}
              style={styles.viewImageAndTitle}>
                 <View style={styles.viewImage}>
                     <Image

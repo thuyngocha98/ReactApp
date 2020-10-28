@@ -19,7 +19,7 @@ const CreateGroupScreenStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginHorizontal: screenWidth / 27.43,
+    marginHorizontal: screenWidth / 24,
   },
   cancel: {
     fontSize: 17,
@@ -38,6 +38,7 @@ const CreateGroupScreenStyles = StyleSheet.create({
   },
   categoryGroupName: {
     flexDirection: 'row',
+    alignItems: 'center',
     margin: screenWidth / 20.55,
   },
   iconCamera: {
@@ -45,69 +46,32 @@ const CreateGroupScreenStyles = StyleSheet.create({
     height: screenWidth / 5.1375,
   },
   nameAndDetail: {
-    flexDirection: 'column',
-    justifyContent: 'center',
+    flex: 1,
     marginLeft: screenWidth / 27.4,
   },
   groupName: {
     fontWeight: '500',
-    fontSize: 18,
-    marginBottom: screenWidth / 82.2,
+    fontSize: 17,
   },
-
-  detail: {},
-  categoryGroupType: {
-    margin: screenWidth / 20.55,
-  },
-  groupType: {
-    fontWeight: '500',
-    fontSize: 18,
-    marginBottom: screenWidth / 41.1,
-  },
-  categoryTypeGroup: {
-    flexDirection: 'row',
-  },
-  apartment: {
-    padding: screenWidth / 82.2,
-    borderWidth: 1,
-    borderRightWidth: -1,
-    borderColor: Colors.tintColor,
-    borderTopLeftRadius: 5,
-    borderBottomLeftRadius: 5,
-    textAlign: 'center',
-  },
-  house: {
-    padding: screenWidth / 82.2,
-    borderWidth: 1,
-    borderRightWidth: -1,
-    borderColor: Colors.tintColor,
-    textAlign: 'center',
-  },
-  trip: {
-    padding: screenWidth / 82.2,
-    borderWidth: 1,
-    borderRightWidth: -1,
-    borderColor: Colors.tintColor,
-    textAlign: 'center',
-  },
-  order: {
-    padding: screenWidth / 82.2,
-    borderWidth: 1,
-    borderColor: Colors.tintColor,
-    borderTopRightRadius: 5,
-    borderBottomRightRadius: 5,
-    textAlign: 'center',
+  detail: {
+    height: screenWidth/12,
+    paddingVertical: 0,
+    fontSize: 16,
+    color: Colors.blackText,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.gray
   },
   pickDate: {
     flexDirection: 'column',
     marginHorizontal: screenWidth / 20.55,
   },
   pickDate1: {
-    marginTop: screenWidth / 20.55,
     flexDirection: 'column',
     marginHorizontal: screenWidth / 20.55,
+    marginBottom: screenWidth/20
   },
   chooseDay: {
+    marginTop: screenWidth/36,
     backgroundColor: Colors.tintColor,
     height: screenWidth / 10,
     alignItems: 'center',
@@ -125,5 +89,23 @@ const CreateGroupScreenStyles = StyleSheet.create({
     justifyContent: 'flex-end',
     backgroundColor: '#00000066',
   },
+  listTrip: {
+    marginTop: screenHeight/64,
+  },
+  itemTrip: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingBottom: screenHeight/72
+  },
+  txtTrip: {
+      fontSize: 16,
+      color: Colors.blackText,
+  },
+  selectTrip: {
+    paddingVertical: screenHeight/64,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.lavender
+},
 });
 export default CreateGroupScreenStyles;

@@ -348,7 +348,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     btnDelete: {
-        padding: screenWidth/36,
+        paddingVertical: screenWidth/36,
+        paddingHorizontal: screenWidth/24,
     }
 });
 

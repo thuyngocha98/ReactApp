@@ -115,6 +115,7 @@ class SearchDetailScreen extends Component<Props, States> {
                 </View>
                 <View style={styles.listItem}>
                     <FlatList
+                        initialNumToRender={14}
                         ListHeaderComponent={this.renderListHeader(data)}
                         ListFooterComponent={() => (
                             <View style={styles.activityIndicator}>

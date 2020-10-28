@@ -11,41 +11,36 @@ import {
     Dimensions,
     TextInput
 } from 'react-native';
-import Colors from '../../../constants/Colors';
-import { APPBAR_HEIGHT, screenHeight, screenWidth } from '../../../constants/Dimensions';
+import Colors from '../../../../constants/Colors';
+import { APPBAR_HEIGHT, screenHeight, screenWidth } from '../../../../constants/Dimensions';
 import { Ionicons, FontAwesome5, AntDesign, MaterialIcons } from '@expo/vector-icons';
-import { BASEURL } from '../../../api/api';
+import { BASEURL } from '../../../../api/api';
 import Constants from 'expo-constants';
 import Modal from 'react-native-modal';
 
 function mapStateToProps(state) {
     return {
-      userId: state.dataUser.dataUser._id,
     };
 }
 
 type Props = {
-    userId?: any;
     navigation?: any,
 }
 
 type States = {
     data?: any[],
     loading?: boolean,
-    destination?: any[]
     modalVisible?: boolean,
-    modalSaveVisible?: boolean,
+    modalUpdateVisible?: boolean,
     modalOptionVisible?: boolean,
     indexDelete?: number,
     nameDelete?: string,
     indexOption?: number,
     namePlan?: string,
-    dataTrip?: any[],
-    loadingTrip?: boolean,
-    indexSelectTrip?: number
+    listAllLocation?: any[]
 }
 
-class PlanTripScreen extends Component<Props, States> {
+class DetailPlanInTripScreen extends Component<Props, States> {
     static navigationOptions = {
         header: null
     };
@@ -53,27 +48,22 @@ class PlanTripScreen extends Component<Props, States> {
     state = {
         data: [],
         loading: true,
-        destination: [],
         modalVisible: false,
         modalOptionVisible: false,
-        modalSaveVisible: false,
+        modalUpdateVisible: false,
         indexDelete: -1,
         nameDelete: "",
         indexOption: 0,
-        namePlan: "plan 1",
-        dataTrip: [],
-        loadingTrip: true,
-        indexSelectTrip: -1
+        namePlan: this.props.navigation.getParam('name', ''),
+        listAllLocation: []
     }
 
     focusListener: any;
 
-    componentDidMount() {
-        const code = this.props.navigation.getParam('code', '');
-        if(code != -1)
-            this.callApiGetPlan(code);
-        else
-            this.setState({loading: false})
+    componentDidMount() {        
+        const location = this.props.navigation.getParam('location', '');
+        this.callApiGetDetail(location[0].code);
+        this.callApiOptimize(location);
         this.focusListener = this.props.navigation.addListener("didFocus",() => {
             // Update your data
             const destination = this.props.navigation.getParam('destination', '');
@@ -92,6 +82,25 @@ class PlanTripScreen extends Component<Props, States> {
     componentWillUnmount() {
         // remove event listener
         this.focusListener.remove();
+    }
+
+    callApiGetDetail = code => {
+        fetch(`${BASEURL}/api/search/get_detail_location/${code}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+        })
+            .then((response) => response.json())
+            .then((res) => {
+                this.setState({
+                    listAllLocation: res.data,
+                })
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     callApiGetPlan = code => {
@@ -126,8 +135,8 @@ class PlanTripScreen extends Component<Props, States> {
         this.setState({modalOptionVisible: !this.state.modalOptionVisible})
     }
 
-    onToggleModalSave = () => {
-        this.setState({modalSaveVisible: !this.state.modalSaveVisible})
+    onToggleModalUpdate = () => {
+        this.setState({modalUpdateVisible: !this.state.modalUpdateVisible})
     }
 
     onRemoveDestination = () => {
@@ -173,30 +182,6 @@ class PlanTripScreen extends Component<Props, States> {
             });
     }
 
-    getListTrip = () => {
-        this.setState({ loadingTrip: true })
-        fetch(`${BASEURL}/api/trip/get_all_trip_by_user_id/${this.props.userId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json'
-            },
-        })
-            .then((response) => response.json())
-            .then((res) => {
-                this.setState({
-                    dataTrip: res.data,
-                    loadingTrip: false,
-                })
-            })
-            .catch((error) => {
-                this.setState({
-                    loadingTrip: false
-                })
-                console.log(error);
-            });
-    }
-
     navigateToDetail = (data, title) => {
         let item = {}
         for(let i = 0; i < data.length; i++){
@@ -205,7 +190,7 @@ class PlanTripScreen extends Component<Props, States> {
                 break;
             }
         }
-        this.props.navigation.navigate('DescriptionLocationScreen', {data: item})
+        this.props.navigation.navigate('DescriptionLocationInTripScreen', {data: item})
     }
 
     onPressOption = index => {
@@ -225,27 +210,23 @@ class PlanTripScreen extends Component<Props, States> {
         this.callApiOptimize(location);
     }
 
-    onPressSave = () => {
+    onPressUpdate = () => {
         if(this.state.data?.location && this.state.data?.location.length > 0){
-            this.getListTrip()
-            this.onToggleModalSave();
+            this.onToggleModalUpdate();
         }
     }
 
-    onCreatePlan = () => {
-        let code = this.state.data.location[0].code;
-        let tripId = "";
-        if(this.state.indexSelectTrip > -1){
-            tripId = this.state.dataTrip[this.state.indexSelectTrip]._id;
-        }
+    onUpdate = () => {
+        let planId = this.props.navigation.getParam('planId', '');
+        let name = this.state.namePlan;
+        let location = this.state.data.location
 
         let json = {
-            tripId : tripId,
-            code: code,
-            name: this.state.namePlan,
-            location: this.state.data.location
+            planId,
+            name,
+            location
         }
-        fetch(`${BASEURL}/api/plan/create_plan/${this.props.userId}`, {
+        fetch(`${BASEURL}/api/plan/update_plan_in_trip`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -255,26 +236,18 @@ class PlanTripScreen extends Component<Props, States> {
         })
             .then((response) => response.json())
             .then((res) => {
-                // this.setState({
-                //     dataTrip: res.data,
-                //     loadingTrip: false,
-                // })
                 this.props.navigation.goBack();
             })
             .catch((error) => {
-                this.setState({
-                    loadingTrip: false
-                })
                 console.log(error);
             });
-        this.onToggleModalSave();
+        this.onToggleModalUpdate();
     }
 
     onCancelSave = () => {
-        this.onToggleModalSave()
+        this.onToggleModalUpdate()
         this.setState({
-            namePlan: "plan 1",
-            indexSelectTrip: -1,
+            namePlan: this.props.navigation.getParam('name', ''),
         })
     }
 
@@ -338,7 +311,7 @@ class PlanTripScreen extends Component<Props, States> {
                 </View>
             </View>
         )
-        const data = this.props.navigation.getParam('data', '');
+        const name = this.props.navigation.getParam('name', '');
         return (
             <View style={styles.container}>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor="transparent" translucent />
@@ -392,16 +365,16 @@ class PlanTripScreen extends Component<Props, States> {
                         </TouchableOpacity>
                     </View>
                 </Modal>
-                {/* view modal save */}
+                {/* view modal update */}
                 <Modal
                 avoidKeyboard
-                isVisible={this.state.modalSaveVisible}
-                style={styles.mainModalSave}
+                isVisible={this.state.modalUpdateVisible}
+                style={styles.mainModalUpdate}
                 coverScreen={false}
                 deviceHeight={Dimensions.get('screen').height}
                 >
-                    <View style={styles.viewModalSave}>
-                        <Text style={styles.txtTitleModalSave}>
+                    <View style={styles.viewModalUpdate}>
+                        <Text style={styles.txtTitleModalUpdate}>
                             Name of the plan
                         </Text>
                         <TextInput
@@ -413,35 +386,6 @@ class PlanTripScreen extends Component<Props, States> {
                             onChangeText={text => this.setState({namePlan: text})}
                             value={this.state.namePlan}
                         />
-                        {this.state.loadingTrip ? (
-                            <View style={styles.selectTrip}>
-                                <ActivityIndicator animating size="small" color={Colors.tintColor} />
-                            </View>
-                        ) : (
-                            this.state.dataTrip &&
-                            <View style={styles.selectTrip}>
-                                <Text style={styles.txtTitleModalSave}>
-                                    Select a trip
-                                </Text>
-                                <ScrollView
-                                 keyboardShouldPersistTaps="handled"
-                                 style={styles.listTrip}>
-                                    {this.state.dataTrip.map((item,index) => (
-                                        <TouchableOpacity 
-                                         onPress={() => this.setState({indexSelectTrip: index})} 
-                                         key={item._id}
-                                         style={styles.itemTrip}>
-                                            <Text style={styles.txtTrip}>{item.name}</Text>
-                                            {this.state.indexSelectTrip == index ? (
-                                                <MaterialIcons name='radio-button-checked' size={20} color={Colors.mediumseagreen} />
-                                            ) : (
-                                                <MaterialIcons name='radio-button-unchecked' size={20} color={Colors.gray} />
-                                            )}
-                                        </TouchableOpacity>
-                                    ))}
-                                </ScrollView>
-                            </View>
-                        )}
                         <View style={styles.viewBtnModal}>
                             <TouchableOpacity
                              onPress={this.onCancelSave}
@@ -449,9 +393,9 @@ class PlanTripScreen extends Component<Props, States> {
                                 <Text style={styles.txtBtnModal}>Cancel</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
-                             onPress={this.onCreatePlan}
+                             onPress={this.onUpdate}
                              style={styles.btnModal}>
-                                <Text style={styles.txtBtnModal}>Save</Text>
+                                <Text style={styles.txtBtnModal}>Update</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -467,13 +411,13 @@ class PlanTripScreen extends Component<Props, States> {
                         >
                             <Ionicons name='md-arrow-back' size={28} color={Colors.white} />
                         </TouchableOpacity>
-                        <Text style={styles.headerTitle}>Planning of travel</Text>
+                        <Text style={styles.headerTitle}>{name}</Text>
                         <TouchableOpacity
                             style={styles.headerRight}
                             activeOpacity={0.5}
-                            onPress={this.onPressSave}
+                            onPress={this.onPressUpdate}
                         >
-                            <Text style={styles.textHeaderRight}>Save</Text>
+                            <Text style={styles.textHeaderRight}>Update</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -483,7 +427,7 @@ class PlanTripScreen extends Component<Props, States> {
                         <View style={styles.underTitle} />
                     </View>
                     <TouchableOpacity
-                     onPress={() => this.props.navigation.navigate('MapPlanScreen', {data: this.state.data})}
+                     onPress={() => this.props.navigation.navigate('MapPlanInTripScreen', {data: this.state.data})}
                      style={styles.viewMap}>
                         <FontAwesome5 name='map-marked-alt' size={20} color={Colors.gray}/>
                     </TouchableOpacity>
@@ -502,7 +446,8 @@ class PlanTripScreen extends Component<Props, States> {
                                         title={item.title}
                                         desc={item.desc}
                                         url={item.url}
-                                        data={data} />
+                                        data={this.state.listAllLocation} 
+                                    />
                                     {this.state.data?.data?.route?.legs[index] ? (
                                         <RenderTimeAndDistance
                                             key={this.state.data?.data.route.legs[index].distance}
@@ -518,7 +463,7 @@ class PlanTripScreen extends Component<Props, States> {
                             ))}
                             <TouchableOpacity
                              onPress={() => {
-                                this.props.navigation.navigate('AddDestinationScreen',{data: data});
+                                this.props.navigation.navigate('AddDestinationInTripScreen',{data: this.state.listAllLocation});
                              }}
                              style={styles.viewBtn}>
                                 <Text style={styles.txtBtn}>Add Destination</Text>
@@ -533,7 +478,7 @@ class PlanTripScreen extends Component<Props, States> {
 
 export default connect(
     mapStateToProps,
-)(PlanTripScreen);
+)(DetailPlanInTripScreen);
 
 const styles = StyleSheet.create({
     container: {
@@ -588,16 +533,16 @@ const styles = StyleSheet.create({
         paddingVertical: screenWidth/27,
         textAlign: 'center'
     },
-    mainModalSave: {
+    mainModalUpdate: {
         justifyContent: 'center',
     },
-    viewModalSave: {
+    viewModalUpdate: {
         flexDirection: 'column',
         backgroundColor: Colors.white,
         borderRadius: 10,
         padding: screenWidth/36,
     },
-    txtTitleModalSave: {
+    txtTitleModalUpdate: {
         fontSize: 16,
         color: Colors.blackText,
         paddingHorizontal: screenWidth/11,
@@ -659,7 +604,7 @@ const styles = StyleSheet.create({
         paddingVertical: screenWidth/72,
     },
     textHeaderRight: {
-        fontSize: 17,
+        fontSize: 15,
         color: Colors.white
     },
     viewTitle: {

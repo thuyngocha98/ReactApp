@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, StatusBar, FlatList } from 'react-native';
-import Colors from '../../../constants/Colors';
-import { APPBAR_HEIGHT, screenWidth } from '../../../constants/Dimensions';
+import Colors from '../../../../constants/Colors';
+import { APPBAR_HEIGHT, screenWidth } from '../../../../constants/Dimensions';
 import { Ionicons } from '@expo/vector-icons';
 import { SearchBar } from 'react-native-elements';
-import ListItemSelectDestination from './ListItemSelectDestination';
+import ListItemSelectDestination from '../../../SearchScreen/PlanTripScreen/ListItemSelectDestination';
 import Constants from 'expo-constants';
 
 type Props = {
@@ -16,7 +16,7 @@ type State = {
     values: string,
 }
 
-class AddDestinationInTripScreen extends Component<Props, State> {
+class AddDestinationScreen extends Component<Props, State> {
     static navigationOptions = {
         header: null
     };
@@ -50,15 +50,15 @@ class AddDestinationInTripScreen extends Component<Props, State> {
 
     selectedDestination = () => {
         let destination = this.state.data.filter(el => el.selected == true);
-        this.props.navigation.navigate('PlanTripScreen', {destination: destination});
+        this.props.navigation.navigate('DetailPlanInTripScreen', {destination: destination});
     }
 
     render() {
         const RenderItem = ({item, index}) => (
             <ListItemSelectDestination 
              item={item} 
-             onPressAdd={() => onPressHandler(index)}
-             onNavigate={() => this.props.navigation.navigate('DescriptionLocationScreen', {data: item})} />
+             onPressAdd={() => onPressHandler(index)} 
+             onNavigate={() => this.props.navigation.navigate('DescriptionLocationInTripScreen', {data: item})} />
         )
 
         const onPressHandler = async index => {
@@ -221,4 +221,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AddDestinationInTripScreen;
+export default AddDestinationScreen;
