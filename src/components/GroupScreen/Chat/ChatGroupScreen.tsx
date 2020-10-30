@@ -405,8 +405,6 @@ class ChatGroupScreen extends Component<Props, States> {
   };
 
   private _stopRecordingAndEnablePlayback = async () => {
-    const info = await FileSystem.getInfoAsync(this.audioRecording.getURI() || '');
-    // console.log(`FILE INFO: ${JSON.stringify(info)}`);
     const { sound, status } = await this.audioRecording.createNewLoadedSoundAsync(
       {
         isLooping: true,
@@ -482,7 +480,6 @@ class ChatGroupScreen extends Component<Props, States> {
       this.audioRecording.setOnRecordingStatusUpdate(null);
       this.audioRecording = null;
     }
-    console.log(this.state.soundDuration);
   };
 
   sendAudioRecording = async () => {
@@ -497,10 +494,11 @@ class ChatGroupScreen extends Component<Props, States> {
 
     setTimeout(() => {
       this.getDataAudioRecording();
-    }, 20);
+    }, 50);
   };
 
   getDataAudioRecording = async () => {
+    console.log(this.state.soundDuration);
     // await fetch(`${BASEURL}/api/chat/save_image_chat`, {
     //   method: 'POST',
     //   headers: {
