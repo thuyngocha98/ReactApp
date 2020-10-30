@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, Image, TouchableOpacity, AsyncStorage, StatusBar } from 'react-native';
+import { View, Text, Platform, Image, TouchableOpacity, AsyncStorage, StatusBar } from 'react-native';
 import styles from '../../styles/AccountScreenStyle/MainAccountScreenStyle';
 import { MaterialCommunityIcons, EvilIcons, AntDesign } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { BASEURL } from '../../api/api';
-import Colors from '../../constants/Colors';
 
 // @ts-ignore
 import { thumbnails } from '../../constants/FunctionCommon';
@@ -18,9 +17,12 @@ function mapStateToProps(state) {
 
 type Props = {
   navigation?: any;
-  user?: any[];
-  avatar?: any;
-  name?: string;
+  user?: {
+    avatar: any,
+    name: string,
+    email: string,
+    _id: string,
+  };
 };
 
 class MainAccountScreen extends Component<Props> {
@@ -30,9 +32,10 @@ class MainAccountScreen extends Component<Props> {
     //set barstyle of statusbar
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('light-content');
-      StatusBar.setBackgroundColor("transparent");
-      StatusBar.setTranslucent(true)
-      // call api get list group
+      if(Platform.OS == 'android'){
+        StatusBar.setBackgroundColor("transparent");
+        StatusBar.setTranslucent(true);
+      }
     });
   }
 

@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Platform,
   StatusBar,
-  ActivityIndicator,
   StyleSheet,
 } from 'react-native';
 import MainScreenGroupStyles from '../../../styles/GroupsStyles/MainScreenGroupStyles/MainScreenGroupStyles';
@@ -16,12 +15,12 @@ import ListItemGroup from './ListItemGroup';
 import Colors from '../../../constants/Colors';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BASEURL } from '../../../api/api';
-import { NavigationEvents } from 'react-navigation';
 import { bindActionCreators } from 'redux';
 import { getApiListTrip } from '../../../actions/action';
 import { number2money, thumbnails } from '../../../constants/FunctionCommon';
 import { SearchBar } from 'react-native-elements';
 import { screenWidth } from '../../../constants/Dimensions';
+import LottieView from 'lottie-react-native';
 
 function mapStateToProps(state) {
   return {
@@ -76,8 +75,10 @@ class MainScreenGroup extends Component<Props, States> {
     //set barstyle of statusbar
     this._navListener = this.props.navigation.addListener('didFocus', async () => {
       StatusBar.setBarStyle('light-content');
-      StatusBar.setBackgroundColor("transparent");
-      StatusBar.setTranslucent(true);
+      if(Platform.OS == 'android'){
+        StatusBar.setBackgroundColor("transparent");
+        StatusBar.setTranslucent(true);
+      }
       if (this.props.userId != undefined) {
         this.thumbnail =
           this.props.user.avatar.length > 2
@@ -187,7 +188,12 @@ class MainScreenGroup extends Component<Props, States> {
         <View style={{ flex: 1 }}>
           {this.state.loading ? (
             <View style={MainScreenGroupStyles.activityIndicator}>
-              <ActivityIndicator animating size="large" color={Colors.tintColor} />
+              <LottieView
+                  style={MainScreenGroupStyles.viewLottie}
+                  source={require('../../../../assets/lotties/WaveLoading.json')}
+                  autoPlay
+                  loop
+              />
             </View>
           ) : (
             <FlatList

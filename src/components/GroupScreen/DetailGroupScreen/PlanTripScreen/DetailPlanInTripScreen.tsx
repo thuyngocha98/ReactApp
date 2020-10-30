@@ -6,17 +6,18 @@ import {
     StyleSheet, Text, 
     Image, 
     ScrollView,
-    ActivityIndicator,
     StatusBar,
     Dimensions,
     TextInput
 } from 'react-native';
 import Colors from '../../../../constants/Colors';
 import { APPBAR_HEIGHT, screenHeight, screenWidth } from '../../../../constants/Dimensions';
-import { Ionicons, FontAwesome5, AntDesign, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, AntDesign } from '@expo/vector-icons';
 import { BASEURL } from '../../../../api/api';
 import Constants from 'expo-constants';
 import Modal from 'react-native-modal';
+import ModalNotification from '../../../components/ModalNotification'
+import LottieView from 'lottie-react-native';
 
 function mapStateToProps(state) {
     return {
@@ -37,7 +38,8 @@ type States = {
     nameDelete?: string,
     indexOption?: number,
     namePlan?: string,
-    listAllLocation?: any[]
+    listAllLocation?: any[],
+    modalVisibleNotification?: boolean
 }
 
 class DetailPlanInTripScreen extends Component<Props, States> {
@@ -55,7 +57,8 @@ class DetailPlanInTripScreen extends Component<Props, States> {
         nameDelete: "",
         indexOption: 0,
         namePlan: this.props.navigation.getParam('name', ''),
-        listAllLocation: []
+        listAllLocation: [],
+        modalVisibleNotification: false
     }
 
     focusListener: any;
@@ -101,6 +104,10 @@ class DetailPlanInTripScreen extends Component<Props, States> {
             .catch((error) => {
                 console.log(error);
             });
+    }
+
+    onToggleModalNotification = () => {
+        this.setState({modalVisibleNotification: !this.state.modalVisibleNotification})
     }
 
     callApiGetPlan = code => {
@@ -236,7 +243,7 @@ class DetailPlanInTripScreen extends Component<Props, States> {
         })
             .then((response) => response.json())
             .then((res) => {
-                this.props.navigation.goBack();
+                this.onToggleModalNotification();
             })
             .catch((error) => {
                 console.log(error);
@@ -249,6 +256,11 @@ class DetailPlanInTripScreen extends Component<Props, States> {
         this.setState({
             namePlan: this.props.navigation.getParam('name', ''),
         })
+    }
+
+    onDoneUpdate = () => {
+        this.onToggleModalNotification();
+        this.props.navigation.goBack();
     }
 
     render() {
@@ -315,6 +327,14 @@ class DetailPlanInTripScreen extends Component<Props, States> {
         return (
             <View style={styles.container}>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor="transparent" translucent />
+                <ModalNotification 
+                type='success'
+                modalVisible={this.state.modalVisibleNotification}
+                title='Update success'
+                description="Congrats! Your plan update successful done"
+                txtButton="Ok"
+                onPress={this.onDoneUpdate}
+                />
                 {/* view modal */}
                 <Modal
                 isVisible={this.state.modalVisible}
@@ -429,13 +449,29 @@ class DetailPlanInTripScreen extends Component<Props, States> {
                     <TouchableOpacity
                      onPress={() => this.props.navigation.navigate('MapPlanInTripScreen', {data: this.state.data})}
                      style={styles.viewMap}>
-                        <FontAwesome5 name='map-marked-alt' size={20} color={Colors.gray}/>
+                        {!this.state.loading ? (
+                            <LottieView
+                                style={styles.lottieMap}
+                                source={require('../../../../../assets/lotties/mapmaker.json')}
+                                autoPlay
+                                loop
+                            />
+                         ) : (
+                             <View style={styles.lottieMap} />
+                         )} 
                     </TouchableOpacity>
                 </View>
                 <ScrollView style={styles.viewContent}>
                     {this.state.loading ? (
                         <View style={styles.activityIndicator}>
-                            <ActivityIndicator animating size="large" color={Colors.tintColor} />
+                             <View style={styles.activityIndicator}>
+                                <LottieView
+                                    style={styles.viewLottie}
+                                    source={require('../../../../../assets/lotties/PinJump.json')}
+                                    autoPlay
+                                    loop
+                                />
+                            </View>
                         </View>
                     ) : (
                         <>
@@ -461,13 +497,15 @@ class DetailPlanInTripScreen extends Component<Props, States> {
                                     )}
                                 </View>
                             ))}
-                            <TouchableOpacity
-                             onPress={() => {
-                                this.props.navigation.navigate('AddDestinationInTripScreen',{data: this.state.listAllLocation});
-                             }}
-                             style={styles.viewBtn}>
-                                <Text style={styles.txtBtn}>Add Destination</Text>
-                            </TouchableOpacity>
+                            {!this.state.loading && (
+                                <TouchableOpacity
+                                onPress={() => {
+                                    this.props.navigation.navigate('AddDestinationInTripScreen',{data: this.state.listAllLocation});
+                                }}
+                                style={styles.viewBtn}>
+                                    <Text style={styles.txtBtn}>Add Destination</Text>
+                                </TouchableOpacity>
+                            )}
                         </>
                     )}
                 </ScrollView>
@@ -733,6 +771,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    viewLottie: {
+        width: screenHeight/1.5,
+        height: screenHeight/2
+    },
     viewBtn: {
         alignSelf: 'center',
         width: screenWidth/1.5,
@@ -748,7 +790,14 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     viewMap: {
-        padding: screenWidth/ 30,
+        paddingHorizontal: screenWidth/36,
+        paddingVertical: screenHeight/ 128,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    lottieMap: {
+        width: screenWidth/12,
+        height: screenHeight/21,
     },
     viewTitleAndImage: {
         flex: 1,

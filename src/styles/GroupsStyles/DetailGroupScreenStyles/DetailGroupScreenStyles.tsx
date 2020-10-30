@@ -62,6 +62,10 @@ const DetailGroupScreenStyles = StyleSheet.create({
         backgroundColor: Colors.white,
         marginTop: screenWidth/6,
     },
+    viewLottie: {
+        width: screenWidth/3.6,
+        height: screenWidth/3.6,
+    },
     addTrip: {
         position: 'absolute',
         bottom: 12,

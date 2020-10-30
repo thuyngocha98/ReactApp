@@ -6,7 +6,6 @@ import {
     Text,
     FlatList,
     StatusBar,
-    ActivityIndicator,
     Dimensions,
 } from 'react-native';
 import Colors from '../../../constants/Colors';
@@ -19,6 +18,7 @@ import {bindActionCreators} from 'redux';
 import {saveTripIdInExpense} from '../../../actions/action';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Modal from 'react-native-modal';
+import LottieView from 'lottie-react-native';
 
 function mapStateToProps(state) {
     return {};
@@ -160,7 +160,12 @@ class DetailGroupScreen extends Component<Props, States> {
                 </View>
                 {this.state.loading ? (
                     <View style={DetailGroupScreenStyles.activityIndicator}>
-                        <ActivityIndicator animating size="large" color={Colors.tintColor}/>
+                        <LottieView
+                            style={DetailGroupScreenStyles.viewLottie}
+                            source={require('../../../../assets/lotties/WaveLoading.json')}
+                            autoPlay
+                            loop
+                        />
                     </View>
                 ) : (
                     <FlatList

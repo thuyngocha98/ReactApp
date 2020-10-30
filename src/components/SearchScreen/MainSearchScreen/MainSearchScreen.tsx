@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, StyleSheet, StatusBar, FlatList, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
+import { View, StyleSheet, StatusBar, FlatList, TouchableOpacity, Platform } from 'react-native';
 import Colors from '../../../constants/Colors';
 import { screenWidth } from '../../../constants/Dimensions';
 // @ts-ignore
 import { SearchBar } from 'react-native-elements';
 import ListItems from './Listitem';
 import { BASEURL } from '../../../api/api';
+import LottieView from 'lottie-react-native';
 
 function mapStateToProps(state) {
     return {
@@ -41,9 +42,10 @@ class MainSearchScreen extends Component<Props, States> {
         //set barstyle of statusbar
         this._navListener = this.props.navigation.addListener('didFocus', () => {
             StatusBar.setBarStyle('light-content');
-            StatusBar.setBackgroundColor("transparent");
-            StatusBar.setTranslucent(true);
-            // call api get list group
+            if(Platform.OS == 'android'){
+                StatusBar.setBackgroundColor("transparent");
+                StatusBar.setTranslucent(true);
+            }
         });
     }
 
@@ -137,9 +139,15 @@ class MainSearchScreen extends Component<Props, States> {
                         containerStyle={styles.containerSearchbar}
                     />
                 </View>
-                <View style={styles.listItem}>{this.state.loading ? (
+                <View style={styles.listItem}>
+                {this.state.loading ? (
                     <View style={styles.activityIndicator}>
-                        <ActivityIndicator animating size="large" color={Colors.tintColor} />
+                        <LottieView
+                            style={styles.viewLottie}
+                            source={require('../../../../assets/lotties/WaveLoading.json')}
+                            autoPlay
+                            loop
+                        />
                     </View>
                 ) : (
                         <FlatList
@@ -200,10 +208,13 @@ const styles = StyleSheet.create({
     activityIndicator: {
         flex: 1,
         justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: Colors.background,
-        marginTop: screenWidth / 13.4,
     },
-
+    viewLottie: {
+        width: screenWidth/3.6,
+        height: screenWidth/3.6,
+    },
 });
 
 export default connect(

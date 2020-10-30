@@ -17,6 +17,8 @@ import { Ionicons, FontAwesome5, AntDesign, MaterialIcons } from '@expo/vector-i
 import { BASEURL } from '../../../api/api';
 import Constants from 'expo-constants';
 import Modal from 'react-native-modal';
+import ModalNotification from '../../components/ModalNotification'
+import LottieView from 'lottie-react-native';
 
 function mapStateToProps(state) {
     return {
@@ -42,7 +44,8 @@ type States = {
     namePlan?: string,
     dataTrip?: any[],
     loadingTrip?: boolean,
-    indexSelectTrip?: number
+    indexSelectTrip?: number,
+    modalVisibleNotification?: boolean
 }
 
 class PlanTripScreen extends Component<Props, States> {
@@ -63,7 +66,8 @@ class PlanTripScreen extends Component<Props, States> {
         namePlan: "plan 1",
         dataTrip: [],
         loadingTrip: true,
-        indexSelectTrip: -1
+        indexSelectTrip: -1,
+        modalVisibleNotification: false
     }
 
     focusListener: any;
@@ -116,6 +120,10 @@ class PlanTripScreen extends Component<Props, States> {
                 })
                 console.log(error);
             });
+    }
+
+    onToggleModalNotification = () => {
+        this.setState({modalVisibleNotification: !this.state.modalVisibleNotification})
     }
 
     onToggleModal = () => {
@@ -259,7 +267,7 @@ class PlanTripScreen extends Component<Props, States> {
                 //     dataTrip: res.data,
                 //     loadingTrip: false,
                 // })
-                this.props.navigation.goBack();
+                this.onToggleModalNotification();
             })
             .catch((error) => {
                 this.setState({
@@ -276,6 +284,11 @@ class PlanTripScreen extends Component<Props, States> {
             namePlan: "plan 1",
             indexSelectTrip: -1,
         })
+    }
+
+    onDoneSave = () => {
+        this.onToggleModalNotification();
+        this.props.navigation.goBack();
     }
 
     render() {
@@ -342,6 +355,15 @@ class PlanTripScreen extends Component<Props, States> {
         return (
             <View style={styles.container}>
                 <StatusBar barStyle="light-content" hidden={false} backgroundColor="transparent" translucent />
+                {/*view modal notification */}
+                <ModalNotification 
+                type='success'
+                modalVisible={this.state.modalVisibleNotification}
+                title='Save success'
+                description="Congrats! Your plan save successful done"
+                txtButton="Ok"
+                onPress={this.onDoneSave}
+                />
                 {/* view modal */}
                 <Modal
                 isVisible={this.state.modalVisible}
@@ -485,13 +507,27 @@ class PlanTripScreen extends Component<Props, States> {
                     <TouchableOpacity
                      onPress={() => this.props.navigation.navigate('MapPlanScreen', {data: this.state.data})}
                      style={styles.viewMap}>
-                        <FontAwesome5 name='map-marked-alt' size={20} color={Colors.gray}/>
+                         {!this.state.loading ? (
+                            <LottieView
+                                style={styles.lottieMap}
+                                source={require('../../../../assets/lotties/mapmaker.json')}
+                                autoPlay
+                                loop
+                            />
+                         ) : (
+                             <View style={styles.lottieMap} />
+                         )} 
                     </TouchableOpacity>
                 </View>
                 <ScrollView style={styles.viewContent}>
                     {this.state.loading ? (
                         <View style={styles.activityIndicator}>
-                            <ActivityIndicator animating size="large" color={Colors.tintColor} />
+                            <LottieView
+                                style={styles.viewLottie}
+                                source={require('../../../../assets/lotties/PinJump.json')}
+                                autoPlay
+                                loop
+                            />
                         </View>
                     ) : (
                         <>
@@ -516,13 +552,15 @@ class PlanTripScreen extends Component<Props, States> {
                                     )}
                                 </View>
                             ))}
-                            <TouchableOpacity
-                             onPress={() => {
-                                this.props.navigation.navigate('AddDestinationScreen',{data: data});
-                             }}
-                             style={styles.viewBtn}>
-                                <Text style={styles.txtBtn}>Add Destination</Text>
-                            </TouchableOpacity>
+                            {!this.state.loading && (
+                                <TouchableOpacity
+                                onPress={() => {
+                                    this.props.navigation.navigate('AddDestinationScreen',{data: data});
+                                }}
+                                style={styles.viewBtn}>
+                                    <Text style={styles.txtBtn}>Add Destination</Text>
+                                </TouchableOpacity>
+                            )}
                         </>
                     )}
                 </ScrollView>
@@ -788,6 +826,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    viewLottie: {
+        width: screenWidth/1.5,
+        height: screenHeight/2
+    },
     viewBtn: {
         alignSelf: 'center',
         width: screenWidth/1.5,
@@ -803,7 +845,14 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     viewMap: {
-        padding: screenWidth/ 30,
+        paddingHorizontal: screenWidth/36,
+        paddingVertical: screenHeight/ 128,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    lottieMap: {
+        width: screenWidth/12,
+        height: screenHeight/21,
     },
     viewTitleAndImage: {
         flex: 1,

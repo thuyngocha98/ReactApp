@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList } from 'react-native';
 import Colors from '../../../constants/Colors';
 import { APPBAR_HEIGHT, screenWidth } from '../../../constants/Dimensions';
 import { Ionicons } from '@expo/vector-icons';
 import ListItem from './Listitem';
 import { BASEURL } from '../../../api/api';
 import Constants from 'expo-constants';
+import LottieView from 'lottie-react-native';
 
 function mapStateToProps(state) {
     return {
@@ -120,7 +121,12 @@ class SearchDetailScreen extends Component<Props, States> {
                         ListFooterComponent={() => (
                             <View style={styles.activityIndicator}>
                                 {this.state.loading && (
-                                    <ActivityIndicator animating size="large" color={Colors.tintColor} />
+                                    <LottieView
+                                        style={styles.viewLottie}
+                                        source={require('../../../../assets/lotties/WaveLoading.json')}
+                                        autoPlay
+                                        loop
+                                    />
                                 )}
                             </View>
                         )}
@@ -215,6 +221,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    viewLottie: {
+        width: screenWidth/3.6,
+        height: screenWidth/3.6,
     },
 });
 

@@ -16,6 +16,7 @@ import { Ionicons, AntDesign, Feather, MaterialIcons } from '@expo/vector-icons'
 import { BASEURL } from '../../../../api/api';
 import Modal from 'react-native-modal';
 import { connect } from 'react-redux';
+import LottieView from 'lottie-react-native';
 
 function mapStateToProps(state) {
     return {
@@ -34,6 +35,11 @@ type States = {
     dataNoInTrip?: any[],
     loadingNoInTrip?: boolean,
     modalAddVisible?: boolean,
+    modalVisible?: boolean,
+    itemDelete?: {
+        _id: string,
+        name: string,
+    },
 }
 
 export class MainPlanInTripScreen extends Component<Props, States> {
@@ -47,6 +53,11 @@ export class MainPlanInTripScreen extends Component<Props, States> {
         dataNoInTrip: [],
         loadingNoInTrip: true,
         modalAddVisible: false,
+        modalVisible: false,
+        itemDelete: {
+            _id: "",
+            name: "",
+        },
     }
 
     focusListener: any;
@@ -66,35 +77,14 @@ export class MainPlanInTripScreen extends Component<Props, States> {
         this.setState({modalAddVisible: !this.state.modalAddVisible})
     }
 
+    onToggleModal = () => {
+        this.setState({modalVisible: !this.state.modalVisible})
+    }
+
     getListPlanTrip = () => {
         this.setState({ loading: true })
         let tripId = this.props.navigation.getParam('tripId', '');
         fetch(`${BASEURL}/api/plan/get_plan_by_trip_id/${tripId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json'
-            },
-        })
-            .then((response) => response.json())
-            .then((res) => {
-                this.setState({
-                    data: res.data,
-                    loading: false,
-                })
-            })
-            .catch((error) => {
-                this.setState({
-                    loading: false
-                })
-                console.log(error);
-            });
-    }
-
-    onPressDeletePlan = planId => {
-        this.setState({ loading: true })
-        let tripId = this.props.navigation.getParam('tripId', '');
-        fetch(`${BASEURL}/api/plan/remove_plan_in_trip/${planId}/${tripId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -182,9 +172,66 @@ export class MainPlanInTripScreen extends Component<Props, States> {
             });
     }
 
+    onPressDeletePlan = item => {
+        this.setState({itemDelete: item})
+        this.onToggleModal();
+    }
+
+    onDelete = () => {
+        this.setState({ loading: true })
+        let tripId = this.props.navigation.getParam('tripId', '');
+        fetch(`${BASEURL}/api/plan/remove_plan_in_trip/${this.state.itemDelete._id}/${tripId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json'
+            },
+        })
+            .then((response) => response.json())
+            .then((res) => {
+                this.setState({
+                    data: res.data,
+                    loading: false,
+                })
+            })
+            .catch((error) => {
+                this.setState({
+                    loading: false
+                })
+                console.log(error);
+            });
+        this.onToggleModal();
+    }
+
     render() {
         return (
             <View style={styles.container}>
+                {/**view modal delete */}
+                <Modal
+                isVisible={this.state.modalVisible}
+                style={styles.mainModal}
+                coverScreen={false}
+                deviceHeight={Dimensions.get('screen').height}
+                onBackdropPress={this.onToggleModal}
+                >
+                    <View style={styles.viewModal}>
+                        <Text style={styles.txtTitleModal}>
+                            {`Are you sure you want to remove ${this.state.itemDelete.name}?`}
+                        </Text>
+                        <View style={styles.viewBtnModal}>
+                            <TouchableOpacity
+                             onPress={this.onToggleModal}
+                             style={[styles.btnModal,{borderRightWidth: 1,borderRightColor: Colors.lavender}]}>
+                                <Text style={styles.txtBtnModal}>Cancel</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                             onPress={this.onDelete}
+                             style={styles.btnModal}>
+                                <Text style={styles.txtBtnModal}>OK</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
                 {/* view modal save */}
                 <Modal
                 avoidKeyboard
@@ -263,7 +310,12 @@ export class MainPlanInTripScreen extends Component<Props, States> {
                 </View>
                 {this.state.loading ? (
                     <View style={styles.activityIndicator}>
-                        <ActivityIndicator animating size="large" color={Colors.tintColor} />
+                        <LottieView
+                            style={styles.viewLottie}
+                            source={require('../../../../../assets/lotties/WaveLoading.json')}
+                            autoPlay
+                            loop
+                        />
                     </View>
                 ) : (
                     <View style={styles.viewList}>
@@ -282,7 +334,7 @@ export class MainPlanInTripScreen extends Component<Props, States> {
                                 <Text style={styles.txtTitle}>{item.name}</Text>
                                 <View style={styles.viewRightItem}>
                                     <TouchableOpacity 
-                                        onPress={() => this.onPressDeletePlan(item._id)}
+                                        onPress={() => this.onPressDeletePlan(item)}
                                         style={styles.btnDelete}>
                                         <AntDesign name='delete' size={18} color={Colors.gray}/>
                                     </TouchableOpacity>
@@ -307,7 +359,26 @@ const styles = StyleSheet.create({
     container: {
         flex: 1
     },
-    
+    mainModal: {
+        justifyContent: 'flex-end',
+        margin: 0,
+    },
+    viewModal: {
+        flexDirection: 'column',
+        backgroundColor: Colors.white,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        padding: screenWidth/36,
+    },
+    txtTitleModal: {
+        fontSize: 16,
+        color: Colors.blackText,
+        paddingBottom: screenWidth/36,
+        paddingHorizontal: screenWidth/8,
+        textAlign: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: Colors.lavender
+    },
     mainModalSave: {
         justifyContent: 'center',
     },
@@ -420,5 +491,9 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    viewLottie: {
+        width: screenWidth/3.6,
+        height: screenWidth/3.6,
     },
 });

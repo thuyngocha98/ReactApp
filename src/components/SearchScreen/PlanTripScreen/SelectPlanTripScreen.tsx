@@ -6,7 +6,6 @@ import {
     StyleSheet, 
     Text, 
     StatusBar,
-    ActivityIndicator,
     FlatList,
     Dimensions
 } from 'react-native';
@@ -16,6 +15,7 @@ import { Ionicons, Feather, MaterialIcons, AntDesign } from '@expo/vector-icons'
 import Constants from 'expo-constants';
 import { BASEURL } from '../../../api/api';
 import Modal from 'react-native-modal';
+import LottieView from 'lottie-react-native';
 
 function mapStateToProps(state) {
     return {
@@ -181,7 +181,12 @@ class SelectPlanTripScreen extends Component<Props, States> {
                 </View>
                 {this.state.loading ? (
                     <View style={styles.activityIndicator}>
-                        <ActivityIndicator animating size="large" color={Colors.tintColor} />
+                        <LottieView
+                            style={styles.viewLottie}
+                            source={require('../../../../assets/lotties/WaveLoading.json')}
+                            autoPlay
+                            loop
+                        />
                     </View>
                 ) : (
                     this.state.data.length ?
@@ -338,6 +343,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    viewLottie: {
+        width: screenWidth/3.6,
+        height: screenWidth/3.6,
     },
     viewList: {
         flex: 1,

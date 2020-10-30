@@ -4,13 +4,10 @@ import {
   Text,
   Platform,
   FlatList,
-  Image,
   TouchableOpacity,
   StatusBar,
-  ActivityIndicator,
   StyleSheet,
 } from 'react-native';
-import styles from '../../../styles/ActivityScreenStyles/RecentActivityScreenStyle/MainActivityScreenStyle';
 import ListItemActivity from './ListItemActivity';
 // @ts-ignore
 import avatar from '../../../../assets/images/avatar.jpg';
@@ -27,6 +24,7 @@ import { SearchBar } from 'react-native-elements';
 import { screenWidth } from '../../../constants/Dimensions';
 import { connect } from 'react-redux';
 import { BASEURL } from '../../../api/api';
+import LottieView from 'lottie-react-native';
 
 function mapStateToProps(state) {
   return {
@@ -60,9 +58,10 @@ class MainActivityScreen extends Component<Props, States> {
     //set barstyle of statusbar
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('light-content');
-      StatusBar.setBackgroundColor("transparent");
-      StatusBar.setTranslucent(true);
-      // call api get list group
+      if(Platform.OS == 'android'){
+        StatusBar.setBackgroundColor("transparent");
+        StatusBar.setTranslucent(true);
+      }
     });
   }
 
@@ -112,7 +111,7 @@ class MainActivityScreen extends Component<Props, States> {
 
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         <StatusBar barStyle="light-content" hidden={false} backgroundColor="transparent" translucent />
         <View>
           <SearchBar
@@ -125,45 +124,58 @@ class MainActivityScreen extends Component<Props, States> {
             onChangeText={(text) => this.searchFilterFunction(text)}
             autoCorrect={false}
             value={this.state.value}
-            inputStyle={Styles.input}
-            inputContainerStyle={Styles.containerInput}
-            containerStyle={Styles.containerSearchBar}
+            inputStyle={styles.input}
+            inputContainerStyle={styles.containerInput}
+            containerStyle={styles.containerSearchBar}
           />
         </View>
         <View style={styles.scrollView}>
-          <View>
-            <Text style={styles.title}>Recent activity</Text>
-          </View>
-          <View>
-            {this.state.loading ? (
-              <View style={styles.activityIndicator}>
-                <ActivityIndicator animating size="large" color={Colors.tintColor} />
-              </View>
-            ) : (
-              <View>
-                <FlatList
-                  scrollEnabled
-                  data={this.state.data}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity>
-                      <ListItemActivity data={item} />
-                    </TouchableOpacity>
-                  )}
-                  keyExtractor={(item) => item._id.toString()}
-                />
-              </View>
-            )}
-          </View>
+          <Text style={styles.title}>Recent activity</Text>
+          {this.state.loading ? (
+            <View style={styles.activityIndicator}>
+              <LottieView
+                style={styles.viewLottie}
+                source={require('../../../../assets/lotties/WaveLoading.json')}
+                autoPlay
+                loop
+              />
+            </View>
+          ) : (
+            <FlatList
+              scrollEnabled
+              data={this.state.data}
+              renderItem={({ item }) => (
+                <TouchableOpacity>
+                  <ListItemActivity data={item} />
+                </TouchableOpacity>
+              )}
+              keyExtractor={(item) => item._id.toString()}
+            />
+          )}
         </View>
       </View>
     );
   }
 }
 
-const Styles = StyleSheet.create({
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   containerMain: {
     flexDirection: 'column',
     backgroundColor: Colors.background,
+  },
+  scrollView: {
+    flex: 1,
+    marginTop: screenWidth/41.1
+  },
+  title: {
+      fontSize: 26,
+      fontWeight: 'bold',
+      marginBottom: screenWidth/20.55,
+      marginLeft: screenWidth / 20.55,
+      opacity: 0.5
   },
   input: {
     width: screenWidth / 2.2,
@@ -183,6 +195,15 @@ const Styles = StyleSheet.create({
     paddingBottom: screenWidth / 41.1,
     justifyContent: 'center',
     backgroundColor: Colors.tintColor,
+  },
+  activityIndicator: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  viewLottie: {
+      width: screenWidth/3.6,
+      height: screenWidth/3.6,
   },
 });
 

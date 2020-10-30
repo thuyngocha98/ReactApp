@@ -53,6 +53,10 @@ const MainScreenGroupStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: Colors.white
-    }
+    },
+    viewLottie: {
+        width: screenWidth/3.6,
+        height: screenWidth/3.6,
+    },
 });
 export default MainScreenGroupStyles;
