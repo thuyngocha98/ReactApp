@@ -2,7 +2,6 @@ import { StatusBar, StyleSheet } from 'react-native';
 import { APPBAR_HEIGHT, screenWidth } from '../../../constants/Dimensions';
 import Colors from '../../../constants/Colors';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
-import { colors } from 'react-native-elements';
 
 const ChatGroupScreenStyles = StyleSheet.create({
   containerHeader: {
@@ -54,7 +53,6 @@ const ChatGroupScreenStyles = StyleSheet.create({
   },
   audioRecording: {
     flex: 0.3,
-    backgroundColor: 'red',
   },
   cancel: {
     flex: 1,
@@ -237,6 +235,54 @@ const ChatGroupScreenStyles = StyleSheet.create({
     marginBottom: screenWidth / 90,
     marginHorizontal: screenWidth / 45,
     fontSize: 8,
+  },
+  timingRecording: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  footerRecording: {
+    flexDirection: 'row',
+    paddingHorizontal: screenWidth / 30,
+    marginBottom: screenWidth / 40,
+  },
+  cancleRecording: {
+    backgroundColor: 'rgba(128,128,128,0.15)',
+    width: screenWidth / 2.2,
+    height: screenWidth / 9,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    marginRight: screenWidth / 60,
+  },
+  sendRecording: {
+    backgroundColor: Colors.tintColor,
+    width: screenWidth / 2.2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    marginLeft: screenWidth / 60,
+    marginRight: screenWidth / 60,
+  },
+  contentCancleRecording: {
+    fontSize: screenWidth / 25,
+    fontWeight: '600',
+  },
+  contentSendRecording: {
+    fontSize: screenWidth / 25,
+    color: Colors.white,
+    fontWeight: '600',
+  },
+  playbackContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: Colors.tintColor,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginLeft: screenWidth / 1.7,
+    borderRadius: screenWidth / 5,
+    height: screenWidth / 13,
+    paddingHorizontal: 10,
   },
 });
 export default ChatGroupScreenStyles;

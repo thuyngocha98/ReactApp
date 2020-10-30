@@ -4,6 +4,7 @@ import { KeyboardAwareView } from 'react-native-keyboard-aware-view';
 import {
   Text,
   TouchableOpacity,
+  TouchableHighlight,
   View,
   TextInput,
   YellowBox,
@@ -12,25 +13,28 @@ import {
   Keyboard,
   Platform,
   Alert,
+  Slider,
 } from 'react-native';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import Colors from '../../../constants/Colors';
 import ChatGroupScreenStyles from '../../../styles/GroupsStyles/ChatGroupScreenStypes/ChatGroupScreenStyles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons1 from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 import { BASEURL } from '../../../api/api';
 import SocketIOClient from 'socket.io-client';
 import { thumbnails } from '../../../constants/FunctionCommon';
 import { screenWidth, screenHeight } from '../../../constants/Dimensions';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
-import { Audio } from 'expo-av';
+import { Audio, AVPlaybackStatus } from 'expo-av';
 import * as Location from 'expo-location';
 import moment from 'moment';
+import * as FileSystem from 'expo-file-system';
 
 type Props = {
   _id?: any;
@@ -46,7 +50,19 @@ type States = {
   chatMessages?: any;
   imageMessage?: any;
   isRecording?: any;
-  recording?: any;
+  recording?: boolean;
+  recordingDuration?: any;
+  soundPosition?: any;
+  soundDuration: any;
+  muted?: boolean;
+  isLoading?: boolean;
+  shouldCorrectPitch?: boolean;
+  isPlaybackAllowed?: boolean;
+  typeAudio?: Number;
+  shouldPlay?: boolean;
+  isPlaying?: boolean;
+  volume?: any;
+  rate?: any;
   fileUrl?: any;
   heightScroll?: Number;
   y?: Number;
@@ -69,24 +85,42 @@ class ChatGroupScreen extends Component<Props, States> {
     header: null, //works with createStackNavigator but not with createBottomTabNavigator
   };
 
-  recording = null;
-  state = {
-    isMessage: false,
-    chatMessage: '',
-    chatMessages: [],
-    imageMessage: '',
-    isRecording: false,
-    recoding: null,
-    fileUrl: null,
-    heightScroll: 0,
-    y: 0,
-    isShareLocation: false,
-    isStopLocation: false,
-    isGetLocation: false,
-    location: null,
-    objectLocation: null,
-    currentLocation: null,
-  };
+  private audioRecording: Audio.Recording | null;
+  private sound: Audio.Sound | null;
+
+  constructor(props) {
+    super(props);
+    this.audioRecording = null;
+    this.sound = null;
+    this.state = {
+      isMessage: false,
+      chatMessage: '',
+      chatMessages: [],
+      imageMessage: '',
+      isRecording: false,
+      recording: false,
+      muted: false,
+      soundPosition: null,
+      soundDuration: null,
+      recordingDuration: null,
+      isPlaybackAllowed: false,
+      shouldPlay: false,
+      isPlaying: false,
+      isLoading: false,
+      shouldCorrectPitch: true,
+      volume: 1.0,
+      rate: 1.0,
+      fileUrl: null,
+      heightScroll: 0,
+      y: 0,
+      isShareLocation: false,
+      isStopLocation: false,
+      isGetLocation: false,
+      location: null,
+      objectLocation: null,
+      currentLocation: null,
+    };
+  }
 
   recordingOptions = {
     // android not currently in use, but parameters are required
@@ -294,32 +328,6 @@ class ChatGroupScreen extends Component<Props, States> {
     }
   };
 
-  audioMessage = async () => {
-    Keyboard.dismiss();
-    const { status } = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
-    if (status !== 'granted') {
-      alert('Sorry, we need audio recording permissions to make this work!');
-    } else {
-      this.setState({ isRecording: !this.state.isRecording });
-      // await Audio.setAudioModeAsync({
-      //   allowsRecordingIOS: true,
-      //   interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
-      //   playsInSilentModeIOS: true,
-      //   shouldDuckAndroid: true,
-      //   interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
-      //   playThroughEarpieceAndroid: true,
-      // });
-      // const recording = new Audio.Recording();
-      // try {
-      //   await recording.prepareToRecordAsync(this.recordingOptions);
-      //   await recording.startAsync();
-      // } catch (error) {
-      //   console.log(error);
-      //   this.stopRecording();
-      // }
-    }
-  };
-
   stopRecording = async () => {};
 
   customTime(time) {
@@ -338,9 +346,186 @@ class ChatGroupScreen extends Component<Props, States> {
     return hours + ':' + minutes + ' ' + tmp;
   }
 
-  audioRecording = null;
+  audioMessage = async () => {
+    Keyboard.dismiss();
+    const { status } = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
+    if (status !== 'granted') {
+      alert('Sorry, we need audio recording permissions to make this work!');
+    } else {
+      if (this.state.recording) {
+        await this.audioRecording.stopAndUnloadAsync();
+      }
+      this.setState({
+        recording: false,
+        isRecording: !this.state.isRecording,
+      });
+    }
+  };
+
+  private _getMMSSFromMillis(millis: number) {
+    const totalSeconds = millis / 1000;
+    const seconds = Math.floor(totalSeconds % 60);
+    const minutes = Math.floor(totalSeconds / 60);
+
+    const padWithZero = (number: number) => {
+      const string = number.toString();
+      if (number < 10) {
+        return '0' + string;
+      }
+      return string;
+    };
+    return padWithZero(minutes) + ':' + padWithZero(seconds);
+  }
+
+  private _getRecordingTimestamp() {
+    if (this.state.recordingDuration != null) {
+      return `${this._getMMSSFromMillis(this.state.recordingDuration)}`;
+    }
+    return `${this._getMMSSFromMillis(0)}`;
+  }
+
+  private _updateScreenForSoundStatus = (status: AVPlaybackStatus) => {
+    if (status.isLoaded) {
+      this.setState({
+        soundDuration: status.durationMillis ?? null,
+        soundPosition: status.positionMillis,
+        shouldPlay: status.shouldPlay,
+        isPlaying: status.isPlaying,
+        rate: status.rate,
+        muted: status.isMuted,
+        volume: status.volume,
+        shouldCorrectPitch: status.shouldCorrectPitch,
+      });
+    } else {
+      this.setState({
+        soundDuration: null,
+        soundPosition: null,
+      });
+    }
+  };
+
+  private _stopRecordingAndEnablePlayback = async () => {
+    const { sound, status } = await this.audioRecording.createNewLoadedSoundAsync(
+      {
+        isLooping: true,
+        isMuted: this.state.muted,
+        volume: this.state.volume,
+        rate: this.state.rate,
+        shouldCorrectPitch: this.state.shouldCorrectPitch,
+      },
+      this._updateScreenForSoundStatus,
+    );
+    this.sound = sound;
+  };
+
+  updateScreenForRecordingStatus = async (status: Audio.RecordingStatus) => {
+    if (status.isRecording) {
+      this.setState({
+        recordingDuration: status.durationMillis,
+      });
+    } else if (status.isDoneRecording) {
+      this.setState({
+        recordingDuration: null,
+      });
+      if (!this.state.recording) {
+        this._stopRecordingAndEnablePlayback();
+      }
+    } else {
+    }
+  };
+
+  private _stopPlaybackAndBeginRecording = async () => {
+    if (this.sound !== null) {
+      await this.sound.unloadAsync();
+      this.sound.setOnPlaybackStatusUpdate(null);
+      this.sound = null;
+    }
+    try {
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+        playsInSilentModeIOS: true,
+        shouldDuckAndroid: true,
+        interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+        playThroughEarpieceAndroid: false,
+        staysActiveInBackground: true,
+      });
+    } catch (error) {
+      console.log(error); // eslint-disable-line
+    }
+    if (this.audioRecording !== null) {
+      this.audioRecording.setOnRecordingStatusUpdate(null);
+      this.audioRecording = null;
+    }
+
+    const { isRecording } = this.state;
+    if (isRecording) {
+      await this.setState({
+        recording: !this.state.recording,
+      });
+      const recording = new Audio.Recording();
+      await recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
+      recording.setOnRecordingStatusUpdate(this.updateScreenForRecordingStatus);
+      this.audioRecording = recording;
+      await this.audioRecording.startAsync();
+    }
+  };
+
+  cancelRecording = async () => {
+    this.setState({
+      recording: !this.state.recording,
+    });
+    await this.audioRecording.stopAndUnloadAsync();
+    if (this.audioRecording !== null) {
+      this.audioRecording.setOnRecordingStatusUpdate(null);
+      this.audioRecording = null;
+    }
+  };
+
+  sendAudioRecording = async () => {
+    this.setState({
+      recording: !this.state.recording,
+    });
+    await this.audioRecording.stopAndUnloadAsync();
+    if (this.audioRecording !== null) {
+      this.audioRecording.setOnRecordingStatusUpdate(null);
+      this.audioRecording = null;
+    }
+
+    setTimeout(() => {
+      this.getDataAudioRecording();
+    }, 50);
+  };
+
+  getDataAudioRecording = async () => {
+    console.log(this.state.soundDuration);
+    // await fetch(`${BASEURL}/api/chat/save_image_chat`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data',
+    //   },
+    //   body: null,
+    // })
+    //   .then((response) => response.json())
+    //   .then((res) => {
+    //     this.socket.emit('image message', res.data);
+    //     this.setState({
+    //       imageMessage: '',
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+  };
+
+  playSlider = async () => {
+    this.setState({
+      isPlaybackAllowed: !this.state.isPlaybackAllowed,
+    });
+  };
 
   scroll: JSX.Element;
+
   _scrollToInput = () => {
     // Add a 'scroll' ref to your ScrollView
     this.scrollView.scrollToEnd({ animated: true });
@@ -412,16 +597,36 @@ class ChatGroupScreen extends Component<Props, States> {
     }
   };
 
-  directionMap = async () => {
+  directionMap = async (location) => {
     this.props.navigation.navigate('MainDirectionScreen', {
-      location: this.state.currentLocation,
+      currentLocation: this.state.currentLocation,
+      destinationLocation: location,
     });
+
+    let coordinates = [];
+    coordinates = coordinates.concat(this.state.currentLocation);
+    let directionLocation = {
+      latitude: location.latitude,
+      longitude: location.longtitude,
+    };
+    coordinates = coordinates.concat(directionLocation);
+    const data = JSON.stringify(coordinates);
+    await fetch(`${BASEURL}/api/placeLocation/directions_between_two_point`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: data,
+    })
+      .then((response) => response.json())
+      .then(async (res) => {})
+      .catch((error) => {
+        alert(error);
+      });
   };
 
   render() {
-    console.log(this.state.currentLocation);
-    const heightY = this.state.isRecording ? this.state.y + 50 : 0;
-    const hScroll = this.state.heightScroll - heightY;
     const lengthMessage = this.state.chatMessage.length;
     const { navigation } = this.props;
     const messages = this.state.chatMessages.map((message, i) =>
@@ -463,8 +668,11 @@ class ChatGroupScreen extends Component<Props, States> {
                     </View>
                   </View>
                   <View>
-                    <TouchableOpacity style={ChatGroupScreenStyles.seeLocation} onPress={this.directionMap}>
-                      <Text>Xem vị trí</Text>
+                    <TouchableOpacity
+                      style={ChatGroupScreenStyles.seeLocation}
+                      onPress={() => this.directionMap(message.location)}
+                    >
+                      <Text>Xem vị trí </Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -478,7 +686,20 @@ class ChatGroupScreen extends Component<Props, States> {
               )}
             </View>
           ) : (
-            <View></View>
+            <View style={ChatGroupScreenStyles.playbackContainer}>
+              <TouchableOpacity onPress={this.playSlider}>
+                {this.state.isPlaybackAllowed ? (
+                  <Fontisto name={'pause'} color={Colors.white} size={15} />
+                ) : (
+                  <View style={{ marginLeft: 2 }}>
+                    <FontAwesome5 name={'caret-right'} color={Colors.white} size={30} />
+                  </View>
+                )}
+              </TouchableOpacity>
+              <View>
+                <Text style={{ color: Colors.white }}>1:23</Text>
+              </View>
+            </View>
           )}
         </View>
       ) : (
@@ -529,8 +750,11 @@ class ChatGroupScreen extends Component<Props, States> {
                         </View>
                       </View>
                       <View>
-                        <TouchableOpacity style={ChatGroupScreenStyles.seeLocation} onPress={this.directionMap}>
-                          <Text>Xem vị trí</Text>
+                        <TouchableOpacity
+                          style={ChatGroupScreenStyles.seeLocation}
+                          onPress={() => this.directionMap(message.location)}
+                        >
+                          <Text>Xem vị trí </Text>
                         </TouchableOpacity>
                       </View>
                     </View>
@@ -735,19 +959,37 @@ class ChatGroupScreen extends Component<Props, States> {
             </View>
           </KeyboardAwareView>
         )}
-        {/* {this.state.isRecording ? (
-          <View
-            style={ChatGroupScreenStyles.audioRecording}
-            onLayout={(event) => {
-              this.find_dimesions1(event.nativeEvent.layout);
-            }}
-          >
-            <View style={{ flex: 1 }}></View>
-            <TouchableOpacity style={ChatGroupScreenStyles.bgAudio}>
-              <Text style={ChatGroupScreenStyles.textAudio}>Ghi âm</Text>
-            </TouchableOpacity>
+        {this.state.isRecording ? (
+          <View style={ChatGroupScreenStyles.audioRecording}>
+            {this.state.recording === false ? (
+              <View style={{ flex: 1 }}>
+                <View style={{ flex: 1 }}></View>
+                <View>
+                  <TouchableOpacity style={ChatGroupScreenStyles.bgAudio} onPress={this._stopPlaybackAndBeginRecording}>
+                    <Text style={ChatGroupScreenStyles.textAudio}>Ghi âm</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ) : (
+              <View style={{ flex: 1 }}>
+                <View style={ChatGroupScreenStyles.timingRecording}>
+                  <Text style={{ alignContent: 'center', fontSize: screenWidth / 8, marginTop: screenWidth / 50 }}>
+                    {this._getRecordingTimestamp()}
+                  </Text>
+                </View>
+                <View style={{ flex: 1 }} />
+                <View style={ChatGroupScreenStyles.footerRecording}>
+                  <TouchableOpacity style={ChatGroupScreenStyles.cancleRecording} onPress={this.cancelRecording}>
+                    <Text style={ChatGroupScreenStyles.contentCancleRecording}>Hủy</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={ChatGroupScreenStyles.sendRecording} onPress={this.sendAudioRecording}>
+                    <Text style={ChatGroupScreenStyles.contentSendRecording}>Gửi</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
           </View>
-        ) : null} */}
+        ) : null}
       </View>
     );
   }
