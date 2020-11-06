@@ -283,6 +283,17 @@ const ChatGroupScreenStyles = StyleSheet.create({
     borderRadius: screenWidth / 5,
     height: screenWidth / 13,
     paddingHorizontal: 10,
+    marginBottom: 5,
+  },
+  playbackContainerReceived: {
+    backgroundColor: '#F1F0F0',
+    flexDirection: 'row',
+    width: screenWidth / 3.5,
+    height: screenWidth / 13.5,
+    borderRadius: screenWidth / 4,
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    alignItems: 'center',
   },
 });
 export default ChatGroupScreenStyles;

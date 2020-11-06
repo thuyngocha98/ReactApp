@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker, AnimatedRegion, Polyline } from 'react-native-maps';
-import { StyleSheet, View, Platform, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Platform, SafeAreaView, Text, Button } from 'react-native';
 import { screenWidth, screenHeight } from '../../constants/Dimensions';
 import Colors from '../../constants/Colors';
-import { BASEURL } from '../../api/api';
-import * as Location from 'expo-location';
 import haversine from 'haversine';
+
+import { OpenMapDirections } from 'react-native-navigation-directions';
 
 type Props = {
   navigation?: any;
@@ -20,7 +20,7 @@ type States = {
   coordinate?: any;
 };
 
-class MainDirectionScreen extends Component<Props, States> {
+class MainDirectionScreen extends React.Component<Props, States> {
   static navigationOptions = {
     header: null,
   };
@@ -120,52 +120,90 @@ class MainDirectionScreen extends Component<Props, States> {
     longitudeDelta: this.LONGITUDE_DELTA,
   });
 
+  _callShowDirections = () => {
+    const startPoint = {
+      longitude: 106.8008832,
+      latitude: 10.8658039,
+    };
+
+    const endPoint = {
+      longitude: 106.7795138,
+      latitude: 10.8830067,
+    };
+
+    const transportPlan = 'w';
+
+    OpenMapDirections(startPoint, endPoint, transportPlan).then((res) => {
+      console.log(res);
+    });
+  };
+
   render() {
-    const length = this.state.routeCoordinates.length;
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <View style={styles.container}>
-          <MapView
-            style={styles.map}
-            showsUserLocation={true}
-            followsUserLocation={true}
-            loadingEnabled={true}
-            region={this.getMapRegion()}
-            provider={PROVIDER_GOOGLE}
-          >
-            {length > 1 && (
-              <Polyline coordinates={this.state.routeCoordinates} strokeColor={Colors.tintColor} strokeWidth={4} />
-            )}
-            {length > 1 && (
-              <Marker.Animated
-                ref={(marker) => {
-                  this.marker = marker;
-                }}
-                coordinate={this.state.coordinate}
-              />
-            )}
-            {length > 1 && (
-              <Marker
-                coordinate={{
-                  latitude: this.destinationLocation.latitude,
-                  longitude: this.destinationLocation.longtitude,
-                }}
-              />
-            )}
-          </MapView>
-        </View>
-      </SafeAreaView>
+      <View style={styles.container}>
+        <Text>Show direction between two random points!</Text>
+        <Button
+          onPress={() => {
+            this._callShowDirections();
+          }}
+          title="Open map"
+          color="#841584"
+        />
+      </View>
+      // <SafeAreaView style={{ flex: 1 }}>
+      //   <View style={styles.container}>
+      //     <MapView
+      //       style={styles.map}
+      //       showsUserLocation={true}
+      //       followsUserLocation={true}
+      //       loadingEnabled={true}
+      //       region={this.getMapRegion()}
+      //       provider={PROVIDER_GOOGLE}
+      //     >
+      //       {length > 1 && (
+      //         <Polyline coordinates={this.state.routeCoordinates} strokeColor={'rgba(128,0,128,0.5)'} strokeWidth={2} />
+      //       )}
+      //       {length > 1 && (
+      //         <Marker.Animated
+      //           ref={(marker) => {
+      //             this.marker = marker;
+      //           }}
+      //           coordinate={this.state.coordinate}
+      //           pinColor={Colors.tintColor}
+      //           anchor={{ x: 0.5, y: 1 }}
+      //         />
+      //       )}
+      //       {length > 1 && (
+      //         <Marker
+      //           coordinate={{
+      //             latitude: this.destinationLocation.latitude,
+      //             longitude: this.destinationLocation.longtitude,
+      //           }}
+      //           anchor={{ x: 0.5, y: 1 }}
+      //         ></Marker>
+      //       )}
+      //     </MapView>
+      //   </View>
+      // </SafeAreaView>
     );
   }
 }
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+    flex: 1,
   },
   map: {
     ...StyleSheet.absoluteFillObject,
+  },
+  backgroundMarker: {
+    width: screenWidth / 21,
+    height: screenWidth / 21,
+    borderRadius: screenWidth / 30,
+    backgroundColor: Colors.orangered,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: Colors.white,
+    borderWidth: 2,
   },
 });
 
