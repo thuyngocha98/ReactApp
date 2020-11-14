@@ -1,3 +1,5 @@
+import { BASEURL } from '../api/api';
+
 export function number2money(number){
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
@@ -14,3 +16,9 @@ export const thumbnails = {
 export function capitalize_Words(str) {
     return str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
 }
+
+export const thumbnail = Url => (
+    Url.length > 2
+      ? { uri: `${BASEURL}/images/avatars/${Url}` }
+      : thumbnails['avatar' + Url]
+)

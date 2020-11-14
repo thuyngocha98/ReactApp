@@ -1,5 +1,5 @@
 import { StatusBar, StyleSheet } from 'react-native';
-import { APPBAR_HEIGHT, screenWidth } from '../../../constants/Dimensions';
+import { APPBAR_HEIGHT, screenHeight, screenWidth } from '../../../constants/Dimensions';
 import Colors from '../../../constants/Colors';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 

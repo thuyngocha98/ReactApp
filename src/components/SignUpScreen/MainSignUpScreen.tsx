@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TextInput,
-  StyleSheet,
   StatusBar,
   Image,
   TouchableOpacity,
@@ -28,6 +27,9 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Colors from '../../constants/Colors';
 import { screenWidth } from '../../constants/Dimensions';
 import DialogBox from 'react-native-dialogbox';
+import { Notifications } from 'expo';
+import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants';
 
 type Props = {
   navigation?: any;
@@ -42,6 +44,7 @@ class MainSignUpScreen extends Component<Props> {
     email: '',
     password: '',
     repeatPassword: '',
+    tokenNotification: ''
   };
   scroll: any;
   emailTextInput: TextInput;
@@ -76,7 +79,36 @@ class MainSignUpScreen extends Component<Props> {
     return re.test(String(email).toLowerCase());
   }
 
+  registerForPushNotificationsAsync = async () => {
+    if (Constants.isDevice) {
+        const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+            finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+            alert('Failed to get push token for push notification!');
+            return;
+        }
+        let token = await Notifications.getExpoPushTokenAsync();
+        this.setState({tokenNotification: token});
+    } else {
+        alert('Must use physical device for Push Notifications');
+    }
+
+    if (Platform.OS === 'android') {
+        Notifications.createChannelAndroidAsync('default', {
+        name: 'default',
+        sound: true,
+        priority: 'max',
+        vibrate: [0, 250, 250, 250],
+        });
+    }
+  };
+
   signUp = async () => {
+    await this.registerForPushNotificationsAsync();
     if (this.state.name.length < 2) {
       this.handleOnPress('Error!', ['Name invalid!', 'Name must be at least 2 characters.']);
     } else if (!this.validateEmail(this.state.email)) {
@@ -94,6 +126,7 @@ class MainSignUpScreen extends Component<Props> {
           email: this.state.email,
           password: this.state.password,
           isCustom: false,
+          token_notification: this.state.tokenNotification,
         };
         const json = JSON.stringify(data);
         fetch(`${BASEURL}/api/user/insert_a_user`, {

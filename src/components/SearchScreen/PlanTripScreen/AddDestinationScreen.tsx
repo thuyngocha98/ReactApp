@@ -80,12 +80,12 @@ class AddDestinationInTripScreen extends Component<Props, State> {
                         >
                             <Ionicons name='md-arrow-back' size={28} color={Colors.white} />
                         </TouchableOpacity>
-                        <Text style={styles.headerTitle}>Select Destination</Text>
+                        <Text style={styles.headerTitle}>Chọn điểm đến</Text>
                         <TouchableOpacity
                             style={styles.headerRight}
                             onPress={() => this.selectedDestination()}
                         >
-                            <Text style={styles.textHeaderRight}>Done</Text>
+                            <Text style={styles.textHeaderRight}>Xong</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

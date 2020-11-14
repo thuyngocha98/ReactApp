@@ -1,20 +1,47 @@
 import React, { PureComponent } from 'react'
-import { View, StyleSheet, Text, Image } from 'react-native'
-import { screenWidth } from '../../../constants/Dimensions';
+import { View, StyleSheet, Text, Image, FlatList, TouchableOpacity, Platform, UIManager, LayoutAnimation } from 'react-native'
+import { screenHeight, screenWidth } from '../../../constants/Dimensions';
 import Colors from '../../../constants/Colors';
 import { BASEURL } from '../../../api/api';
 
 
 type Props = {
+    navigation?: any,
     item?: {
         title?: string,
         desc?: string,
         url?: string,
-        resultSearch?: string,
+        resultSearch?: any[]
     }
 }
 
-export default class ListItems extends PureComponent<Props>{
+type States = {
+    data: any[],
+}
+// Check platform android set flag animation layout
+if (
+    Platform.OS === 'android' &&
+    UIManager.setLayoutAnimationEnabledExperimental
+  ) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+export default class ListItems extends PureComponent<Props, States>{
+    state= {
+        data: this.props.item?.resultSearch ? this.props.item?.resultSearch.slice(0,2) : [],
+    }
+
+    onPressMore = () => {
+        if(this.props.item.resultSearch.length == this.state.data.length){
+            Platform.OS === 'android' &&
+                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+            this.setState({data: this.props.item?.resultSearch.slice(0,2)})
+        }else{
+            Platform.OS === 'android' &&
+                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+            this.setState({data: this.props.item.resultSearch})
+        }
+    }
+
     render() {
         const { item } = this.props;
         return (
@@ -36,9 +63,36 @@ export default class ListItems extends PureComponent<Props>{
                     </View>
                 </View>
                 {item?.resultSearch && (
-                    <Text style={styles.txtResultSearch} numberOfLines={1}>
-                        {item.resultSearch}
-                    </Text>
+                   item.resultSearch.length > 0 && (
+                   <View style={styles.listSearch}>
+                        <FlatList 
+                            data={this.state.data}
+                            renderItem={({item}) => (
+                                <TouchableOpacity 
+                                onPress={() => this.props.navigation.navigate('SearchDetailScreen', {data: this.props.item, next: item})}
+                                style={styles.viewItem}>
+                                    <View style={styles.styleImageListSearch}>
+                                        <Image
+                                            style={styles.photoListSearch}
+                                            source={{ uri: BASEURL+"/images/main/"+ item.url }}
+                                        />
+                                    </View>
+                                    <Text numberOfLines={1} style={styles.txtItemSearch}>{item.title}</Text>
+                                </TouchableOpacity>
+                            )}
+                            keyExtractor={item => item._id}
+                        />
+                        {this.props.item?.resultSearch.length - 2 > 0 && (
+                        <TouchableOpacity
+                        onPress={this.onPressMore}
+                        style={styles.viewTouchMore}>
+                            <Text style={styles.txtMore}>
+                                {this.state.data.length == this.props.item.resultSearch.length ? "Ẩn bớt" : "Xem thêm"}
+                            </Text>
+                        </TouchableOpacity>
+                        )}
+                    </View>
+                   )
                 )}
             </View>
         );
@@ -49,7 +103,9 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         marginHorizontal: screenWidth/24,
-        padding: screenWidth / 36,
+        paddingHorizontal: screenWidth / 36,
+        paddingTop: screenHeight/56,
+        paddingBottom: screenHeight/108,
         backgroundColor: Colors.white,
         marginTop: screenWidth / 36,
         borderRadius: screenWidth / 45,
@@ -58,7 +114,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: screenWidth / 72,
+        marginBottom: screenHeight/108,
     },
     styleImage: {
         borderTopLeftRadius: screenWidth/82.2,
@@ -90,9 +146,42 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
         color: Colors.gray
     },
-    txtResultSearch: {
-        fontSize: 12,
-        color: Colors.tintColor,
-        fontStyle: 'italic'
+    listSearch: {
+        marginLeft: screenWidth/5.48,
+    },
+    viewItem: {
+        paddingVertical: screenHeight/108,
+        borderTopWidth: 1,
+        borderTopColor: Colors.lavender,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    styleImageListSearch: {
+        borderTopLeftRadius: screenWidth/82.2,
+        borderBottomLeftRadius: screenWidth/82.2,
+        borderTopRightRadius: screenWidth/82.2,
+        borderBottomRightRadius: screenWidth/82.2,
+        overflow: 'hidden',
+    },
+    photoListSearch: {
+        width: screenWidth/5.48,
+        height: screenWidth/9.68,
+        resizeMode: 'cover',
+    },
+    txtItemSearch: {
+        flex: 1,
+        marginLeft: '5%',
+        fontSize: 13,
+        color: Colors.gray
+    },
+    txtMore: {
+        textAlign: 'center',
+        marginTop: screenHeight/108,
+        fontStyle: 'italic',
+        fontSize: 13,
+        color: "blue"
+    },
+    viewTouchMore: {
+        paddingBottom: screenHeight/108,
     }
 });

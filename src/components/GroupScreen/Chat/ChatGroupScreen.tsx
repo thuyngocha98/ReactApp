@@ -41,7 +41,9 @@ type Props = {
   _id?: any;
   navigation?: any;
   nameGroup?: any;
-  user?: any[];
+  user?: {
+    _id?: string,
+  };
 };
 
 type States = {
@@ -667,6 +669,25 @@ class ChatGroupScreen extends Component<Props, States> {
         isGetLocation: !this.state.isGetLocation,
         isShareLocation: !this.state.isShareLocation,
       });
+      let currentLocation = await Location.getCurrentPositionAsync({});
+      let data = {
+        userId: this.props.user._id,
+        latitude: currentLocation.coords.latitude,
+        longitude: currentLocation.coords.longitude,
+      }
+      await fetch(`${BASEURL}/api/locationUser/create_or_update_location_user`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then(async (res) => {})
+        .catch((error) => {
+          alert(error);
+        });
     }
   };
 
@@ -701,37 +722,24 @@ class ChatGroupScreen extends Component<Props, States> {
     }
   };
 
-  directionMap = async (location) => {
-    console.log(location);
+  directionMap = async () => {
     let { status } = await Location.requestPermissionsAsync();
     if (status !== 'granted') {
       Alert.alert('Permission to access location was denied');
     } else {
-      let locationUser = await Location.getCurrentPositionAsync();
-      let currentLocation = await {
-        latitude: locationUser.coords.latitude,
-        longitude: locationUser.coords.longitude,
-      };
-      this.props.navigation.navigate('MainDirectionScreen', {
-        currentLocation: currentLocation,
-        destinationLocation: location,
-      });
-
-      let coordinates = [];
-      coordinates = coordinates.concat(this.state.currentLocation);
-      let directionLocation = {
-        latitude: location.latitude,
-        longitude: location.longtitude,
-      };
-      coordinates = coordinates.concat(directionLocation);
-      const data = JSON.stringify(coordinates);
-      await fetch(`${BASEURL}/api/placeLocation/directions_between_two_point`, {
+      let currentLocation = await Location.getCurrentPositionAsync({});
+      let data = {
+        userId: this.props.user._id,
+        latitude: currentLocation.coords.latitude,
+        longitude: currentLocation.coords.longitude,
+      }
+      await fetch(`${BASEURL}/api/locationUser/create_or_update_location_user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
-        body: data,
+        body: JSON.stringify(data),
       })
         .then((response) => response.json())
         .then(async (res) => {})
@@ -739,6 +747,7 @@ class ChatGroupScreen extends Component<Props, States> {
           alert(error);
         });
     }
+    this.props.navigation.navigate('MainDirectionScreen', {tripId: this.tripId});
   };
   _callShowDirections = async (location) => {
     let { status } = await Location.requestPermissionsAsync();
@@ -1065,11 +1074,18 @@ class ChatGroupScreen extends Component<Props, States> {
                     </Text>
                   </TouchableOpacity>
                 ) : (
-                  <TouchableOpacity style={ChatGroupScreenStyles.shareLocation} onPress={this.isStartShareLocation}>
-                    <Text style={{ color: Colors.white, fontSize: 18, fontWeight: 'bold', opacity: 0.9 }}>
-                      Start share live location
-                    </Text>
-                  </TouchableOpacity>
+                  <View>
+                    <TouchableOpacity style={ChatGroupScreenStyles.shareLocation} onPress={this.isStartShareLocation}>
+                      <Text style={{ color: Colors.white, fontSize: 18, fontWeight: 'bold', opacity: 0.9 }}>
+                        Start share live location
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={ChatGroupScreenStyles.shareLocation} onPress={this.directionMap}>
+                      <Text style={{ color: Colors.white, fontSize: 18, fontWeight: 'bold', opacity: 0.9 }}>
+                        Xem vị trí các thành viên
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 )}
               </View>
             ) : null}

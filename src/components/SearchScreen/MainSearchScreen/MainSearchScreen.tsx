@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { View, StyleSheet, StatusBar, FlatList, TouchableOpacity, Platform } from 'react-native';
 import Colors from '../../../constants/Colors';
 import { screenWidth } from '../../../constants/Dimensions';
-// @ts-ignore
 import { SearchBar } from 'react-native-elements';
 import ListItems from './Listitem';
 import { BASEURL } from '../../../api/api';
@@ -159,7 +158,7 @@ class MainSearchScreen extends Component<Props, States> {
                                         this.props.navigation.navigate("SearchDetailScreen", { data: item });
                                     }}
                                 >
-                                    <ListItems item={item}/>
+                                    <ListItems navigation={this.props.navigation} item={item} />
                                 </TouchableOpacity>
                             )}
                             keyExtractor={item => item._id.toString()}

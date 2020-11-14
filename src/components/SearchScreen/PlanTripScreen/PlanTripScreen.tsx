@@ -32,7 +32,10 @@ type Props = {
 }
 
 type States = {
-    data?: any[],
+    data?: {
+        location?: any[],
+        data?: any[],
+    },
     loading?: boolean,
     destination?: any[]
     modalVisible?: boolean,
@@ -54,7 +57,10 @@ class PlanTripScreen extends Component<Props, States> {
     };
 
     state = {
-        data: [],
+        data: {
+            location: null,
+            data: null
+        },
         loading: true,
         destination: [],
         modalVisible: false,
@@ -359,8 +365,8 @@ class PlanTripScreen extends Component<Props, States> {
                 <ModalNotification 
                 type='success'
                 modalVisible={this.state.modalVisibleNotification}
-                title='Save success'
-                description="Congrats! Your plan save successful done"
+                title='Lưu thành công'
+                description="Chúc mừng! Lịch trình của bạn đã được lưu thành công."
                 txtButton="Ok"
                 onPress={this.onDoneSave}
                 />
@@ -374,13 +380,13 @@ class PlanTripScreen extends Component<Props, States> {
                 >
                     <View style={styles.viewModal}>
                         <Text style={styles.txtTitleModal}>
-                            {`Are you sure you want to remove ${this.state.nameDelete} ?`}
+                            {`Bạn có chắc muốn xóa ${this.state.nameDelete} ?`}
                         </Text>
                         <View style={styles.viewBtnModal}>
                             <TouchableOpacity
                              onPress={this.onToggleModal}
                              style={[styles.btnModal,{borderRightWidth: 1,borderRightColor: Colors.lavender}]}>
-                                <Text style={styles.txtBtnModal}>Cancel</Text>
+                                <Text style={styles.txtBtnModal}>Hủy bỏ</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                              onPress={this.onRemoveDestination}
@@ -400,17 +406,17 @@ class PlanTripScreen extends Component<Props, States> {
                 >
                     <View style={styles.viewModal}>
                         <Text style={styles.txtTitleModal}>
-                            {`Select this place as: `}
+                            {`Chọn vị trí này là: `}
                         </Text>
                         <TouchableOpacity 
                          onPress={() => this.onPressSelectOption('start')} 
                          style={styles.viewBtnModalOption}>
-                            <Text style={styles.txtModalOption}>Start place</Text>
+                            <Text style={styles.txtModalOption}>Điểm bắt đầu</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                          onPress={() => this.onPressSelectOption('end')} 
                          style={styles.viewBtnModalOption}>
-                            <Text style={styles.txtModalOption}>End place</Text>
+                            <Text style={styles.txtModalOption}>Điểm kết thúc</Text>
                         </TouchableOpacity>
                     </View>
                 </Modal>
@@ -424,13 +430,13 @@ class PlanTripScreen extends Component<Props, States> {
                 >
                     <View style={styles.viewModalSave}>
                         <Text style={styles.txtTitleModalSave}>
-                            Name of the plan
+                            Tên của lịch trình
                         </Text>
                         <TextInput
                             autoFocus
                             autoCorrect={false}
                             maxLength={50}
-                            placeholder="Enter name of the plan"
+                            placeholder="Nhập tên lịch trình"
                             style={styles.input}
                             onChangeText={text => this.setState({namePlan: text})}
                             value={this.state.namePlan}
@@ -443,7 +449,7 @@ class PlanTripScreen extends Component<Props, States> {
                             this.state.dataTrip &&
                             <View style={styles.selectTrip}>
                                 <Text style={styles.txtTitleModalSave}>
-                                    Select a trip
+                                    Chọn chuyến đi
                                 </Text>
                                 <ScrollView
                                  keyboardShouldPersistTaps="handled"
@@ -468,12 +474,12 @@ class PlanTripScreen extends Component<Props, States> {
                             <TouchableOpacity
                              onPress={this.onCancelSave}
                              style={[styles.btnModal,{borderRightWidth: 1,borderRightColor: Colors.lavender}]}>
-                                <Text style={styles.txtBtnModal}>Cancel</Text>
+                                <Text style={styles.txtBtnModal}>Hủy bỏ</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                              onPress={this.onCreatePlan}
                              style={styles.btnModal}>
-                                <Text style={styles.txtBtnModal}>Save</Text>
+                                <Text style={styles.txtBtnModal}>Lưu</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -489,22 +495,22 @@ class PlanTripScreen extends Component<Props, States> {
                         >
                             <Ionicons name='md-arrow-back' size={28} color={Colors.white} />
                         </TouchableOpacity>
-                        <Text style={styles.headerTitle}>Planning of travel</Text>
+                        <Text style={styles.headerTitle}>Lịch trình chuyến đi</Text>
                         <TouchableOpacity
                             style={styles.headerRight}
                             activeOpacity={0.5}
                             onPress={this.onPressSave}
                         >
-                            <Text style={styles.textHeaderRight}>Save</Text>
+                            <Text style={styles.textHeaderRight}>Lưu</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
                 <View style={styles.viewTitle}>
                     <View>
-                        <Text style={styles.txtTitle}>Detail plan</Text>
+                        <Text style={styles.txtTitle}>Chi tiết lịch trình</Text>
                         <View style={styles.underTitle} />
                     </View>
-                    <TouchableOpacity
+                    {this.state.data?.location && <TouchableOpacity
                      onPress={() => this.props.navigation.navigate('MapPlanScreen', {data: this.state.data})}
                      style={styles.viewMap}>
                          {!this.state.loading ? (
@@ -517,7 +523,7 @@ class PlanTripScreen extends Component<Props, States> {
                          ) : (
                              <View style={styles.lottieMap} />
                          )} 
-                    </TouchableOpacity>
+                    </TouchableOpacity>}
                 </View>
                 <ScrollView style={styles.viewContent}>
                     {this.state.loading ? (
@@ -558,7 +564,7 @@ class PlanTripScreen extends Component<Props, States> {
                                     this.props.navigation.navigate('AddDestinationScreen',{data: data});
                                 }}
                                 style={styles.viewBtn}>
-                                    <Text style={styles.txtBtn}>Add Destination</Text>
+                                    <Text style={styles.txtBtn}>Thêm điểm đến</Text>
                                 </TouchableOpacity>
                             )}
                         </>

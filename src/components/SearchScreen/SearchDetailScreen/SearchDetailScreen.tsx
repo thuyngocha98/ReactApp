@@ -35,6 +35,22 @@ class SearchDetailScreen extends Component<Props, States> {
         loading: false
     }
 
+    static getDerivedStateFromProps(props, state) {
+        if(props.navigation.state.params?.next){
+            return {
+                next: props.navigation.state.params.next
+            }
+        }
+        return null;
+    }
+
+    componentDidUpdate(prevProps) {
+        if(this.props.navigation.state.params.next !== prevProps.next){
+            const next = this.props.navigation.getParam('next', '');
+            this.props.navigation.navigate('DescriptionLocationScreen', {data: next})
+        }
+    }
+
     componentDidMount() {
         const data = this.props.navigation.getParam('data', '');
         this.callApiGetDetail(data.code);
@@ -73,12 +89,12 @@ class SearchDetailScreen extends Component<Props, States> {
                 />
             </View>
             <View style={styles.viewTitle}>
-                <Text style={styles.textRecommend}>Introduce</Text>
+                <Text style={styles.textRecommend}>Giới thiệu</Text>
                 <Text style={styles.textDesc}>{data.desc}...</Text>
             </View>
             <View style={styles.underLine} />
             <View style={{ marginHorizontal: screenWidth / 20.55, marginVertical: screenWidth / 41.1, }}>
-                <Text style={styles.textRecommend}>Top sights</Text>
+                <Text style={styles.textRecommend}>Thắng cảnh hàng đầu</Text>
             </View>
         </View>
     )
@@ -110,7 +126,7 @@ class SearchDetailScreen extends Component<Props, States> {
                                 });
                             }}
                         >
-                            <Text style={styles.textHeaderLeft}>Plan trip</Text>
+                            <Text style={styles.textHeaderLeft}>Lịch trình</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

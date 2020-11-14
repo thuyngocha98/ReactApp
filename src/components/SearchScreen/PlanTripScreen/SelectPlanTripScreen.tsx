@@ -166,12 +166,12 @@ class SelectPlanTripScreen extends Component<Props, States> {
                         >
                             <Ionicons name='md-arrow-back' size={28} color={Colors.white} />
                         </TouchableOpacity>
-                        <Text style={styles.headerTitle}>Planning of travel</Text>
+                        <Text style={styles.headerTitle}>Lên lịch trình chuyến đi</Text>
                         <View style={styles.headerRight} />
                     </View>
                 </View>
                 <View style={styles.viewContent}>
-                    <Text style={styles.txtRecommend}>Recommendations</Text>
+                    <Text style={styles.txtRecommend}>Lịch trình gợi ý</Text>
                     <TouchableOpacity
                      onPress={() => this.props.navigation.navigate('PlanTripScreen', {data: data, code: code})}
                      style={styles.viewPlan}>
@@ -191,7 +191,7 @@ class SelectPlanTripScreen extends Component<Props, States> {
                 ) : (
                     this.state.data.length ?
                     <View style={styles.viewList}>
-                        <Text style={styles.txtRecommend}>Your plan</Text>
+                        <Text style={styles.txtRecommend}>Lịch trình của bạn</Text>
                         <FlatList 
                          data={this.state.data}
                          renderItem={({item}) => (
