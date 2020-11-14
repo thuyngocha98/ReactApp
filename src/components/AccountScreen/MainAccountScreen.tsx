@@ -18,10 +18,10 @@ function mapStateToProps(state) {
 type Props = {
   navigation?: any;
   user?: {
-    avatar: any,
-    name: string,
-    email: string,
-    _id: string,
+    avatar: any;
+    name: string;
+    email: string;
+    _id: string;
   };
 };
 
@@ -32,8 +32,8 @@ class MainAccountScreen extends Component<Props> {
     //set barstyle of statusbar
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('light-content');
-      if(Platform.OS == 'android'){
-        StatusBar.setBackgroundColor("transparent");
+      if (Platform.OS == 'android') {
+        StatusBar.setBackgroundColor('transparent');
         StatusBar.setTranslucent(true);
       }
     });
@@ -78,7 +78,7 @@ class MainAccountScreen extends Component<Props> {
                 this.props.navigation.navigate('AudioRecordingScreen');
               }}
             >
-              Overview
+              Tổng quan
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -95,15 +95,15 @@ class MainAccountScreen extends Component<Props> {
             }}
           >
             <EvilIcons name={'user'} size={30} color={'gray'} />
-            <Text style={styles.textSetting}>Account Setting</Text>
+            <Text style={styles.textSetting}>Chỉnh sửa thông tin</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.help} onPress={() => {}}>
             <MaterialCommunityIcons name={'flag-outline'} size={25} color={'gray'} />
-            <Text style={styles.textHelp}>Help</Text>
+            <Text style={styles.textHelp}>Trợ giúp</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.signOut} onPress={this.signOut}>
             <AntDesign name={'logout'} size={20} color={'gray'} style={{ marginLeft: screenWidth / 137 }} />
-            <Text style={styles.textSignOut}>Sign Out</Text>
+            <Text style={styles.textSignOut}>Đăng xuất</Text>
           </TouchableOpacity>
         </View>
       </View>

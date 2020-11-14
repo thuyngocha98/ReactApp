@@ -68,25 +68,25 @@ const SearchStack = createStackNavigator({
     screen: AddDestinationScreen,
   },
   MapPlanScreen: {
-    screen: MapPlanScreen
+    screen: MapPlanScreen,
   },
   DescriptionLocationScreen: {
-    screen: DescriptionLocationScreen
+    screen: DescriptionLocationScreen,
   },
   SelectPlanTripScreen: {
-    screen: SelectPlanTripScreen
-  }
+    screen: SelectPlanTripScreen,
+  },
 });
 
 SearchStack.navigationOptions = ({ navigation }) => {
   let tabBarVisible = true;
-  if(navigation.state.index > 0){
+  if (navigation.state.index > 0) {
     tabBarVisible = false;
   }
 
   return {
     tabBarVisible,
-    tabBarLabel: 'Search',
+    tabBarLabel: 'Tìm Kiếm',
     tabBarIcon: ({ focused }) => (
       <Octicons
         focused={focused}
@@ -192,7 +192,7 @@ const GroupStack = createStackNavigator(
       screen: AddDestinationInTripScreen,
     },
     DescriptionLocationInTripScreen: {
-      screen: DescriptionLocationInTripScreen
+      screen: DescriptionLocationInTripScreen,
     },
   },
   {
@@ -203,12 +203,12 @@ const GroupStack = createStackNavigator(
 
 GroupStack.navigationOptions = ({ navigation }) => {
   let tabBarVisible;
-  if(navigation.state.index > 0){
+  if (navigation.state.index > 0) {
     tabBarVisible = false;
   }
   return {
     tabBarVisible,
-    tabBarLabel: 'Groups',
+    tabBarLabel: 'Nhóm Du Lịch',
     tabBarIcon: ({ focused }) => (
       <MaterialCommunityIcons
         focused={focused}
@@ -275,7 +275,7 @@ const ExpenseStack = createStackNavigator(
 
 ExpenseStack.navigationOptions = ({ navigation }) => {
   let tabBarVisible = true;
-  if(navigation.state.index > 0){
+  if (navigation.state.index > 0) {
     tabBarVisible = false;
   }
   return {
@@ -315,7 +315,7 @@ const ActivityStack = createStackNavigator(
 );
 
 ActivityStack.navigationOptions = {
-  tabBarLabel: 'Activity',
+  tabBarLabel: 'Hoạt Động',
   tabBarIcon: ({ focused }) => (
     <Feather
       focused={focused}
@@ -351,12 +351,12 @@ const AccountStack = createStackNavigator(
 
 AccountStack.navigationOptions = ({ navigation }) => {
   let tabBarVisible = true;
-  if(navigation.state.index > 0){
+  if (navigation.state.index > 0) {
     tabBarVisible = false;
   }
   return {
     tabBarVisible,
-    tabBarLabel: 'Account',
+    tabBarLabel: 'Cá Nhân',
     tabBarIcon: ({ focused }) => (
       <MaterialCommunityIcons
         focused={focused}

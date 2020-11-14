@@ -6,6 +6,7 @@ import BalanceScreenStyles from '../../../../styles/GroupsStyles/DetailGroupScre
 import { MaterialCommunityIcons, FontAwesome5, Entypo } from '@expo/vector-icons';
 import ListItemBalance from './ListItemBalance';
 import { APPBAR_HEIGHT, screenHeight, screenWidth } from '../../../../constants/Dimensions';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { BASEURL } from '../../../../api/api';
 
 function mapStateToProps(state) {
@@ -24,7 +25,7 @@ type States = {
 class BalanceScreen extends Component<Props> {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: 'Group balances',
+      title: 'Chi Phí Nhóm',
       headerStyle: {
         elevation: 0,
         textAlign: 'center',
@@ -45,7 +46,7 @@ class BalanceScreen extends Component<Props> {
               navigation.goBack();
             }}
           >
-            <Text style={BalanceScreenStyles.textHeaderLeft}>Cancel</Text>
+            <AntDesign name={'left'} color={Colors.white} size={screenWidth / 18} />
           </TouchableOpacity>
         </View>
       ),
@@ -104,7 +105,6 @@ class BalanceScreen extends Component<Props> {
   };
 
   render() {
-    console.log(this.state.data);
     return (
       <View style={BalanceScreenStyles.container}>
         <View style={{ flex: 1 }}>
@@ -126,7 +126,7 @@ class BalanceScreen extends Component<Props> {
               backgroundColor: Colors.tintColor,
             }}
           >
-            <Text style={{ fontSize: 18, color: Colors.white, fontWeight: 'bold' }}>Remind to all member</Text>
+            <Text style={{ fontSize: 18, color: Colors.white, fontWeight: 'bold' }}>Nhắc nhở tất cả thành viên</Text>
           </TouchableOpacity>
         </View>
       </View>

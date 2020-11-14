@@ -166,10 +166,8 @@ const InputExpenseScreenStyles = StyleSheet.create({
     marginBottom: screenWidth / 82.2,
   },
   btnSubmit: {
-    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: screenWidth / 20.55,
     marginBottom: screenWidth / 24,
   },
   text1: {
@@ -177,15 +175,24 @@ const InputExpenseScreenStyles = StyleSheet.create({
     fontWeight: '400',
   },
   text2: {
+    marginVertical: 5,
     fontSize: 15,
     fontWeight: '300',
     padding: screenWidth / 82.2,
+    color: 'rgb(255, 128, 0)',
+  },
+  text3: {
+    marginVertical: 5,
+    fontSize: 15,
+    fontWeight: '300',
+    padding: screenWidth / 82.2,
+    color: '#bf00ff',
   },
   button: {
-    backgroundColor: Colors.white,
-    borderColor: Colors.gray,
-    elevation: 3,
-    borderRadius: screenWidth / 82.2,
+    // backgroundColor: Colors.white,
+    // borderColor: Colors.gray,
+    // elevation: 3,
+    // borderRadius: screenWidth / 82.2,
   },
   viewRowItem: {
     flexDirection: 'row',

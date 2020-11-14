@@ -20,9 +20,9 @@ type Props = {
   navigation?: any;
   user_id?: string;
   user?: {
-    name?: string,
-    email?: string,
-  }
+    name?: string;
+    email?: string;
+  };
 };
 
 type States = {
@@ -214,16 +214,16 @@ class AddMemberGroupScreen extends Component<Props, States> {
         <View style={{ zIndex: 10, backgroundColor: Colors.tabIconSelected }}>
           <View style={styles.header}>
             <TouchableOpacity activeOpacity={0.5} onPress={this.goBackFriendsScreen}>
-              <Text style={styles.cancel}>Cancel</Text>
+              <Text style={styles.cancel}>Hủy</Text>
             </TouchableOpacity>
-            <Text style={styles.addFriends}>Add Members</Text>
+            <Text style={styles.addFriends}>Thên thành viên</Text>
             <TouchableOpacity
               activeOpacity={0.5}
               onPress={() => {
                 this.createTrip();
               }}
             >
-              <Text style={styles.next}>Done</Text>
+              <Text style={styles.next}>Kết thúc</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.input}>
@@ -240,7 +240,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
               value={this.state.email}
               returnKeyType={'next'}
               autoCapitalize={'none'}
-              placeholder={'Enter email...'}
+              placeholder={'Email thành viên...'}
               autoFocus
             />
             <View style={{ flex: 1 }} />
@@ -260,7 +260,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
               blurOnSubmit={false}
               autoCorrect={false}
               autoCapitalize={'words'}
-              placeholder={'Enter name...'}
+              placeholder={'Tên thành viên...'}
             />
           </View>
           <View>
@@ -271,7 +271,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
               }}
             >
               <Text style={{ color: 'rgba(128,128,128,0.8)', fontSize: 15, fontWeight: 'bold', textAlign: 'center' }}>
-                Add Member
+                Thêm thành viên
               </Text>
             </TouchableOpacity>
           </View>
@@ -300,7 +300,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
           </View>
         </View>
         {this.state.data?.length > 1 && (
-          <Text style={styles.txtChooseLeader}>Choose a leader for your group, the default is you</Text>
+          <Text style={styles.txtChooseLeader}>Chọn một trưởng nhóm cho nhóm của bạn, mặc định sẽ là bạn</Text>
         )}
         <View style={styles.viewContent}>
           <FlatList

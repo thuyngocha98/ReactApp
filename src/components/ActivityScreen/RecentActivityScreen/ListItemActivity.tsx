@@ -50,14 +50,14 @@ class ListItemActivity extends Component<Props> {
                 <Text style={styles.bold}>
                   {name[name.length - 1]} {this.props.data.user_id.name[0]}.{' '}
                 </Text>
-                <Text style={[styles.size, { color: Colors.mediumseagreen }]}>created</Text>
-                <Text style={styles.size}> the group </Text>
+                <Text style={[styles.size, { color: Colors.mediumseagreen }]}>đã tạo</Text>
+                <Text style={styles.size}> nhóm </Text>
                 <Text style={styles.bold}>{this.props.data.trip_id.name} </Text>
               </View>
               <View>
                 <View style={styles.flexRow}>
                   <Text style={styles.time}>
-                    ngày {time[2]} thg {time[1]}, {time[0]} at{' '}
+                    ngày {time[2]} thg {time[1]}, {time[0]} -{' '}
                   </Text>
                   <Text style={styles.time}>
                     {time[3]}:{time[4]}
@@ -90,7 +90,7 @@ class ListItemActivity extends Component<Props> {
                 <Text style={styles.bold}>
                   {name[name.length - 1]} {this.props.data.user_id.name[0]}.{' '}
                 </Text>
-                <Text style={styles.size}>added </Text>
+                <Text style={styles.size}> đã thêm </Text>
                 <Text style={styles.bold}>{nameTransaction} </Text>
                 <Text style={styles.size}>in </Text>
                 <Text style={styles.bold}>{this.props.data.trip_id.name} </Text>
@@ -98,12 +98,12 @@ class ListItemActivity extends Component<Props> {
               <View>
                 <View style={styles.flexRow}>
                   <Text style={{ color: Colors.mediumseagreen }}>
-                    Total money {number2money(this.props.data.transaction_id.amount)} VND
+                    Tổng tiền {number2money(this.props.data.transaction_id.amount)} VND
                   </Text>
                 </View>
                 <View style={styles.flexRow}>
                   <Text style={styles.time}>
-                    ngày {time[2]} thg {time[1]}, {time[0]} at{' '}
+                    ngày {time[2]} thg {time[1]}, {time[0]} -{' '}
                   </Text>
                   <Text style={styles.time}>
                     {time[3]}:{time[4]}
@@ -135,14 +135,14 @@ class ListItemActivity extends Component<Props> {
                 <Text style={styles.bold}>
                   {name[name.length - 1]} {this.props.data.user_id.name[0]}.{' '}
                 </Text>
-                <Text style={[styles.size, { color: Colors.orangered }]}>removed</Text>
-                <Text style={styles.size}> the group </Text>
+                <Text style={[styles.size, { color: Colors.orangered }]}>đã xóa</Text>
+                <Text style={styles.size}> nhóm </Text>
                 <Text style={styles.bold}>{this.props.data.trip_id.name} </Text>
               </View>
               <View>
                 <View style={styles.flexRow}>
                   <Text style={styles.time}>
-                    ngày {time[2]} thg {time[1]}, {time[0]} at{' '}
+                    ngày {time[2]} thg {time[1]}, {time[0]} -{' '}
                   </Text>
                   <Text style={styles.time}>
                     {time[3]}:{time[4]}
@@ -174,14 +174,14 @@ class ListItemActivity extends Component<Props> {
                 <Text style={styles.bold}>
                   {name[name.length - 1]} {this.props.data.user_id.name[0]}.{' '}
                 </Text>
-                <Text style={[styles.size, { color: 'purple' }]}>updated</Text>
-                <Text style={styles.size}> the group </Text>
+                <Text style={[styles.size, { color: 'purple' }]}>sửa tên</Text>
+                <Text style={styles.size}> nhóm thành </Text>
                 <Text style={styles.bold}>{this.props.data.trip_id.name} </Text>
               </View>
               <View>
                 <View style={styles.flexRow}>
                   <Text style={styles.time}>
-                    ngày {time[2]} thg {time[1]}, {time[0]} at{' '}
+                    ngày {time[2]} thg {time[1]}, {time[0]} -{' '}
                   </Text>
                   <Text style={styles.time}>
                     {time[3]}:{time[4]}

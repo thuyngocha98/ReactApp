@@ -32,10 +32,9 @@ type States = {
   isModelVisible?: boolean;
 };
 class DetaiTransactionScreen extends Component<Props, States> {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.transaction = this.props.navigation.getParam('transaction', '');
-
   }
   state = {
     data: [],
@@ -123,7 +122,7 @@ class DetaiTransactionScreen extends Component<Props, States> {
             >
               <Ionicons name="ios-arrow-back" size={30} color={Colors.white} />
             </TouchableOpacity>
-            <Text style={DetailTransactionScreenStyles.addContact}>Details</Text>
+            <Text style={DetailTransactionScreenStyles.addContact}>Chi Tiết</Text>
             <TouchableOpacity style={DetailTransactionScreenStyles.save1} activeOpacity={0.5} onPress={() => {}}>
               <AntDesign name={'delete'} size={25} color={Colors.white} />
             </TouchableOpacity>
@@ -157,17 +156,17 @@ class DetaiTransactionScreen extends Component<Props, States> {
                           style={DetailTransactionScreenStyles.image}
                           source={require('../../../../../assets/images/icon-home.png')}
                         />
-                        <Text style={DetailTransactionScreenStyles.txtAllOf}>All of {nameGroup}</Text>
+                        <Text style={DetailTransactionScreenStyles.txtAllOf}>Tổng hợp chi phí của {nameGroup}</Text>
                       </View>
                     </View>
                     <View style={{ flexDirection: 'row', marginLeft: 10 }}>
-                      <Text style={{ fontSize: 14, marginBottom: 5, opacity: 0.5 }}>Added by you on </Text>
+                      <Text style={{ fontSize: 14, marginBottom: 5, opacity: 0.5 }}>Được bạn tạo ngày </Text>
                       <Text style={{ fontSize: 14, opacity: 0.5 }}>
                         {time[2]}-{time[1]}-{time[0]}
                       </Text>
                     </View>
                     <View style={{ flexDirection: 'row', marginLeft: 10 }}>
-                      <Text style={{ fontSize: 14, marginBottom: 5, opacity: 0.5 }}>Last updated by you on </Text>
+                      <Text style={{ fontSize: 14, marginBottom: 5, opacity: 0.5 }}>Cập nhật cuối cùng ngày </Text>
                       <Text style={{ fontSize: 14, opacity: 0.5 }}>
                         {time[2]}-{time[1]}-{time[0]}
                       </Text>

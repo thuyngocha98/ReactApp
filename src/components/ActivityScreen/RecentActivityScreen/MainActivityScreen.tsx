@@ -1,13 +1,5 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Text,
-  Platform,
-  FlatList,
-  TouchableOpacity,
-  StatusBar,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, Platform, FlatList, TouchableOpacity, StatusBar, StyleSheet } from 'react-native';
 import ListItemActivity from './ListItemActivity';
 // @ts-ignore
 import avatar from '../../../../assets/images/avatar.jpg';
@@ -58,8 +50,8 @@ class MainActivityScreen extends Component<Props, States> {
     //set barstyle of statusbar
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('light-content');
-      if(Platform.OS == 'android'){
-        StatusBar.setBackgroundColor("transparent");
+      if (Platform.OS == 'android') {
+        StatusBar.setBackgroundColor('transparent');
         StatusBar.setTranslucent(true);
       }
     });
@@ -130,7 +122,7 @@ class MainActivityScreen extends Component<Props, States> {
           />
         </View>
         <View style={styles.scrollView}>
-          <Text style={styles.title}>Recent activity</Text>
+          <Text style={styles.title}>Hoạt Động Gần Đây</Text>
           {this.state.loading ? (
             <View style={styles.activityIndicator}>
               <LottieView
@@ -168,14 +160,14 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-    marginTop: screenWidth/41.1
+    marginTop: screenWidth / 41.1,
   },
   title: {
-      fontSize: 26,
-      fontWeight: 'bold',
-      marginBottom: screenWidth/20.55,
-      marginLeft: screenWidth / 20.55,
-      opacity: 0.5
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: screenWidth / 20.55,
+    marginLeft: screenWidth / 20.55,
+    opacity: 0.5,
   },
   input: {
     width: screenWidth / 2.2,
@@ -202,8 +194,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   viewLottie: {
-      width: screenWidth/3.6,
-      height: screenWidth/3.6,
+    width: screenWidth / 3.6,
+    height: screenWidth / 3.6,
   },
 });
 

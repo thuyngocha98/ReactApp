@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-  View,
-  Text,
-  FlatList,
-  Image,
-  TouchableOpacity,
-  Platform,
-  StatusBar,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, FlatList, Image, TouchableOpacity, Platform, StatusBar, StyleSheet } from 'react-native';
 import MainScreenGroupStyles from '../../../styles/GroupsStyles/MainScreenGroupStyles/MainScreenGroupStyles';
 import ListItemGroup from './ListItemGroup';
 import Colors from '../../../constants/Colors';
@@ -21,6 +12,8 @@ import { number2money, thumbnails } from '../../../constants/FunctionCommon';
 import { SearchBar } from 'react-native-elements';
 import { screenWidth } from '../../../constants/Dimensions';
 import LottieView from 'lottie-react-native';
+import { CONTACTS } from 'expo-permissions';
+import { Col } from 'native-base';
 
 function mapStateToProps(state) {
   return {
@@ -75,8 +68,8 @@ class MainScreenGroup extends Component<Props, States> {
     //set barstyle of statusbar
     this._navListener = this.props.navigation.addListener('didFocus', async () => {
       StatusBar.setBarStyle('light-content');
-      if(Platform.OS == 'android'){
-        StatusBar.setBackgroundColor("transparent");
+      if (Platform.OS == 'android') {
+        StatusBar.setBackgroundColor('transparent');
         StatusBar.setTranslucent(true);
       }
       if (this.props.userId != undefined) {
@@ -167,17 +160,24 @@ class MainScreenGroup extends Component<Props, States> {
             containerStyle={styles.containerSearchBar}
           />
         </View>
-        <Text style={MainScreenGroupStyles.group}>Groups</Text>
+        <Text style={MainScreenGroupStyles.group}>Nhóm</Text>
         <View style={MainScreenGroupStyles.cartExpense}>
           <Image style={MainScreenGroupStyles.avatar} source={this.thumbnail} />
           <View style={MainScreenGroupStyles.text}>
-            <Text style={MainScreenGroupStyles.textTotal}>Total balance</Text>
-            <Text style={MainScreenGroupStyles.textDetail}>
-              {this.state.total >= 0
-                ? 'You are owned ' + number2money(this.state.total)
-                : 'You owe ' + number2money(this.state.total * -1)}{' '}
-              VND
-            </Text>
+            <Text style={MainScreenGroupStyles.textTotal}>Tổng số dư</Text>
+            <View>
+              {this.state.total >= 0 ? (
+                <View style={{ flexDirection: 'row' }}>
+                  <Text style={{ color: Colors.white }}> Bạn Dư : </Text>
+                  <Text style={{ color: Colors.mediumseagreen }}>{number2money(this.state.total)} VND</Text>
+                </View>
+              ) : (
+                <View style={{ flexDirection: 'row' }}>
+                  <Text style={{ color: Colors.white }}> Bạn Nợ : </Text>
+                  <Text style={{ color: Colors.orangered }}>{number2money(this.state.total * -1)} VND</Text>
+                </View>
+              )}
+            </View>
           </View>
           <View style={MainScreenGroupStyles.menu}>
             <TouchableOpacity>
@@ -189,10 +189,10 @@ class MainScreenGroup extends Component<Props, States> {
           {this.state.loading ? (
             <View style={MainScreenGroupStyles.activityIndicator}>
               <LottieView
-                  style={MainScreenGroupStyles.viewLottie}
-                  source={require('../../../../assets/lotties/WaveLoading.json')}
-                  autoPlay
-                  loop
+                style={MainScreenGroupStyles.viewLottie}
+                source={require('../../../../assets/lotties/WaveLoading.json')}
+                autoPlay
+                loop
               />
             </View>
           ) : (

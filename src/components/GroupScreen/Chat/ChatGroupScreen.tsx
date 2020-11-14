@@ -1139,13 +1139,13 @@ class ChatGroupScreen extends Component<Props, States> {
                   {this.state.isStopLocation ? (
                     <TouchableOpacity style={ChatGroupScreenStyles.shareLocation} onPress={this.isStopShareLocation}>
                       <Text style={{ color: Colors.white, fontSize: 18, fontWeight: 'bold', opacity: 0.9 }}>
-                        Stop share live location
+                        Dừng chia sẻ vị trí
                       </Text>
                     </TouchableOpacity>
                   ) : (
                     <TouchableOpacity style={ChatGroupScreenStyles.shareLocation} onPress={this.isStartShareLocation}>
                       <Text style={{ color: Colors.white, fontSize: 18, fontWeight: 'bold', opacity: 0.9 }}>
-                        Start share live location
+                        Bắt đầu chia sẻ vị trí
                       </Text>
                     </TouchableOpacity>
                   )}

@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { 
-  View, 
+import {
+  View,
   Text,
-  ScrollView, 
-  TouchableOpacity, 
-  Image, 
-  TextInput, 
-  StatusBar, 
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  StatusBar,
   Keyboard,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import Colors from '../../../constants/Colors';
 import CreateGroupScreenStyles from '../../../styles/GroupsStyles/CreateGroupScreenStyles/CreateGroupScreenStyles';
@@ -55,21 +55,21 @@ class CreateGroupScreen extends Component<Props, States> {
     checkInputName: false,
     isDateTimePickerVisible: false,
     isDateTimePickerVisible1: false,
-    startDay: 'Select start day',
-    endDay: 'Select end day',
+    startDay: 'Chọn ngày bắt đầu',
+    endDay: 'Chọn ngày kết thúc',
     show: false,
     show1: false,
     dateString: moment(new Date()).format('YYYY-MM-DD'),
     date: new Date(),
     dataTrip: [],
     indexSelectTrip: -1,
-    loadingTrip: false
+    loadingTrip: false,
   };
 
   _navListener: any;
 
   componentDidMount() {
-    this.getListTrip()
+    this.getListTrip();
     // set barstyle of statusbar
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('light-content');
@@ -99,7 +99,7 @@ class CreateGroupScreen extends Component<Props, States> {
 
   checkCondition() {
     let listPlan = this.state.dataTrip.reduce((acc, cur) => {
-      if(cur.isSelect){
+      if (cur.isSelect) {
         acc.push(cur._id);
       }
       return acc;
@@ -168,34 +168,34 @@ class CreateGroupScreen extends Component<Props, States> {
   };
 
   getListTrip = () => {
-    this.setState({ loadingTrip: true })
+    this.setState({ loadingTrip: true });
     fetch(`${BASEURL}/api/plan/get_all_plan/${this.props.userId}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json'
-        },
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
     })
-        .then((response) => response.json())
-        .then((res) => {
-            this.setState({
-                dataTrip: res.data.map(item => ({...item, isSelect: false})),
-                loadingTrip: false,
-            })
-        })
-        .catch((error) => {
-            this.setState({
-                loadingTrip: false
-            })
-            console.log(error);
+      .then((response) => response.json())
+      .then((res) => {
+        this.setState({
+          dataTrip: res.data.map((item) => ({ ...item, isSelect: false })),
+          loadingTrip: false,
         });
-  }
+      })
+      .catch((error) => {
+        this.setState({
+          loadingTrip: false,
+        });
+        console.log(error);
+      });
+  };
 
-  onSelectPlanTrip = index => {
+  onSelectPlanTrip = (index) => {
     let newData = this.state.dataTrip;
     newData[index].isSelect = !newData[index].isSelect;
-    this.setState({dataTrip: [...newData]});
-  }
+    this.setState({ dataTrip: [...newData] });
+  };
 
   render() {
     const { navigation } = this.props;
@@ -210,16 +210,18 @@ class CreateGroupScreen extends Component<Props, States> {
                 navigation.goBack();
               }}
             >
-              <Text style={CreateGroupScreenStyles.cancel}>Cancel</Text>
+              <Text style={CreateGroupScreenStyles.cancel}>Hủy</Text>
             </TouchableOpacity>
-            <Text style={CreateGroupScreenStyles.addContact}>Create new group</Text>
+            <Text style={CreateGroupScreenStyles.addContact}>Tạo nhóm mới</Text>
             <TouchableOpacity
               activeOpacity={0.5}
               onPress={() => {
                 this.checkCondition();
               }}
             >
-              <Text style={[CreateGroupScreenStyles.add, { opacity: this.state.checkInputName ? 1 : 0.5 }]}>Next</Text>
+              <Text style={[CreateGroupScreenStyles.add, { opacity: this.state.checkInputName ? 1 : 0.5 }]}>
+                Tiếp tục
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -229,7 +231,7 @@ class CreateGroupScreen extends Component<Props, States> {
             source={require('../../../../assets/images/icon_camera.png')}
           />
           <View style={CreateGroupScreenStyles.nameAndDetail}>
-            <Text style={CreateGroupScreenStyles.groupName}>Group Name</Text>
+            <Text style={CreateGroupScreenStyles.groupName}>Tên Nhóm</Text>
             <TextInput
               style={CreateGroupScreenStyles.detail}
               onChangeText={(text) => {
@@ -238,7 +240,7 @@ class CreateGroupScreen extends Component<Props, States> {
               value={this.state.name}
               maxLength={50}
               autoCapitalize="words"
-              placeholder={'Enter name group'}
+              placeholder={'Nhập tên nhóm'}
               autoFocus={true}
               keyboardType="default"
               autoCorrect={false}
@@ -248,7 +250,7 @@ class CreateGroupScreen extends Component<Props, States> {
         <View style={CreateGroupScreenStyles.pickDate}>
           <TouchableOpacity onPress={this.showOverlay} style={CreateGroupScreenStyles.chooseDay}>
             <Text style={CreateGroupScreenStyles.contentChooseDay}>
-              {this.state.startDay !== 'Select start day' ? 'From ' + this.state.startDay : this.state.startDay}
+              {this.state.startDay !== 'Chọn ngày bắt đầu' ? 'Từ ' + this.state.startDay : this.state.startDay}
             </Text>
           </TouchableOpacity>
           <View>
@@ -267,7 +269,7 @@ class CreateGroupScreen extends Component<Props, States> {
         <View style={CreateGroupScreenStyles.pickDate1}>
           <TouchableOpacity onPress={this.showOverlay1} style={CreateGroupScreenStyles.chooseDay}>
             <Text style={CreateGroupScreenStyles.contentChooseDay}>
-              {this.state.endDay !== 'Select end day' ? 'To ' + this.state.endDay : this.state.endDay}
+              {this.state.endDay !== 'Chọn ngày kết thúc' ? 'Đến ' + this.state.endDay : this.state.endDay}
             </Text>
           </TouchableOpacity>
           <View>
@@ -284,30 +286,29 @@ class CreateGroupScreen extends Component<Props, States> {
           </View>
         </View>
         <View style={CreateGroupScreenStyles.pickDate}>
-          <Text style={CreateGroupScreenStyles.groupName}>Trip plan</Text>
+          <Text style={CreateGroupScreenStyles.groupName}>Hành trình chuyến đi</Text>
           {this.state.loadingTrip ? (
             <View style={CreateGroupScreenStyles.selectTrip}>
-                <ActivityIndicator animating size="small" color={Colors.tintColor} />
+              <ActivityIndicator animating size="small" color={Colors.tintColor} />
             </View>
           ) : (
-            <ScrollView
-              keyboardShouldPersistTaps="never"
-              style={CreateGroupScreenStyles.listTrip}>
-                {this.state.dataTrip.map((item,index) => (
-                    <TouchableOpacity
-                      onPress={() => this.onSelectPlanTrip(index)} 
-                      key={item._id}
-                      style={CreateGroupScreenStyles.itemTrip}>
-                        <Text style={[CreateGroupScreenStyles.txtTrip, {fontWeight: item.isSelect ? 'bold' : 'normal'}]}>
-                          {item.name}
-                        </Text>
-                        {item.isSelect ? (
-                            <MaterialIcons name='radio-button-checked' size={24} color={Colors.mediumseagreen} />
-                        ) : (
-                            <MaterialIcons name='radio-button-unchecked' size={24} color={Colors.gray} />
-                        )}
-                    </TouchableOpacity>
-                ))}
+            <ScrollView keyboardShouldPersistTaps="never" style={CreateGroupScreenStyles.listTrip}>
+              {this.state.dataTrip.map((item, index) => (
+                <TouchableOpacity
+                  onPress={() => this.onSelectPlanTrip(index)}
+                  key={item._id}
+                  style={CreateGroupScreenStyles.itemTrip}
+                >
+                  <Text style={[CreateGroupScreenStyles.txtTrip, { fontWeight: item.isSelect ? 'bold' : 'normal' }]}>
+                    {item.name}
+                  </Text>
+                  {item.isSelect ? (
+                    <MaterialIcons name="radio-button-checked" size={24} color={Colors.mediumseagreen} />
+                  ) : (
+                    <MaterialIcons name="radio-button-unchecked" size={24} color={Colors.gray} />
+                  )}
+                </TouchableOpacity>
+              ))}
             </ScrollView>
           )}
         </View>

@@ -110,7 +110,7 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
             >
               <Ionicons name="ios-close" size={45} color={Colors.white} />
             </TouchableOpacity>
-            <Text style={ExpenseByNumberSplitScreenStyles.addContact}>Expense details</Text>
+            <Text style={ExpenseByNumberSplitScreenStyles.addContact}>Chi tiết</Text>
             <TouchableOpacity
               style={ExpenseByNumberSplitScreenStyles.save}
               activeOpacity={0.5}
@@ -118,7 +118,7 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
                 this.createListUser(list_user, this.totalMoney);
               }}
             >
-              <Text style={ExpenseByNumberSplitScreenStyles.add}>Done</Text>
+              <Text style={ExpenseByNumberSplitScreenStyles.add}>Kết thúc</Text>
             </TouchableOpacity>
           </View>
         </View>

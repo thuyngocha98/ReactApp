@@ -131,7 +131,7 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
             >
               <Ionicons name="ios-close" size={45} color={Colors.white} />
             </TouchableOpacity>
-            <Text style={ExpenseByPlusOrMinusStyles.addContact}>Expense details</Text>
+            <Text style={ExpenseByPlusOrMinusStyles.addContact}>Chi Tiết</Text>
             <TouchableOpacity
               style={ExpenseByPlusOrMinusStyles.save}
               activeOpacity={0.5}
@@ -139,7 +139,7 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
                 this.createListUser(list_user);
               }}
             >
-              <Text style={ExpenseByPlusOrMinusStyles.add}>Done</Text>
+              <Text style={ExpenseByPlusOrMinusStyles.add}>Kết thúc</Text>
             </TouchableOpacity>
           </View>
         </View>

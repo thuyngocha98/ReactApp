@@ -65,17 +65,17 @@ class MainExpenseScreen extends Component<Props, States> {
             <TouchableOpacity style={MainExpenseScreenStyles.cancel} activeOpacity={0.5} onPress={() => {}}>
               <Ionicons name="ios-close" size={45} color={Colors.white} />
             </TouchableOpacity>
-            <Text style={MainExpenseScreenStyles.addContact}>Add an expense</Text>
+            <Text style={MainExpenseScreenStyles.addContact}>Thêm chi phí</Text>
             <TouchableOpacity style={MainExpenseScreenStyles.save} activeOpacity={0.5} onPress={() => {}}>
-              <Text style={[MainExpenseScreenStyles.add, { opacity: 0.6 }]}>Save</Text>
+              <Text style={[MainExpenseScreenStyles.add, { opacity: 0.6 }]}>Lưu</Text>
             </TouchableOpacity>
           </View>
         </View>
         <View style={MainExpenseScreenStyles.header1}>
-          <Text style={MainExpenseScreenStyles.headerTitle}>Select a group</Text>
+          <Text style={MainExpenseScreenStyles.headerTitle}>Chọn nhóm</Text>
         </View>
         <View style={MainExpenseScreenStyles.sectionHeader}>
-          <Text style={MainExpenseScreenStyles.title}>Group</Text>
+          <Text style={MainExpenseScreenStyles.title}>Nhóm</Text>
         </View>
         <View>
           {this.state.data.length > 0 && currentGroup !== '' ? (
@@ -103,7 +103,7 @@ class MainExpenseScreen extends Component<Props, States> {
                 paddingTop: screenWidth / 20.55,
               }}
             >
-              <Text>You don't have group yet, please create group first.</Text>
+              <Text>Bạn chưa có nhóm vui lòng tạo nhóm</Text>
             </View>
           )}
         </View>

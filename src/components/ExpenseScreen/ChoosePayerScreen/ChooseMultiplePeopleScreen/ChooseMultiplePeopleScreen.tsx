@@ -88,9 +88,8 @@ class ChooseMultiplePeopleScreen extends Component<Props, States> {
               }}
             >
               <Ionicons name="ios-arrow-back" size={30} color={Colors.white} />
-              <Text style={ChooseMultiplePeopleScreenStyles.textCancel}>Choose payer</Text>
             </TouchableOpacity>
-            <Text style={ChooseMultiplePeopleScreenStyles.addContact}>Enter paid amounts</Text>
+            <Text style={ChooseMultiplePeopleScreenStyles.addContact}>Nhập số tiền thanh toán</Text>
             <TouchableOpacity
               style={ChooseMultiplePeopleScreenStyles.save}
               activeOpacity={0.5}
@@ -100,7 +99,7 @@ class ChooseMultiplePeopleScreen extends Component<Props, States> {
                   : Alert.alert('The payment values do not add up to the total cost.');
               }}
             >
-              <Text style={ChooseMultiplePeopleScreenStyles.add}>Done</Text>
+              <Text style={ChooseMultiplePeopleScreenStyles.add}>Kết thúc</Text>
             </TouchableOpacity>
           </View>
         </View>
