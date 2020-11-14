@@ -424,7 +424,7 @@ class InputExpenseScreen extends Component<Props, States> {
             >
               <Ionicons name="ios-close" size={45} color={Colors.white} />
             </TouchableOpacity>
-            <Text style={InputExpenseScreenStyles.addContact}>Add categories</Text>
+            <Text style={InputExpenseScreenStyles.addContact}>Thêm danh mục</Text>
             <TouchableOpacity
               style={InputExpenseScreenStyles.save}
               activeOpacity={0.5}
@@ -445,7 +445,7 @@ class InputExpenseScreen extends Component<Props, States> {
                   },
                 ]}
               >
-                Save
+                Lưu
               </Text>
             </TouchableOpacity>
           </View>
@@ -458,7 +458,7 @@ class InputExpenseScreen extends Component<Props, States> {
           >
             <View style={InputExpenseScreenStyles.viewIconAndTitleItem}>
               <MaterialIcons name={'note-add'} color={Colors.tintColor} size={screenWidth / 14} />
-              <Text style={InputExpenseScreenStyles.txtTitleItem}>Add Expense</Text>
+              <Text style={InputExpenseScreenStyles.txtTitleItem}>Chi phí</Text>
             </View>
             <View style={this.state.isCheckExpense ? InputExpenseScreenStyles.viewIconRightItem : null}>
               <FontAwesome
@@ -475,7 +475,7 @@ class InputExpenseScreen extends Component<Props, States> {
                   onPress={() => this.setInputExpenseAgain()}
                   style={InputExpenseScreenStyles.btnSetAgain}
                 >
-                  <Text style={InputExpenseScreenStyles.txtSetAgain}>Set again</Text>
+                  <Text style={InputExpenseScreenStyles.txtSetAgain}>Đặt lại</Text>
                   <FontAwesome name="repeat" size={10} color={Colors.gray} />
                 </TouchableOpacity>
               </View>
@@ -487,7 +487,7 @@ class InputExpenseScreen extends Component<Props, States> {
                   <TextInput
                     onChangeText={(text) => this.checkDescription(text)}
                     style={InputExpenseScreenStyles.txtInputDescription}
-                    placeholder="Enter a description"
+                    placeholder="Nhập miêu tả"
                     value={this.state.description}
                     keyboardType="visible-password"
                     autoCorrect={false}
@@ -517,30 +517,29 @@ class InputExpenseScreen extends Component<Props, States> {
                 </View>
               </View>
               <View style={InputExpenseScreenStyles.btnSubmit}>
-                <Text style={InputExpenseScreenStyles.text1}>{'Paid by '}</Text>
+                <Text style={InputExpenseScreenStyles.text1}></Text>
                 <View style={InputExpenseScreenStyles.button}>
                   <Text
                     style={InputExpenseScreenStyles.text2}
                     onPress={() =>
                       this.state.checkDescription && this.state.checkMoney
                         ? this.prepareSendListUserToChoose(this.listTypeUser, this.idPayer)
-                        : Alert.alert('Please enter full information')
+                        : Alert.alert('Vui lòng điền đầy đủ thông tin')
                     }
                   >
-                    you
+                    Chọn thành viên thanh toán (đầu vào)
                   </Text>
                 </View>
-                <Text style={InputExpenseScreenStyles.text1}>{' and split '}</Text>
                 <View style={InputExpenseScreenStyles.button}>
                   <Text
-                    style={InputExpenseScreenStyles.text2}
+                    style={InputExpenseScreenStyles.text3}
                     onPress={() =>
                       this.state.checkDescription && this.state.checkMoney
                         ? this.prepareSendListUserToSplit(this.listTypeUser, this.idPayer)
-                        : Alert.alert('Please enter full information')
+                        : Alert.alert('Vui lòng điền đầy đủ thông tin')
                     }
                   >
-                    equally
+                    Chọn thành viên tham gia (đầu ra)
                   </Text>
                 </View>
               </View>
@@ -551,7 +550,7 @@ class InputExpenseScreen extends Component<Props, States> {
           <TouchableOpacity onPress={() => this.onShowHideViewLocation()} style={InputExpenseScreenStyles.viewRowItem}>
             <View style={InputExpenseScreenStyles.viewIconAndTitleItem}>
               <MaterialIcons name={'add-location'} color={Colors.splitWise} size={screenWidth / 14} />
-              <Text style={InputExpenseScreenStyles.txtTitleItem}>Add Location</Text>
+              <Text style={InputExpenseScreenStyles.txtTitleItem}>Vị trí</Text>
             </View>
             <View style={this.state.isCheckLocation ? InputExpenseScreenStyles.viewIconRightItem : null}>
               <FontAwesome
@@ -565,7 +564,7 @@ class InputExpenseScreen extends Component<Props, States> {
             <View style={InputExpenseScreenStyles.viewMainAddLocation}>
               <View style={InputExpenseScreenStyles.viewHeaderAddLocation}>
                 <View style={InputExpenseScreenStyles.viewEnableLocation}>
-                  <Text style={InputExpenseScreenStyles.txtSetAgain}>Enable add location</Text>
+                  <Text style={InputExpenseScreenStyles.txtSetAgain}>Cho phép thêm vị trí</Text>
                   <TouchableOpacity
                     onPress={() => this.setState({ isEnableAddLocation: !this.state.isEnableAddLocation })}
                     style={
@@ -623,7 +622,7 @@ class InputExpenseScreen extends Component<Props, States> {
           >
             <View style={InputExpenseScreenStyles.viewIconAndTitleItem}>
               <MaterialIcons name={'library-add'} color={Colors.mediumseagreen} size={screenWidth / 14} />
-              <Text style={InputExpenseScreenStyles.txtTitleItem}>Add Image</Text>
+              <Text style={InputExpenseScreenStyles.txtTitleItem}>Hình ảnh</Text>
             </View>
             <View style={this.state.isCheckImage ? InputExpenseScreenStyles.viewIconRightItem : null}>
               <FontAwesome

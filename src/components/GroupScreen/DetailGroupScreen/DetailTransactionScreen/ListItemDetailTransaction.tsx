@@ -33,7 +33,7 @@ class ListItemDetailTransaction extends Component<Props> {
               <View style={ListItemDetailTransactionStyles.title1}>
                 <Text style={ListItemDetailTransactionStyles.name}>
                   {this.props.data.user_id.name}
-                  <Text style={ListItemDetailTransactionStyles.normal}>{' paid '}</Text>
+                  <Text style={ListItemDetailTransactionStyles.normal}>{' đã thanh toán '}</Text>
                   <Text style={[ListItemDetailTransactionStyles.money, { color: Colors.mediumseagreen }]}>
                     {number2money(this.props.data.type)} VND
                   </Text>
@@ -41,7 +41,7 @@ class ListItemDetailTransaction extends Component<Props> {
                 <Text style={ListItemDetailTransactionStyles.name1}>
                   {'(' + this.props.data.user_id.name}
                   <Text style={ListItemDetailTransactionStyles.normal1}>
-                    {this.props.data.total >= 0 ? ' gets back ' : ' owes '}
+                    {this.props.data.total >= 0 ? ' lấy lại ' : ' nợ '}
                   </Text>
                   <Text
                     style={[
@@ -61,7 +61,7 @@ class ListItemDetailTransaction extends Component<Props> {
               <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center' }}>
                 <Text style={ListItemDetailTransactionStyles.name}>
                   {this.props.data.user_id.name}
-                  <Text style={ListItemDetailTransactionStyles.normal}>{' owes '}</Text>
+                  <Text style={ListItemDetailTransactionStyles.normal}>{' nợ '}</Text>
                   <Text style={[ListItemDetailTransactionStyles.money, { color: Colors.orangered }]}>
                     {number2money(this.props.data.total * -1)} VND
                   </Text>

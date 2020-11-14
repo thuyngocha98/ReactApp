@@ -48,6 +48,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lightgray,
     marginVertical: screenWidth / 27.4,
   },
+  overView: {
+    flex: 1,
+    flexDirection: 'row',
+  },
 });
 
 export default styles;

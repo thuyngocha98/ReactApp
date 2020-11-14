@@ -201,9 +201,9 @@ class HeaderTitleComponent extends Component<Props, States> {
       <MenuProvider>
         <DialogInput
           isDialogVisible={this.state.isDialogVisible}
-          title={'Edit The Group'}
-          message={'Enter the group name you want to change'}
-          hintInput={'Enter the group name...'}
+          title={'Chỉnh sửa nhóm'}
+          message={'Nhập tên nhóm bạn muốn chỉnh sửa'}
+          hintInput={'Nhập tên nhóm...'}
           submitInput={(inputText) => {
             this.changeNameGroup(inputText);
           }}
@@ -241,10 +241,10 @@ class HeaderTitleComponent extends Component<Props, States> {
                   />
                   <MenuOptions customStyles={optionsStyles}>
                     <MenuOption onSelect={this.editGroup}>
-                      <Text style={{ color: '#ff9933' }}>Edit</Text>
+                      <Text style={{ color: '#ff9933' }}>Chỉnh sửa</Text>
                     </MenuOption>
                     <MenuOption onSelect={this.removeGroup}>
-                      <Text style={{ color: Colors.orangered }}>Delete</Text>
+                      <Text style={{ color: Colors.orangered }}>Xóa</Text>
                     </MenuOption>
                   </MenuOptions>
                 </Menu>
@@ -253,77 +253,22 @@ class HeaderTitleComponent extends Component<Props, States> {
             <View style={HeaderTitleComponentStyles.contentText}>
               <Text style={HeaderTitleComponentStyles.textTitle}>{this.props.nameGroup}</Text>
               <Text style={HeaderTitleComponentStyles.numberPeopleAndTime}>
-                {this.props.numberUserInTrip} people • Created thg {time[1]} {time[0]}
+                {this.props.numberUserInTrip} thành viên tham gia nhóm được tạo - tháng {time[1]} {time[0]}
               </Text>
               {/*<Text style={HeaderTitleComponentStyles.startEndDay}>From {this.props.startDay.toString().split('-').join(' ')} To {this.props.endDay.toString().split('-').join(' ')}</Text>*/}
               <View style={HeaderTitleComponentStyles.owesAndMoney}>
                 <Text style={HeaderTitleComponentStyles.owes}>
-                  {this.props.amount >= 0 ? 'You are owned ' : 'You owe '}
+                  {this.props.amount >= 0 ? 'Bạn Dư : ' : 'Bạn Nợ : '}
                 </Text>
                 <Text style={HeaderTitleComponentStyles.money}>
-                  {this.props.amount >= 0 ? number2money(this.props.amount) : number2money(this.props.amount * -1)} VND
+                  {this.props.amount >= 0 ? (
+                    <Text>{number2money(this.props.amount)}</Text>
+                  ) : (
+                    <Text>{number2money(this.props.amount * -1)}</Text>
+                  )}{' '}
+                  VND
                 </Text>
               </View>
-            </View>
-            <View style={HeaderTitleComponentStyles.flatList}>
-              <FlatList
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                data={this.data}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      switch (item.title) {
-                        case 'Balances':
-                          navigation.navigate('BalanceScreen', { tripId: this.props.idGroup });
-                          break;
-                        case 'Plan Trip':
-                          navigation.navigate('MainPlanInTripScreen', { tripId: this.props.idGroup });
-                          break;
-                        case 'Picture Memories':
-                          navigation.navigate('ShowImagesScreen', { tripId: this.props.idGroup });
-                          break;
-                        case 'Chat':
-                          this.props.navigation.navigate('ChatGroupScreen', {
-                            tripId: this.props.idGroup,
-                            nameTrip: this.props.nameGroup,
-                            navigation: this.props.navigation,
-                          });
-                          break;
-                        case 'See the schedule of the trip':
-                          navigation.navigate('MainLocationScreen', { tripId: this.props.idGroup });
-                      }
-                    }}
-                  >
-                    <ListItemHeader title={item.title} itemSelected={this.state.itemSelected == item.id} />
-                  </TouchableOpacity>
-                )}
-                keyExtractor={(item) => item.id.toString()}
-              />
-              <LinearGradient
-                colors={['rgba(0,0,0,0.8)', 'transparent']}
-                style={{
-                  position: 'absolute',
-                  left: 0,
-                  right: screenWidth / 1.096,
-                  top: 0,
-                  height: screenWidth / 7.48,
-                }}
-                start={{ x: 0, y: 0.5 }}
-                end={{ x: 0.8, y: 0.5 }}
-              />
-              <LinearGradient
-                colors={['rgba(0,0,0,0.8)', 'transparent']}
-                style={{
-                  position: 'absolute',
-                  left: screenWidth / 1.096,
-                  right: 0,
-                  top: 0,
-                  height: screenWidth / 7.48,
-                }}
-                start={{ x: 1, y: 0.5 }}
-                end={{ x: 0.2, y: 0.5 }}
-              />
             </View>
           </ImageBackground>
         </View>

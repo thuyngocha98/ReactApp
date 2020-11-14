@@ -27,6 +27,7 @@ const ChooseMultiplePeopleScreenStyles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500',
     color: Colors.white,
+    marginLeft: screenWidth / 6,
   },
   cancel: {
     flex: 3,

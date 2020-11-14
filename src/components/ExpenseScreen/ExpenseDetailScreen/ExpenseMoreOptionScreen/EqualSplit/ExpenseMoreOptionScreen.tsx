@@ -111,7 +111,7 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
             >
               <Ionicons name="ios-close" size={45} color={Colors.white} />
             </TouchableOpacity>
-            <Text style={ExpenseMoreOptionScreenStyles.addContact}>Expense details</Text>
+            <Text style={ExpenseMoreOptionScreenStyles.addContact}>Chi tiết</Text>
             <TouchableOpacity
               style={ExpenseMoreOptionScreenStyles.save}
               activeOpacity={0.5}
@@ -119,7 +119,7 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
                 this.createListUser(list_user, totalMoney);
               }}
             >
-              <Text style={ExpenseMoreOptionScreenStyles.add}>Done</Text>
+              <Text style={ExpenseMoreOptionScreenStyles.add}>Kết Thúc</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -139,7 +139,7 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
         </View>
         <View style={ExpenseMoreOptionScreenStyles.underLineInput} />
         <View style={ExpenseMoreOptionScreenStyles.contentSplit}>
-          <Text style={ExpenseMoreOptionScreenStyles.title1}>Split equally</Text>
+          <Text style={ExpenseMoreOptionScreenStyles.title1}>Chia đều</Text>
           <Text style={ExpenseMoreOptionScreenStyles.title2}>Select which people owe an equal share.</Text>
         </View>
         <View style={ExpenseMoreOptionScreenStyles.categoryTypeGroup}>
@@ -279,7 +279,7 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
           <View style={ExpenseMoreOptionScreenStyles.tabBar}>
             <View style={ExpenseMoreOptionScreenStyles.contentBar}>
               <Text style={ExpenseMoreOptionScreenStyles.moneyPerson}>
-                {number2money(this.state.moneysigle)} VND/person
+                {number2money(this.state.moneysigle)} VND/người
               </Text>
               <Text style={ExpenseMoreOptionScreenStyles.numberPeople}>
                 {`(` + this.state.numberPeople + ` people)`}
