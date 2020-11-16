@@ -16,6 +16,7 @@ import { Ionicons, Feather } from '@expo/vector-icons';
 import Colors from '../../../../../constants/Colors';
 import ExpenseByPlusOrMinusStyles from '../../../../../styles/ExpenseScreenStyles/ExpenseDetailScreenStyles/ExpenseMoreOptionScreenStyles/PlusOrMinusSplit/ExpenseByPlusOrMinusStyles';
 import { thumbnails, number2money } from '../../../../../constants/FunctionCommon';
+import { BASEURL } from '../../../../../api/api';
 
 function mapStateToProps(state) {
   return {};
@@ -207,7 +208,7 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
                 ],
               ]}
             >
-              custom
+              Tùy Chọn
             </Text>
           </TouchableOpacity>
         </View>
@@ -220,7 +221,7 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
                 renderItem={({ item, index }) => {
                   const thumbnail =
                     item.user_id.avatar.length > 2
-                      ? { uri: `data:image/png;base64,${item.user_id.avatar}` }
+                      ? { uri: `${BASEURL}/images/avatars/${item.user_id.avatar}` }
                       : thumbnails['avatar' + item.user_id.avatar];
                   return (
                     <View style={ExpenseByPlusOrMinusStyles.mainFlatlist}>
@@ -277,7 +278,7 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
             ) : null}
           </View>
           <View style={ExpenseByPlusOrMinusStyles.viewTitle}>
-            <Text style={ExpenseByPlusOrMinusStyles.txtTitle}>Please select people custom money.</Text>
+            <Text style={ExpenseByPlusOrMinusStyles.txtTitle}>Vui lòng tùy chọn thành viên tham gia.</Text>
           </View>
           <View style={ExpenseByPlusOrMinusStyles.flatlist2}>
             <FlatList
@@ -309,7 +310,7 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
                             ]}
                             source={
                               item.user_id.avatar.length > 2
-                                ? { uri: `data:image/png;base64,${item.user_id.avatar}` }
+                                ? { uri: `${BASEURL}/images/avatars/${item.user_id.avatar}` }
                                 : thumbnails['avatar' + item.user_id.avatar]
                             }
                           />

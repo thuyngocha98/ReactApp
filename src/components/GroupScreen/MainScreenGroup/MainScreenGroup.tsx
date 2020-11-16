@@ -168,12 +168,12 @@ class MainScreenGroup extends Component<Props, States> {
             <View>
               {this.state.total >= 0 ? (
                 <View style={{ flexDirection: 'row' }}>
-                  <Text style={{ color: Colors.white }}> Bạn Dư : </Text>
+                  <Text style={{ color: Colors.white }}> Bạn lấy lại : </Text>
                   <Text style={{ color: Colors.mediumseagreen }}>{number2money(this.state.total)} VND</Text>
                 </View>
               ) : (
                 <View style={{ flexDirection: 'row' }}>
-                  <Text style={{ color: Colors.white }}> Bạn Nợ : </Text>
+                  <Text style={{ color: Colors.white }}> Bạn nợ : </Text>
                   <Text style={{ color: Colors.orangered }}>{number2money(this.state.total * -1)} VND</Text>
                 </View>
               )}
@@ -207,7 +207,12 @@ class MainScreenGroup extends Component<Props, States> {
                     }}
                   >
                     {item.isDelete ? null : (
-                      <ListItemGroup nameGroup={item.name} price={item.oweUser} isOwned={this.isOwned} />
+                      <ListItemGroup
+                        dataTrip={item}
+                        nameGroup={item.name}
+                        price={item.oweUser}
+                        isOwned={this.isOwned}
+                      />
                     )}
                   </TouchableOpacity>
                 )

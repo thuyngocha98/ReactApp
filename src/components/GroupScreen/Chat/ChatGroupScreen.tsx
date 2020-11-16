@@ -42,7 +42,7 @@ type Props = {
   navigation?: any;
   nameGroup?: any;
   user?: {
-    _id?: string,
+    _id?: string;
   };
 };
 
@@ -674,7 +674,7 @@ class ChatGroupScreen extends Component<Props, States> {
         userId: this.props.user._id,
         latitude: currentLocation.coords.latitude,
         longitude: currentLocation.coords.longitude,
-      }
+      };
       await fetch(`${BASEURL}/api/locationUser/create_or_update_location_user`, {
         method: 'POST',
         headers: {
@@ -732,7 +732,7 @@ class ChatGroupScreen extends Component<Props, States> {
         userId: this.props.user._id,
         latitude: currentLocation.coords.latitude,
         longitude: currentLocation.coords.longitude,
-      }
+      };
       await fetch(`${BASEURL}/api/locationUser/create_or_update_location_user`, {
         method: 'POST',
         headers: {
@@ -747,7 +747,7 @@ class ChatGroupScreen extends Component<Props, States> {
           alert(error);
         });
     }
-    this.props.navigation.navigate('MainDirectionScreen', {tripId: this.tripId});
+    this.props.navigation.navigate('MainDirectionScreen', { tripId: this.tripId });
   };
   _callShowDirections = async (location) => {
     let { status } = await Location.requestPermissionsAsync();
@@ -1023,22 +1023,24 @@ class ChatGroupScreen extends Component<Props, States> {
               }}
             >
               {lengthMessage < 1 ? (
-                <View style={{ flex: 1, flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row' }}>
                   <TouchableOpacity style={ChatGroupScreenStyles.location} onPress={this.shareLocation}>
-                    <MaterialIcons name={'location-on'} size={31} color={Colors.tintColor} />
+                    <MaterialIcons name={'location-on'} size={screenWidth / 14} color={Colors.tintColor} />
                   </TouchableOpacity>
                   <TouchableOpacity style={ChatGroupScreenStyles.camera} onPress={this.imageCamera}>
-                    <FontAwesome name={'camera'} size={26} color={Colors.tintColor} />
+                    <FontAwesome name={'camera'} size={screenWidth / 16} color={Colors.tintColor} />
                   </TouchableOpacity>
                   <TouchableOpacity style={ChatGroupScreenStyles.image} onPress={this.imagePhoto}>
-                    <FontAwesome name={'photo'} size={25} color={Colors.tintColor} />
+                    <FontAwesome name={'photo'} size={screenWidth / 16} color={Colors.tintColor} />
                   </TouchableOpacity>
                 </View>
-              ) : (
-                <View></View>
-              )}
+              ) : null}
               <View
-                style={lengthMessage > 0 ? { flex: 8.5, marginLeft: 10 } : { flex: 6, marginLeft: screenWidth / 5 }}
+                style={
+                  lengthMessage > 0
+                    ? { marginLeft: screenWidth / 100, flex: 1 }
+                    : { marginLeft: screenWidth / 35, flex: 1, marginRight: screenWidth / 50 }
+                }
               >
                 <TextInput
                   style={ChatGroupScreenStyles.input}
@@ -1053,14 +1055,14 @@ class ChatGroupScreen extends Component<Props, States> {
                 />
               </View>
               {/* <View style={{}}/> */}
-              <View style={{ flex: 1 }}>
+              <View>
                 {lengthMessage > 0 ? (
                   <TouchableOpacity style={ChatGroupScreenStyles.send} onPress={this.submitMessage}>
-                    <Ionicons1 name={'ios-send'} size={20} color={Colors.white} />
+                    <Ionicons1 name={'ios-send'} size={screenWidth / 20} color={Colors.white} />
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity style={ChatGroupScreenStyles.microphone} onPress={this.audioMessage}>
-                    <FontAwesome name={'microphone'} size={28} color={Colors.tintColor} />
+                    <FontAwesome name={'microphone'} size={screenWidth / 16} color={Colors.tintColor} />
                   </TouchableOpacity>
                 )}
               </View>
@@ -1070,14 +1072,14 @@ class ChatGroupScreen extends Component<Props, States> {
                 {this.state.isStopLocation ? (
                   <TouchableOpacity style={ChatGroupScreenStyles.shareLocation} onPress={this.isStopShareLocation}>
                     <Text style={{ color: Colors.white, fontSize: 18, fontWeight: 'bold', opacity: 0.9 }}>
-                      Stop share live location
+                      Kết thúc chia sẻ vị trí
                     </Text>
                   </TouchableOpacity>
                 ) : (
                   <View>
                     <TouchableOpacity style={ChatGroupScreenStyles.shareLocation} onPress={this.isStartShareLocation}>
                       <Text style={{ color: Colors.white, fontSize: 18, fontWeight: 'bold', opacity: 0.9 }}>
-                        Start share live location
+                        Bắt đầu chia sẻ vị trí
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={ChatGroupScreenStyles.shareLocation} onPress={this.directionMap}>
@@ -1108,22 +1110,24 @@ class ChatGroupScreen extends Component<Props, States> {
               }}
             >
               {lengthMessage < 1 ? (
-                <View style={{ flex: 1, flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row' }}>
                   <TouchableOpacity style={ChatGroupScreenStyles.location} onPress={this.shareLocation}>
-                    <MaterialIcons name={'location-on'} size={31} color={Colors.tintColor} />
+                    <MaterialIcons name={'location-on'} size={screenWidth / 14} color={Colors.tintColor} />
                   </TouchableOpacity>
                   <TouchableOpacity style={ChatGroupScreenStyles.camera} onPress={this.imageCamera}>
-                    <FontAwesome name={'camera'} size={26} color={Colors.tintColor} />
+                    <FontAwesome name={'camera'} size={screenWidth / 16} color={Colors.tintColor} />
                   </TouchableOpacity>
                   <TouchableOpacity style={ChatGroupScreenStyles.image} onPress={this.imagePhoto}>
-                    <FontAwesome name={'photo'} size={25} color={Colors.tintColor} />
+                    <FontAwesome name={'photo'} size={screenWidth / 16} color={Colors.tintColor} />
                   </TouchableOpacity>
                 </View>
-              ) : (
-                <View></View>
-              )}
+              ) : null}
               <View
-                style={lengthMessage > 0 ? { flex: 8.5, marginLeft: 10 } : { flex: 6, marginLeft: screenWidth / 5 }}
+                style={
+                  lengthMessage > 0
+                    ? { marginLeft: screenWidth / 100, flex: 1 }
+                    : { marginLeft: screenWidth / 35, flex: 1, marginRight: screenWidth / 50 }
+                }
               >
                 <TextInput
                   style={ChatGroupScreenStyles.input}
@@ -1137,14 +1141,14 @@ class ChatGroupScreen extends Component<Props, States> {
                   onChangeText={this.chatMessage}
                 />
               </View>
-              <View style={{ flex: 1 }}>
+              <View>
                 {lengthMessage > 0 ? (
                   <TouchableOpacity style={ChatGroupScreenStyles.send} onPress={this.submitMessage}>
-                    <Ionicons1 name={'ios-send'} size={20} color={Colors.white} />
+                    <Ionicons1 name={'ios-send'} size={screenWidth / 20} color={Colors.white} />
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity style={ChatGroupScreenStyles.microphone} onPress={this.audioMessage}>
-                    <FontAwesome name={'microphone'} size={28} color={Colors.tintColor} />
+                    <FontAwesome name={'microphone'} size={screenWidth / 16} color={Colors.tintColor} />
                   </TouchableOpacity>
                 )}
               </View>
@@ -1159,11 +1163,18 @@ class ChatGroupScreen extends Component<Props, States> {
                       </Text>
                     </TouchableOpacity>
                   ) : (
-                    <TouchableOpacity style={ChatGroupScreenStyles.shareLocation} onPress={this.isStartShareLocation}>
-                      <Text style={{ color: Colors.white, fontSize: 18, fontWeight: 'bold', opacity: 0.9 }}>
-                        Bắt đầu chia sẻ vị trí
-                      </Text>
-                    </TouchableOpacity>
+                    <View>
+                      <TouchableOpacity style={ChatGroupScreenStyles.shareLocation} onPress={this.isStartShareLocation}>
+                        <Text style={{ color: Colors.white, fontSize: 18, fontWeight: 'bold', opacity: 0.9 }}>
+                          Bắt đầu chia sẻ vị trí
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={ChatGroupScreenStyles.shareLocation} onPress={this.directionMap}>
+                        <Text style={{ color: Colors.white, fontSize: 18, fontWeight: 'bold', opacity: 0.9 }}>
+                          Xem vị trí các thành viên
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
                   )}
                 </View>
               ) : null}

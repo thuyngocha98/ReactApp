@@ -23,7 +23,6 @@ const ExpenseMoreOptionScreenStyles = StyleSheet.create({
     marginHorizontal: screenWidth / 27.43,
   },
   addContact: {
-    flex: 5,
     fontSize: 20,
     fontWeight: '500',
     color: Colors.white,
@@ -61,6 +60,7 @@ const ExpenseMoreOptionScreenStyles = StyleSheet.create({
   },
   title2: {
     fontSize: 16,
+    marginTop: screenWidth / 40,
   },
   categorySelectTypeSplit: {
     flexDirection: 'row',
@@ -156,8 +156,9 @@ const ExpenseMoreOptionScreenStyles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   txtAll: {
-    fontSize: 17,
+    fontSize: screenWidth / 20,
     fontWeight: '500',
+    marginRight: screenWidth / 150,
   },
   iconAll: {
     justifyContent: 'center',

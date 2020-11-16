@@ -35,7 +35,8 @@ import destination from '../../../../assets/images/destination.png';
 import map from '../../../../assets/images/map.png';
 // @ts-ignore
 import groupChat from '../../../../assets/images/group-chat.png';
-
+// @ts-ignore
+import plus from '../../../../assets/images/plus.png';
 function mapStateToProps(state) {
   return {};
 }
@@ -62,9 +63,10 @@ class DetailGroupScreen extends Component<Props, States> {
     numberUserInTrip: 0,
     modalVisible: false,
     index: 0,
+
     routes: [
       { key: 'first', title: 'Tổng quan' },
-      { key: 'second', title: 'Giao dịch' },
+      { key: 'second', title: 'Xem chi tiết' },
     ],
   };
 
@@ -108,6 +110,7 @@ class DetailGroupScreen extends Component<Props, States> {
     })
       .then((response) => response.json())
       .then(async (res) => {
+        console.log(res);
         await this.setState({
           numberUserInTrip: res.numberUser,
           data: res.data.reverse(),
@@ -168,6 +171,7 @@ class DetailGroupScreen extends Component<Props, States> {
             navigation={this.props.navigation}
             nameGroup={this.dataTrip.name}
             idGroup={this.dataTrip._id}
+            dataTrip={this.dataTrip}
             // startDay={this.dataTrip.startDay}
             // endDay={this.dataTrip.endDay}
             time={this.dataTrip.create_date}
@@ -181,6 +185,18 @@ class DetailGroupScreen extends Component<Props, States> {
             renderScene={SceneMap({
               first: () => (
                 <ScrollView>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('InputExpenseScreen', { dataGroup: this.dataTrip });
+                    }}
+                  >
+                    <View style={[DetailGroupScreenStyles.overView, { marginTop: screenHeight / 40 }]}>
+                      <Image style={DetailGroupScreenStyles.imageOverView} source={plus} />
+                      <Text style={{ marginLeft: screenWidth / 20 }}>Tạo mới</Text>
+                      <View style={{ flex: 1 }} />
+                      <AntDesign name={'right'} size={screenWidth / 28} />
+                    </View>
+                  </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => {
                       navigation.navigate('MainPlanInTripScreen', { tripId: this.dataTrip._id });
@@ -287,16 +303,17 @@ class DetailGroupScreen extends Component<Props, States> {
             initialLayout={{ width: screenWidth }}
           />
         </View>
-
-        {this.state.modalVisible ? null : (
-          <TouchableOpacity
-            style={DetailGroupScreenStyles.addTrip}
-            activeOpacity={0.5}
-            onPress={() => this.setState({ modalVisible: !this.state.modalVisible })}
-          >
-            <MaterialIcons name={'add'} color={Colors.white} size={screenWidth / 9} />
-          </TouchableOpacity>
-        )}
+        {this.state.index == 1 ? (
+          this.state.modalVisible ? null : (
+            <TouchableOpacity
+              style={DetailGroupScreenStyles.addTrip}
+              activeOpacity={0.5}
+              onPress={() => this.setState({ modalVisible: !this.state.modalVisible })}
+            >
+              <MaterialIcons name={'add'} color={Colors.white} size={screenWidth / 9} />
+            </TouchableOpacity>
+          )
+        ) : null}
       </View>
     );
   }

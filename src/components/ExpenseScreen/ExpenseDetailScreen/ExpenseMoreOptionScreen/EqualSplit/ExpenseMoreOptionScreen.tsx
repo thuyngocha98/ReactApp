@@ -92,11 +92,13 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
     this.listUser = navigation.getParam('listUser', '');
     const totalMoney = navigation.getParam('totalMoney', '');
     const list_user = navigation.getParam('list_user', '');
+    console.log(this.listUser);
     const userPayer = navigation.getParam('userPayer', []);
     const thumbnail =
       userPayer.user_id.avatar.length > 2
         ? { uri: `${BASEURL}/images/avatars/${userPayer.user_id.avatar}` }
         : thumbnails['avatar' + userPayer.user_id.avatar];
+
     return (
       <View style={ExpenseMoreOptionScreenStyles.container}>
         <StatusBar barStyle="light-content" hidden={false} backgroundColor={'transparent'} translucent />
@@ -129,7 +131,7 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
           </View>
           <View style={ExpenseMoreOptionScreenStyles.content}>
             <Text style={ExpenseMoreOptionScreenStyles.txt1}>
-              {`Paid by `}
+              {`Thành viên thanh toán:  `}
               <Text style={ExpenseMoreOptionScreenStyles.txt2}>{userPayer.user_id.name}</Text>
             </Text>
           </View>
@@ -140,7 +142,7 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
         <View style={ExpenseMoreOptionScreenStyles.underLineInput} />
         <View style={ExpenseMoreOptionScreenStyles.contentSplit}>
           <Text style={ExpenseMoreOptionScreenStyles.title1}>Chia đều</Text>
-          <Text style={ExpenseMoreOptionScreenStyles.title2}>Select which people owe an equal share.</Text>
+          <Text style={ExpenseMoreOptionScreenStyles.title2}>Chọn người tham gia, số tiền sẽ được chia đều.</Text>
         </View>
         <View style={ExpenseMoreOptionScreenStyles.categoryTypeGroup}>
           <TouchableOpacity style={{ flex: 1 }} onPress={() => {}}>
@@ -208,7 +210,7 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
                 ],
               ]}
             >
-              custom
+              Tùy Chọn
             </Text>
           </TouchableOpacity>
         </View>
@@ -243,7 +245,7 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
                             ]}
                             source={
                               item.user_id.avatar.length > 2
-                                ? { uri: `data:image/png;base64,${item.user_id.avatar}` }
+                                ? { uri: `${BASEURL}/images/avatars/${item.user_id.avatar}` }
                                 : thumbnails['avatar' + item.user_id.avatar]
                             }
                           />
@@ -282,14 +284,14 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
                 {number2money(this.state.moneysigle)} VND/người
               </Text>
               <Text style={ExpenseMoreOptionScreenStyles.numberPeople}>
-                {`(` + this.state.numberPeople + ` people)`}
+                {`(` + this.state.numberPeople + ` thành viên)`}
               </Text>
             </View>
             <View style={ExpenseMoreOptionScreenStyles.viewSeparate}>
               <View style={ExpenseMoreOptionScreenStyles.separate} />
             </View>
             <View style={ExpenseMoreOptionScreenStyles.all}>
-              <Text style={ExpenseMoreOptionScreenStyles.txtAll}>All</Text>
+              <Text style={ExpenseMoreOptionScreenStyles.txtAll}>Tất Cả</Text>
               <View style={ExpenseMoreOptionScreenStyles.iconAll}>
                 <Ionicons
                   name="ios-checkmark-circle"

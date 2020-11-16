@@ -13,6 +13,9 @@ import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-m
 import { BASEURL } from '../../../api/api';
 import { number2money } from '../../../constants/FunctionCommon';
 import DialogInput from 'react-native-dialog-input';
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
+import styles from '../../../styles/FriendsScreenStyles/MainFriendsOweScreenStyle/MainFriendsOweScreenStyle';
 
 function mapStateToProps(state) {
   return {
@@ -31,6 +34,7 @@ type Props = {
   numberUserInTrip?: number;
   startDay?: string;
   endDay?: string;
+  dataTrip?: any;
 };
 
 type States = {
@@ -38,6 +42,7 @@ type States = {
   opened?: boolean;
   isDialogVisible?: boolean;
   nameGroup?: any;
+  image?: any;
 };
 
 class HeaderTitleComponent extends Component<Props, States> {
@@ -48,6 +53,7 @@ class HeaderTitleComponent extends Component<Props, States> {
       opened: false,
       isDialogVisible: false,
       nameGroup: '',
+      image: null,
     };
   }
 
@@ -194,9 +200,106 @@ class HeaderTitleComponent extends Component<Props, States> {
       });
   };
 
+  imageLibary = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+    if (!result.cancelled) {
+      let localUri = result.uri;
+      let filename = localUri.split('/').pop();
+
+      // Infer the type of the image
+      let match = /\.(\w+)$/.exec(filename);
+      let type = match ? `image/${match[1]}` : `image`;
+      let image = {
+        uri: localUri,
+        name: filename,
+        type,
+      };
+      this.setState({
+        image,
+      });
+      this.saveImagePhoto();
+    }
+  };
+
+  takePhoto = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+    if (!result.cancelled) {
+      let localUri = result.uri;
+      let filename = localUri.split('/').pop();
+
+      // Infer the type of the image
+      let match = /\.(\w+)$/.exec(filename);
+      let type = match ? `image/${match[1]}` : `image`;
+      let image = {
+        uri: localUri,
+        name: filename,
+        type,
+      };
+      this.setState({
+        image,
+      });
+      this.saveImagePhoto();
+    }
+  };
+
+  saveImagePhoto = async () => {
+    let bodyFormData = new FormData();
+    bodyFormData.append('image', this.state.image);
+    bodyFormData.append('tripId', this.props.dataTrip._id);
+    await fetch(`${BASEURL}/api/trip/change_avatar_group`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      body: bodyFormData,
+    })
+      .then((response) => response.json())
+      .then((res) => {})
+      .catch((error) => {
+        console.log(error);
+      });
+    this.setState({
+      image: null,
+    });
+  };
+
+  camera = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status !== 'granted') {
+      alert('Sorry, we need camera roll permissions to make this work!');
+    } else {
+      Alert.alert(
+        'Thay đổi ảnh đại diện nhóm',
+        '',
+        [
+          {
+            text: 'Truy cập thư viện',
+            onPress: this.imageLibary,
+          },
+          {
+            text: 'Chụp ảnh',
+            onPress: this.takePhoto,
+          },
+        ],
+        { cancelable: false },
+      );
+    }
+  };
+
   render() {
+    const lengthAvatar = this.props.dataTrip.avatarGroup.length;
     const { navigation } = this.props;
     var time = this.props.time.split('-');
+    const avatar =
+      lengthAvatar > 2
+        ? { uri: `${BASEURL}/images/avatarsGroup/${this.props.dataTrip.avatarGroup}` }
+        : require('../../../../assets/images/icon_camera.png');
     return (
       <MenuProvider>
         <DialogInput
@@ -229,10 +332,19 @@ class HeaderTitleComponent extends Component<Props, States> {
                   <Ionicons name="ios-arrow-back" size={32} color={Colors.white} />
                 </View>
               </TouchableOpacity>
-              <Image
-                style={HeaderTitleComponentStyles.iconCamera}
-                source={require('../../../../assets/images/icon_camera.png')}
-              />
+              <TouchableOpacity onPress={this.camera}>
+                <Image
+                  style={
+                    this.state.image
+                      ? HeaderTitleComponentStyles.iconCamera1
+                      : lengthAvatar > 0
+                      ? HeaderTitleComponentStyles.iconCamera1
+                      : HeaderTitleComponentStyles.iconCamera
+                  }
+                  source={this.state.image ? { uri: this.state.image.uri } : avatar}
+                  resizeMode="cover"
+                />
+              </TouchableOpacity>
               <View style={HeaderTitleComponentStyles.btnSetting}>
                 <Menu opened={this.state.opened} onBackdropPress={() => this.onBackdropPress()}>
                   <MenuTrigger
@@ -253,12 +365,12 @@ class HeaderTitleComponent extends Component<Props, States> {
             <View style={HeaderTitleComponentStyles.contentText}>
               <Text style={HeaderTitleComponentStyles.textTitle}>{this.props.nameGroup}</Text>
               <Text style={HeaderTitleComponentStyles.numberPeopleAndTime}>
-                {this.props.numberUserInTrip} thành viên tham gia nhóm được tạo - tháng {time[1]} {time[0]}
+                {this.props.numberUserInTrip} thành viên tham gia. Nhóm được tạo - tháng {time[1]} {time[0]}
               </Text>
               {/*<Text style={HeaderTitleComponentStyles.startEndDay}>From {this.props.startDay.toString().split('-').join(' ')} To {this.props.endDay.toString().split('-').join(' ')}</Text>*/}
               <View style={HeaderTitleComponentStyles.owesAndMoney}>
                 <Text style={HeaderTitleComponentStyles.owes}>
-                  {this.props.amount >= 0 ? 'Bạn Dư : ' : 'Bạn Nợ : '}
+                  {this.props.amount >= 0 ? 'Bạn lấy lại : ' : 'Bạn nợ : '}
                 </Text>
                 <Text style={HeaderTitleComponentStyles.money}>
                   {this.props.amount >= 0 ? (

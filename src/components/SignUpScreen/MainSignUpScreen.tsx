@@ -14,14 +14,6 @@ import {
 import styles from '../../styles/SignUpScreenStyle/MainSignUpScreenStyle';
 // @ts-ignore
 import reactLogo from '../../../assets/images/wego.png';
-// @ts-ignore
-import signUpUser from '../../../assets/images/signUpUser.png';
-// @ts-ignore
-import email from '../../../assets/images/envelope.png';
-// @ts-ignore
-import lock from '../../../assets/images/lock.png';
-// @ts-ignore
-import key from '../../../assets/images/key.png';
 import { BASEURL } from '../../api/api';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Colors from '../../constants/Colors';
@@ -30,6 +22,8 @@ import DialogBox from 'react-native-dialogbox';
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 type Props = {
   navigation?: any;
@@ -44,7 +38,7 @@ class MainSignUpScreen extends Component<Props> {
     email: '',
     password: '',
     repeatPassword: '',
-    tokenNotification: ''
+    tokenNotification: '',
   };
   scroll: any;
   emailTextInput: TextInput;
@@ -81,43 +75,43 @@ class MainSignUpScreen extends Component<Props> {
 
   registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
-        const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-        let finalStatus = existingStatus;
-        if (existingStatus !== 'granted') {
-            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-            finalStatus = status;
-        }
-        if (finalStatus !== 'granted') {
-            alert('Failed to get push token for push notification!');
-            return;
-        }
-        let token = await Notifications.getExpoPushTokenAsync();
-        this.setState({tokenNotification: token});
+      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      let token = await Notifications.getExpoPushTokenAsync();
+      this.setState({ tokenNotification: token });
     } else {
-        alert('Must use physical device for Push Notifications');
+      alert('Must use physical device for Push Notifications');
     }
 
     if (Platform.OS === 'android') {
-        Notifications.createChannelAndroidAsync('default', {
+      Notifications.createChannelAndroidAsync('default', {
         name: 'default',
         sound: true,
         priority: 'max',
         vibrate: [0, 250, 250, 250],
-        });
+      });
     }
   };
 
   signUp = async () => {
     await this.registerForPushNotificationsAsync();
     if (this.state.name.length < 2) {
-      this.handleOnPress('Error!', ['Name invalid!', 'Name must be at least 2 characters.']);
+      this.handleOnPress('Lỗi!', ['Tên không có giá trị!', 'Tên phải có ít nhất 2 ký tự.']);
     } else if (!this.validateEmail(this.state.email)) {
-      this.handleOnPress('Error!', ['Email invalid!', 'Please check again.']);
+      this.handleOnPress('Lỗi!', ['Email không có giá trị!', 'Vui lòng kiểm tra lại.']);
     } else if (this.state.password === '') {
-      this.handleOnPress('Error!', ['Password invalid!', 'Please enter password.']);
+      this.handleOnPress('Lỗi!', ['Mật khẩu không có giá trị!', 'Vui lòng nhập lại mật khẩu.']);
       return;
     } else if (this.state.password.length < 5) {
-      this.handleOnPress('Error!', ['Password invalid!', 'Password must be at least 5 characters.']);
+      this.handleOnPress('Lỗi!', ['Mật khẩu không có giá trị!', 'Mật khẩu phải có ít nhất 5 ký tự.']);
       return;
     } else {
       if (this.state.password === this.state.repeatPassword) {
@@ -140,16 +134,19 @@ class MainSignUpScreen extends Component<Props> {
           .then((response) => response.json())
           .then((res) => {
             if (res.error) {
-              this.handleOnPress('Error!', [res.error, 'Please check again.']);
+              this.handleOnPress('Lỗi!', [res.error, 'Vui lòng kiểm tra lại.']);
             } else {
-              this.props.navigation.navigate('verifyScreen');
+              if (res.result == 'ok') {
+                this.props.navigation.navigate('verifyScreen');
+                Alert.alert('Vui lòng kiểm tra email để nhập mã pin.');
+              }
             }
           })
           .catch((error) => {
             console.log(error);
           });
       } else {
-        this.handleOnPress('Error!', ['Confirm password incorrect', 'Please check again.']);
+        this.handleOnPress('Lỗi!', ['Xác nhận mật khẩu không đúng.', 'Vui lòng kiểm tra lại.']);
       }
     }
   };
@@ -175,141 +172,146 @@ class MainSignUpScreen extends Component<Props> {
         >
           <View style={styles.mainContainer}>
             <StatusBar barStyle="dark-content" hidden={false} backgroundColor={'transparent'} translucent />
-            <View>
-              <View style={styles.header}>
-                <Image source={reactLogo} style={styles.reactLogo} />
+            <View style={styles.header}>
+              <Image source={reactLogo} style={styles.reactLogo} />
+            </View>
+            <View style={styles.userContainer}>
+              <View style={styles.user}>
+                <Ionicons name="md-person" size={screenWidth / 15} color="gray" />
+                <TextInput
+                  style={styles.input}
+                  onChangeText={(text) =>
+                    this.setState({
+                      name: text,
+                    })
+                  }
+                  placeholder={'Tên '}
+                  autoCapitalize={'words'}
+                  returnKeyType={'next'}
+                  maxLength={30}
+                  keyboardType="default"
+                  autoCorrect={false}
+                  placeholderTextColor={Colors.lightgray}
+                  underlineColorAndroid="transparent"
+                  onSubmitEditing={() => {
+                    this.emailTextInput.focus();
+                  }}
+                  blurOnSubmit={false}
+                  onFocus={() => {
+                    this._scrollToInput(0);
+                  }}
+                />
               </View>
             </View>
-            <View>
-              <View style={styles.userContainer}>
-                <View style={styles.user}>
-                  <Image source={signUpUser} style={styles.userName} />
-                  <TextInput
-                    style={styles.input}
-                    onChangeText={(text) =>
-                      this.setState({
-                        name: text,
-                      })
-                    }
-                    placeholder={'Name'}
-                    autoCapitalize={'words'}
-                    returnKeyType={'next'}
-                    maxLength={30}
-                    keyboardType="default"
-                    autoCorrect={false}
-                    placeholderTextColor={Colors.lightgray}
-                    underlineColorAndroid="transparent"
-                    onSubmitEditing={() => {
-                      this.emailTextInput.focus();
-                    }}
-                    blurOnSubmit={false}
-                    onFocus={() => {
-                      this._scrollToInput(0);
-                    }}
-                  />
-                </View>
+            <View style={styles.userContainer}>
+              <View style={styles.user}>
+                <MaterialIcons
+                  name="email"
+                  size={screenWidth / 16}
+                  style={{ marginLeft: -screenWidth / 170 }}
+                  color="gray"
+                />
+                <TextInput
+                  style={styles.input}
+                  onChangeText={(text) =>
+                    this.setState({
+                      email: text,
+                    })
+                  }
+                  placeholder={'Email '}
+                  autoCapitalize={'none'}
+                  returnKeyType={'next'}
+                  keyboardType="email-address"
+                  autoCorrect={false}
+                  placeholderTextColor={Colors.lightgray}
+                  underlineColorAndroid="transparent"
+                  ref={(input) => {
+                    this.emailTextInput = input;
+                  }}
+                  onSubmitEditing={() => {
+                    this.passTextInput.focus();
+                  }}
+                  blurOnSubmit={false}
+                  onFocus={() => {
+                    this._scrollToInput(screenWidth / 8);
+                  }}
+                />
               </View>
             </View>
-            <View>
-              <View style={styles.userContainer}>
-                <View style={styles.user}>
-                  <Image source={email} style={styles.userName} />
-                  <TextInput
-                    style={styles.input}
-                    onChangeText={(text) =>
-                      this.setState({
-                        email: text,
-                      })
-                    }
-                    placeholder={'Email '}
-                    autoCapitalize={'none'}
-                    returnKeyType={'next'}
-                    keyboardType="email-address"
-                    autoCorrect={false}
-                    placeholderTextColor={Colors.lightgray}
-                    underlineColorAndroid="transparent"
-                    ref={(input) => {
-                      this.emailTextInput = input;
-                    }}
-                    onSubmitEditing={() => {
-                      this.passTextInput.focus();
-                    }}
-                    blurOnSubmit={false}
-                    onFocus={() => {
-                      this._scrollToInput(screenWidth / 8);
-                    }}
-                  />
-                </View>
+            <View style={styles.userContainer}>
+              <View style={styles.user}>
+                <MaterialIcons
+                  name="lock"
+                  size={screenWidth / 16}
+                  style={{ marginLeft: -screenWidth / 100, marginBottom: screenWidth / screenWidth }}
+                  color="gray"
+                />
+                <TextInput
+                  style={styles.input}
+                  onChangeText={(text) =>
+                    this.setState({
+                      password: text,
+                    })
+                  }
+                  placeholder={'Mật khẩu'}
+                  autoCapitalize={'none'}
+                  returnKeyType={'next'}
+                  keyboardType="default"
+                  secureTextEntry
+                  autoCorrect={false}
+                  placeholderTextColor={Colors.lightgray}
+                  underlineColorAndroid="transparent"
+                  ref={(input) => {
+                    this.passTextInput = input;
+                  }}
+                  onSubmitEditing={() => {
+                    this.rePassTextInput.focus();
+                  }}
+                  blurOnSubmit={false}
+                  onFocus={() => {
+                    this._scrollToInput(screenWidth / 5.1375);
+                  }}
+                />
               </View>
             </View>
-            <View>
-              <View style={styles.userContainer}>
-                <View style={styles.user}>
-                  <Image source={lock} style={styles.userName} />
-                  <TextInput
-                    style={styles.input}
-                    onChangeText={(text) =>
-                      this.setState({
-                        password: text,
-                      })
-                    }
-                    placeholder={'Password '}
-                    autoCapitalize={'none'}
-                    returnKeyType={'next'}
-                    keyboardType="default"
-                    secureTextEntry
-                    autoCorrect={false}
-                    placeholderTextColor={Colors.lightgray}
-                    underlineColorAndroid="transparent"
-                    ref={(input) => {
-                      this.passTextInput = input;
-                    }}
-                    onSubmitEditing={() => {
-                      this.rePassTextInput.focus();
-                    }}
-                    blurOnSubmit={false}
-                    onFocus={() => {
-                      this._scrollToInput(screenWidth / 5.1375);
-                    }}
-                  />
-                </View>
-              </View>
-            </View>
-            <View>
-              <View style={styles.userContainer}>
-                <View style={styles.user}>
-                  <Image source={key} style={styles.userName} />
-                  <TextInput
-                    style={styles.input}
-                    onChangeText={(text) =>
-                      this.setState({
-                        repeatPassword: text,
-                      })
-                    }
-                    placeholder={'Confirm Password'}
-                    autoCapitalize={'none'}
-                    returnKeyType={'done'}
-                    keyboardType="default"
-                    secureTextEntry
-                    autoCorrect={false}
-                    placeholderTextColor={Colors.lightgray}
-                    underlineColorAndroid="transparent"
-                    ref={(input) => {
-                      this.rePassTextInput = input;
-                    }}
-                    // onSubmitEditing={() => { this.secondTextInput.focus(); }}
-                    onFocus={() => {
-                      this._scrollToInput(screenWidth / 2.5);
-                    }}
-                    onSubmitEditing={Keyboard.dismiss}
-                  />
-                </View>
+            <View style={styles.userContainer1}>
+              <View style={styles.user}>
+                <Ionicons
+                  name="md-key"
+                  size={screenWidth / 14}
+                  color="gray"
+                  style={{ marginBottom: -screenWidth / 150 }}
+                />
+                <TextInput
+                  style={styles.input}
+                  onChangeText={(text) =>
+                    this.setState({
+                      repeatPassword: text,
+                    })
+                  }
+                  placeholder={'Xác nhận mật khẩu'}
+                  autoCapitalize={'none'}
+                  returnKeyType={'done'}
+                  keyboardType="default"
+                  secureTextEntry
+                  autoCorrect={false}
+                  placeholderTextColor={Colors.lightgray}
+                  underlineColorAndroid="transparent"
+                  ref={(input) => {
+                    this.rePassTextInput = input;
+                  }}
+                  // onSubmitEditing={() => { this.secondTextInput.focus(); }}
+                  onFocus={() => {
+                    this._scrollToInput(screenWidth / 2.5);
+                  }}
+                  onSubmitEditing={Keyboard.dismiss}
+                />
               </View>
             </View>
             <View>
               <View style={styles.buttonSignUp}>
                 <TouchableOpacity activeOpacity={0.5} style={styles.buttonSignUp1} onPress={this.signUp}>
-                  <Text style={styles.textSignUp}>Sign Up</Text>
+                  <Text style={styles.textSignUp}>Đăng Ký</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -320,7 +322,7 @@ class MainSignUpScreen extends Component<Props> {
                   style={styles.buttonLogin1}
                   onPress={() => navigation.navigate('MainLoginScreen')}
                 >
-                  <Text style={styles.textLogin}>Login </Text>
+                  <Text style={styles.textLogin}>Đăng Nhập</Text>
                 </TouchableOpacity>
               </View>
             </View>

@@ -15,11 +15,12 @@ import {
 } from 'react-native';
 import { Ionicons, FontAwesome5, Octicons } from '@expo/vector-icons';
 import ListItemNumberSplit from './ListItemNumberSplit';
-import { APPBAR_HEIGHT } from '../../../../../constants/Dimensions';
+import { APPBAR_HEIGHT, screenWidth } from '../../../../../constants/Dimensions';
 import Colors from '../../../../../constants/Colors';
 import ExpenseByNumberSplitScreenStyles from '../../../../../styles/ExpenseScreenStyles/ExpenseDetailScreenStyles/ExpenseMoreOptionScreenStyles/NumberSplit/ExpenseByNumberSplitScreenStyles';
 import { thumbnails, number2money } from '../../../../../constants/FunctionCommon';
 import { KeyboardAwareFlatList, KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { BASEURL } from '../../../../../api/api';
 
 function mapStateToProps(state) {
   return {};
@@ -193,7 +194,7 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
                   ],
                 ]}
               >
-                custom
+                Tùy Chọn
               </Text>
             </TouchableOpacity>
           </View>
@@ -204,7 +205,7 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
               renderItem={({ item, index }) => {
                 const thumbnail =
                   item.user_id.avatar.length > 2
-                    ? { uri: `data:image/png;base64,${item.user_id.avatar}` }
+                    ? { uri: `${BASEURL}/images/avatars/${item.user_id.avatar}` }
                     : thumbnails['avatar' + item.user_id.avatar];
                 return (
                   <View style={ExpenseByNumberSplitScreenStyles.mainFlatlist}>
@@ -259,11 +260,12 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
         <View style={ExpenseByNumberSplitScreenStyles.footer}>
           <View style={ExpenseByNumberSplitScreenStyles.line1}>
             <Text style={ExpenseByNumberSplitScreenStyles.moneyTotal}>
-              {number2money(this.state.moneyCurrent)} VND of
+              {number2money(this.state.moneyCurrent)} VND -
             </Text>
             <Text style={ExpenseByNumberSplitScreenStyles.moneyTotal}>{` ${number2money(this.totalMoney)}`} VND</Text>
           </View>
           <View style={ExpenseByNumberSplitScreenStyles.line2}>
+            <Text style={{ fontSize: screenWidth / 24 }}>Đầu ra còn lại: </Text>
             <Text
               style={[
                 ExpenseByNumberSplitScreenStyles.moneyLeft,
@@ -276,9 +278,11 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
                       : Colors.orangered,
                 },
               ]}
-            >
-              {number2money(this.state.moneyLeft)} VND left
+            ></Text>
+            <Text style={{ fontSize: screenWidth / 24, color: 'purple' }}>
+              {number2money(this.state.moneyLeft)} VND
             </Text>
+            <Text style={{ fontSize: screenWidth / 24 }}> chưa thanh toán</Text>
           </View>
         </View>
       </View>

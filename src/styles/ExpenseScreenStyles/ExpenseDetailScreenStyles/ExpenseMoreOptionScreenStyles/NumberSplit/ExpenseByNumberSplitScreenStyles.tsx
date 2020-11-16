@@ -23,7 +23,6 @@ const ExpenseByNumberSplitScreenStyles = StyleSheet.create({
     marginHorizontal: screenWidth / 27.43,
   },
   addContact: {
-    flex: 5,
     fontSize: 20,
     fontWeight: '500',
     color: Colors.white,
@@ -108,7 +107,7 @@ const ExpenseByNumberSplitScreenStyles = StyleSheet.create({
     borderTopRightRadius: screenWidth / 82.2,
     borderBottomRightRadius: screenWidth / 82.2,
     textAlign: 'center',
-    fontSize: 25,
+    fontSize: screenWidth / 16.5,
   },
   viewTabBar: {
     borderColor: Colors.lightgray,
@@ -246,7 +245,7 @@ const ExpenseByNumberSplitScreenStyles = StyleSheet.create({
     alignItems: 'center',
   },
   moneyLeft: {
-    fontSize: 17,
+    fontSize: screenWidth / 24,
   },
 });
 export default ExpenseByNumberSplitScreenStyles;

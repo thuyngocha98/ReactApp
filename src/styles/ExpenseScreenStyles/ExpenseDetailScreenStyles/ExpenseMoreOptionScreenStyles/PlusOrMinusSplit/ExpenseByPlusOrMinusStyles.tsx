@@ -23,7 +23,6 @@ const ExpenseByPlusOrMinusStyles = StyleSheet.create({
     marginHorizontal: screenWidth / 27.43,
   },
   addContact: {
-    flex: 5,
     fontSize: 20,
     fontWeight: '500',
     color: Colors.white,

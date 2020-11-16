@@ -19,7 +19,6 @@ type Props = {
 
 class ListItemPayer extends Component<Props> {
   render() {
-    console.log(this.props.avatar);
     const thumbnail =
       this.props.avatar.length > 2
         ? { uri: `${BASEURL}/images/avatars/${this.props.avatar}` }

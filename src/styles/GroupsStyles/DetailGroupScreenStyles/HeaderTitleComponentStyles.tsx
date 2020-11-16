@@ -36,6 +36,12 @@ const HeaderTitleComponentStyles = StyleSheet.create({
     tintColor: Colors.white,
     alignSelf: 'center',
   },
+  iconCamera1: {
+    width: screenWidth / 5.1425,
+    height: screenWidth / 5.1425,
+    alignSelf: 'center',
+    borderRadius: screenWidth / 10,
+  },
   contentText: {
     width: screenWidth,
     flexDirection: 'column',
