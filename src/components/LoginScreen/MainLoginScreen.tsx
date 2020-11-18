@@ -112,9 +112,9 @@ class MainLoginScreen extends Component<Props, States> {
       .then((response) => response.json())
       .then(async (res) => {
         if (res.error) {
-          if (res.error) {
-            Keyboard.dismiss();
-            Alert.alert(res.error);
+          if (res.error === 'verify') {
+            this.props.navigation.navigate('verifyScreen');
+            Alert.alert('Vui lòng kiểm tra email để nhập mã pin');
           } else this.handleOnPress('Lỗi', [res.error, 'Vui lòn kiểm tra lại.']);
         } else {
           await AsyncStorage.setItem('jwt', res.token);
