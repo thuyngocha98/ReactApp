@@ -8,6 +8,8 @@ import ListItemDetail from './ListItemDetail';
 import { number2money } from '../../../constants/FunctionCommon';
 import { BASEURL } from '../../../api/api';
 import ListItemFriendsOwe from '../../FriendsScreen/MainFriendsOweScreen/ListItemFriendsOwe';
+import moment from 'moment';
+import { screenWidth } from '../../../constants/Dimensions';
 
 function mapStateToProps(state) {
   return {};
@@ -24,6 +26,7 @@ type Props = {
 
 class ListItemGroup extends Component<Props> {
   render() {
+    console.log(this.props.dataTrip);
     const lengthAvatar = this.props.dataTrip.avatarGroup.length;
     const avatar =
       lengthAvatar > 2
@@ -53,6 +56,31 @@ class ListItemGroup extends Component<Props> {
             </View>
           </View>
           <Octicons name="chevron-right" size={25} color={Colors.lightgray} />
+        </View>
+        <View style={{ flexDirection: 'row' }}>
+          <View style={ListItemGroupStyles.dotted1} />
+          <View>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={ListItemGroupStyles.dotted2} />
+              <View style={ListItemGroupStyles.circle} />
+              <View style={ListItemGroupStyles.member1}>
+                <Text style={{ fontSize: screenWidth / 30, opacity: 0.8 }}>
+                  Được tạo ngày {moment(this.props.dataTrip.create_date).format('L')}
+                </Text>
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={ListItemGroupStyles.dotted3} />
+              <View style={ListItemGroupStyles.circle1} />
+              <View style={ListItemGroupStyles.member2}>
+                <Text style={{ fontSize: screenWidth / 30, opacity: 0.8 }}>
+                  {' '}
+                  {this.props.dataTrip.membersTrip} thành viên ( bạn và {this.props.dataTrip.membersTrip - 1} thành viên
+                  khác)
+                </Text>
+              </View>
+            </View>
+          </View>
         </View>
       </View>
     );

@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { screenWidth } from '../../../constants/Dimensions';
 import Colors from '../../../constants/Colors';
 
@@ -47,7 +47,7 @@ const ListItemGroupStyles = StyleSheet.create({
   },
   name: {
     fontWeight: '400',
-    fontSize: 16,
+    fontSize: screenWidth / 25,
   },
   linkComment: {
     height: screenWidth / 20,
@@ -56,6 +56,47 @@ const ListItemGroupStyles = StyleSheet.create({
   linkComment1: {
     height: screenWidth / 10,
     marginLeft: -screenWidth / 80,
+  },
+  dotted1: {
+    height: screenWidth / 6,
+    width: 0.6,
+    backgroundColor: 'black',
+    marginLeft: screenWidth / 22,
+    marginTop: -screenWidth / 70,
+  },
+  dotted2: {
+    height: 0.3,
+    width: screenWidth / 10,
+    backgroundColor: 'black',
+    marginTop: screenWidth / 29,
+  },
+  dotted3: {
+    height: 0.3,
+    width: screenWidth / 10,
+    backgroundColor: 'black',
+    marginTop: screenWidth / 20,
+  },
+  circle: {
+    width: screenWidth / 80,
+    height: screenWidth / 80,
+    backgroundColor: Colors.mediumseagreen,
+    borderRadius: screenWidth / 40,
+    marginTop: screenWidth / 35,
+  },
+  circle1: {
+    width: screenWidth / 80,
+    height: screenWidth / 80,
+    backgroundColor: Colors.mediumseagreen,
+    borderRadius: screenWidth / 40,
+    marginTop: screenWidth / 23,
+  },
+  member1: {
+    marginTop: Platform.OS === 'ios' ? screenWidth / 70 : screenWidth / 90,
+    marginLeft: screenWidth / 80,
+  },
+  member2: {
+    marginTop: Platform.OS === 'ios' ? screenWidth / 40 : screenWidth / 40,
+    marginLeft: screenWidth / 160,
   },
 });
 export default ListItemGroupStyles;
