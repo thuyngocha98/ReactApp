@@ -177,6 +177,7 @@ class ChatGroupScreen extends Component<Props, States> {
   scrollView: ScrollView;
 
   componentDidMount = async () => {
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
     this.getTotalMessage();
     this.socket.on('chat message', async (msg) => {
       if (msg.trip_id === this.tripId) {
@@ -208,15 +209,11 @@ class ChatGroupScreen extends Component<Props, States> {
     });
   };
 
-  UNSAFE_componentWillMount = async () => {
-    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
-  };
-
   _keyboardDidShow = () => {
     this._scrollToInput();
   };
 
-  UNSAFE_componentWillUnmount = async () => {
+  componentWillUnmount = () => {
     this.keyboardDidShowListener.remove();
     this.socket.off('chat message');
   };
@@ -1023,7 +1020,7 @@ class ChatGroupScreen extends Component<Props, States> {
               }}
             >
               {lengthMessage < 1 ? (
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <TouchableOpacity style={ChatGroupScreenStyles.location} onPress={this.shareLocation}>
                     <MaterialIcons name={'location-on'} size={screenWidth / 14} color={Colors.tintColor} />
                   </TouchableOpacity>
@@ -1110,7 +1107,7 @@ class ChatGroupScreen extends Component<Props, States> {
               }}
             >
               {lengthMessage < 1 ? (
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <TouchableOpacity style={ChatGroupScreenStyles.location} onPress={this.shareLocation}>
                     <MaterialIcons name={'location-on'} size={screenWidth / 14} color={Colors.tintColor} />
                   </TouchableOpacity>

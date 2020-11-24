@@ -1,9 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { View, Image, Text } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import ListItemNumberSplitStyles from '../../../../../styles/ExpenseScreenStyles/ExpenseDetailScreenStyles/ExpenseMoreOptionScreenStyles/NumberSplit/ListItemNumberSplitStyles';
-import Colors from '../../../../../constants/Colors';
 import { TextInput } from 'react-native-gesture-handler';
 
 function mapStateToProps(state) {
@@ -17,7 +15,7 @@ type Props = {
     nameMember?: string,
 }
 
-class ListItemNumberSplit extends Component<Props> {
+class ListItemNumberSplit extends PureComponent<Props> {
     render() {
         return (
             <View style={ListItemNumberSplitStyles.flatlistMember}>
@@ -39,7 +37,6 @@ class ListItemNumberSplit extends Component<Props> {
                                 US$
                         </Text>
                         </View>
-                        
                         <View style={ListItemNumberSplitStyles.viewInput}>
                             <TextInput
                                 style={ListItemNumberSplitStyles.inputMoney}

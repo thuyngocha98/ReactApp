@@ -17,6 +17,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import { MaterialIcons } from '@expo/vector-icons';
 import { BASEURL } from '../../../api/api';
+import ModalNotification from '../../components/ModalNotification';
 
 function mapStateToProps(state) {
   return {
@@ -44,6 +45,13 @@ type States = {
   dataTrip?: any[];
   indexSelectTrip?: number;
   loadingTrip?: boolean;
+  modalNotification?: {
+    modalVisible?: boolean,
+    type?: string,
+    title?: string,
+    description?: string,
+    onPress?: () => void;
+  },
 };
 
 class CreateGroupScreen extends Component<Props, States> {
@@ -64,6 +72,13 @@ class CreateGroupScreen extends Component<Props, States> {
     dataTrip: [],
     indexSelectTrip: -1,
     loadingTrip: false,
+    modalNotification: {
+      modalVisible: false,
+      type: 'success',
+      title: '',
+      description: '',
+      onPress: () => {}
+    },
   };
 
   _navListener: any;
@@ -96,28 +111,48 @@ class CreateGroupScreen extends Component<Props, States> {
   }
 
   // Date time picker start day
-
   checkCondition() {
-    let listPlan = this.state.dataTrip.reduce((acc, cur) => {
-      if (cur.isSelect) {
-        acc.push(cur._id);
-      }
-      return acc;
-    }, []);
-    if (this.state.checkInputName) {
-      if (this.state.startDay !== 'Select Start Day') {
-        if (this.state.endDay !== 'Select End Day') {
-          this.props.navigation.navigate('AddMemberGroupScreen', {
-            nameGroup: this.state.name,
-            startDay: this.state.startDay,
-            endDay: this.state.endDay,
-            listPlan: listPlan,
-          });
+    if(this.state.checkInputName) {
+      Keyboard.dismiss();
+      let listPlan = this.state.dataTrip.reduce((acc, cur) => {
+        if (cur.isSelect) {
+          acc.push(cur._id);
+        }
+        return acc;
+      }, []);
+      if (this.state.checkInputName) {
+        if (this.state.startDay !== 'Chọn ngày bắt đầu') {
+          if (this.state.endDay !== 'Chọn ngày kết thúc') {
+            this.props.navigation.navigate('AddMemberGroupScreen', {
+              nameGroup: this.state.name,
+              startDay: this.state.startDay,
+              endDay: this.state.endDay,
+              listPlan: listPlan,
+            });
+          } else {
+            this.setState({modalNotification: {
+              type: 'error',
+              title: 'Bạn chưa chọn ngày kết thúc',
+              description: 'Vui lòng chọn ngày kết thúc.',
+              modalVisible: true,
+            }})
+          }
         } else {
+          this.setState({modalNotification: {
+            type: 'error',
+            title: 'Bạn chưa chọn ngày bắt đầu',
+            description: 'Vui lòng chọn ngày bắt đầu.',
+            modalVisible: true,
+          }})
         }
       } else {
+        this.setState({modalNotification: {
+          type: 'error',
+          title: 'Tên nhóm không hợp lệ!',
+          description: 'Vui lòng nhập lại tên nhóm.',
+          modalVisible: true,
+        }})
       }
-    } else {
     }
   }
 
@@ -202,6 +237,14 @@ class CreateGroupScreen extends Component<Props, States> {
     return (
       <View style={CreateGroupScreenStyles.container}>
         <StatusBar barStyle="light-content" hidden={false} backgroundColor={'transparent'} translucent />
+        <ModalNotification
+          type={this.state.modalNotification.type}
+          modalVisible={this.state.modalNotification.modalVisible}
+          title={this.state.modalNotification.title}
+          description={this.state.modalNotification.description}
+          txtButton="Ok"
+          onPress={() => this.setState({ modalNotification: { modalVisible: false}})}
+        />
         <View style={CreateGroupScreenStyles.containerHeader}>
           <View style={CreateGroupScreenStyles.header}>
             <TouchableOpacity

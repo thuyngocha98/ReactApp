@@ -6,8 +6,6 @@ import {
   StatusBar,
   Image,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  Alert,
   Platform,
   Keyboard,
 } from 'react-native';
@@ -18,12 +16,12 @@ import { BASEURL } from '../../api/api';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Colors from '../../constants/Colors';
 import { screenWidth } from '../../constants/Dimensions';
-import DialogBox from 'react-native-dialogbox';
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import ModalNotification from '../components/ModalNotification';
 
 type Props = {
   navigation?: any;
@@ -39,12 +37,18 @@ class MainSignUpScreen extends Component<Props> {
     password: '',
     repeatPassword: '',
     tokenNotification: '',
+    modalNotification: {
+      modalVisible: false,
+      type: 'success',
+      title: '',
+      description: '',
+      onPress: () => {}
+    },
   };
   scroll: any;
   emailTextInput: TextInput;
   passTextInput: TextInput;
   rePassTextInput: TextInput;
-  dialogbox: any;
 
   componentWillUnmount() {
     this.setState({
@@ -52,19 +56,6 @@ class MainSignUpScreen extends Component<Props> {
       email: '',
       password: '',
       repeatPassword: '',
-    });
-  }
-
-  handleOnPress(title, content) {
-    Keyboard.dismiss();
-    // alert
-    this.dialogbox.tip({
-      title: title,
-      content: content,
-      btn: {
-        text: 'OK',
-        style: { fontWeight: '500', fontSize: 20, color: '#044de0' },
-      },
     });
   }
 
@@ -82,13 +73,23 @@ class MainSignUpScreen extends Component<Props> {
         finalStatus = status;
       }
       if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
+        this.setState({modalNotification: {
+          type: 'warning',
+          title: 'Warning',
+          description: 'Failed to get push token for push notification!',
+          modalVisible: true,
+        }})
         return;
       }
       let token = await Notifications.getExpoPushTokenAsync();
       this.setState({ tokenNotification: token });
     } else {
-      alert('Must use physical device for Push Notifications');
+      this.setState({modalNotification: {
+        type: 'warning',
+        title: 'Warning',
+        description: 'Must use physical device for Push Notifications!',
+        modalVisible: true,
+      }})
     }
 
     if (Platform.OS === 'android') {
@@ -103,15 +104,36 @@ class MainSignUpScreen extends Component<Props> {
 
   signUp = async () => {
     await this.registerForPushNotificationsAsync();
+    Keyboard.dismiss();
     if (this.state.name.length < 2) {
-      this.handleOnPress('Lỗi!', ['Tên không có giá trị!', 'Tên phải có ít nhất 2 ký tự.']);
+      this.setState({modalNotification: {
+        type: 'error',
+        title: 'Tên không hợp lệ!',
+        description: 'Tên phải có ít nhất 2 ký tự.',
+        modalVisible: true,
+      }})
     } else if (!this.validateEmail(this.state.email)) {
-      this.handleOnPress('Lỗi!', ['Email không có giá trị!', 'Vui lòng kiểm tra lại.']);
+      this.setState({modalNotification: {
+        type: 'error',
+        title: 'Email không hợp lệ!',
+        description: 'Vui lòng kiểm tra lại.',
+        modalVisible: true,
+      }})
     } else if (this.state.password === '') {
-      this.handleOnPress('Lỗi!', ['Mật khẩu không có giá trị!', 'Vui lòng nhập lại mật khẩu.']);
+      this.setState({modalNotification: {
+        type: 'error',
+        title: 'Mật khẩu không hợp lệ!',
+        description: 'Vui lòng nhập lại mật khẩu.',
+        modalVisible: true,
+      }})
       return;
     } else if (this.state.password.length < 5) {
-      this.handleOnPress('Lỗi!', ['Mật khẩu không có giá trị!', 'Mật khẩu phải có ít nhất 5 ký tự.']);
+      this.setState({modalNotification: {
+        type: 'error',
+        title: 'Mật khẩu không hợp lệ!',
+        description: 'Mật khẩu phải có ít nhất 5 ký tự.',
+        modalVisible: true,
+      }})
       return;
     } else {
       if (this.state.password === this.state.repeatPassword) {
@@ -134,11 +156,15 @@ class MainSignUpScreen extends Component<Props> {
           .then((response) => response.json())
           .then((res) => {
             if (res.error) {
-              this.handleOnPress('Lỗi!', [res.error, 'Vui lòng kiểm tra lại.']);
+              this.setState({modalNotification: {
+                type: 'error',
+                title: res.error,
+                description: 'Vui lòng kiểm tra lại.',
+                modalVisible: true,
+              }})
             } else {
               if (res.result == 'ok') {
                 this.props.navigation.navigate('verifyScreen');
-                Alert.alert('Vui lòng kiểm tra email để nhập mã pin.');
               }
             }
           })
@@ -146,7 +172,12 @@ class MainSignUpScreen extends Component<Props> {
             console.log(error);
           });
       } else {
-        this.handleOnPress('Lỗi!', ['Xác nhận mật khẩu không đúng.', 'Vui lòng kiểm tra lại.']);
+        this.setState({modalNotification: {
+          type: 'error',
+          title: 'Xác nhận mật khẩu không đúng!',
+          description: 'Vui lòng kiểm tra lại.',
+          modalVisible: true,
+        }})
       }
     }
   };
@@ -161,6 +192,14 @@ class MainSignUpScreen extends Component<Props> {
     const { navigation } = this.props;
     return (
       <View style={{ flex: 1 }}>
+        <ModalNotification
+          type={this.state.modalNotification.type}
+          modalVisible={this.state.modalNotification.modalVisible}
+          title={this.state.modalNotification.title}
+          description={this.state.modalNotification.description}
+          txtButton="Ok"
+          onPress={() => this.setState({modalNotification: {modalVisible: false}})}
+        />
         <KeyboardAwareScrollView
           enableOnAndroid={true}
           enableAutomaticScroll={Platform.OS === 'ios'}
@@ -168,7 +207,7 @@ class MainSignUpScreen extends Component<Props> {
           innerRef={(ref) => {
             this.scroll = ref;
           }}
-          keyboardShouldPersistTaps="always" // can click button when is openning keyboard
+          keyboardShouldPersistTaps="handled" // can click button when is openning keyboard
         >
           <View style={styles.mainContainer}>
             <StatusBar barStyle="dark-content" hidden={false} backgroundColor={'transparent'} translucent />
@@ -188,7 +227,7 @@ class MainSignUpScreen extends Component<Props> {
                   placeholder={'Tên '}
                   autoCapitalize={'words'}
                   returnKeyType={'next'}
-                  maxLength={30}
+                  maxLength={50}
                   keyboardType="default"
                   autoCorrect={false}
                   placeholderTextColor={Colors.lightgray}
@@ -218,6 +257,7 @@ class MainSignUpScreen extends Component<Props> {
                       email: text,
                     })
                   }
+                  maxLength={50}
                   placeholder={'Email '}
                   autoCapitalize={'none'}
                   returnKeyType={'next'}
@@ -253,6 +293,7 @@ class MainSignUpScreen extends Component<Props> {
                       password: text,
                     })
                   }
+                  maxLength={40}
                   placeholder={'Mật khẩu'}
                   autoCapitalize={'none'}
                   returnKeyType={'next'}
@@ -278,7 +319,7 @@ class MainSignUpScreen extends Component<Props> {
               <View style={styles.user}>
                 <Ionicons
                   name="md-key"
-                  size={screenWidth / 14}
+                  size={screenWidth / 16}
                   color="gray"
                   style={{ marginBottom: -screenWidth / 150 }}
                 />
@@ -289,6 +330,7 @@ class MainSignUpScreen extends Component<Props> {
                       repeatPassword: text,
                     })
                   }
+                  maxLength={40}
                   placeholder={'Xác nhận mật khẩu'}
                   autoCapitalize={'none'}
                   returnKeyType={'done'}
@@ -328,13 +370,6 @@ class MainSignUpScreen extends Component<Props> {
             </View>
           </View>
         </KeyboardAwareScrollView>
-        <DialogBox
-          ref={(dialogbox) => {
-            this.dialogbox = dialogbox;
-          }}
-          isOverlayClickClose={false}
-          style={{ backgroundColor: '#333' }}
-        />
       </View>
     );
   }

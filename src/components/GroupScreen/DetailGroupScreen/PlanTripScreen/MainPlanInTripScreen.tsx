@@ -215,7 +215,7 @@ export class MainPlanInTripScreen extends Component<Props, States> {
           onBackdropPress={this.onToggleModal}
         >
           <View style={styles.viewModal}>
-            <Text style={styles.txtTitleModal}>{`Are you sure you want to remove ${this.state.itemDelete.name}?`}</Text>
+            <Text style={styles.txtTitleModal}>{`Bạn có chắc muốn xóa ${this.state.itemDelete.name}?`}</Text>
             <View style={styles.viewBtnModal}>
               <TouchableOpacity
                 onPress={this.onToggleModal}
@@ -244,6 +244,7 @@ export class MainPlanInTripScreen extends Component<Props, States> {
                 <ActivityIndicator animating size="small" color={Colors.tintColor} />
               </View>
             ) : this.state.dataNoInTrip.length > 0 ? (
+              <>
               <View style={styles.selectTrip}>
                 <ScrollView keyboardShouldPersistTaps="handled" style={styles.listTrip}>
                   {this.state.dataNoInTrip.map((item, index) => (
@@ -264,20 +265,42 @@ export class MainPlanInTripScreen extends Component<Props, States> {
                   ))}
                 </ScrollView>
               </View>
+              <View style={styles.viewBtnModal}>
+                <TouchableOpacity
+                  onPress={this.toggleModal}
+                  style={[styles.btnModal, { borderRightWidth: 1, borderRightColor: Colors.lavender }]}
+                >
+                  <Text style={styles.txtBtnModal}>Hủy</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this.onAddPlanInTrip} style={styles.btnModal}>
+                  <Text style={styles.txtBtnModal}>Lưu</Text>
+                </TouchableOpacity>
+              </View>
+              </>
             ) : (
-              <Text>lịch trình không tồn tại, vui lòng tạo lịch trình của bạn</Text>
+              <>
+              <Text style={{
+                fontSize: 15, 
+                color: Colors.black,
+                textAlign: 'center',
+                marginHorizontal: screenWidth/24
+              }}>
+                Bạn chưa có lịch trình nào, vui lòng tạo lịch trình của bạn
+              </Text>
+              <View style={styles.viewBtnModal}>
+                <TouchableOpacity
+                  onPress={this.toggleModal}
+                  style={[styles.btnModal, { borderRightWidth: 1, borderRightColor: Colors.lavender }]}
+                >
+                  <Text style={styles.txtBtnModal}>Hủy</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this.toggleModal} style={styles.btnModal}>
+                  <Text style={styles.txtBtnModal}>OK</Text>
+                </TouchableOpacity>
+              </View>
+              </>
             )}
-            <View style={styles.viewBtnModal}>
-              <TouchableOpacity
-                onPress={this.toggleModal}
-                style={[styles.btnModal, { borderRightWidth: 1, borderRightColor: Colors.lavender }]}
-              >
-                <Text style={styles.txtBtnModal}>Hủy</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={this.onAddPlanInTrip} style={styles.btnModal}>
-                <Text style={styles.txtBtnModal}>Lưu</Text>
-              </TouchableOpacity>
-            </View>
+            
           </View>
         </Modal>
         <View style={styles.containerHeader}>

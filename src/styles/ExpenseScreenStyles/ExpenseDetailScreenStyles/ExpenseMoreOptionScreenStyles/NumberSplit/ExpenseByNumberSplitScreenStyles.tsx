@@ -93,21 +93,23 @@ const ExpenseByNumberSplitScreenStyles = StyleSheet.create({
     fontSize: 25,
   },
   number: {
-    padding: screenWidth / 82.2,
+    flex: 1,
+    textAlignVertical: 'center',
     borderWidth: 1,
     borderRightWidth: -1,
     borderColor: Colors.tintColor,
     textAlign: 'center',
-    fontSize: 25,
+    fontSize: 20,
   },
   plusOrMinus: {
-    padding: screenWidth / 82.2,
+    flex: 1,
+    textAlign: 'center',
+    textAlignVertical: 'center',
     borderWidth: 1,
     borderColor: Colors.tintColor,
-    borderTopRightRadius: screenWidth / 82.2,
+    borderTopRightRadius: screenWidth / 82.25,
     borderBottomRightRadius: screenWidth / 82.2,
-    textAlign: 'center',
-    fontSize: screenWidth / 16.5,
+    fontSize: 18,
   },
   viewTabBar: {
     borderColor: Colors.lightgray,
@@ -147,6 +149,7 @@ const ExpenseByNumberSplitScreenStyles = StyleSheet.create({
   unitMoney: {
     color: Colors.gray,
     fontSize: 15,
+    marginRight: screenWidth/72,
   },
   inputMoney: {
     fontSize: 16,
@@ -176,7 +179,7 @@ const ExpenseByNumberSplitScreenStyles = StyleSheet.create({
   },
   name: {
     flex: 3,
-    marginLeft: 5,
+    marginHorizontal: screenWidth/72,
     flexDirection: 'column',
     justifyContent: 'center',
   },
@@ -185,19 +188,19 @@ const ExpenseByNumberSplitScreenStyles = StyleSheet.create({
     fontSize: 15,
   },
   viewInputMoney: {
-    flex: 2,
+    flex: 2.5,
     flexDirection: 'row',
   },
   viewVND: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
   },
   viewInput: {
     flexDirection: 'column',
-    flex: 2,
+    flex: 1,
   },
   input: {
+    flex: 1,
     textAlign: 'right',
     fontSize: 20,
   },
@@ -207,7 +210,7 @@ const ExpenseByNumberSplitScreenStyles = StyleSheet.create({
     borderRadius: screenWidth / 16.44,
   },
   txt: {
-    fontSize: 19,
+    fontSize: 18,
   },
   underLine: {
     marginTop: screenWidth / 27.4,

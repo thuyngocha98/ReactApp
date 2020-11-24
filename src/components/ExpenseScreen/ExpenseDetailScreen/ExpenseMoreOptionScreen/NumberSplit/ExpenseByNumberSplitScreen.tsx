@@ -6,12 +6,9 @@ import {
   Text,
   Image,
   FlatList,
-  ScrollView,
   StatusBar,
   Keyboard,
   TextInput,
-  ToastAndroid,
-  Alert,
 } from 'react-native';
 import { Ionicons, FontAwesome5, Octicons } from '@expo/vector-icons';
 import ListItemNumberSplit from './ListItemNumberSplit';
@@ -19,8 +16,9 @@ import { APPBAR_HEIGHT, screenWidth } from '../../../../../constants/Dimensions'
 import Colors from '../../../../../constants/Colors';
 import ExpenseByNumberSplitScreenStyles from '../../../../../styles/ExpenseScreenStyles/ExpenseDetailScreenStyles/ExpenseMoreOptionScreenStyles/NumberSplit/ExpenseByNumberSplitScreenStyles';
 import { thumbnails, number2money } from '../../../../../constants/FunctionCommon';
-import { KeyboardAwareFlatList, KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { BASEURL } from '../../../../../api/api';
+import ModalNotification from '../../../../components/ModalNotification';
 
 function mapStateToProps(state) {
   return {};
@@ -34,6 +32,13 @@ type States = {
   moneyInputs?: any[];
   moneyCurrent?: number;
   moneyLeft?: number;
+  modalNotification?: {
+    modalVisible?: boolean,
+    type?: string,
+    title?: string,
+    description?: string,
+    onPress?: () => void;
+  },
 };
 
 class ExpenseByNumberSplitScreen extends Component<Props, States> {
@@ -46,22 +51,19 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
   state = {
     moneyInputs: [],
     moneyCurrent: 0,
-    moneyLeft: 0,
+    moneyLeft: parseInt(this.props.navigation.getParam('totalMoney', '0')),
+    modalNotification: {
+      modalVisible: false,
+      type: 'success',
+      title: '',
+      description: '',
+      onPress: () => {}
+    },
   };
-  totalMoney: string;
-  listUser: any[];
 
-  componentWillMount() {
-    this.totalMoney = this.props.navigation.getParam('totalMoney', '0');
-    this.listUser = this.props.navigation.getParam('listUser', '');
-    this.setState({
-      moneyLeft: parseInt(this.totalMoney),
-    });
-  }
-
-  async caculateTotalMoney() {
+  async caculateTotalMoney(totalMoney, listUser) {
     let moneyInput = 0;
-    for (var i = 0; i < this.listUser.length; i++) {
+    for (var i = 0; i < listUser.length; i++) {
       moneyInput +=
         this.state.moneyInputs[i] !== undefined && this.state.moneyInputs[i] !== ''
           ? parseInt(this.state.moneyInputs[i])
@@ -69,11 +71,12 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
     }
     this.setState({
       moneyCurrent: moneyInput,
-      moneyLeft: parseInt(this.totalMoney) - moneyInput,
+      moneyLeft: parseInt(totalMoney) - moneyInput,
     });
   }
 
-  createListUser(list_user, totalMoney) {
+  createListUser(list_user) {
+    Keyboard.dismiss();
     if (this.state.moneyLeft === 0) {
       for (let i = 0; i < list_user.length; i++) {
         if (this.state.moneyInputs[i] !== undefined && this.state.moneyInputs[i] !== '') {
@@ -84,21 +87,31 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
       }
       this.props.navigation.navigate('InputExpenseScreen', { listTypeUser: list_user });
     } else {
+      this.setState({modalNotification: {
+        type: 'error',
+        title: 'Số tiền chia không hợp lệ!',
+        description: 'Vui lòng chia hết số tiền cần thanh toán',
+        modalVisible: true,
+      }})
     }
-  }
-
-  scroll: JSX.Element;
-  _scrollToInput(position) {
-    // Add a 'scroll' ref to your ScrollView
-    this.scroll.props.scrollToPosition(position, position, true);
   }
 
   render() {
     const { navigation } = this.props;
     const list_user = navigation.getParam('list_user', '');
     const userPayer = navigation.getParam('userPayer', []);
+    const listUser = this.props.navigation.getParam('listUser', '');
+    const totalMoney = this.props.navigation.getParam('totalMoney', '0');
     return (
       <View style={ExpenseByNumberSplitScreenStyles.container}>
+        <ModalNotification
+          type={this.state.modalNotification.type}
+          modalVisible={this.state.modalNotification.modalVisible}
+          title={this.state.modalNotification.title}
+          description={this.state.modalNotification.description}
+          txtButton="Ok"
+          onPress={() => this.setState({modalNotification: {modalVisible: false}})}
+        />
         <StatusBar barStyle="light-content" hidden={false} backgroundColor={'transparent'} translucent />
         <View style={ExpenseByNumberSplitScreenStyles.containerHeader}>
           <View style={ExpenseByNumberSplitScreenStyles.header}>
@@ -116,28 +129,21 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
               style={ExpenseByNumberSplitScreenStyles.save}
               activeOpacity={0.5}
               onPress={() => {
-                this.createListUser(list_user, this.totalMoney);
+                this.createListUser(list_user);
               }}
             >
-              <Text style={ExpenseByNumberSplitScreenStyles.add}>Kết thúc</Text>
+              <Text style={ExpenseByNumberSplitScreenStyles.add}>Xong</Text>
             </TouchableOpacity>
           </View>
         </View>
-        <KeyboardAwareScrollView
-          style={{ flex: 1, flexDirection: 'column' }}
-          innerRef={(ref) => {
-            this.scroll = ref;
-          }}
-          keyboardShouldPersistTaps="always" // can click button when is openning keyboard
-        >
           <View style={ExpenseByNumberSplitScreenStyles.categoryTypeGroup}>
             <TouchableOpacity
               style={{ flex: 1 }}
               onPress={() => {
                 navigation.navigate('ExpenseMoreOptionScreen', {
-                  listUser: this.listUser,
+                  listUser: listUser,
                   list_user: list_user,
-                  totalMoney: this.totalMoney,
+                  totalMoney: totalMoney,
                   userPayer: userPayer,
                 });
               }}
@@ -176,9 +182,9 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
               style={{ flex: 1 }}
               onPress={() => {
                 navigation.navigate('ExpenseByPlusOrMinusScreen', {
-                  listUser: this.listUser,
+                  listUser: listUser,
                   list_user: list_user,
-                  totalMoney: this.totalMoney,
+                  totalMoney: totalMoney,
                   userPayer: userPayer,
                 });
               }}
@@ -200,7 +206,7 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
           </View>
           <View style={ExpenseByNumberSplitScreenStyles.flatlist}>
             <FlatList
-              data={this.listUser}
+              data={listUser}
               extraData={this.state}
               renderItem={({ item, index }) => {
                 const thumbnail =
@@ -214,7 +220,7 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
                         <Image style={ExpenseByNumberSplitScreenStyles.image} source={thumbnail} />
                       </View>
                       <View style={ExpenseByNumberSplitScreenStyles.name}>
-                        <Text style={ExpenseByNumberSplitScreenStyles.txt}>{item.user_id.name}</Text>
+                        <Text numberOfLines={1} style={ExpenseByNumberSplitScreenStyles.txt}>{item.user_id.name}</Text>
                       </View>
                       <View style={ExpenseByNumberSplitScreenStyles.viewInputMoney}>
                         <View style={ExpenseByNumberSplitScreenStyles.viewVND}>
@@ -230,7 +236,7 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
                               await this.setState({
                                 moneyInputs,
                               });
-                              this.caculateTotalMoney();
+                              this.caculateTotalMoney(totalMoney, listUser);
                             }}
                             value={
                               this.state.moneyInputs[index] !== undefined && this.state.moneyInputs[index] !== ''
@@ -241,9 +247,6 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
                             keyboardType="number-pad"
                             autoCorrect={false}
                             underlineColorAndroid={'transparent'}
-                            onFocus={() => {
-                              this._scrollToInput(index * 75);
-                            }}
                           />
                           <View style={{ height: 1, backgroundColor: Colors.black }} />
                         </View>
@@ -256,13 +259,12 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
               keyExtractor={(item) => item.user_id._id.toString()}
             />
           </View>
-        </KeyboardAwareScrollView>
         <View style={ExpenseByNumberSplitScreenStyles.footer}>
           <View style={ExpenseByNumberSplitScreenStyles.line1}>
             <Text style={ExpenseByNumberSplitScreenStyles.moneyTotal}>
               {number2money(this.state.moneyCurrent)} VND -
             </Text>
-            <Text style={ExpenseByNumberSplitScreenStyles.moneyTotal}>{` ${number2money(this.totalMoney)}`} VND</Text>
+            <Text style={ExpenseByNumberSplitScreenStyles.moneyTotal}>{totalMoney ? ` ${number2money(totalMoney)}` : 0} VND</Text>
           </View>
           <View style={ExpenseByNumberSplitScreenStyles.line2}>
             <Text style={{ fontSize: screenWidth / 24 }}>Đầu ra còn lại: </Text>

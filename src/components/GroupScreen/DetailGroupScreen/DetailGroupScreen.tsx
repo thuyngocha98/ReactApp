@@ -37,11 +37,15 @@ import map from '../../../../assets/images/map.png';
 import groupChat from '../../../../assets/images/group-chat.png';
 // @ts-ignore
 import plus from '../../../../assets/images/plus.png';
+import ModalNotification from '../../components/ModalNotification';
 function mapStateToProps(state) {
-  return {};
+  return {
+    userId: state.dataUser.dataUser._id,
+  };
 }
 
 type Props = {
+  userId?: any;
   navigation?: any;
   saveTripId?: any;
   idGroup?: string;
@@ -54,6 +58,14 @@ type States = {
   modalVisible?: boolean;
   routes?: any;
   index?: any;
+  modalDeleteVisible?: boolean;
+  modalNotification?: {
+    modalVisible?: boolean,
+    type?: string,
+    title?: string,
+    description?: string,
+    onPress?: () => void;
+  },
 };
 
 class DetailGroupScreen extends Component<Props, States> {
@@ -63,11 +75,18 @@ class DetailGroupScreen extends Component<Props, States> {
     numberUserInTrip: 0,
     modalVisible: false,
     index: 0,
-
+    modalDeleteVisible: false,
     routes: [
       { key: 'first', title: 'Tổng quan' },
       { key: 'second', title: 'Xem chi tiết' },
     ],
+    modalNotification: {
+      modalVisible: false,
+      type: 'success',
+      title: '',
+      description: '',
+      onPress: () => {}
+    },
   };
 
   static navigationOptions = ({ navigation }) => {
@@ -118,6 +137,7 @@ class DetailGroupScreen extends Component<Props, States> {
         });
       })
       .catch((error) => {
+        this.setState({loading: false});
         alert(error);
       });
   };
@@ -137,11 +157,63 @@ class DetailGroupScreen extends Component<Props, States> {
     });
   };
 
+  onPress = visible => {
+    this.setState({modalDeleteVisible: visible});
+  }
+
+  toggleDeleteModal = () => {
+    this.setState({modalDeleteVisible: !this.state.modalDeleteVisible});
+  }
+
+  callApiRemoveGroup = async () => {
+    const data = {
+      user_id: this.props.userId,
+    };
+    const json = JSON.stringify(data);
+    fetch(`${BASEURL}/api/trip/delete_a_trip/${this.dataTrip._id}/${this.props.userId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: json,
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.result == 'Failed') {
+          this.setState({modalNotification: {
+            type: 'error',
+            title: res.message,
+            description: 'Vui lòng kiểm tra lại.',
+            modalVisible: true,
+          }})
+        } else {
+          this.props.navigation.navigate('GroupScreen');
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  onDeleteGroup = () => {
+    this.toggleDeleteModal();
+    this.callApiRemoveGroup();
+  }
+
   render() {
     const navigation = this.props.navigation;
     const time = this.dataTrip.create_date.split('-');
     return (
       <View style={DetailGroupScreenStyles.mainContainer}>
+        <ModalNotification
+          type={this.state.modalNotification.type}
+          modalVisible={this.state.modalNotification.modalVisible}
+          title={this.state.modalNotification.title}
+          description={this.state.modalNotification.description}
+          txtButton="Ok"
+          onPress={() => this.setState({modalNotification: {modalVisible: false}})}
+        />
         {/* view modal */}
         <Modal
           isVisible={this.state.modalVisible}
@@ -165,6 +237,31 @@ class DetailGroupScreen extends Component<Props, States> {
             </TouchableOpacity>
           </View>
         </Modal>
+        <Modal
+          isVisible={this.state.modalDeleteVisible}
+          style={DetailGroupScreenStyles.mainDeleteModal}
+          coverScreen={false}
+          deviceHeight={Dimensions.get('screen').height}
+          onBackdropPress={this.toggleDeleteModal}
+        >
+          <View style={DetailGroupScreenStyles.viewDeleteModal}>
+              <Text style={DetailGroupScreenStyles.txtTitleDeleteModal}>
+                  {`Bạn có chắc muốn xóa nhóm này?`}
+              </Text>
+              <View style={DetailGroupScreenStyles.viewBtnDeleteModal}>
+                  <TouchableOpacity
+                   onPress={this.toggleDeleteModal}
+                    style={[DetailGroupScreenStyles.btnDeleteModal,{borderRightWidth: 1,borderRightColor: Colors.lavender}]}>
+                      <Text style={DetailGroupScreenStyles.txtBtnDeleteModal}>Hủy bỏ</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                   onPress={this.onDeleteGroup}
+                    style={DetailGroupScreenStyles.btnDeleteModal}>
+                      <Text style={DetailGroupScreenStyles.txtBtnDeleteModal}>Xóa</Text>
+                  </TouchableOpacity>
+              </View>
+          </View>
+        </Modal>
         <StatusBar barStyle="light-content" hidden={false} backgroundColor={'transparent'} translucent />
         <View style={DetailGroupScreenStyles.header}>
           <HeaderTitleComponent
@@ -176,6 +273,7 @@ class DetailGroupScreen extends Component<Props, States> {
             // endDay={this.dataTrip.endDay}
             time={this.dataTrip.create_date}
             amount={this.dataTrip.oweUser}
+            onPress={this.onPress}
             numberUserInTrip={this.state.numberUserInTrip}
           />
         </View>

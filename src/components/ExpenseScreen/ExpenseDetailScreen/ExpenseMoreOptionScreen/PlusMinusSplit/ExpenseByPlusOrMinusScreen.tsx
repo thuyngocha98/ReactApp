@@ -11,12 +11,14 @@ import {
   ToastAndroid,
   ScrollView,
   Alert,
+  Keyboard,
 } from 'react-native';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import Colors from '../../../../../constants/Colors';
 import ExpenseByPlusOrMinusStyles from '../../../../../styles/ExpenseScreenStyles/ExpenseDetailScreenStyles/ExpenseMoreOptionScreenStyles/PlusOrMinusSplit/ExpenseByPlusOrMinusStyles';
 import { thumbnails, number2money } from '../../../../../constants/FunctionCommon';
 import { BASEURL } from '../../../../../api/api';
+import ModalNotification from '../../../../components/ModalNotification';
 
 function mapStateToProps(state) {
   return {};
@@ -31,6 +33,13 @@ type States = {
   data2?: any[];
   moneyInputs?: any[];
   arrChecked?: any[];
+  modalNotification?: {
+    modalVisible?: boolean,
+    type?: string,
+    title?: string,
+    description?: string,
+    onPress?: () => void;
+  },
 };
 
 class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
@@ -42,21 +51,17 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
 
   state = {
     data1: [],
-    data2: [],
+    data2: this.props.navigation.getParam('listUser', []),
     moneyInputs: [],
     arrChecked: [],
+    modalNotification: {
+      modalVisible: false,
+      type: 'success',
+      title: '',
+      description: '',
+      onPress: () => {}
+    },
   };
-
-  totalMoney: string;
-  listUser: any[];
-
-  componentWillMount() {
-    this.totalMoney = this.props.navigation.getParam('totalMoney', '0');
-    this.listUser = this.props.navigation.getParam('listUser', '');
-    this.setState({
-      data2: this.listUser,
-    });
-  }
 
   deleteFromList(item) {
     let newData1 = this.state.data1.filter(function (obj) {
@@ -77,7 +82,8 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
     }
   }
 
-  createListUser(list_user) {
+  createListUser(list_user, totalMoney) {
+    Keyboard.dismiss();
     for (let i = 0; i < list_user.length; i++) {
       list_user[i].amount_user = 0;
     }
@@ -90,15 +96,14 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
         }
       }
     }
-    let remain = parseInt(this.totalMoney) - totalInput;
+    let remain = parseInt(totalMoney) - totalInput;
     if (remain < 0) {
-      // ToastAndroid.showWithGravityAndOffset(
-      //     'The payment value is not equal to the total cost, please enter again!',
-      //     ToastAndroid.SHORT,
-      //     ToastAndroid.BOTTOM,
-      //     25,
-      //     50,
-      // );
+      this.setState({modalNotification: {
+        type: 'error',
+        title: 'Số tiền thanh toán không bằng tổng chi phí',
+        description: 'Vui lòng nhập số tiền lại',
+        modalVisible: true,
+      }})
     } else {
       let numberPeopleSplit = 0;
       for (let i = 0; i < list_user.length; i++) {
@@ -118,8 +123,18 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
     const { navigation } = this.props;
     const list_user = navigation.getParam('list_user', '');
     const userPayer = navigation.getParam('userPayer', []);
+    const listUser = this.props.navigation.getParam('listUser', '');
+    const totalMoney = this.props.navigation.getParam('totalMoney', '0');
     return (
       <View style={ExpenseByPlusOrMinusStyles.container}>
+        <ModalNotification
+          type={this.state.modalNotification.type}
+          modalVisible={this.state.modalNotification.modalVisible}
+          title={this.state.modalNotification.title}
+          description={this.state.modalNotification.description}
+          txtButton="Ok"
+          onPress={() => this.setState({modalNotification: {modalVisible: false}})}
+        />
         <StatusBar barStyle="light-content" hidden={false} backgroundColor={'transparent'} translucent />
         <View style={ExpenseByPlusOrMinusStyles.containerHeader}>
           <View style={ExpenseByPlusOrMinusStyles.header}>
@@ -137,10 +152,10 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
               style={ExpenseByPlusOrMinusStyles.save}
               activeOpacity={0.5}
               onPress={() => {
-                this.createListUser(list_user);
+                this.createListUser(list_user, totalMoney);
               }}
             >
-              <Text style={ExpenseByPlusOrMinusStyles.add}>Kết thúc</Text>
+              <Text style={ExpenseByPlusOrMinusStyles.add}>Xong</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -149,9 +164,9 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
             style={{ flex: 1 }}
             onPress={() => {
               navigation.navigate('ExpenseMoreOptionScreen', {
-                listUser: this.listUser,
+                listUser: listUser,
                 list_user: list_user,
-                totalMoney: this.totalMoney,
+                totalMoney: totalMoney,
                 userPayer: userPayer,
               });
             }}
@@ -175,9 +190,9 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
             style={{ flex: 1 }}
             onPress={() => {
               navigation.navigate('ExpenseByNumberSplitScreen', {
-                listUser: this.listUser,
+                listUser: listUser,
                 list_user: list_user,
-                totalMoney: this.totalMoney,
+                totalMoney: totalMoney,
                 userPayer: userPayer,
               });
             }}
@@ -230,7 +245,7 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
                           <Image style={ExpenseByPlusOrMinusStyles.image} source={thumbnail} />
                         </View>
                         <View style={ExpenseByPlusOrMinusStyles.name}>
-                          <Text style={ExpenseByPlusOrMinusStyles.txt}>{item.user_id.name}</Text>
+                          <Text numberOfLines={1} style={ExpenseByPlusOrMinusStyles.txt}>{item.user_id.name}</Text>
                         </View>
                         <View style={ExpenseByPlusOrMinusStyles.viewInputMoney}>
                           <View style={ExpenseByPlusOrMinusStyles.viewVND}>

@@ -20,18 +20,16 @@ const styles = StyleSheet.create({
   },
   userContainer: {
     flexDirection: 'row',
-    paddingHorizontal: screenWidth / 7,
     marginBottom: screenWidth / 10,
   },
   userContainer1: {
     flexDirection: 'row',
-    paddingHorizontal: screenWidth / 7,
     marginBottom: screenWidth / 15,
   },
   user: {
     flex: 1,
+    marginHorizontal: screenWidth / 7,
     flexDirection: 'row',
-    width: screenWidth,
     alignItems: 'center',
     borderBottomColor: 'rgba(0,0,0,1)',
     borderBottomWidth: 0.5,

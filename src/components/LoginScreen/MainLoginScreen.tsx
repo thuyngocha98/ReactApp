@@ -1,23 +1,16 @@
 import React, { Component } from 'react';
-import { screenWidth, screenHeight } from '../../constants/Dimensions';
+import { screenWidth } from '../../constants/Dimensions';
 import styles from '../../styles/LoginScreenStyle/MainLoginScreenStyle';
 import { connect } from 'react-redux';
-import DialogBox from 'react-native-dialogbox';
-
+import ModalNotification from '../components/ModalNotification';
 import {
   View,
   Text,
   TextInput,
-  StyleSheet,
   StatusBar,
-  ImageBackground,
   Image,
   TouchableOpacity,
   AsyncStorage,
-  Alert,
-  findNodeHandle,
-  ScrollView,
-  Button,
   Keyboard,
 } from 'react-native';
 // @ts-ignore
@@ -30,7 +23,6 @@ import password from '../../../assets/images/password.png';
 import eyeBlack from '../../../assets/images/eye_black.png';
 // @ts-ignore
 import emailEnvelope from '../../../assets/images/envelope-shape.png';
-import Layout from '../../constants/Layout';
 import Colors from '../../constants/Colors';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { BASEURL } from '../../api/api';
@@ -45,6 +37,13 @@ type States = {
   showPass?: boolean;
   email?: string;
   password?: string;
+  modalNotification?: {
+    modalVisible?: boolean,
+    type?: string,
+    title?: string,
+    description?: string,
+    onPress?: () => void;
+  },
 };
 
 class MainLoginScreen extends Component<Props, States> {
@@ -55,20 +54,15 @@ class MainLoginScreen extends Component<Props, States> {
     showPass: true,
     email: '',
     password: '',
+    modalNotification: {
+      modalVisible: false,
+      type: 'success',
+      title: '',
+      description: '',
+      onPress: () => {}
+    },
   };
 
-  handleOnPress(title, content) {
-    Keyboard.dismiss();
-    // alert
-    this.dialogbox.tip({
-      title: title,
-      content: content,
-      btn: {
-        text: 'OK',
-        style: { fontWeight: '500', fontSize: 20, color: '#044de0' },
-      },
-    });
-  }
   showPass = () => {
     this.setState({
       showPass: !this.state.showPass,
@@ -76,7 +70,6 @@ class MainLoginScreen extends Component<Props, States> {
   };
   scroll: any;
   secondTextInput: TextInput;
-  dialogbox: any;
 
   validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -84,16 +77,32 @@ class MainLoginScreen extends Component<Props, States> {
   }
 
   login = async () => {
+    Keyboard.dismiss();
     if (!this.validateEmail(this.state.email)) {
-      this.handleOnPress('Lỗi!', ['Email không có giá trị!', 'Vui lòng kiêmt tra email của bạn.']);
+      this.setState({modalNotification: {
+        type: 'error',
+        title: 'Email không hợp lệ!',
+        description: 'Vui lòng kiểm tra lại email của bạn.',
+        modalVisible: true,
+      }})
       return;
     }
     if (this.state.password === '') {
-      this.handleOnPress('Lỗi!', ['Mật khẩu không có giá trị!', 'Vui lòng nhập mật khẩu.']);
+      this.setState({modalNotification: {
+        type: 'error',
+        title: 'Mật khẩu không hợp lệ!',
+        description: 'Vui lòng nhập lại mật khẩu.',
+        modalVisible: true,
+      }})
       return;
     }
     if (this.state.password.length < 5) {
-      this.handleOnPress('Lỗi!', ['Mật khẩu không có giá trị!', 'Mật khẩu phải ít nhất 5 ký tự.']);
+      this.setState({modalNotification: {
+        type: 'error',
+        title: 'Mật khẩu không hợp lệ!',
+        description: 'Mật khẩu phải ít nhất 5 ký tự.',
+        modalVisible: true,
+      }})
       return;
     }
     const data = {
@@ -112,10 +121,22 @@ class MainLoginScreen extends Component<Props, States> {
       .then((response) => response.json())
       .then(async (res) => {
         if (res.error) {
-          if (res.error) {
+          if (res.error=='verify') {
             Keyboard.dismiss();
-            Alert.alert(res.error);
-          } else this.handleOnPress('Lỗi', [res.error, 'Vui lòn kiểm tra lại.']);
+            this.setState({modalNotification: {
+              type: 'warning',
+              title: "Tài khoản của bạn chưa được xác minh!",
+              description: 'Vui lòng xác minh tài khoản để tiếp tục.',
+              modalVisible: true,
+            }})
+          } else {
+            this.setState({modalNotification: {
+              type: 'error',
+              title: res.error,
+              description: 'Vui lòng kiểm tra lại.',
+              modalVisible: true,
+            }})
+          }
         } else {
           await AsyncStorage.setItem('jwt', res.token);
           this.getDataUserForRedux();
@@ -126,12 +147,24 @@ class MainLoginScreen extends Component<Props, States> {
       });
   };
 
+  onActionModal = () => {
+    this.setState({modalNotification: {modalVisible: false}});
+    if(this.state.modalNotification.title == 'Tài khoản của bạn chưa được xác minh!'){
+      this.props.navigation.navigate('verifyScreen')
+    }
+  }
+
   async getDataUserForRedux() {
     const dataUser = await this.props.getDataUser();
     if (dataUser !== null) {
       this.props.navigation.navigate('GroupScreen');
     } else {
-      this.handleOnPress('Lỗi!', ['Đã có lỗi xảy ra', 'Vui lòng kiểm tra đăng nhập lần nữa!']);
+      this.setState({modalNotification: {
+        type: 'error',
+        title: 'Đã có lỗi xảy ra',
+        description: 'Vui lòng kiểm tra đăng nhập lần nữa!',
+        modalVisible: true,
+      }})
     }
   }
 
@@ -144,12 +177,20 @@ class MainLoginScreen extends Component<Props, States> {
     const { navigation } = this.props;
     return (
       <View style={{ flex: 1 }}>
+        <ModalNotification
+          type={this.state.modalNotification.type}
+          modalVisible={this.state.modalNotification.modalVisible}
+          title={this.state.modalNotification.title}
+          description={this.state.modalNotification.description}
+          txtButton="Ok"
+          onPress={this.onActionModal}
+        />
         <KeyboardAwareScrollView
           style={{ flex: 1 }}
           innerRef={(ref) => {
             this.scroll = ref;
           }}
-          keyboardShouldPersistTaps="always" // can click button when is openning keyboard
+          keyboardShouldPersistTaps="handled" // can click button when is openning keyboard
         >
           <View style={styles.mainContainer}>
             <StatusBar barStyle="dark-content" hidden={false} backgroundColor={'transparent'} translucent />
@@ -239,13 +280,6 @@ class MainLoginScreen extends Component<Props, States> {
             </View>
           </View>
         </KeyboardAwareScrollView>
-        <DialogBox
-          ref={(dialogbox) => {
-            this.dialogbox = dialogbox;
-          }}
-          isOverlayClickClose={false}
-          style={{ backgroundColor: '#333' }}
-        />
       </View>
     );
   }

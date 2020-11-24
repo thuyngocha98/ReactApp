@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { View, Text } from 'react-native';
 import ListItemHeaderStyles from '../../../styles/GroupsStyles/DetailGroupScreenStyles/ListItemHeaderStyles';
@@ -15,7 +15,7 @@ type Props = {
     itemSelected?: boolean,
 }
 
-class ListItemHeader extends Component<Props> {
+class ListItemHeader extends PureComponent<Props> {
     render() {
         return (
             <View style={[ListItemHeaderStyles.container, {backgroundColor: this.props.itemSelected ? Colors.tintColor : Colors.white}]}>

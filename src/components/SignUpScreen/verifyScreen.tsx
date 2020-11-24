@@ -1,6 +1,6 @@
-import React, { Component, createRef } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Animated, Alert, Image, TouchableOpacity, AsyncStorage } from 'react-native';
+import { View, Text, Animated, Image, TouchableOpacity, AsyncStorage } from 'react-native';
 import CodeFiled from 'react-native-confirmation-code-field';
 import verifyScreenStyles, {
     ACTIVE_CELL_BG_COLOR,
@@ -12,8 +12,7 @@ import verifyScreenStyles, {
 import { BASEURL } from '../../api/api';
 import { bindActionCreators } from 'redux';
 import { getApiDataUser } from '../../actions/action';
-import DialogBox from 'react-native-dialogbox';
-
+import ModalNotification from '../components/ModalNotification';
 
 type Props = {
     navigation?: any,
@@ -22,6 +21,13 @@ type Props = {
 
 type States = {
     pinCode?: number,
+    modalNotification?: {
+        modalVisible?: boolean,
+        type?: string,
+        title?: string,
+        description?: string,
+        onPress?: Function
+    },
 }
 
 const codeLength = 5;
@@ -37,7 +43,14 @@ class verifyScreen extends Component<Props, States> {
     };
 
     state = {
-        pinCode: null
+        pinCode: null,
+        modalNotification: {
+            modalVisible: false,
+            type: 'success',
+            title: '',
+            description: '',
+            onPress: () => {}
+        },
     }
 
     _animationsColor = [...new Array(codeLength)].map(
@@ -46,19 +59,6 @@ class verifyScreen extends Component<Props, States> {
     _animationsScale = [...new Array(codeLength)].map(
         () => new Animated.Value(1),
     );
-    dialogbox: any;
-
-    handleOnPress(title, content) {
-        // alert
-        this.dialogbox.tip({
-            title: title,
-            content: content,
-            btn: {
-                text: 'OK',
-                style: { fontWeight: '500', fontSize: 20, color: "#044de0" },
-            },
-        });
-    }
 
     onFinishCheckingCode = code => {
         this.setState({
@@ -135,7 +135,12 @@ class verifyScreen extends Component<Props, States> {
                 .then((response) => response.json())
                 .then(async (res) => {
                     if (res.error) {
-                        this.handleOnPress("Error!", [res.error, "Please check again."])
+                        this.setState({modalNotification: {
+                            type: 'error',
+                            title: res.error,
+                            description: 'Please check again.',
+                            modalVisible: true,
+                        }})
                     } else {
                         await AsyncStorage.setItem('jwt', res.token)
                         await this.getDataUserForRedux();
@@ -146,7 +151,12 @@ class verifyScreen extends Component<Props, States> {
                     console.log(error);
                 });
         } else {
-            this.handleOnPress("Error!", ["PIN missing!", "Please enter PIN verification."])
+            this.setState({modalNotification: {
+                type: 'error',
+                title: 'Lỗi mã PIN',
+                description: 'Vui lòng kiểm tra lại mã xác minh!',
+                modalVisible: true,
+            }})
         }
     };
 
@@ -160,17 +170,23 @@ class verifyScreen extends Component<Props, States> {
         }
     }
 
-
-
     render() {
         /*concept : https://dribbble.com/shots/5476562-Forgot-Password-Verification/attachments */
         return (
             <View style={{ flex: 1 }}>
+                <ModalNotification
+                    type={this.state.modalNotification.type}
+                    modalVisible={this.state.modalNotification.modalVisible}
+                    title={this.state.modalNotification.title}
+                    description={this.state.modalNotification.description}
+                    txtButton="Ok"
+                    onPress={() => this.setState({modalNotification: {modalVisible: false}})}
+                />
                 <View style={verifyScreenStyles.inputWrapper}>
-                    <Text style={verifyScreenStyles.inputLabel}>Verification</Text>
+                    <Text style={verifyScreenStyles.inputLabel}>Xác Minh</Text>
                     <Image style={verifyScreenStyles.icon} source={source} />
                     <Text style={verifyScreenStyles.inputSubLabel}>
-                        {'Please enter the verification code\nwe send to your email address'}
+                        {'Vui lòng nhập mã xác minh\nChúng tôi đã gửi đến mail của bạn'}
                     </Text>
                     <CodeFiled
                         maskSymbol=" "
@@ -193,7 +209,6 @@ class verifyScreen extends Component<Props, States> {
                         </View>
                     </TouchableOpacity>
                 </View>
-                <DialogBox ref={dialogbox => { this.dialogbox = dialogbox }} isOverlayClickClose={false} style={{ backgroundColor: "#333" }} />
             </View>
         );
     }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import ListItemDetailStyles from '../../../styles/GroupsStyles/MainScreenGroupStyles/ListItemDetailStyles';
 import { Entypo } from '@expo/vector-icons';
@@ -15,7 +15,7 @@ type Props = {
     text?: string
 }
 
-class ListItemDetail extends Component<Props> {
+class ListItemDetail extends PureComponent<Props> {
     render() {
         return (
             <View style={ListItemDetailStyles.container}>

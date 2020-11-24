@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Colors from '../../../../constants/Colors';
-import { View, TouchableOpacity, Text, ToastAndroid, Image, Button, Alert, FlatList } from 'react-native';
+import { View, TouchableOpacity, Text, FlatList } from 'react-native';
 import BalanceScreenStyles from '../../../../styles/GroupsStyles/DetailGroupScreenStyles/BalanceScreen/BalanceScreenStyles';
-import { MaterialCommunityIcons, FontAwesome5, Entypo } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import ListItemBalance from './ListItemBalance';
 import { APPBAR_HEIGHT, screenHeight, screenWidth } from '../../../../constants/Dimensions';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import { BASEURL } from '../../../../api/api';
 
 function mapStateToProps(state) {
@@ -46,7 +45,7 @@ class BalanceScreen extends Component<Props> {
               navigation.goBack();
             }}
           >
-            <AntDesign name={'left'} color={Colors.white} size={screenWidth / 18} />
+            <Ionicons name="ios-arrow-back" size={32} color={Colors.white} />
           </TouchableOpacity>
         </View>
       ),
@@ -115,6 +114,7 @@ class BalanceScreen extends Component<Props> {
           />
         </View>
         <View style={{ width: '100%', height: screenHeight / 8 }}>
+        {this.state.data.length > 0 && 
           <TouchableOpacity
             onPress={() => this.sendMoney()}
             style={{
@@ -127,7 +127,7 @@ class BalanceScreen extends Component<Props> {
             }}
           >
             <Text style={{ fontSize: 18, color: Colors.white, fontWeight: 'bold' }}>Nhắc nhở tất cả thành viên</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>}
         </View>
       </View>
     );

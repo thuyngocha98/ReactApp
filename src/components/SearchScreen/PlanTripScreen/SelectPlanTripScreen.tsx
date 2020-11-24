@@ -139,18 +139,18 @@ class SelectPlanTripScreen extends Component<Props, States> {
                 >
                     <View style={styles.viewModal}>
                         <Text style={styles.txtTitleModal}>
-                            {`Are you sure you want to remove ${this.state.itemDelete.name}?`}
+                            {`Bạn có chắc muốn xóa ${this.state.itemDelete.name}?`}
                         </Text>
                         <View style={styles.viewBtnModal}>
                             <TouchableOpacity
                              onPress={this.onToggleModal}
                              style={[styles.btnModal,{borderRightWidth: 1,borderRightColor: Colors.lavender}]}>
-                                <Text style={styles.txtBtnModal}>Cancel</Text>
+                                <Text style={styles.txtBtnModal}>Hủy bỏ</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                              onPress={this.onDelete}
                              style={styles.btnModal}>
-                                <Text style={styles.txtBtnModal}>OK</Text>
+                                <Text style={styles.txtBtnModal}>Xóa</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

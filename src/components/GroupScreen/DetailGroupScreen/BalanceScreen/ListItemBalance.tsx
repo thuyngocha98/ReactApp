@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { View, Image, Text, TouchableOpacity, Alert } from 'react-native';
-import { MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Colors from '../../../../constants/Colors';
 import ListItemBalanceStyles from '../../../../styles/GroupsStyles/DetailGroupScreenStyles/BalanceScreen/ListItemBalanceStyles';
 import { number2money, thumbnails } from '../../../../constants/FunctionCommon';
@@ -28,7 +28,7 @@ type States = {
   isShow?: boolean;
 };
 
-class ListItemBalance extends Component<Props, States> {
+class ListItemBalance extends PureComponent<Props, States> {
   state = {
     isShow: false,
   };

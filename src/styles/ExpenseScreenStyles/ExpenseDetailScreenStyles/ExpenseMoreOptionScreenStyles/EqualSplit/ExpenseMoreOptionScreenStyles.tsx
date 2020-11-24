@@ -1,6 +1,6 @@
 import { StyleSheet, StatusBar } from 'react-native';
 import Constants from 'expo-constants';
-import { screenWidth, APPBAR_HEIGHT } from '../../../../../constants/Dimensions';
+import { screenWidth, APPBAR_HEIGHT, screenHeight } from '../../../../../constants/Dimensions';
 import Colors from '../../../../../constants/Colors';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
@@ -46,7 +46,7 @@ const ExpenseMoreOptionScreenStyles = StyleSheet.create({
     marginHorizontal: screenWidth / 41.1,
   },
   txt1: {
-    fontSize: 18,
+    fontSize: 14,
   },
   contentSplit: {
     flexDirection: 'column',
@@ -96,21 +96,26 @@ const ExpenseMoreOptionScreenStyles = StyleSheet.create({
     fontSize: 25,
   },
   number: {
-    padding: screenWidth / 82.2,
+    flex: 1,
+    textAlignVertical: 'center',
     borderWidth: 1,
     borderRightWidth: -1,
     borderColor: Colors.tintColor,
     textAlign: 'center',
-    fontSize: 25,
+    fontSize: 20,
   },
   plusOrMinus: {
-    padding: screenWidth / 82.2,
+    flex: 1,
+    textAlign: 'center',
+    textAlignVertical: 'center',
     borderWidth: 1,
     borderColor: Colors.tintColor,
     borderTopRightRadius: screenWidth / 82.25,
     borderBottomRightRadius: screenWidth / 82.2,
-    textAlign: 'center',
-    fontSize: 25,
+    fontSize: 18,
+  },
+  viewTabView: {
+    flex: 1,
   },
   flatlist: {
     flex: 1,
@@ -126,7 +131,7 @@ const ExpenseMoreOptionScreenStyles = StyleSheet.create({
     margin: screenWidth / 27.4,
   },
   contentBar: {
-    flex: 3.5,
+    flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
@@ -150,15 +155,14 @@ const ExpenseMoreOptionScreenStyles = StyleSheet.create({
     backgroundColor: Colors.lightgray,
   },
   all: {
-    flex: 0.8,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   txtAll: {
-    fontSize: screenWidth / 20,
+    fontSize: 18,
     fontWeight: '500',
-    marginRight: screenWidth / 150,
+    marginRight: screenWidth / 72,
   },
   iconAll: {
     justifyContent: 'center',
@@ -180,12 +184,11 @@ const ExpenseMoreOptionScreenStyles = StyleSheet.create({
   },
   content: {
     flex: 4,
-    flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: 'center'
   },
   txt2: {
-    fontSize: 18,
-    fontWeight: '500',
+    fontSize: 15,
+    fontWeight: 'bold',
   },
   iconRight: {
     flex: 1.7,

@@ -1,13 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { View, FlatList, Image, Text } from 'react-native';
+import { View, Image, Text } from 'react-native';
 import ListItemGroupStyles from '../../../styles/GroupsStyles/MainScreenGroupStyles/ListItemGroupStyles';
 import Colors from '../../../constants/Colors';
-import { FontAwesome5, Entypo, Octicons } from '@expo/vector-icons';
-import ListItemDetail from './ListItemDetail';
+import { Octicons } from '@expo/vector-icons';
 import { number2money } from '../../../constants/FunctionCommon';
 import { BASEURL } from '../../../api/api';
-import ListItemFriendsOwe from '../../FriendsScreen/MainFriendsOweScreen/ListItemFriendsOwe';
 import moment from 'moment';
 import { screenWidth } from '../../../constants/Dimensions';
 
@@ -24,7 +22,7 @@ type Props = {
   dataTrip?: any;
 };
 
-class ListItemGroup extends Component<Props> {
+class ListItemGroup extends PureComponent<Props> {
   render() {
     console.log(this.props.dataTrip);
     const lengthAvatar = this.props.dataTrip.avatarGroup.length;

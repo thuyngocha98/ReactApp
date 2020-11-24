@@ -127,21 +127,23 @@ const ExpenseByPlusOrMinusStyles = StyleSheet.create({
     fontSize: 25,
   },
   number: {
-    padding: screenWidth / 82.2,
+    flex: 1,
+    textAlignVertical: 'center',
     borderWidth: 1,
     borderRightWidth: -1,
     borderColor: Colors.tintColor,
     textAlign: 'center',
-    fontSize: 25,
+    fontSize: 20,
   },
   plusOrMinus: {
-    padding: screenWidth / 82.2,
+    flex: 1,
+    textAlign: 'center',
+    textAlignVertical: 'center',
     borderWidth: 1,
     borderColor: Colors.tintColor,
-    borderTopRightRadius: screenWidth / 82.2,
+    borderTopRightRadius: screenWidth / 82.25,
     borderBottomRightRadius: screenWidth / 82.2,
-    textAlign: 'center',
-    fontSize: 25,
+    fontSize: 18,
   },
   flatlist: {
     flex: 1,
@@ -173,7 +175,9 @@ const ExpenseByPlusOrMinusStyles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
-  flatlist1: {},
+  flatlist1: {
+    
+  },
   viewTitle: {
     marginVertical: 10,
     marginHorizontal: 20,
@@ -207,14 +211,13 @@ const ExpenseByPlusOrMinusStyles = StyleSheet.create({
     alignItems: 'center',
   },
   avatar1: {
-    flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-start',
+    marginRight: screenWidth/36,
   },
   name: {
-    flex: 3.5,
-    marginLeft: 5,
+    flex: 2,
     flexDirection: 'column',
     justifyContent: 'center',
   },
@@ -223,21 +226,23 @@ const ExpenseByPlusOrMinusStyles = StyleSheet.create({
     fontSize: 13,
   },
   viewInputMoney: {
-    flex: 2.3,
+    flex: 2,
     flexDirection: 'row',
   },
   viewVND: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    marginHorizontal: screenWidth/72,
   },
   viewInput: {
     flexDirection: 'column',
-    flex: 2.5,
+    flex: 1,
+    marginRight: screenWidth/36,
   },
   input: {
     textAlign: 'right',
-    fontSize: 19,
+    fontSize: 18,
+    flex: 1,
   },
   image: {
     width: screenWidth / 10,
@@ -245,7 +250,7 @@ const ExpenseByPlusOrMinusStyles = StyleSheet.create({
     borderRadius: screenWidth / 20,
   },
   txt: {
-    fontSize: 17,
+    fontSize: 16,
   },
   underLine: {
     marginTop: screenWidth / 80,
@@ -257,7 +262,6 @@ const ExpenseByPlusOrMinusStyles = StyleSheet.create({
     backgroundColor: Colors.lightgray,
   },
   delete: {
-    flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-end',

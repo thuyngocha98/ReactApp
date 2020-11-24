@@ -8,6 +8,47 @@ const DetailGroupScreenStyles = StyleSheet.create({
     justifyContent: 'flex-end',
     margin: 0,
   },
+  // modal delete
+  mainDeleteModal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+  viewDeleteModal: {
+      flexDirection: 'column',
+      backgroundColor: Colors.white,
+      borderTopLeftRadius: 10,
+      borderTopRightRadius: 10,
+      padding: screenWidth/36,
+  },
+  txtTitleDeleteModal: {
+      fontSize: 16,
+      color: Colors.blackText,
+      paddingBottom: screenWidth/36,
+      paddingHorizontal: screenWidth/11,
+      textAlign: 'center',
+      borderBottomWidth: 1,
+      borderBottomColor: Colors.lavender
+  },
+  viewItemDeleteModal: {
+      flexDirection: 'column', 
+      justifyContent: 'center', 
+      alignItems: 'center'
+  },
+  viewBtnDeleteModal: {
+      flexDirection: 'row',
+  },
+  txtBtnDeleteModal: {
+      fontSize: 14,
+      fontWeight: 'bold',
+      color: Colors.blackText,
+      textAlign: 'center',
+      paddingVertical: screenWidth/36
+  },
+  btnDeleteModal: {
+      flex: 1,
+      backgroundColor: Colors.white
+  },
+  // modal create new
   viewModal: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',

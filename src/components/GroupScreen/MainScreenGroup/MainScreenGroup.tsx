@@ -12,8 +12,6 @@ import { number2money, thumbnails } from '../../../constants/FunctionCommon';
 import { SearchBar } from 'react-native-elements';
 import { screenWidth } from '../../../constants/Dimensions';
 import LottieView from 'lottie-react-native';
-import { CONTACTS } from 'expo-permissions';
-import { Col } from 'native-base';
 
 function mapStateToProps(state) {
   return {
@@ -105,7 +103,7 @@ class MainScreenGroup extends Component<Props, States> {
         .then((response) => response.json())
         .then(async (res) => {
           await this.props.getListAllTrip(res.data.reverse());
-          await this.caculateTotalMoney(res.data);
+          await this.calculateTotalMoney(res.data);
           await this.setState({
             data: res.data,
             loading: false,
@@ -118,7 +116,7 @@ class MainScreenGroup extends Component<Props, States> {
     }
   };
 
-  async caculateTotalMoney(data) {
+  async calculateTotalMoney(data) {
     this.totalMoney = 0;
     await data.forEach((element) => {
       this.totalMoney += element.oweUser;
@@ -141,7 +139,6 @@ class MainScreenGroup extends Component<Props, States> {
   };
 
   render() {
-    console.log(this.state.data);
     return (
       <View style={MainScreenGroupStyles.container}>
         <StatusBar barStyle="light-content" hidden={false} backgroundColor="transparent" translucent />

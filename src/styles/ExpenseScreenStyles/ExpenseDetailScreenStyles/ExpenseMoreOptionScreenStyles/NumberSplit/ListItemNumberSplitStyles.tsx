@@ -39,7 +39,7 @@ const ListItemNumberSplitStyles = StyleSheet.create({
         backgroundColor: Colors.lightgray
     },
     viewInputMoney: {
-        flex: 1.7,
+        flex: 2,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center'
@@ -50,6 +50,7 @@ const ListItemNumberSplitStyles = StyleSheet.create({
     unitMoney: {
         color: Colors.gray,
         fontSize: 15,
+        marginRight: screenWidth/72,
     },
     viewInput: {
         flex: 1.7,

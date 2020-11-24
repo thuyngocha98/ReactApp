@@ -36,6 +36,8 @@ export default function ModalNotification({
         <Modal
         {...props}
         avoidKeyboard
+        animationIn="zoomIn"
+        animationOut="zoomOut"
         isVisible={modalVisible}
         style={styles.mainModal}
         coverScreen={false}

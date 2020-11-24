@@ -330,8 +330,8 @@ class DetailPlanInTripScreen extends Component<Props, States> {
                 <ModalNotification 
                 type='success'
                 modalVisible={this.state.modalVisibleNotification}
-                title='Update success'
-                description="Congrats! Your plan update successful done"
+                title='Cập nhật thành công'
+                description="Chúc mừng! Lịch trình của bạn đã được cập nhật thành công"
                 txtButton="Ok"
                 onPress={this.onDoneUpdate}
                 />
@@ -345,7 +345,7 @@ class DetailPlanInTripScreen extends Component<Props, States> {
                 >
                     <View style={styles.viewModal}>
                         <Text style={styles.txtTitleModal}>
-                            {`Are you sure you want to remove ${this.state.nameDelete} ?`}
+                            {`Bạn có chắc muốn xóa ${this.state.nameDelete} ?`}
                         </Text>
                         <View style={styles.viewBtnModal}>
                             <TouchableOpacity
@@ -371,17 +371,17 @@ class DetailPlanInTripScreen extends Component<Props, States> {
                 >
                     <View style={styles.viewModal}>
                         <Text style={styles.txtTitleModal}>
-                            {`Select this place as: `}
+                            {`Chọn vị trí này là: `}
                         </Text>
                         <TouchableOpacity 
                          onPress={() => this.onPressSelectOption('start')} 
                          style={styles.viewBtnModalOption}>
-                            <Text style={styles.txtModalOption}>Start place</Text>
+                            <Text style={styles.txtModalOption}>Điểm bắt đầu</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                          onPress={() => this.onPressSelectOption('end')} 
                          style={styles.viewBtnModalOption}>
-                            <Text style={styles.txtModalOption}>End place</Text>
+                            <Text style={styles.txtModalOption}>Điểm kết thúc</Text>
                         </TouchableOpacity>
                     </View>
                 </Modal>
@@ -395,13 +395,13 @@ class DetailPlanInTripScreen extends Component<Props, States> {
                 >
                     <View style={styles.viewModalUpdate}>
                         <Text style={styles.txtTitleModalUpdate}>
-                            Name of the plan
+                            Tên của lịch trình
                         </Text>
                         <TextInput
                             autoFocus
                             autoCorrect={false}
                             maxLength={50}
-                            placeholder="Enter name of the plan"
+                            placeholder="Nhập tên của lịch trình"
                             style={styles.input}
                             onChangeText={text => this.setState({namePlan: text})}
                             value={this.state.namePlan}
@@ -437,13 +437,13 @@ class DetailPlanInTripScreen extends Component<Props, States> {
                             activeOpacity={0.5}
                             onPress={this.onPressUpdate}
                         >
-                            <Text style={styles.textHeaderRight}>Update</Text>
+                            <Text style={styles.textHeaderRight}>Cập nhật</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
                 <View style={styles.viewTitle}>
                     <View>
-                        <Text style={styles.txtTitle}>Detail plan</Text>
+                        <Text style={styles.txtTitle}>Chi tiết lịch trình</Text>
                         <View style={styles.underTitle} />
                     </View>
                     <TouchableOpacity
@@ -503,7 +503,7 @@ class DetailPlanInTripScreen extends Component<Props, States> {
                                     this.props.navigation.navigate('AddDestinationInTripScreen',{data: this.state.listAllLocation});
                                 }}
                                 style={styles.viewBtn}>
-                                    <Text style={styles.txtBtn}>Add Destination</Text>
+                                    <Text style={styles.txtBtn}>Thêm địa điểm</Text>
                                 </TouchableOpacity>
                             )}
                         </>

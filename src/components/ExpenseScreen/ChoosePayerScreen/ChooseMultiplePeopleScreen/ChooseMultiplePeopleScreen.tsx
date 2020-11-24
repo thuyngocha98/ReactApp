@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Image, Alert } from 'react-native';
+import { View, Text, Image, Keyboard } from 'react-native';
 import Colors from '../../../../constants/Colors';
 import { TouchableOpacity, FlatList, TextInput } from 'react-native-gesture-handler';
 import ChooseMultiplePeopleScreenStyles from '../../../../styles/ExpenseScreenStyles/ChoosePayerScreenStyles/ChooseMultiplePeopleScreenStyles/ChooseMultiplePeopleScreenStyles';
 import { Ionicons } from '@expo/vector-icons';
 import { thumbnails, number2money } from '../../../../constants/FunctionCommon';
 import { BASEURL } from '../../../../api/api';
+import ModalNotification from '../../../components/ModalNotification';
 
 function mapStateToProps(state) {
   return {};
@@ -20,16 +21,33 @@ type States = {
   moneyInputs?: any[];
   moneyCurrent?: number;
   moneyLeft?: number;
+  modalNotification?: {
+    modalVisible?: boolean,
+    type?: string,
+    title?: string,
+    description?: string,
+    onPress?: () => void;
+  },
 };
 
 class ChooseMultiplePeopleScreen extends Component<Props, States> {
   totalMoney: string;
   listUser: any[];
-  state = {
-    moneyInputs: [],
-    moneyCurrent: 0,
-    moneyLeft: 0,
-  };
+  constructor(props){
+    super(props)
+    this.state = {
+      moneyInputs: [],
+      moneyCurrent: 0,
+      moneyLeft: parseInt(this.props.navigation.getParam('totalMoney', 0)),
+      modalNotification: {
+        modalVisible: false,
+        type: 'success',
+        title: '',
+        description: '',
+        onPress: () => {}
+      },
+    }
+  }
 
   static navigationOptions = ({ navigation }) => {
     return {
@@ -37,12 +55,9 @@ class ChooseMultiplePeopleScreen extends Component<Props, States> {
     };
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.totalMoney = this.props.navigation.getParam('totalMoney', '0');
     this.listUser = this.props.navigation.getParam('listUser', '');
-    this.setState({
-      moneyLeft: parseInt(this.totalMoney),
-    });
   }
 
   async caculateTotalMoney() {
@@ -72,12 +87,34 @@ class ChooseMultiplePeopleScreen extends Component<Props, States> {
     this.props.navigation.navigate('InputExpenseScreen', { listTypeUser: list_user });
   }
 
+  onPressDone(list_user) {
+    Keyboard.dismiss();
+    this.state.moneyLeft === 0
+    ? this.functionDone(list_user)
+    : (
+      this.setState({modalNotification: {
+        type: 'error',
+        title: 'Số tiền thanh toán không bằng tổng chi phí!',
+        description: 'Vui lòng nhập lại số tiền thanh toán.',
+        modalVisible: true,
+      }})
+    )
+  }
+
   render() {
     const { navigation } = this.props;
     const listUser = navigation.getParam('listUser', '');
     const list_user = navigation.getParam('list_user', '');
     return (
       <View style={ChooseMultiplePeopleScreenStyles.container}>
+        <ModalNotification
+          type={this.state.modalNotification.type}
+          modalVisible={this.state.modalNotification.modalVisible}
+          title={this.state.modalNotification.title}
+          description={this.state.modalNotification.description}
+          txtButton="Ok"
+          onPress={() => this.setState({modalNotification: {modalVisible: false}})}
+        />
         <View style={ChooseMultiplePeopleScreenStyles.containerHeader}>
           <View style={ChooseMultiplePeopleScreenStyles.header}>
             <TouchableOpacity
@@ -93,13 +130,9 @@ class ChooseMultiplePeopleScreen extends Component<Props, States> {
             <TouchableOpacity
               style={ChooseMultiplePeopleScreenStyles.save}
               activeOpacity={0.5}
-              onPress={() => {
-                this.state.moneyLeft === 0
-                  ? this.functionDone(list_user)
-                  : Alert.alert('The payment values do not add up to the total cost.');
-              }}
+              onPress={() => this.onPressDone(list_user)}
             >
-              <Text style={ChooseMultiplePeopleScreenStyles.add}>Kết thúc</Text>
+              <Text style={ChooseMultiplePeopleScreenStyles.add}>Xong</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -119,7 +152,7 @@ class ChooseMultiplePeopleScreen extends Component<Props, States> {
                       <Image style={ChooseMultiplePeopleScreenStyles.image} source={thumbnail} />
                     </View>
                     <View style={ChooseMultiplePeopleScreenStyles.name}>
-                      <Text style={ChooseMultiplePeopleScreenStyles.txt}>{item.user_id.name}</Text>
+                      <Text numberOfLines={1} style={ChooseMultiplePeopleScreenStyles.txt}>{item.user_id.name}</Text>
                     </View>
                     <View style={ChooseMultiplePeopleScreenStyles.viewInputMoney}>
                       <View style={ChooseMultiplePeopleScreenStyles.viewVND}>
@@ -162,9 +195,9 @@ class ChooseMultiplePeopleScreen extends Component<Props, States> {
         <View style={ChooseMultiplePeopleScreenStyles.footer}>
           <View style={ChooseMultiplePeopleScreenStyles.line1}>
             <Text style={ChooseMultiplePeopleScreenStyles.moneyTotal}>
-              {number2money(this.state.moneyCurrent)} VND of
+              {`${number2money(this.state.moneyCurrent)} VND of `}
             </Text>
-            <Text style={ChooseMultiplePeopleScreenStyles.moneyTotal}>{` ${number2money(this.totalMoney)}`} VND</Text>
+            <Text style={ChooseMultiplePeopleScreenStyles.moneyTotal}>{this.totalMoney ? number2money(this.totalMoney) : 0} VND</Text>
           </View>
           <View style={ChooseMultiplePeopleScreenStyles.line2}>
             <Text

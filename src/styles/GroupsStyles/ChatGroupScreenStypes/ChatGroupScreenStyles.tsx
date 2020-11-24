@@ -93,12 +93,13 @@ const ChatGroupScreenStyles = StyleSheet.create({
   },
   footer: {
     flexDirection: 'row',
+    alignItems: 'center',
     marginHorizontal: screenWidth / 80,
     marginVertical: screenWidth / 80,
   },
   input: {
     paddingLeft: screenWidth / 30,
-    height: screenWidth / 12,
+    height: screenWidth / 9,
     borderWidth: 1,
     borderColor: Colors.lightgray,
     borderRadius: screenWidth / 20,

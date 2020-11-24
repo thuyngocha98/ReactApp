@@ -3,7 +3,7 @@ import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState } from 'react';
 import { StyleSheet, View, Platform, Dimensions, Text, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, Entypo, EvilIcons } from '@expo/vector-icons';
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
@@ -190,6 +190,12 @@ async function loadResourcesAsync() {
     Font.loadAsync({
       // This is the font that we are using for our tab bar
       ...Ionicons.font,
+      ...Feather.font,
+      ...MaterialCommunityIcons.font,
+      ...Octicons.font,
+      ...AntDesign.font,
+      ...Entypo.font,
+      ...EvilIcons.font,
       // We include SpaceMono because we use it in FriendsScreen.js. Feel free to
       // remove this if you are not using it in your app
       'space-mono': require('../../assets/fonts/SpaceMono-Regular.ttf'),

@@ -59,7 +59,7 @@ class ChoosePayerScreen extends Component<Props, States> {
                 });
               }}
             >
-              <Text style={ChoosePayerScreenStyles.add}>Kết thúc</Text>
+              <Text style={ChoosePayerScreenStyles.add}>Xong</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -99,7 +99,7 @@ class ChoosePayerScreen extends Component<Props, States> {
               <Text style={ChoosePayerScreenStyles.txt}>Chọn nhiều người thanh toán</Text>
             </View>
             <View style={ChoosePayerScreenStyles.iconRight}>
-              <Octicons name="chevron-right" size={25} color={Colors.lightgray} />
+              <Octicons name="chevron-right" size={25} color={Colors.gray} />
             </View>
           </View>
           <View style={ChoosePayerScreenStyles.underLine} />

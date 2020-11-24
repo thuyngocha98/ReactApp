@@ -55,6 +55,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
+  viewHeader: {
+    zIndex: 1, 
+    backgroundColor: Colors.tabIconSelected,
+  },
   viewContent: {
     flex: 1,
     marginHorizontal: screenWidth / 20.55,
@@ -81,19 +85,18 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: Colors.blackText,
   },
-  popuplist: {
+  popupList: {
+    zIndex: 20,
     alignSelf: 'center',
     width: screenWidth - screenWidth / 15,
+    top: screenWidth / 3.1615,
     position: 'absolute',
-    zIndex: 10,
-    marginTop: screenWidth / 3.1615,
-    backgroundColor: Colors.white,
-    borderRadius: 5,
+    backgroundColor: 'transparent',
+    maxHeight: screenHeight/3,
   },
   userExists: {
-    zIndex: 10,
+    zIndex: 20,
     backgroundColor: Colors.white,
-    flexDirection: 'column',
     borderWidth: 0.5,
     borderColor: Colors.gray,
     borderRadius: 5,
@@ -121,15 +124,23 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
   },
+  viewBtn: {
+    marginHorizontal: screenWidth / 3.5,
+    marginBottom: screenWidth / 40,
+  },
   buttonAdd: {
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
     backgroundColor: 'rgba(255,255,255,0.8)',
-    marginHorizontal: screenWidth / 3.5,
     padding: screenWidth / 40,
     borderRadius: 5,
-    marginBottom: screenWidth / 40,
   },
+  txtAddMember: {
+   color: 'rgba(128,128,128,0.8)', 
+   fontSize: 15, 
+   fontWeight: 'bold', 
+   textAlign: 'center',
+  }
 });
 export default styles;

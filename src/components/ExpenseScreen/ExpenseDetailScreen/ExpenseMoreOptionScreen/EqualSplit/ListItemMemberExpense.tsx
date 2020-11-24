@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Image } from 'react-native';
 import ListitemMemberExpenseStyles from '../../../../../styles/ExpenseScreenStyles/ExpenseDetailScreenStyles/ExpenseMoreOptionScreenStyles/EqualSplit/ListItemMemberExpenseStyles';
@@ -16,7 +16,7 @@ type Props = {
     nameMember?: string,
 }
 
-class ListItemMemberExpense extends Component<Props> {
+class ListItemMemberExpense extends PureComponent<Props> {
     render() {
         return (
             <View style={ListitemMemberExpenseStyles.flatlistMember}>

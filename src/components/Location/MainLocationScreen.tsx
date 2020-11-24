@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import MapView, { PROVIDER_GOOGLE, Marker, Polyline, Heatmap } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker, Polyline } from 'react-native-maps';
 import { StyleSheet, View, Text, StatusBar, TouchableOpacity } from 'react-native';
 import { screenHeight, screenWidth } from '../../constants/Dimensions';
 import Colors from '../../constants/Colors';
 import { BASEURL } from '../../api/api';
 import moment from 'moment';
+import { Ionicons } from '@expo/vector-icons';
 
 type Props = {
   navigation?: any;
@@ -14,7 +15,7 @@ type States = {
   initialLocation?: any;
   currentPosition?: any;
   currentPositionLatitude?: any;
-  currentPositionLongtitude?: any;
+  currentPositionLongitude?: any;
   location?: any;
   coordinates?: any;
 };
@@ -30,7 +31,7 @@ class MainLocationScreen extends Component<Props, States> {
       initialLocation: null,
       currentPosition: null,
       currentPositionLatitude: null,
-      currentPositionLongtitude: null,
+      currentPositionLongitude: null,
       location: null,
       coordinates: [],
     };
@@ -69,7 +70,7 @@ class MainLocationScreen extends Component<Props, States> {
       this.setState({
         currentPosition,
         currentPositionLatitude,
-        currentPositionLongtitude,
+        currentPositionLongitude: currentPositionLongtitude,
       });
     }
   };
@@ -80,6 +81,7 @@ class MainLocationScreen extends Component<Props, States> {
       <View style={styles.container}>
         <StatusBar hidden={true} />
         {length > 0 ? (
+          <>
           <MapView
             zoomEnabled={true}
             style={styles.mapStyle}
@@ -107,7 +109,14 @@ class MainLocationScreen extends Component<Props, States> {
               </Marker>
             ))}
           </MapView>
+          <TouchableOpacity
+          onPress={() => this.props.navigation.goBack()}
+          style={styles.btnGoBack}>
+             <Ionicons name='md-arrow-back' size={30} color={Colors.gray} />
+          </TouchableOpacity>
+          </>
         ) : (
+          <>
           <MapView style={styles.mapStyle} provider={PROVIDER_GOOGLE} region={this.state.currentPosition}>
             {/* <Marker
               coordinate={{
@@ -116,6 +125,12 @@ class MainLocationScreen extends Component<Props, States> {
               }}
             ></Marker> */}
           </MapView>
+          <TouchableOpacity
+          onPress={() => this.props.navigation.goBack()}
+          style={styles.btnGoBack}>
+             <Ionicons name='md-arrow-back' size={30} color={Colors.gray} />
+          </TouchableOpacity>
+          </>
         )}
       </View>
     );
@@ -161,6 +176,15 @@ const styles = StyleSheet.create({
     color: Colors.tintColor,
     textAlign: 'center',
   },
+  btnGoBack: {
+    position: 'absolute',
+    top: screenWidth/20,
+    left: screenWidth/24,
+    paddingVertical: screenWidth/72,
+    paddingHorizontal: screenWidth/18,
+    borderRadius: screenWidth/24,
+    backgroundColor: 'rgba(255,255,255,0.9)'
+},
 });
 
 export default MainLocationScreen;

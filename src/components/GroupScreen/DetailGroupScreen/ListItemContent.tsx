@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { View, Text } from 'react-native';
 import ListItemContentStyles from '../../../styles/GroupsStyles/DetailGroupScreenStyles/ListItemContentStyles';
 import { MaterialIcons, Octicons, FontAwesome } from '@expo/vector-icons';
 import Colors from '../../../constants/Colors';
-import { number2money } from '../../../constants/FunctionCommon';
 
 function mapStateToProps(state) {
   return {
@@ -21,8 +20,8 @@ type Props = {
   data?: any;
 };
 
-class ListItemContent extends Component<Props> {
-  caculateMoney() {
+class ListItemContent extends PureComponent<Props> {
+  calculateMoney() {
     const arrayUser = this.props.data.list_user;
     let money = 0;
     for (let i = 0; i < arrayUser.length; i++) {

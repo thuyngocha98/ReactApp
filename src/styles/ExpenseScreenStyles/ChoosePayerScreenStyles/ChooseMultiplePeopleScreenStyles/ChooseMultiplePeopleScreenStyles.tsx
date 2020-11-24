@@ -23,29 +23,24 @@ const ChooseMultiplePeopleScreenStyles = StyleSheet.create({
     marginHorizontal: screenWidth / 27.43,
   },
   addContact: {
-    flex: 7,
+    flex: 1,
     fontSize: 18,
     fontWeight: '500',
     color: Colors.white,
-    marginLeft: screenWidth / 6,
+    textAlign: 'center'
   },
   cancel: {
-    flex: 3,
+    height: '100%',
+    paddingHorizontal: screenWidth/72,
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: screenWidth / 41.1,
-  },
-  textCancel: {
-    marginLeft: screenWidth / 82.2,
-    color: Colors.white,
-    fontSize: 16,
   },
   add: {
     fontSize: 16,
     color: Colors.white,
   },
   save: {
-    flex: 1,
+    height: '100%',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-end',
@@ -82,21 +77,21 @@ const ChooseMultiplePeopleScreenStyles = StyleSheet.create({
     fontSize: 15,
   },
   viewInputMoney: {
-    flex: 2,
+    flex: 2.5,
     flexDirection: 'row',
   },
   viewVND: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
   },
   viewInput: {
+    marginLeft: screenWidth/72,
     flexDirection: 'column',
-    flex: 2,
+    flex: 2.5,
   },
   input: {
     textAlign: 'right',
-    fontSize: 20,
+    fontSize: 18,
   },
   image: {
     width: screenWidth / 8.22,

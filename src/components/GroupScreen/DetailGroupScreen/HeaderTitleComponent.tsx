@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Image, ImageBackground, Alert, Platform } from 'react-native';
+import { View, Text, Image, ImageBackground, Alert, Platform, Dimensions } from 'react-native';
 import HeaderTitleComponentStyles from '../../../styles/GroupsStyles/DetailGroupScreenStyles/HeaderTitleComponentStyles';
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import ListItemHeader from './ListItemHeader';
-import { LinearGradient } from 'expo-linear-gradient';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { screenWidth } from '../../../constants/Dimensions';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../../../constants/Colors';
@@ -15,7 +13,6 @@ import { number2money } from '../../../constants/FunctionCommon';
 import DialogInput from 'react-native-dialog-input';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
-import styles from '../../../styles/FriendsScreenStyles/MainFriendsOweScreenStyle/MainFriendsOweScreenStyle';
 
 function mapStateToProps(state) {
   return {
@@ -35,6 +32,7 @@ type Props = {
   startDay?: string;
   endDay?: string;
   dataTrip?: any;
+  onPress?: (_:boolean) => void;
 };
 
 type States = {
@@ -107,7 +105,7 @@ class HeaderTitleComponent extends Component<Props, States> {
       });
       this.callApiChangeNameGroup();
     } else {
-      alert('the group name must least 2 character ');
+      alert('Tên nhóm phải có ít nhất 2 kí tự !');
     }
   };
 
@@ -148,24 +146,7 @@ class HeaderTitleComponent extends Component<Props, States> {
   // function delete group
   removeGroup = () => {
     this.setState({ opened: false });
-    Alert.alert(
-      'Are you sure you want to delete this group?',
-      '',
-      [
-        {
-          text: 'OK',
-          onPress: this.callApiRemoveGroup,
-        },
-        {
-          text: 'Cancel',
-          onPress: () => {
-            this.setState({ opened: false });
-          },
-          style: 'cancel',
-        },
-      ],
-      { cancelable: false },
-    );
+    this.props.onPress(true);
   };
 
   hideDialogInput = () => {
@@ -174,33 +155,9 @@ class HeaderTitleComponent extends Component<Props, States> {
     });
   };
 
-  callApiRemoveGroup = async () => {
-    const data = {
-      user_id: this.props.userId,
-    };
-    const json = JSON.stringify(data);
-    fetch(`${BASEURL}/api/trip/delete_a_trip/${this.props.idGroup}/${this.props.userId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: json,
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        if (res.result == 'Failed') {
-          Alert.alert(res.message);
-        } else {
-          this.props.navigation.navigate('GroupScreen');
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  
 
-  imageLibary = async () => {
+  imageLibrary = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
@@ -280,14 +237,14 @@ class HeaderTitleComponent extends Component<Props, States> {
         [
           {
             text: 'Truy cập thư viện',
-            onPress: this.imageLibary,
+            onPress: this.imageLibrary,
           },
           {
             text: 'Chụp ảnh',
             onPress: this.takePhoto,
           },
         ],
-        { cancelable: false },
+        { cancelable: true },
       );
     }
   };
@@ -317,6 +274,7 @@ class HeaderTitleComponent extends Component<Props, States> {
               : ''
           }
         ></DialogInput>
+         {/* view modal */}
         <View style={HeaderTitleComponentStyles.container}>
           <ImageBackground
             source={{ uri: 'https://designroast.org/wp-content/uploads/2014/02/pattern-thepatternlibrary.png' }}
@@ -365,7 +323,10 @@ class HeaderTitleComponent extends Component<Props, States> {
             <View style={HeaderTitleComponentStyles.contentText}>
               <Text style={HeaderTitleComponentStyles.textTitle}>{this.props.nameGroup}</Text>
               <Text style={HeaderTitleComponentStyles.numberPeopleAndTime}>
-                {this.props.numberUserInTrip} thành viên tham gia. Nhóm được tạo - tháng {time[1]} {time[0]}
+                {this.props.numberUserInTrip} thành viên tham gia.
+              </Text>
+              <Text style={HeaderTitleComponentStyles.numberPeopleAndTime}>
+                Nhóm được tạo - tháng {time[1]} {time[0]}
               </Text>
               {/*<Text style={HeaderTitleComponentStyles.startEndDay}>From {this.props.startDay.toString().split('-').join(' ')} To {this.props.endDay.toString().split('-').join(' ')}</Text>*/}
               <View style={HeaderTitleComponentStyles.owesAndMoney}>

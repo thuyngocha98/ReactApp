@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import Colors from '../../../constants/Colors';
 import { APPBAR_HEIGHT, screenHeight, screenWidth } from '../../../constants/Dimensions';
-import { Ionicons, FontAwesome5, AntDesign, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { BASEURL } from '../../../api/api';
 import Constants from 'expo-constants';
 import Modal from 'react-native-modal';

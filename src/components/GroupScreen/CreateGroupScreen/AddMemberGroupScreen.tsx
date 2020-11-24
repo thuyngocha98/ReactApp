@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, StatusBar, FlatList, Keyboard, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, StatusBar, FlatList, Keyboard, TouchableOpacity } from 'react-native';
 import Colors from '../../../constants/Colors';
 import { connect } from 'react-redux';
 import styles from '../../../styles/GroupsStyles/CreateGroupScreenStyles/AddMemberGroupScreenStyles';
 import { MaterialCommunityIcons, Feather, FontAwesome } from '@expo/vector-icons';
 import { BASEURL } from '../../../api/api';
-import DialogBox from 'react-native-dialogbox';
 import { screenWidth } from '../../../constants/Dimensions';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import ModalNotification from '../../components/ModalNotification';
+import ModalLoading from '../../components/ModalLoading';
 
 function mapStateToProps(state) {
   return {
@@ -33,13 +33,20 @@ type States = {
   showUserExists?: boolean;
   idLeader?: string;
   isLoading?: boolean;
+  modalNotification?: {
+    modalVisible?: boolean,
+    type?: string,
+    title?: string,
+    description?: string,
+    onPress?: () => void;
+  },
 };
 class AddMemberGroupScreen extends Component<Props, States> {
   static navigationOptions = {
     header: null,
   };
   emailTextInput: TextInput;
-  dialogbox: any;
+  timeout?: any;
 
   constructor(props) {
     super(props);
@@ -51,20 +58,14 @@ class AddMemberGroupScreen extends Component<Props, States> {
       showUserExists: false,
       idLeader: this.props.user.email,
       isLoading: false,
-    };
-  }
-
-  handleOnPress(title, content) {
-    Keyboard.dismiss();
-    // alert
-    this.dialogbox.tip({
-      title: title,
-      content: content,
-      btn: {
-        text: 'OK',
-        style: { fontWeight: '500', fontSize: 20, color: '#044de0' },
+      modalNotification: {
+        modalVisible: false,
+        type: 'success',
+        title: '',
+        description: '',
+        onPress: () => {}
       },
-    });
+    };
   }
 
   goBackFriendsScreen = () => {
@@ -86,9 +87,15 @@ class AddMemberGroupScreen extends Component<Props, States> {
   }
 
   addEmailToList(name, email) {
+    Keyboard.dismiss();
     this.setState({ dataUserExist: [] });
     if (name === '' || email === '') {
-      this.handleOnPress('Error!', ['Information missing!!!', 'Please enter full infomation..']);
+      this.setState({modalNotification: {
+        type: 'error',
+        title: 'Bạn chưa điền thông tin',
+        description: 'Vui lòng nhập đầy đủ thông tin.',
+        modalVisible: true,
+      }})
     } else {
       let check = this.state.data.some((item, i) => {
         if (item.name === name || item.email === email) {
@@ -96,7 +103,12 @@ class AddMemberGroupScreen extends Component<Props, States> {
         }
       });
       if (check) {
-        this.handleOnPress('Error!', ['Name or Email already exists!', 'Please check again.']);
+        this.setState({modalNotification: {
+          type: 'error',
+          title: 'Tên hoặc Email đã tồn tại',
+          description: 'Vui lòng kiểm tra lại.',
+          modalVisible: true,
+        }})
       } else {
         if (this.validateEmail(email)) {
           let newData = [...this.state.data, { name: name, email: email, isCustom: false }];
@@ -106,13 +118,19 @@ class AddMemberGroupScreen extends Component<Props, States> {
             name: '',
           });
         } else {
-          this.handleOnPress('Error!', ['Email invalid!', 'Please check again.']);
+          this.setState({modalNotification: {
+            type: 'error',
+            title: 'Email không hợp lệ',
+            description: 'Vui lòng kiểm tra lại.',
+            modalVisible: true,
+          }})
         }
       }
     }
   }
 
   createTrip = async () => {
+    Keyboard.dismiss();
     this.setState({ isLoading: true });
     let newData = [];
     this.state.data.forEach((element) => {
@@ -141,21 +159,14 @@ class AddMemberGroupScreen extends Component<Props, States> {
       .then((res) => {
         if (res.error) {
           this.setState({ isLoading: false });
-          Keyboard.dismiss();
-          this.dialogbox.tip({
-            title: 'Error!',
-            content: [res.error, 'Please enter another group name.'],
-            btn: {
-              text: 'OK',
-              style: { fontWeight: '500', fontSize: 20, color: '#044de0' },
-              callback: () => {
-                this.props.navigation.navigate('CreateGroupScreen');
-              },
-            },
-          });
+          this.setState({modalNotification: {
+            type: 'error',
+            title: res.error,
+            description: 'Vui lòng kiểm tra lại.',
+            modalVisible: true,
+          }})
         } else {
           this.setState({ isLoading: false });
-          Keyboard.dismiss();
           this.props.navigation.navigate('GroupScreen');
         }
       })
@@ -174,9 +185,12 @@ class AddMemberGroupScreen extends Component<Props, States> {
     }
 
     this.setState({ email: text });
-    if (text.indexOf('@') > -1 && text[text.length - 1] === '@') {
-      this.checkUserExist(text);
-    }
+    clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => {
+      if (text.indexOf('@') > -1 && text[text.length - 1] === '@') {
+        this.checkUserExist(text);
+      }
+    }, 300); // await 0.3s after stop input then call api
   }
 
   checkUserExist = async (email) => {
@@ -207,152 +221,153 @@ class AddMemberGroupScreen extends Component<Props, States> {
       });
   };
 
+  renderListUserSearch = ({item}) => {
+    return (
+      <TouchableOpacity
+        onPressIn={() => {
+          this.addEmailToList(item.name, item.email), this.setState({ showUserExists: false });
+        }}>
+        <View style={styles.userExists}>
+          <Text style={styles.username}>{item.name}</Text>
+          <Text style={styles.email}>{item.email}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  }
+
   render() {
     return (
-      <View style={styles.container}>
-        <StatusBar barStyle="light-content" hidden={false} backgroundColor={'transparent'} translucent />
-        <View style={{ zIndex: 10, backgroundColor: Colors.tabIconSelected }}>
-          <View style={styles.header}>
-            <TouchableOpacity activeOpacity={0.5} onPress={this.goBackFriendsScreen}>
-              <Text style={styles.cancel}>Hủy</Text>
-            </TouchableOpacity>
-            <Text style={styles.addFriends}>Thên thành viên</Text>
-            <TouchableOpacity
-              activeOpacity={0.5}
-              onPress={() => {
-                this.createTrip();
-              }}
-            >
-              <Text style={styles.next}>Kết thúc</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.input}>
-            <View style={styles.iconSearch}>
-              <MaterialCommunityIcons name="email" size={25} color={Colors.gray} />
+      <>
+        <ModalNotification
+            type={this.state.modalNotification.type}
+            modalVisible={this.state.modalNotification.modalVisible}
+            title={this.state.modalNotification.title}
+            description={this.state.modalNotification.description}
+            txtButton="Ok"
+            onPress={() => this.setState({ modalNotification: { modalVisible: false}})}
+        />
+        <View style={styles.container}>
+          <ModalLoading isVisible={this.state.isLoading} />
+          <StatusBar barStyle="light-content" hidden={false} backgroundColor={'transparent'} translucent />
+          <View style={styles.viewHeader}>
+            <View style={styles.header}>
+              <TouchableOpacity activeOpacity={0.5} onPress={this.goBackFriendsScreen}>
+                <Text style={styles.cancel}>Hủy</Text>
+              </TouchableOpacity>
+              <Text style={styles.addFriends}>Thên thành viên</Text>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => {
+                  this.createTrip();
+                }}
+              >
+                <Text style={styles.next}>Kết thúc</Text>
+              </TouchableOpacity>
             </View>
-            <TextInput
-              style={{ flex: 8 }}
-              keyboardType="email-address"
-              onChangeText={(text) => this.listenerInputEmail(text)}
-              onSubmitEditing={() => {
-                this.emailTextInput.focus();
-              }}
-              value={this.state.email}
-              returnKeyType={'next'}
-              autoCapitalize={'none'}
-              placeholder={'Email thành viên...'}
-              autoFocus
-            />
-            <View style={{ flex: 1 }} />
-          </View>
-          <View style={styles.input1}>
-            <View style={styles.iconSearch}>
-              <FontAwesome name="user" size={25} color={Colors.gray} />
+            <View style={styles.input}>
+              <View style={styles.iconSearch}>
+                <MaterialCommunityIcons name="email" size={25} color={Colors.gray} />
+              </View>
+              <TextInput
+                style={{ flex: 8 }}
+                keyboardType="email-address"
+                onChangeText={(text) => this.listenerInputEmail(text)}
+                onSubmitEditing={() => {
+                  this.emailTextInput.focus();
+                }}
+                value={this.state.email}
+                returnKeyType={'next'}
+                autoCapitalize={'none'}
+                placeholder={'Email thành viên...'}
+                autoFocus
+              />
+              <View style={{ flex: 1 }} />
             </View>
-            <TextInput
-              style={{ flex: 8 }}
-              keyboardType="visible-password"
-              onChangeText={(text) => this.setState({ name: text })}
-              value={this.state.name}
-              ref={(input) => {
-                this.emailTextInput = input;
-              }}
-              blurOnSubmit={false}
-              autoCorrect={false}
-              autoCapitalize={'words'}
-              placeholder={'Tên thành viên...'}
+            <View style={styles.input1}>
+              <View style={styles.iconSearch}>
+                <FontAwesome name="user" size={25} color={Colors.gray} />
+              </View>
+              <TextInput
+                style={{ flex: 8 }}
+                keyboardType="visible-password"
+                onChangeText={(text) => this.setState({ name: text })}
+                value={this.state.name}
+                ref={(input) => {
+                  this.emailTextInput = input;
+                }}
+                blurOnSubmit={false}
+                autoCorrect={false}
+                autoCapitalize={'words'}
+                placeholder={'Tên thành viên...'}
+              />
+            </View>
+            <View style={styles.viewBtn}>
+              <TouchableOpacity
+                style={styles.buttonAdd}
+                onPress={() => {
+                  this.addEmailToList(this.state.name, this.state.email);
+                }}
+              >
+                <Text style={styles.txtAddMember}>
+                  Thêm thành viên
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          {this.state.data?.length > 1 && (
+            <Text style={styles.txtChooseLeader}>Chọn một trưởng nhóm cho nhóm của bạn, mặc định sẽ là bạn</Text>
+          )}
+          <View style={styles.viewContent}>
+            <FlatList
+              scrollEnabled
+              extraData={this.state}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="always"
+              data={this.state.data}
+              renderItem={({ item }) => (
+                <View style={styles.viewEmail}>
+                  <View style={styles.nameAndMail}>
+                    <Text style={styles.textName}>{item.name}</Text>
+                    <Text style={styles.textEmail}>{item.email}</Text>
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <TouchableOpacity
+                      style={{ marginRight: screenWidth / 40 }}
+                      onPress={() => this.setState({ idLeader: item.email })}
+                    >
+                      <MaterialCommunityIcons
+                        name="crown"
+                        size={25}
+                        color={this.state.idLeader == item.email ? Colors.tintColor : Colors.gray}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{ opacity: item.email !== this.props.user.email ? 1 : 0.05 }}
+                      onPress={() => {
+                        item.email !== this.props.user.email && this.deleteEmailFromList(item.email);
+                      }}
+                    >
+                      <Feather name="delete" size={25} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
+              keyExtractor={(item) => item.email}
             />
           </View>
-          <View>
-            <TouchableOpacity
-              style={styles.buttonAdd}
-              onPress={() => {
-                this.addEmailToList(this.state.name, this.state.email);
-              }}
-            >
-              <Text style={{ color: 'rgba(128,128,128,0.8)', fontSize: 15, fontWeight: 'bold', textAlign: 'center' }}>
-                Thêm thành viên
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.popuplist}>
-            {this.state.showUserExists ? (
+          {this.state.showUserExists ? (
+            <View style={styles.popupList}>
               <FlatList
-                scrollEnabled
-                showsVerticalScrollIndicator={false}
-                keyboardShouldPersistTaps="always"
+                nestedScrollEnabled={true}
+                removeClippedSubviews={true}
                 data={this.state.dataUserExist}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    onPressIn={() => {
-                      this.addEmailToList(item.name, item.email), this.setState({ showUserExists: false });
-                    }}
-                  >
-                    <View style={styles.userExists}>
-                      <Text style={styles.username}>{item.name}</Text>
-                      <Text style={styles.email}>{item.email}</Text>
-                    </View>
-                  </TouchableOpacity>
-                )}
+                renderItem={this.renderListUserSearch}
                 keyExtractor={(item) => item._id.toString()}
               />
-            ) : null}
-          </View>
+            </View>
+          ) : null}
         </View>
-        {this.state.data?.length > 1 && (
-          <Text style={styles.txtChooseLeader}>Chọn một trưởng nhóm cho nhóm của bạn, mặc định sẽ là bạn</Text>
-        )}
-        <View style={styles.viewContent}>
-          <FlatList
-            scrollEnabled
-            extraData={this.state}
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="always"
-            data={this.state.data}
-            renderItem={({ item }) => (
-              <View style={styles.viewEmail}>
-                <View style={styles.nameAndMail}>
-                  <Text style={styles.textName}>{item.name}</Text>
-                  <Text style={styles.textEmail}>{item.email}</Text>
-                </View>
-                <View style={{ flexDirection: 'row' }}>
-                  <TouchableOpacity
-                    style={{ marginRight: screenWidth / 40 }}
-                    onPress={() => this.setState({ idLeader: item.email })}
-                  >
-                    <MaterialCommunityIcons
-                      name="crown"
-                      size={25}
-                      color={this.state.idLeader == item.email ? Colors.tintColor : Colors.gray}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={{ opacity: item.email !== this.props.user.email ? 1 : 0.05 }}
-                    onPress={() => {
-                      item.email !== this.props.user.email && this.deleteEmailFromList(item.email);
-                    }}
-                  >
-                    <Feather name="delete" size={25} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
-            keyExtractor={(item) => item.email}
-          />
-        </View>
-        {this.state.isLoading ? (
-          <View style={styles.activityIndicator}>
-            <ActivityIndicator animating size="large" color={Colors.tintColor} />
-          </View>
-        ) : null}
-        <DialogBox
-          ref={(dialogbox) => {
-            this.dialogbox = dialogbox;
-          }}
-          isOverlayClickClose={false}
-          style={{ zIndex: 20, backgroundColor: '#333' }}
-        />
-      </View>
+      </>
     );
   }
 }

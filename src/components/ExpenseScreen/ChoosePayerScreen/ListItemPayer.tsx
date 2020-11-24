@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { View, Image, Text } from 'react-native';
 import ListItemPayerStyles from '../../../styles/ExpenseScreenStyles/ChoosePayerScreenStyles/ListItemPayerStyles';
@@ -17,7 +17,7 @@ type Props = {
   avatar?: any;
 };
 
-class ListItemPayer extends Component<Props> {
+class ListItemPayer extends PureComponent<Props> {
   render() {
     const thumbnail =
       this.props.avatar.length > 2
