@@ -326,6 +326,7 @@ ActivityStack.navigationOptions = {
     />
   ),
   tabBarOptions: {
+    keyboardHidesTabBar: true,
     activeTintColor: Colors.tintColor,
     labelStyle: {
       paddingBottom: Platform.OS === 'ios' ? screenWidth / 41.4 : screenWidth / 80,

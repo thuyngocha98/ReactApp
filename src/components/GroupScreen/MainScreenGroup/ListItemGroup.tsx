@@ -24,7 +24,6 @@ type Props = {
 
 class ListItemGroup extends PureComponent<Props> {
   render() {
-    console.log(this.props.dataTrip);
     const lengthAvatar = this.props.dataTrip.avatarGroup.length;
     const avatar =
       lengthAvatar > 2

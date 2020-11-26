@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { View, Text, Image, ScrollView } from 'react-native';
+import React, { PureComponent } from 'react';
+import { View, Text, Image } from 'react-native';
 import styles from '../../../styles/ActivityScreenStyles/RecentActivityScreenStyle/ListItemActivityStyle';
 import Colors from '../../../constants/Colors';
 // @ts-ignore
@@ -28,7 +28,7 @@ type Props = {
   data?: any[];
 };
 
-class ListItemActivity extends Component<Props> {
+class ListItemActivity extends PureComponent<Props> {
   render() {
     if (this.props.data.type === 'created_trip') {
       const thumbnail =

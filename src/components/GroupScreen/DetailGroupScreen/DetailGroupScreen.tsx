@@ -129,7 +129,6 @@ class DetailGroupScreen extends Component<Props, States> {
     })
       .then((response) => response.json())
       .then(async (res) => {
-        console.log(res);
         await this.setState({
           numberUserInTrip: res.numberUser,
           data: res.data.reverse(),

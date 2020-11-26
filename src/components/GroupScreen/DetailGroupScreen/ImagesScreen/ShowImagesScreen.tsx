@@ -6,7 +6,10 @@ import { APPBAR_HEIGHT, screenWidth } from '../../../../constants/Dimensions';
 import { BASEURL } from '../../../../api/api';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
-
+import { Ionicons } from '@expo/vector-icons';
+import moment from 'moment';
+import localization from 'moment/locale/vi';
+moment.updateLocale("vi", localization);
 function mapStateToProps(state) {
   return {};
 }
@@ -79,6 +82,7 @@ class ShowImagesScreen extends Component<Props, States> {
   };
 
   render() {
+    console.log();
     return (
       <View style={styles.mainContainer}>
         <Modal visible={this.state.isModelVisible} transparent={false} onRequestClose={() => this.toggleModal()}>
@@ -93,9 +97,9 @@ class ShowImagesScreen extends Component<Props, States> {
                 this.props.navigation.goBack();
               }}
             >
-              <Text style={styles.textHeaderLeft}>Cancel</Text>
+              <Ionicons name="ios-arrow-back" size={32} color={Colors.white} />
             </TouchableOpacity>
-            <Text style={styles.addContact}>Picture Memories</Text>
+            <Text style={styles.addContact}>Hình ảnh chuyến đi</Text>
             <View style={styles.save}>
               <Text style={styles.add}>upload</Text>
             </View>
@@ -111,7 +115,7 @@ class ShowImagesScreen extends Component<Props, States> {
                 borderBottomColor: Colors.lightgray,
               }}
             >
-              <Text>{images.create_date.split('T')[0]}</Text>
+              <Text>{moment(images.create_date).format('LLL')}</Text>
               <FlatList
                 horizontal
                 data={images.imageURL}
@@ -128,7 +132,9 @@ class ShowImagesScreen extends Component<Props, States> {
                       <Image
                         source={{ uri: `${BASEURL}/images/uploads/${item}` }}
                         style={{
-                          resizeMode: 'stretch',
+                          borderWidth: 1,
+                          borderColor: Colors.lavender,
+                          resizeMode: 'cover',
                           width: screenWidth / 4.5,
                           height: screenWidth / 4,
                           borderRadius: 8,
