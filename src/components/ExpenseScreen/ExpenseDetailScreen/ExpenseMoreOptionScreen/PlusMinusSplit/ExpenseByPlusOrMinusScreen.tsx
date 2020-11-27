@@ -278,7 +278,7 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
             ) : null}
           </View>
           <View style={ExpenseByPlusOrMinusStyles.viewTitle}>
-            <Text style={ExpenseByPlusOrMinusStyles.txtTitle}>Vui lòng tùy chọn thành viên tham gia.</Text>
+            <Text style={ExpenseByPlusOrMinusStyles.txtTitle}>Vui lòng chọn thành viên tham gia.</Text>
           </View>
           <View style={ExpenseByPlusOrMinusStyles.flatlist2}>
             <FlatList

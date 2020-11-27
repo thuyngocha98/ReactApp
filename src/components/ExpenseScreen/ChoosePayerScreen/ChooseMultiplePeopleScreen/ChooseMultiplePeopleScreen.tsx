@@ -96,7 +96,7 @@ class ChooseMultiplePeopleScreen extends Component<Props, States> {
               onPress={() => {
                 this.state.moneyLeft === 0
                   ? this.functionDone(list_user)
-                  : Alert.alert('The payment values do not add up to the total cost.');
+                  : Alert.alert('Giá trị thanh toán đầu vào và đầu ra không bằng nhau\nVui lòng nhập lại');
               }}
             >
               <Text style={ChooseMultiplePeopleScreenStyles.add}>Kết thúc</Text>

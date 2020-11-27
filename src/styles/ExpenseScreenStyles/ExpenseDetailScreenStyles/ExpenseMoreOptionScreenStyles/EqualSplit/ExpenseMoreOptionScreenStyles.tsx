@@ -150,7 +150,6 @@ const ExpenseMoreOptionScreenStyles = StyleSheet.create({
     backgroundColor: Colors.lightgray,
   },
   all: {
-    flex: 0.8,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

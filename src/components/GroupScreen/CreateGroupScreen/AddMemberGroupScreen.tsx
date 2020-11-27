@@ -88,7 +88,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
   addEmailToList(name, email) {
     this.setState({ dataUserExist: [] });
     if (name === '' || email === '') {
-      this.handleOnPress('Error!', ['Information missing!!!', 'Please enter full infomation..']);
+      this.handleOnPress('Lỗi!', ['Thông tin chưa đủ!', 'Vui lòng điền đầy đủ thông tin..']);
     } else {
       let check = this.state.data.some((item, i) => {
         if (item.name === name || item.email === email) {
@@ -96,7 +96,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
         }
       });
       if (check) {
-        this.handleOnPress('Error!', ['Name or Email already exists!', 'Please check again.']);
+        this.handleOnPress('Lỗi!', ['Email đã tồn tại!', 'Vui lòng kiểm tra lại.']);
       } else {
         if (this.validateEmail(email)) {
           let newData = [...this.state.data, { name: name, email: email, isCustom: false }];
@@ -106,7 +106,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
             name: '',
           });
         } else {
-          this.handleOnPress('Error!', ['Email invalid!', 'Please check again.']);
+          this.handleOnPress('Lỗi!', ['Email đã tồn tại!', 'Vui lòng kiểm tra lại.']);
         }
       }
     }
@@ -143,8 +143,8 @@ class AddMemberGroupScreen extends Component<Props, States> {
           this.setState({ isLoading: false });
           Keyboard.dismiss();
           this.dialogbox.tip({
-            title: 'Error!',
-            content: [res.error, 'Please enter another group name.'],
+            title: 'Lỗi',
+            content: [res.error, 'Vui lòng nhập tên chuyến đi.'],
             btn: {
               text: 'OK',
               style: { fontWeight: '500', fontSize: 20, color: '#044de0' },

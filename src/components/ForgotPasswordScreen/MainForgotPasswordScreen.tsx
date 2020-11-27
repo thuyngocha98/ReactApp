@@ -82,15 +82,15 @@ class MainForgotPasswordScreen extends Component<Props> {
 
   onChangePassword = async () => {
     if (!this.validateEmail(this.state.email)) {
-      this.handleOnPress('Error!', ['Email invalid!', 'Please check again.']);
+      this.handleOnPress('Lỗi!', ['Email không có giá trị!', 'Vui lòng kiểm tra lại email.']);
       return;
     }
     if (this.state.password === '') {
-      this.handleOnPress('Error!', ['Password invalid!', 'Please enter password.']);
+      this.handleOnPress('Lỗi!', ['Mật khẩu không có giá trị!', 'Vui lòng kiểm tra lại.']);
       return;
     }
     if (this.state.password.length < 5) {
-      this.handleOnPress('Error!', ['Password invalid!', 'Password must be at least 5 characters.']);
+      this.handleOnPress('Lỗi!', ['Mật khẩu không có giá trị', 'Mật khẩu phải có ít nhất 5 ký tự.']);
       return;
     }
     const data = {
@@ -114,12 +114,12 @@ class MainForgotPasswordScreen extends Component<Props> {
         .then((response) => response.json())
         .then((res) => {
           if (res.error) {
-            this.handleOnPress('Error!', [res.error, 'Please check again.']);
+            this.handleOnPress('Lỗi!', [res.error, 'Vui lòng kiểm tra lại.']);
           } else {
             AsyncStorage.removeItem('jwt');
             this.dialogbox.tip({
-              title: 'Alert!',
-              content: [res.result, "Let's go!"],
+              title: 'Thông Báo!',
+              content: [res.result, 'Bạn có thể đăng nhập!'],
               btn: {
                 text: 'OK',
                 style: { fontWeight: '500', fontSize: 20, color: '#044de0' },
@@ -134,13 +134,13 @@ class MainForgotPasswordScreen extends Component<Props> {
           console.log(error);
         });
     } else {
-      this.handleOnPress('Error!', ['Confirm password incorrect', 'Please check again.']);
+      this.handleOnPress('Lỗi!', ['Xác nhận mật khẩu không đúng', 'Vui lòng kiểm tra lại.']);
     }
   };
 
   sendMailGetCode = async () => {
     if (!this.validateEmail(this.state.email)) {
-      this.handleOnPress('Error!', ['Email invalid!', 'Please check again.']);
+      this.handleOnPress('Lỗi!', ['Email không có giá trị!', 'Vui lòng kiểm tra lại.']);
       return;
     }
     const data = {
@@ -158,9 +158,9 @@ class MainForgotPasswordScreen extends Component<Props> {
       .then((response) => response.json())
       .then((res) => {
         if (res.error) {
-          this.handleOnPress('Error!', [res.error, 'Please check again.']);
+          this.handleOnPress('Lỗi!', [res.error, 'Vui lòng kiểm tra lại.']);
         } else {
-          this.handleOnPress('Alert!', ['Sent Mail!', 'Please check your email.']);
+          this.handleOnPress('Thành Công!', ['Mã pin đã được gửi!', 'Vui lòng kiểm tra email của bạn.']);
         }
       })
       .catch((error) => {

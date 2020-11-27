@@ -81,6 +81,7 @@ const ExpenseByNumberSplitScreenStyles = StyleSheet.create({
   categoryTypeGroup: {
     flexDirection: 'row',
     margin: screenWidth / 20.55,
+    marginTop: screenWidth / 10,
   },
   equal: {
     padding: screenWidth / 82.2,

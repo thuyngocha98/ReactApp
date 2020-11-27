@@ -85,7 +85,7 @@ class MainLoginScreen extends Component<Props, States> {
 
   login = async () => {
     if (!this.validateEmail(this.state.email)) {
-      this.handleOnPress('Lỗi!', ['Email không có giá trị!', 'Vui lòng kiêmt tra email của bạn.']);
+      this.handleOnPress('Lỗi!', ['Email không có giá trị!', 'Vui lòng nhập email của bạn.']);
       return;
     }
     if (this.state.password === '') {
@@ -195,7 +195,7 @@ class MainLoginScreen extends Component<Props, States> {
                           password: text,
                         })
                       }
-                      placeholder={'Password'}
+                      placeholder={'Mật Khẩu'}
                       secureTextEntry={this.state.showPass}
                       autoCapitalize={'none'}
                       returnKeyType={'done'}

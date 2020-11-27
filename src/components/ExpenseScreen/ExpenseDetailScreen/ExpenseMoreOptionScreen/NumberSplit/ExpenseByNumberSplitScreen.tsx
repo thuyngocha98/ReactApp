@@ -198,6 +198,9 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
               </Text>
             </TouchableOpacity>
           </View>
+          <View style={{ marginLeft: screenWidth / 20, marginVertical: screenWidth / 30 }}>
+            <Text style={{ fontSize: screenWidth / 22 }}>Nhập số tiền tham gia mỗi thành viên</Text>
+          </View>
           <View style={ExpenseByNumberSplitScreenStyles.flatlist}>
             <FlatList
               data={this.listUser}

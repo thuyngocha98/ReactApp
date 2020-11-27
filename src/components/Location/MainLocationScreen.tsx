@@ -51,7 +51,7 @@ class MainLocationScreen extends Component<Props, States> {
     })
       .then((response) => response.json())
       .then(async (res) => {
-        res.data.lenght > 0 && this.setState({ coordinates: res.data });
+        (await res.data.length) > 0 && (await this.setState({ coordinates: res.data }));
       })
       .catch((error) => {
         alert(error);
@@ -76,6 +76,7 @@ class MainLocationScreen extends Component<Props, States> {
 
   render() {
     const length = this.state.coordinates.length;
+    console.log(length);
     return (
       <View style={styles.container}>
         <StatusBar hidden={true} />
