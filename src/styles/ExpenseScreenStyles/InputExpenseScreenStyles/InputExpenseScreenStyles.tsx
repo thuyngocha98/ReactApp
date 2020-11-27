@@ -9,6 +9,47 @@ const InputExpenseScreenStyles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
+  // modal
+  mainModal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+  viewModal: {
+      flexDirection: 'column',
+      backgroundColor: Colors.white,
+      borderTopLeftRadius: 10,
+      borderTopRightRadius: 10,
+      padding: screenWidth/36,
+  },
+  txtTitleModal: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: Colors.blackText,
+      paddingBottom: screenWidth/36,
+      paddingHorizontal: screenWidth/11,
+      textAlign: 'center',
+      borderBottomWidth: 1,
+      borderBottomColor: Colors.lavender
+  },
+  viewItemModal: {
+      flexDirection: 'column', 
+      justifyContent: 'center', 
+      alignItems: 'center'
+  },
+  viewBtnModal: {
+      flexDirection: 'row',
+  },
+  txtBtnModal: {
+      fontSize: 14,
+      fontWeight: 'bold',
+      color: Colors.blackText,
+      textAlign: 'center',
+      paddingVertical: screenWidth/36
+  },
+  btnModal: {
+      flex: 1,
+      backgroundColor: Colors.white
+  },
   containerHeader: {
     width: screenWidth,
     height: APPBAR_HEIGHT + getStatusBarHeight(),
@@ -283,36 +324,56 @@ const InputExpenseScreenStyles = StyleSheet.create({
     paddingHorizontal: screenWidth / 24,
     marginBottom: screenWidth / 24,
   },
-  viewIconAdd: {},
+  viewIconAdd: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   iconAdd: {
     width: screenWidth / 6,
     height: screenWidth / 6,
     borderRadius: 8,
   },
+  txtAddImage: {
+    fontSize: 14,
+    color: Colors.blackText,
+  },
   viewShowImage: {
+    marginTop: screenHeight/56,
     flexDirection: 'row',
   },
   showImage: {
     paddingTop: screenWidth / 48,
-    marginRight: screenWidth / 30,
+    marginRight: screenWidth / 24,
   },
   imageAdd: {
-    resizeMode: 'stretch',
-    width: screenWidth / 4.5,
+    resizeMode: 'cover',
+    width: screenWidth / 3,
     height: screenWidth / 4,
     borderRadius: 8,
   },
   viewDeleteImage: {
     zIndex: 10,
     backgroundColor: Colors.lightgray,
-    width: screenWidth / 24,
-    height: screenWidth / 24,
-    borderRadius: screenWidth / 48,
+    width: screenWidth / 20,
+    height: screenWidth / 20,
+    borderRadius: screenWidth / 40,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    right: -screenWidth / 48,
+    right: -screenWidth / 40,
     top: 0,
+  },
+  viewDropModalZoom: {
+    zIndex: 10,
+    backgroundColor: Colors.lightgray,
+    width: screenWidth / 10,
+    height: screenWidth / 10,
+    borderRadius: screenWidth / 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    right: screenWidth / 36,
+    top: screenWidth / 36,
   },
 });
 export default InputExpenseScreenStyles;

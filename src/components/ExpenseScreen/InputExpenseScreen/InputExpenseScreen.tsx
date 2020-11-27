@@ -7,13 +7,15 @@ import {
   Text,
   TextInput,
   StatusBar,
-  Alert,
   Keyboard,
-  ToastAndroid,
+  Modal as ModalOrg,
   ScrollView,
   Image,
   FlatList,
-  Modal,
+  Platform,
+  UIManager,
+  LayoutAnimation,
+  Dimensions,
 } from 'react-native';
 import { Ionicons, MaterialIcons, FontAwesome, Feather } from '@expo/vector-icons';
 import InputExpenseScreenStyles from '../../../styles/ExpenseScreenStyles/InputExpenseScreenStyles/InputExpenseScreenStyles';
@@ -26,6 +28,8 @@ import { screenWidth, screenHeight } from '../../../constants/Dimensions';
 import MapView, { Marker } from 'react-native-maps';
 import * as ImagePicker from 'expo-image-picker';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import ModalNotification from '../../components/ModalNotification';
+import Modal from 'react-native-modal';
 
 function mapStateToProps(state) {
   return {
@@ -57,12 +61,27 @@ type States = {
   address?: string;
   listImageAdd?: any[];
   isModelVisible?: boolean;
+  modalNotification?: {
+    modalVisible?: boolean,
+    type?: string,
+    title?: string,
+    description?: string,
+    onPress?: () => void;
+  },
+  modalVisiblePickImage: boolean;
 };
 
+const SAVE_SUCCESS = 'Lưu thông tin thành công';
 const ASPECT_RATIO = screenWidth / (screenHeight / 1.97);
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-
+// Check platform android set flag animation layout
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 class InputExpenseScreen extends Component<Props, States> {
   constructor(props) {
     super(props);
@@ -81,6 +100,14 @@ class InputExpenseScreen extends Component<Props, States> {
       address: '',
       listImageAdd: [],
       isModelVisible: false,
+      modalNotification: {
+        modalVisible: false,
+        type: 'success',
+        title: '',
+        description: '',
+        onPress: () => {}
+      },
+      modalVisiblePickImage: false,
     };
   }
 
@@ -100,6 +127,8 @@ class InputExpenseScreen extends Component<Props, States> {
       let data = this.props.navigation.getParam('dataGroup', {});
       this.props.getListUserInTrip(data._id);
       let isCheck = this.props.navigation.getParam('isCheck', '1');
+      Platform.OS === 'android' &&
+                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       if (isCheck === '1') this.setState({ isCheckExpense: true });
       else if (isCheck === '2') {
         this.onGetMyCurrentLocation();
@@ -204,30 +233,18 @@ class InputExpenseScreen extends Component<Props, States> {
   }
 
   async createTransaction(tripId, listTypeUser, idPayer) {
+    Keyboard.dismiss();
     const Money = parseInt(this.state.money.replace(/,/g, ''));
     const Description = this.state.description;
     var list_user = await this.createListUser(listTypeUser, idPayer);
     if (this.state.checkDescription !== this.state.checkMoney) {
-      // Keyboard.dismiss();
-      // ToastAndroid.showWithGravityAndOffset(
-      //   'Please enter the full expense information !',
-      //   ToastAndroid.SHORT,
-      //   ToastAndroid.BOTTOM,
-      //   25,
-      //   50,
-      // );
+      this.setState({modalNotification: {
+        type: 'error',
+        title: 'Thông tin không hợp lệ.',
+        description: 'Vui lòng nhập đầy đủ thông tin.',
+        modalVisible: true,
+      }})
     } else {
-      if (!this.state.checkDescription && !this.state.isEnableAddLocation && this.state.listImageAdd?.length === 0) {
-        // Keyboard.dismiss();
-        // ToastAndroid.showWithGravityAndOffset(
-        //   'Please enter additional information !',
-        //   ToastAndroid.SHORT,
-        //   ToastAndroid.BOTTOM,
-        //   25,
-        //   50,
-        // );
-        return;
-      }
       var bodyFormData = new FormData();
       var dataExpense = {};
       var dataLocation = {};
@@ -257,12 +274,10 @@ class InputExpenseScreen extends Component<Props, States> {
           bodyFormData.append('image', photo);
         });
       }
-      console.log(this.state.listImageAdd);
 
       bodyFormData.append('dataExpense', JSON.stringify(dataExpense));
       bodyFormData.append('dataLocation', JSON.stringify(dataLocation));
       bodyFormData.append('trip_id', tripId);
-      console.log(bodyFormData);
       fetch(`${BASEURL}/api/transaction/insert_new_transaction`, {
         method: 'POST',
         headers: {
@@ -274,16 +289,32 @@ class InputExpenseScreen extends Component<Props, States> {
         .then(async (res) => {
           if (res.result === 'ok') {
             this.setInputExpenseAgain();
-            // ToastAndroid.showWithGravityAndOffset('Save done!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
             await this.props.saveTripId(tripId);
-            this.props.navigation.goBack();
+            this.setState({modalNotification: {
+              type: 'success',
+              title: SAVE_SUCCESS,
+              description: 'Thông tin của bạn đã được lưu thành công.',
+              modalVisible: true,
+            }})
           } else {
-            // ToastAndroid.showWithGravityAndOffset('Save error!', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+            this.setState({modalNotification: {
+              type: 'error',
+              title: 'Đã xảy ra lỗi',
+              description: 'Lưu thông tin không thành công, xin vui lòng thử lại.',
+              modalVisible: true,
+            }})
           }
         })
         .catch((error) => {
           console.log(error);
         });
+    }
+  }
+
+  onActionModal = () => {
+    this.setState({modalNotification: {modalVisible: false}});
+    if(this.state.modalNotification.title == SAVE_SUCCESS){
+      this.props.navigation.goBack();
     }
   }
 
@@ -317,8 +348,15 @@ class InputExpenseScreen extends Component<Props, States> {
   async onShowHideViewLocation() {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
-      alert("Hey! You don't enable location ");
+      this.setState({modalNotification: {
+        type: 'warning',
+        title: 'Bạn đã không cấp quyền sử dụng vị trí',
+        description: 'Bạn không thể sử dụng tính năng vị trí.',
+        modalVisible: true,
+      }})
     } else {
+      Platform.OS === 'android' &&
+                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       if (this.state.isCheckLocation) this.setState({ isCheckLocation: false });
       else {
         if (!this.state.latMarker) {
@@ -345,13 +383,20 @@ class InputExpenseScreen extends Component<Props, States> {
   async onGetMyCurrentLocation() {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
-      alert("Hey! You don't enable location ");
+      this.setState({modalNotification: {
+        type: 'warning',
+        title: 'Bạn đã không cấp quyền sử dụng vị trí',
+        description: 'Bạn không thể sử dụng tính năng vị trí.',
+        modalVisible: true,
+      }})
     } else {
       let currentPosition = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
       let address = await Location.reverseGeocodeAsync({
         latitude: currentPosition.coords.latitude,
         longitude: currentPosition.coords.longitude,
       });
+      Platform.OS === 'android' &&
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       this.setState({
         isCheckLocation: true,
         isEnableAddLocation: true,
@@ -366,27 +411,74 @@ class InputExpenseScreen extends Component<Props, States> {
   }
 
   _pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      quality: 1,
-    });
-    if (!result.cancelled) {
-      // ImagePicker saves the taken photo to disk and returns a local URI to it
-      let localUri = result.uri;
-      let filename = localUri.split('/').pop();
-
-      // Infer the type of the image
-      let match = /\.(\w+)$/.exec(filename);
-      let type = match ? `image/${match[1]}` : `image`;
-
-      let listImage = this.state.listImageAdd.concat({
-        id: this.state.listImageAdd?.length + 1,
-        url: localUri,
-        name: filename,
-        type,
+    const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+    if (status !== 'granted') {
+      this.setState({modalNotification: {
+        type: 'warning',
+        title: 'Bạn đã không cấp quyền sử dụng thư viện',
+        description: 'Bạn không thể sử dụng tính năng đăng tải ảnh.',
+        modalVisible: true,
+      }})
+    } else {
+      this.toggleModalPickImage();
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 1,
       });
-      this.setState({ listImageAdd: listImage });
+      if (!result.cancelled) {
+        // ImagePicker saves the taken photo to disk and returns a local URI to it
+        let localUri = result.uri;
+        let filename = localUri.split('/').pop();
+  
+        // Infer the type of the image
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
+  
+        let listImage = this.state.listImageAdd.concat({
+          id: this.state.listImageAdd?.length + 1,
+          url: localUri,
+          name: filename,
+          type,
+        });
+        this.setState({ listImageAdd: listImage });
+      }
+    }
+  };
+
+  _pickImageCamera = async () => {
+    const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+    if (status !== 'granted') {
+      this.setState({modalNotification: {
+        type: 'warning',
+        title: 'Bạn đã không cấp quyền sử dụng camera',
+        description: 'Bạn không thể sử dụng tính năng chụp ảnh.',
+        modalVisible: true,
+      }})
+    } else {
+      this.toggleModalPickImage();
+      let result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 1,
+      });
+      if (!result.cancelled) {
+        // ImagePicker saves the taken photo to disk and returns a local URI to it
+        let localUri = result.uri;
+        let filename = localUri.split('/').pop();
+
+        // Infer the type of the image
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
+
+        let listImage = this.state.listImageAdd.concat({
+          id: this.state.listImageAdd?.length + 1,
+          url: localUri,
+          name: filename,
+          type,
+        });
+        this.setState({ listImageAdd: listImage });
+      }
     }
   };
 
@@ -400,6 +492,22 @@ class InputExpenseScreen extends Component<Props, States> {
     this.setState({ isModelVisible: !this.state.isModelVisible });
   };
 
+  toggleModalPickImage = () => {
+    this.setState({ modalVisiblePickImage: !this.state.modalVisiblePickImage });
+  };
+
+  toggleExpense = () => {
+    Platform.OS === 'android' &&
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      this.setState({ isCheckExpense: !this.state.isCheckExpense })
+  }
+
+  toggleImage = () => {
+    Platform.OS === 'android' &&
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      this.setState({ isCheckImage: !this.state.isCheckImage })
+  }
+
   render() {
     const { navigation } = this.props;
     this.listTypeUser = navigation.getParam('listTypeUser', []);
@@ -407,10 +515,49 @@ class InputExpenseScreen extends Component<Props, States> {
     var Group = navigation.getParam('dataGroup', {});
     return (
       <View style={InputExpenseScreenStyles.container}>
-        <StatusBar barStyle="light-content" hidden={false} backgroundColor={'transparent'} translucent />
-        <Modal visible={this.state.isModelVisible} transparent={false} onRequestClose={() => this.toggleModal()}>
-          <ImageViewer imageUrls={this.state.listImageAdd} />
+        <ModalNotification
+          type={this.state.modalNotification.type}
+          modalVisible={this.state.modalNotification.modalVisible}
+          title={this.state.modalNotification.title}
+          description={this.state.modalNotification.description}
+          txtButton="Ok"
+          onPress={this.onActionModal}
+        />
+         <Modal
+          isVisible={this.state.modalVisiblePickImage}
+          style={InputExpenseScreenStyles.mainModal}
+          coverScreen={false}
+          deviceHeight={Dimensions.get('screen').height}
+          onBackdropPress={this.toggleModalPickImage}
+        >
+          <View style={InputExpenseScreenStyles.viewModal}>
+              <Text style={InputExpenseScreenStyles.txtTitleModal}>
+                  {`Thêm ảnh từ`}
+              </Text>
+              <View style={InputExpenseScreenStyles.viewBtnModal}>
+                  <TouchableOpacity
+                    onPress={this._pickImage}
+                    style={[InputExpenseScreenStyles.btnModal,{borderRightWidth: 1,borderRightColor: Colors.lavender}]}>
+                      <Text style={InputExpenseScreenStyles.txtBtnModal}>Thư viện</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={this._pickImageCamera}
+                    style={InputExpenseScreenStyles.btnModal}>
+                      <Text style={InputExpenseScreenStyles.txtBtnModal}>Camera</Text>
+                  </TouchableOpacity>
+              </View>
+          </View>
         </Modal>
+        <StatusBar barStyle="light-content" hidden={false} backgroundColor={'transparent'} translucent />
+        <ModalOrg visible={this.state.isModelVisible} onRequestClose={this.toggleModal}>
+          <ImageViewer useNativeDriver={true} imageUrls={this.state.listImageAdd} />
+          <TouchableOpacity
+            onPress={this.toggleModal}
+            style={InputExpenseScreenStyles.viewDropModalZoom}
+          >
+            <Feather name={'x'} color={Colors.black} size={18} />
+          </TouchableOpacity>
+        </ModalOrg>
         {/* view header */}
         <View style={InputExpenseScreenStyles.containerHeader}>
           <View style={InputExpenseScreenStyles.header}>
@@ -428,6 +575,7 @@ class InputExpenseScreen extends Component<Props, States> {
             <TouchableOpacity
               style={InputExpenseScreenStyles.save}
               activeOpacity={0.5}
+              disabled={!this.state.checkDescription && !this.state.isEnableAddLocation && this.state.listImageAdd?.length === 0}
               onPress={() => {
                 this.createTransaction(Group._id, this.listTypeUser, this.idPayer);
               }}
@@ -453,7 +601,7 @@ class InputExpenseScreen extends Component<Props, States> {
         <ScrollView keyboardShouldPersistTaps="handled">
           {/* view add expense */}
           <TouchableOpacity
-            onPress={() => this.setState({ isCheckExpense: !this.state.isCheckExpense })}
+            onPress={this.toggleExpense}
             style={InputExpenseScreenStyles.viewRowItem}
           >
             <View style={InputExpenseScreenStyles.viewIconAndTitleItem}>
@@ -524,7 +672,12 @@ class InputExpenseScreen extends Component<Props, States> {
                     onPress={() =>
                       this.state.checkDescription && this.state.checkMoney
                         ? this.prepareSendListUserToChoose(this.listTypeUser, this.idPayer)
-                        : Alert.alert('Vui lòng điền đầy đủ thông tin')
+                        : this.setState({modalNotification: {
+                            type: 'error',
+                            title: 'Đã có lỗi xảy ra',
+                            description: 'Vui lòng nhập đầy đủ thông tin',
+                            modalVisible: true,
+                          }})
                     }
                   >
                     Chọn thành viên thanh toán (đầu vào)
@@ -536,7 +689,12 @@ class InputExpenseScreen extends Component<Props, States> {
                     onPress={() =>
                       this.state.checkDescription && this.state.checkMoney
                         ? this.prepareSendListUserToSplit(this.listTypeUser, this.idPayer)
-                        : Alert.alert('Vui lòng điền đầy đủ thông tin')
+                        : this.setState({modalNotification: {
+                            type: 'error',
+                            title: 'Đã có lỗi xảy ra',
+                            description: 'Vui lòng nhập đầy đủ thông tin',
+                            modalVisible: true,
+                          }})
                     }
                   >
                     Chọn thành viên tham gia (đầu ra)
@@ -617,7 +775,7 @@ class InputExpenseScreen extends Component<Props, States> {
           <View style={InputExpenseScreenStyles.line} />
           {/* view add image */}
           <TouchableOpacity
-            onPress={() => this.setState({ isCheckImage: !this.state.isCheckImage })}
+            onPress={this.toggleImage}
             style={InputExpenseScreenStyles.viewRowItem}
           >
             <View style={InputExpenseScreenStyles.viewIconAndTitleItem}>
@@ -634,7 +792,7 @@ class InputExpenseScreen extends Component<Props, States> {
           </TouchableOpacity>
           {this.state.isCheckImage ? (
             <View style={InputExpenseScreenStyles.viewAddImage}>
-              <TouchableOpacity onPress={() => this._pickImage()} style={InputExpenseScreenStyles.viewIconAdd}>
+              <TouchableOpacity onPress={this.toggleModalPickImage} style={InputExpenseScreenStyles.viewIconAdd}>
                 <Image
                   source={{
                     uri:
@@ -642,6 +800,7 @@ class InputExpenseScreen extends Component<Props, States> {
                   }}
                   style={InputExpenseScreenStyles.iconAdd}
                 />
+                <Text style={InputExpenseScreenStyles.txtAddImage}>Thêm hình ảnh</Text>
               </TouchableOpacity>
               <View style={InputExpenseScreenStyles.viewShowImage}>
                 <FlatList

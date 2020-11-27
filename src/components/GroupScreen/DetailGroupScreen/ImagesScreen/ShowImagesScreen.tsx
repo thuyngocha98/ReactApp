@@ -6,7 +6,7 @@ import { APPBAR_HEIGHT, screenWidth } from '../../../../constants/Dimensions';
 import { BASEURL } from '../../../../api/api';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
-import { Ionicons } from '@expo/vector-icons';
+import { Feather, Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
 import localization from 'moment/locale/vi';
 moment.updateLocale("vi", localization);
@@ -86,7 +86,13 @@ class ShowImagesScreen extends Component<Props, States> {
     return (
       <View style={styles.mainContainer}>
         <Modal visible={this.state.isModelVisible} transparent={false} onRequestClose={() => this.toggleModal()}>
-          <ImageViewer imageUrls={[{ url: `${BASEURL}/images/uploads/${this.state.imageModal}` }]} />
+          <ImageViewer useNativeDriver={true} imageUrls={[{ url: `${BASEURL}/images/uploads/${this.state.imageModal}` }]} />
+          <TouchableOpacity
+            onPress={this.toggleModal}
+            style={styles.viewDropModalZoom}
+          >
+            <Feather name={'x'} color={Colors.black} size={18} />
+          </TouchableOpacity>
         </Modal>
         <View style={styles.containerHeader}>
           <View style={styles.header}>
@@ -107,38 +113,17 @@ class ShowImagesScreen extends Component<Props, States> {
         </View>
         <ScrollView style={{ flex: 1, flexDirection: 'column' }}>
           {this.state.listImage.map((images) => (
-            <View
-              key={images._id}
-              style={{
-                padding: screenWidth / 24,
-                borderBottomWidth: 1,
-                borderBottomColor: Colors.lightgray,
-              }}
-            >
+            <View key={images._id} style={styles.viewItem} >
               <Text>{moment(images.create_date).format('LLL')}</Text>
               <FlatList
                 horizontal
                 data={images.imageURL}
                 renderItem={({ item }) => (
-                  <View
-                    style={{
-                      marginTop: screenWidth / 72,
-                      marginRight: screenWidth / 36,
-                      width: screenWidth / 4.5,
-                      height: screenWidth / 4,
-                    }}
-                  >
+                  <View style={styles.viewItemImage} >
                     <TouchableOpacity onPress={() => this.onZoomImage(item)}>
                       <Image
                         source={{ uri: `${BASEURL}/images/uploads/${item}` }}
-                        style={{
-                          borderWidth: 1,
-                          borderColor: Colors.lavender,
-                          resizeMode: 'cover',
-                          width: screenWidth / 4.5,
-                          height: screenWidth / 4,
-                          borderRadius: 8,
-                        }}
+                        style={styles.itemImage}
                       />
                     </TouchableOpacity>
                   </View>
@@ -157,6 +142,39 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     flexDirection: 'column',
+  },
+  viewItem: {
+    padding: screenWidth / 24,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.lightgray,
+  },
+  viewItemImage: {
+    marginTop: screenWidth / 72,
+    marginRight: screenWidth / 36,
+    width: screenWidth / 3,
+    height: screenWidth / 4,
+    borderWidth: 1,
+    borderColor: Colors.lavender,
+    borderRadius: 8,
+    overflow: 'hidden'
+  },
+  itemImage: {
+    resizeMode: 'cover',
+    width: screenWidth / 3,
+    height: screenWidth / 4,
+    borderRadius: 8,
+  },
+  viewDropModalZoom: {
+    zIndex: 10,
+    backgroundColor: Colors.lightgray,
+    width: screenWidth / 10,
+    height: screenWidth / 10,
+    borderRadius: screenWidth / 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    right: screenWidth / 36,
+    top: screenWidth / 36,
   },
   container: {
     flex: 1,

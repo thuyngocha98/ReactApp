@@ -268,6 +268,7 @@ class CreateGroupScreen extends Component<Props, States> {
             </TouchableOpacity>
           </View>
         </View>
+        <ScrollView>
         <View style={CreateGroupScreenStyles.categoryGroupName}>
           <Image
             style={CreateGroupScreenStyles.iconCamera}
@@ -329,13 +330,13 @@ class CreateGroupScreen extends Component<Props, States> {
           </View>
         </View>
         <View style={CreateGroupScreenStyles.pickDate}>
-          <Text style={CreateGroupScreenStyles.groupName}>Hành trình chuyến đi</Text>
+          <Text style={CreateGroupScreenStyles.groupName}>Chọn lịch trình</Text>
           {this.state.loadingTrip ? (
             <View style={CreateGroupScreenStyles.selectTrip}>
               <ActivityIndicator animating size="small" color={Colors.tintColor} />
             </View>
           ) : (
-            <ScrollView keyboardShouldPersistTaps="never" style={CreateGroupScreenStyles.listTrip}>
+            <View style={CreateGroupScreenStyles.listTrip}>
               {this.state.dataTrip.map((item, index) => (
                 <TouchableOpacity
                   onPress={() => this.onSelectPlanTrip(index)}
@@ -352,9 +353,10 @@ class CreateGroupScreen extends Component<Props, States> {
                   )}
                 </TouchableOpacity>
               ))}
-            </ScrollView>
+            </View>
           )}
         </View>
+        </ScrollView>
       </View>
     );
   }
