@@ -38,6 +38,7 @@ import groupChat from '../../../../assets/images/group-chat.png';
 // @ts-ignore
 import plus from '../../../../assets/images/plus.png';
 import ModalNotification from '../../components/ModalNotification';
+import ListEmpty from '../../components/ListEmpty';
 function mapStateToProps(state) {
   return {
     userId: state.dataUser.dataUser._id,
@@ -379,6 +380,15 @@ class DetailGroupScreen extends Component<Props, States> {
                       data={this.state.data}
                       scrollEnabled
                       keyExtractor={(item, index) => index.toString()}
+                      ListEmptyComponent={() => (
+                        <View style={DetailGroupScreenStyles.viewEmpty}>
+                          <ListEmpty 
+                           title={'Hiện tại chưa có sự kiện nào được ghi lại'}
+                           titleAction={'Bắt đầu thêm sự kiện mới'}
+                           action={() => this.setState({ modalVisible: !this.state.modalVisible })}
+                          />
+                       </View>
+                       )}
                       renderItem={({ item }) => (
                         <TouchableOpacity
                           onPress={() => {

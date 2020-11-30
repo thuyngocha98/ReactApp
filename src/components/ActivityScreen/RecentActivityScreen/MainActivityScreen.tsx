@@ -17,6 +17,7 @@ import { screenWidth } from '../../../constants/Dimensions';
 import { connect } from 'react-redux';
 import { BASEURL } from '../../../api/api';
 import LottieView from 'lottie-react-native';
+import ListEmpty from '../../components/ListEmpty';
 
 function mapStateToProps(state) {
   return {
@@ -142,6 +143,15 @@ class MainActivityScreen extends Component<Props, States> {
                 </TouchableOpacity>
               )}
               keyExtractor={(item) => item._id.toString()}
+              ListEmptyComponent={() => (
+                <View style={styles.viewEmpty}>
+                  <ListEmpty 
+                    title={'Hiện tại chưa có hoạt động nào được ghi lại'}
+                    titleAction={null}
+                    action={null}
+                  />
+                </View>
+              )}
             />
           )}
         </View>
@@ -197,6 +207,11 @@ const styles = StyleSheet.create({
     width: screenWidth / 3.6,
     height: screenWidth / 3.6,
   },
+  viewEmpty: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
 
 export default connect(mapStateToProps, null)(MainActivityScreen);

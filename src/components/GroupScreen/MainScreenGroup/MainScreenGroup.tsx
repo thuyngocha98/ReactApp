@@ -12,6 +12,7 @@ import { number2money, thumbnails } from '../../../constants/FunctionCommon';
 import { SearchBar } from 'react-native-elements';
 import { screenWidth } from '../../../constants/Dimensions';
 import LottieView from 'lottie-react-native';
+import ListEmpty from '../../components/ListEmpty';
 
 function mapStateToProps(state) {
   return {
@@ -214,6 +215,15 @@ class MainScreenGroup extends Component<Props, States> {
                     )}
                   </TouchableOpacity>
                 )
+              )}
+              ListEmptyComponent={() => (
+               <View style={MainScreenGroupStyles.viewEmpty}>
+                 <ListEmpty 
+                  title={'Hiện tại bạn chưa tham gia nhóm nào'}
+                  titleAction={'Bắt đầu tạo nhóm mới'}
+                  action={() => this.props.navigation.navigate('CreateGroupScreen')}
+                 />
+              </View>
               )}
               keyExtractor={(item) => item._id.toString()}
             />

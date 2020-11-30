@@ -330,7 +330,7 @@ class CreateGroupScreen extends Component<Props, States> {
           </View>
         </View>
         <View style={CreateGroupScreenStyles.pickDate}>
-          <Text style={CreateGroupScreenStyles.groupName}>Chọn lịch trình</Text>
+          {this.state.dataTrip.length > 0 && <Text style={CreateGroupScreenStyles.groupName}>Chọn lịch trình</Text>}
           {this.state.loadingTrip ? (
             <View style={CreateGroupScreenStyles.selectTrip}>
               <ActivityIndicator animating size="small" color={Colors.tintColor} />

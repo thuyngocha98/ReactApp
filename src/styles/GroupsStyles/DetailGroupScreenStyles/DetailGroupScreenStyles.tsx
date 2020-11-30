@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../../constants/Colors';
-import { screenWidth } from '../../../constants/Dimensions';
+import { screenHeight, screenWidth } from '../../../constants/Dimensions';
 import Constants from 'expo-constants';
 
 const DetailGroupScreenStyles = StyleSheet.create({
@@ -109,8 +109,8 @@ const DetailGroupScreenStyles = StyleSheet.create({
   },
   addTrip: {
     position: 'absolute',
-    bottom: 5,
-    right: 5,
+    bottom: screenHeight/108,
+    right: screenWidth/72,
     width: screenWidth / 7.5,
     height: screenWidth / 7.5,
     borderRadius: screenWidth / 4,
@@ -150,5 +150,10 @@ const DetailGroupScreenStyles = StyleSheet.create({
     height: screenWidth / 18,
     resizeMode: 'cover',
   },
+  viewEmpty: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
 export default DetailGroupScreenStyles;

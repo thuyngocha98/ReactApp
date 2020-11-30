@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Colors from '../../../constants/Colors';
-import { screenWidth } from '../../../constants/Dimensions';
+import { screenHeight, screenWidth } from '../../../constants/Dimensions';
 
 const MainScreenGroupStyles = StyleSheet.create({
   container: {
@@ -57,5 +57,11 @@ const MainScreenGroupStyles = StyleSheet.create({
     width: screenWidth / 3.6,
     height: screenWidth / 3.6,
   },
+  viewEmpty: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: screenHeight/6,
+  }
 });
 export default MainScreenGroupStyles;

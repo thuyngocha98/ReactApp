@@ -261,7 +261,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
                   this.createTrip();
                 }}
               >
-                <Text style={styles.next}>Kết thúc</Text>
+                <Text style={styles.next}>Xong</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.input}>
