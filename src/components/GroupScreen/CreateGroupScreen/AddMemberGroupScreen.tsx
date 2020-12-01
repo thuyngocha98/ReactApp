@@ -34,12 +34,12 @@ type States = {
   idLeader?: string;
   isLoading?: boolean;
   modalNotification?: {
-    modalVisible?: boolean,
-    type?: string,
-    title?: string,
-    description?: string,
+    modalVisible?: boolean;
+    type?: string;
+    title?: string;
+    description?: string;
     onPress?: () => void;
-  },
+  };
 };
 class AddMemberGroupScreen extends Component<Props, States> {
   static navigationOptions = {
@@ -63,7 +63,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
         type: 'success',
         title: '',
         description: '',
-        onPress: () => {}
+        onPress: () => {},
       },
     };
   }
@@ -90,12 +90,14 @@ class AddMemberGroupScreen extends Component<Props, States> {
     Keyboard.dismiss();
     this.setState({ dataUserExist: [] });
     if (name === '' || email === '') {
-      this.setState({modalNotification: {
-        type: 'error',
-        title: 'Bạn chưa điền thông tin',
-        description: 'Vui lòng nhập đầy đủ thông tin.',
-        modalVisible: true,
-      }})
+      this.setState({
+        modalNotification: {
+          type: 'error',
+          title: 'Bạn chưa điền thông tin',
+          description: 'Vui lòng nhập đầy đủ thông tin.',
+          modalVisible: true,
+        },
+      });
     } else {
       let check = this.state.data.some((item, i) => {
         if (item.name === name || item.email === email) {
@@ -103,12 +105,14 @@ class AddMemberGroupScreen extends Component<Props, States> {
         }
       });
       if (check) {
-        this.setState({modalNotification: {
-          type: 'error',
-          title: 'Tên hoặc Email đã tồn tại',
-          description: 'Vui lòng kiểm tra lại.',
-          modalVisible: true,
-        }})
+        this.setState({
+          modalNotification: {
+            type: 'error',
+            title: 'Tên hoặc Email đã tồn tại',
+            description: 'Vui lòng kiểm tra lại.',
+            modalVisible: true,
+          },
+        });
       } else {
         if (this.validateEmail(email)) {
           let newData = [...this.state.data, { name: name, email: email, isCustom: false }];
@@ -118,12 +122,14 @@ class AddMemberGroupScreen extends Component<Props, States> {
             name: '',
           });
         } else {
-          this.setState({modalNotification: {
-            type: 'error',
-            title: 'Email không hợp lệ',
-            description: 'Vui lòng kiểm tra lại.',
-            modalVisible: true,
-          }})
+          this.setState({
+            modalNotification: {
+              type: 'error',
+              title: 'Email không hợp lệ',
+              description: 'Vui lòng kiểm tra lại.',
+              modalVisible: true,
+            },
+          });
         }
       }
     }
@@ -140,8 +146,8 @@ class AddMemberGroupScreen extends Component<Props, States> {
     });
     const data = {
       name: this.props.navigation.getParam('nameGroup', 'No name'),
-      // startDay: this.props.navigation.getParam('startDay', '0-0-0000'),
-      // endDay: this.props.navigation.getParam('endDay', '0-0-0000'),
+      startDay: this.props.navigation.getParam('startDay', '0-0-0000'),
+      endDay: this.props.navigation.getParam('endDay', '0-0-0000'),
       author: this.props.user_id,
       list_user: newData,
       listPlan: this.props.navigation.getParam('listPlan', []),
@@ -159,12 +165,14 @@ class AddMemberGroupScreen extends Component<Props, States> {
       .then((res) => {
         if (res.error) {
           this.setState({ isLoading: false });
-          this.setState({modalNotification: {
-            type: 'error',
-            title: res.error,
-            description: 'Vui lòng kiểm tra lại.',
-            modalVisible: true,
-          }})
+          this.setState({
+            modalNotification: {
+              type: 'error',
+              title: res.error,
+              description: 'Vui lòng kiểm tra lại.',
+              modalVisible: true,
+            },
+          });
         } else {
           this.setState({ isLoading: false });
           this.props.navigation.navigate('GroupScreen');
@@ -221,30 +229,31 @@ class AddMemberGroupScreen extends Component<Props, States> {
       });
   };
 
-  renderListUserSearch = ({item}) => {
+  renderListUserSearch = ({ item }) => {
     return (
       <TouchableOpacity
         onPressIn={() => {
           this.addEmailToList(item.name, item.email), this.setState({ showUserExists: false });
-        }}>
+        }}
+      >
         <View style={styles.userExists}>
           <Text style={styles.username}>{item.name}</Text>
           <Text style={styles.email}>{item.email}</Text>
         </View>
       </TouchableOpacity>
     );
-  }
+  };
 
   render() {
     return (
       <>
         <ModalNotification
-            type={this.state.modalNotification.type}
-            modalVisible={this.state.modalNotification.modalVisible}
-            title={this.state.modalNotification.title}
-            description={this.state.modalNotification.description}
-            txtButton="Ok"
-            onPress={() => this.setState({ modalNotification: { modalVisible: false}})}
+          type={this.state.modalNotification.type}
+          modalVisible={this.state.modalNotification.modalVisible}
+          title={this.state.modalNotification.title}
+          description={this.state.modalNotification.description}
+          txtButton="Ok"
+          onPress={() => this.setState({ modalNotification: { modalVisible: false } })}
         />
         <View style={styles.container}>
           <ModalLoading isVisible={this.state.isLoading} />
@@ -308,9 +317,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
                   this.addEmailToList(this.state.name, this.state.email);
                 }}
               >
-                <Text style={styles.txtAddMember}>
-                  Thêm thành viên
-                </Text>
+                <Text style={styles.txtAddMember}>Thêm thành viên</Text>
               </TouchableOpacity>
             </View>
           </View>
