@@ -140,6 +140,7 @@ class MainScreenGroup extends Component<Props, States> {
   };
 
   render() {
+    console.log(this.state.data);
     return (
       <View style={MainScreenGroupStyles.container}>
         <StatusBar barStyle="light-content" hidden={false} backgroundColor="transparent" translucent />
@@ -163,8 +164,8 @@ class MainScreenGroup extends Component<Props, States> {
         <View style={MainScreenGroupStyles.cartExpense}>
           <Image style={MainScreenGroupStyles.avatar} source={this.thumbnail} />
           <View style={MainScreenGroupStyles.text}>
-            <Text style={MainScreenGroupStyles.textTotal}>Tổng số dư</Text>
-            <View>
+            <Text style={MainScreenGroupStyles.textTotal}>Tổng số chuyến đi</Text>
+            {/* <View>
               {this.state.total >= 0 ? (
                 <View style={{ flexDirection: 'row' }}>
                   <Text style={{ color: Colors.white }}> Bạn lấy lại : </Text>
@@ -176,7 +177,7 @@ class MainScreenGroup extends Component<Props, States> {
                   <Text style={{ color: Colors.orangered }}>{number2money(this.state.total * -1)} VND</Text>
                 </View>
               )}
-            </View>
+            </View> */}
           </View>
           <View style={MainScreenGroupStyles.menu}>
             <TouchableOpacity>

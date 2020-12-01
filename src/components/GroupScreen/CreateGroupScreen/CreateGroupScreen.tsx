@@ -37,7 +37,9 @@ type States = {
   isDateTimePickerVisible?: boolean;
   isDateTimePickerVisible1?: boolean;
   startDay?: string;
+  getTimeStartDay?: Number;
   endDay?: string;
+  getTimeEndDay?: Number;
   show?: boolean;
   show1?: boolean;
   date?: any;
@@ -46,12 +48,12 @@ type States = {
   indexSelectTrip?: number;
   loadingTrip?: boolean;
   modalNotification?: {
-    modalVisible?: boolean,
-    type?: string,
-    title?: string,
-    description?: string,
+    modalVisible?: boolean;
+    type?: string;
+    title?: string;
+    description?: string;
     onPress?: () => void;
-  },
+  };
 };
 
 class CreateGroupScreen extends Component<Props, States> {
@@ -64,7 +66,9 @@ class CreateGroupScreen extends Component<Props, States> {
     isDateTimePickerVisible: false,
     isDateTimePickerVisible1: false,
     startDay: 'Chọn ngày bắt đầu',
+    getTimeStartDay: null,
     endDay: 'Chọn ngày kết thúc',
+    getTimeEndDay: null,
     show: false,
     show1: false,
     dateString: moment(new Date()).format('YYYY-MM-DD'),
@@ -77,7 +81,7 @@ class CreateGroupScreen extends Component<Props, States> {
       type: 'success',
       title: '',
       description: '',
-      onPress: () => {}
+      onPress: () => {},
     },
   };
 
@@ -112,7 +116,7 @@ class CreateGroupScreen extends Component<Props, States> {
 
   // Date time picker start day
   checkCondition() {
-    if(this.state.checkInputName) {
+    if (this.state.checkInputName) {
       Keyboard.dismiss();
       let listPlan = this.state.dataTrip.reduce((acc, cur) => {
         if (cur.isSelect) {
@@ -130,43 +134,71 @@ class CreateGroupScreen extends Component<Props, States> {
               listPlan: listPlan,
             });
           } else {
-            this.setState({modalNotification: {
-              type: 'error',
-              title: 'Bạn chưa chọn ngày kết thúc',
-              description: 'Vui lòng chọn ngày kết thúc.',
-              modalVisible: true,
-            }})
+            this.setState({
+              modalNotification: {
+                type: 'error',
+                title: 'Bạn chưa chọn ngày kết thúc',
+                description: 'Vui lòng chọn ngày kết thúc.',
+                modalVisible: true,
+              },
+            });
           }
         } else {
-          this.setState({modalNotification: {
-            type: 'error',
-            title: 'Bạn chưa chọn ngày bắt đầu',
-            description: 'Vui lòng chọn ngày bắt đầu.',
-            modalVisible: true,
-          }})
+          this.setState({
+            modalNotification: {
+              type: 'error',
+              title: 'Bạn chưa chọn ngày bắt đầu',
+              description: 'Vui lòng chọn ngày bắt đầu.',
+              modalVisible: true,
+            },
+          });
         }
       } else {
-        this.setState({modalNotification: {
-          type: 'error',
-          title: 'Tên nhóm không hợp lệ!',
-          description: 'Vui lòng nhập lại tên nhóm.',
-          modalVisible: true,
-        }})
+        this.setState({
+          modalNotification: {
+            type: 'error',
+            title: 'Tên nhóm không hợp lệ!',
+            description: 'Vui lòng nhập lại tên nhóm.',
+            modalVisible: true,
+          },
+        });
       }
     }
   }
 
   onChange = (event: any, selectedDate: any) => {
-    if (event.type === 'dismissed') {
-      Keyboard.dismiss();
-      this.setState({
-        show: !this.state.show,
-      });
+    if (this.state.getTimeEndDay === null) {
+      if (event.type === 'dismissed') {
+        Keyboard.dismiss();
+        this.setState({
+          show: !this.state.show,
+        });
+      } else {
+        this.setState({
+          startDay: moment(selectedDate).format('L'),
+          getTimeStartDay: selectedDate.getTime(),
+          show: !this.state.show,
+        });
+      }
     } else {
-      this.setState({
-        startDay: moment(selectedDate).format('YYYY-MM-DD'),
-        show: !this.state.show,
-      });
+      let timeStartDay = selectedDate.getTime();
+      if (timeStartDay > this.state.getTimeEndDay) {
+        this.setState({
+          show: !this.state.show,
+          modalNotification: {
+            type: 'error',
+            title: 'Ngày bắt đầu không được lớn hơn ngày kết thúc',
+            description: 'Vui lòng chọn lại ngày bắt đầu.',
+            modalVisible: true,
+          },
+        });
+      } else {
+        this.setState({
+          startDay: moment(selectedDate).format('L'),
+          getTimeStartDay: selectedDate.getTime(),
+          show: !this.state.show,
+        });
+      }
     }
   };
 
@@ -180,16 +212,38 @@ class CreateGroupScreen extends Component<Props, States> {
   };
 
   onChange1 = (event: any, selectedDate: any) => {
-    if (event.type === 'dismissed') {
-      Keyboard.dismiss();
-      this.setState({
-        show1: !this.state.show1,
-      });
+    if (this.state.getTimeStartDay === null) {
+      if (event.type === 'dismissed') {
+        Keyboard.dismiss();
+        this.setState({
+          show1: !this.state.show1,
+        });
+      } else {
+        this.setState({
+          endDay: moment(selectedDate).format('L'),
+          getTimeEndDay: selectedDate.getTime(),
+          show1: !this.state.show1,
+        });
+      }
     } else {
-      this.setState({
-        endDay: moment(selectedDate).format('YYYY-MM-DD'),
-        show1: !this.state.show1,
-      });
+      let timeEndDay = selectedDate.getTime();
+      if (timeEndDay < this.state.getTimeStartDay) {
+        this.setState({
+          show1: !this.state.show1,
+          modalNotification: {
+            type: 'error',
+            title: 'Ngày kết thúc phải lớn hơn ngày bắt đầu',
+            description: 'Vui lòng chọn lại ngày kết thúc.',
+            modalVisible: true,
+          },
+        });
+      } else {
+        this.setState({
+          endDay: moment(selectedDate).format('L'),
+          getTimeEndDay: selectedDate.getTime(),
+          show1: !this.state.show1,
+        });
+      }
     }
   };
 
@@ -243,7 +297,7 @@ class CreateGroupScreen extends Component<Props, States> {
           title={this.state.modalNotification.title}
           description={this.state.modalNotification.description}
           txtButton="Ok"
-          onPress={() => this.setState({ modalNotification: { modalVisible: false}})}
+          onPress={() => this.setState({ modalNotification: { modalVisible: false } })}
         />
         <View style={CreateGroupScreenStyles.containerHeader}>
           <View style={CreateGroupScreenStyles.header}>
