@@ -16,6 +16,7 @@ import {
   UIManager,
   LayoutAnimation,
   Dimensions,
+  Share,
 } from 'react-native';
 import { Ionicons, MaterialIcons, FontAwesome, Feather } from '@expo/vector-icons';
 import InputExpenseScreenStyles from '../../../styles/ExpenseScreenStyles/InputExpenseScreenStyles/InputExpenseScreenStyles';
@@ -30,6 +31,8 @@ import * as ImagePicker from 'expo-image-picker';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import ModalNotification from '../../components/ModalNotification';
 import Modal from 'react-native-modal';
+import ModalLoading from '../../components/ModalLoading';
+import LottieView from 'lottie-react-native';
 
 function mapStateToProps(state) {
   return {
@@ -69,6 +72,12 @@ type States = {
     onPress?: () => void;
   },
   modalVisiblePickImage: boolean;
+  isLoading?: boolean;
+  visibleModalShare?: boolean;
+  dataShare?: {
+    imgId?: string,
+    locationId?: string,
+  }
 };
 
 const SAVE_SUCCESS = 'Lưu thông tin thành công';
@@ -108,6 +117,12 @@ class InputExpenseScreen extends Component<Props, States> {
         onPress: () => {}
       },
       modalVisiblePickImage: false,
+      isLoading: false,
+      visibleModalShare: false,
+      dataShare: {
+        imgId: "",
+        locationId: "",
+      }
     };
   }
 
@@ -245,6 +260,7 @@ class InputExpenseScreen extends Component<Props, States> {
         modalVisible: true,
       }})
     } else {
+      this.setState({ isLoading: true });
       var bodyFormData = new FormData();
       var dataExpense = {};
       var dataLocation = {};
@@ -290,14 +306,26 @@ class InputExpenseScreen extends Component<Props, States> {
           if (res.result === 'ok') {
             this.setInputExpenseAgain();
             await this.props.saveTripId(tripId);
-            this.setState({modalNotification: {
-              type: 'success',
-              title: SAVE_SUCCESS,
-              description: 'Thông tin của bạn đã được lưu thành công.',
-              modalVisible: true,
-            }})
+            if(res?.idForShare && res?.idForShare.imgId.length > 0){
+              this.setState({
+                dataShare: res.idForShare,
+                isLoading: false,
+                visibleModalShare: true,
+               })
+            }else {
+              this.setState({
+                isLoading: false,
+                modalNotification: {
+                type: 'success',
+                title: SAVE_SUCCESS,
+                description: 'Thông tin của bạn đã được lưu thành công.',
+                modalVisible: true,
+              }})
+            }
           } else {
-            this.setState({modalNotification: {
+            this.setState({
+              isLoading: false,
+              modalNotification: {
               type: 'error',
               title: 'Đã xảy ra lỗi',
               description: 'Lưu thông tin không thành công, xin vui lòng thử lại.',
@@ -306,7 +334,14 @@ class InputExpenseScreen extends Component<Props, States> {
           }
         })
         .catch((error) => {
-          console.log(error);
+          this.setState({
+            isLoading: false,
+            modalNotification: {
+            type: 'error',
+            title: 'Đã xảy ra lỗi',
+            description: error,
+            modalVisible: true,
+          }})
         });
     }
   }
@@ -508,6 +543,54 @@ class InputExpenseScreen extends Component<Props, States> {
       this.setState({ isCheckImage: !this.state.isCheckImage })
   }
 
+  onPressShare = async () => {
+    try {
+      const result = await Share.share({
+        ...Platform.select({
+          ios: {
+            message: 'Chia sẻ một khoảnh khắc : ',
+            url: `${BASEURL}/api/index/shareSocial/${this.props.author}/${this.state.dataShare.imgId}/${this.state.dataShare.locationId}`,
+          },
+          android: {
+            message: `${BASEURL}/api/index/shareSocial/${this.props.author}/${this.state.dataShare.imgId}/${this.state.dataShare.locationId}`
+          }
+        }),
+        title: 'Wow, did you see that?'
+      }, {
+        ...Platform.select({
+          ios: {
+            // iOS only:
+            excludedActivityTypes: [
+              'com.apple.UIKit.activity.PostToTwitter'
+            ]
+          },
+          android: {
+            // Android only:
+            dialogTitle: 'Chia sẻ với'
+          }
+        })
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          this.setState({ 
+            visibleModalShare: false,
+            listImageAdd: [],
+            isEnableAddLocation: false,
+            isCheckImage: false,
+            isCheckLocation: false,
+          });
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   render() {
     const { navigation } = this.props;
     this.listTypeUser = navigation.getParam('listTypeUser', []);
@@ -515,6 +598,7 @@ class InputExpenseScreen extends Component<Props, States> {
     var Group = navigation.getParam('dataGroup', {});
     return (
       <View style={InputExpenseScreenStyles.container}>
+        <ModalLoading isVisible={this.state.isLoading}/>
         <ModalNotification
           type={this.state.modalNotification.type}
           modalVisible={this.state.modalNotification.modalVisible}
@@ -523,6 +607,41 @@ class InputExpenseScreen extends Component<Props, States> {
           txtButton="Ok"
           onPress={this.onActionModal}
         />
+        {/* view modal share */}
+        <Modal
+          avoidKeyboard
+          isVisible={this.state.visibleModalShare}
+          style={InputExpenseScreenStyles.mainModalShare}
+          coverScreen={false}
+          deviceHeight={Dimensions.get('screen').height}
+          >
+            <View style={InputExpenseScreenStyles.viewModalShare}>
+              <LottieView
+                  style={InputExpenseScreenStyles.viewLottieShare}
+                  source={require('../../../../assets/lotties/share.json')}
+                  autoPlay
+                  loop
+              />
+              <Text style={InputExpenseScreenStyles.txtTitleShare}>
+                Tải lên thành công
+              </Text>
+              <Text style={InputExpenseScreenStyles.descShare}>
+                Bạn có muốn chia sẻ hình ảnh?
+              </Text>
+              <View style={InputExpenseScreenStyles.viewBtnShare}>
+                <TouchableOpacity 
+                onPress={() => this.props.navigation.goBack()}
+                style={InputExpenseScreenStyles.btnShare}>
+                  <Text style={InputExpenseScreenStyles.txtBtnCancelShare}>Hủy bỏ</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                onPress={this.onPressShare} 
+                style={InputExpenseScreenStyles.btnShare}>
+                  <Text style={InputExpenseScreenStyles.txtBtnOKShare}>Chia sẻ</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+        </Modal>
          <Modal
           isVisible={this.state.modalVisiblePickImage}
           style={InputExpenseScreenStyles.mainModal}
@@ -794,10 +913,7 @@ class InputExpenseScreen extends Component<Props, States> {
             <View style={InputExpenseScreenStyles.viewAddImage}>
               <TouchableOpacity onPress={this.toggleModalPickImage} style={InputExpenseScreenStyles.viewIconAdd}>
                 <Image
-                  source={{
-                    uri:
-                      'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Icons8_flat_add_image.svg/1024px-Icons8_flat_add_image.svg.png',
-                  }}
+                  source={require('../../../../assets/images/uploadImage.png')}
                   style={InputExpenseScreenStyles.iconAdd}
                 />
                 <Text style={InputExpenseScreenStyles.txtAddImage}>Thêm hình ảnh</Text>

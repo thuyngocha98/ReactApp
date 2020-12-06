@@ -140,7 +140,6 @@ class MainScreenGroup extends Component<Props, States> {
   };
 
   render() {
-    console.log(this.state.data);
     return (
       <View style={MainScreenGroupStyles.container}>
         <StatusBar barStyle="light-content" hidden={false} backgroundColor="transparent" translucent />

@@ -277,7 +277,7 @@ class HeaderTitleComponent extends Component<Props, States> {
          {/* view modal */}
         <View style={HeaderTitleComponentStyles.container}>
           <ImageBackground
-            source={{ uri: 'https://designroast.org/wp-content/uploads/2014/02/pattern-thepatternlibrary.png' }}
+            source={require('../../../../assets/images/backgroundDetailGroup.png')}
             style={HeaderTitleComponentStyles.backgroundImage}
           >
             <View style={HeaderTitleComponentStyles.header}>
