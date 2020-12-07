@@ -9,6 +9,60 @@ const InputExpenseScreenStyles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
+  mainModalShare: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  viewModalShare: {
+    width: screenWidth/1.5,
+    flexDirection: 'column',
+    backgroundColor: Colors.white,
+    borderRadius: 10,
+    padding: screenWidth/36,
+  },
+  viewLottieShare: {
+    alignSelf: 'center',
+    width: screenWidth/3.6,
+    height: screenWidth/3.6,
+  },
+  viewBtnShare: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  txtTitleShare: {
+    fontSize: 16,
+    fontWeight: 'normal',
+    textAlign: 'center',
+    color: Colors.black
+  },
+  descShare: {
+    marginTop: screenHeight/216,
+    marginBottom: screenHeight/108,
+    fontSize: 14,
+    fontWeight: 'normal',
+    textAlign: 'center',
+    color: Colors.black
+  },
+  txtBtnOKShare: {
+    textAlign: 'center',
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: Colors.tintColor
+  },
+  txtBtnCancelShare: {
+    textAlign: 'center',
+    fontSize: 14,
+    fontWeight: 'normal',
+    color: Colors.gray
+  },
+  btnShare: {
+    marginTop: screenHeight/108,
+    paddingVertical: screenHeight/108,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   // modal
   mainModal: {
     justifyContent: 'flex-end',
