@@ -1,3 +1,4 @@
+import { CONTACTS } from 'expo-permissions';
 import { StyleSheet } from 'react-native';
 import Colors from '../../../constants/Colors';
 import { screenHeight, screenWidth } from '../../../constants/Dimensions';
@@ -36,9 +37,14 @@ const MainScreenGroupStyles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: screenWidth / 41.1,
   },
+  email: {
+    color: Colors.white,
+    fontSize: screenWidth / 30,
+  },
   textTotal: {
     color: Colors.white,
-    fontSize: 17,
+    fontSize: screenWidth / 25,
+    marginBottom: screenWidth / 100,
   },
   textDetail: {
     color: Colors.white,
@@ -61,7 +67,7 @@ const MainScreenGroupStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: screenHeight/6,
-  }
+    marginTop: screenHeight / 6,
+  },
 });
 export default MainScreenGroupStyles;

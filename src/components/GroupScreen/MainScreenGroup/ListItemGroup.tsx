@@ -44,6 +44,9 @@ class ListItemGroup extends PureComponent<Props> {
           <View style={ListItemGroupStyles.texts}>
             <View style={ListItemGroupStyles.nameGroup}>
               <Text style={ListItemGroupStyles.name}>{this.props.nameGroup}</Text>
+              <Text style={{ fontSize: screenWidth / 35, color: Colors.mediumseagreen }}>
+                (Được tạo ngày {moment(this.props.dataTrip.create_date).format('L')})
+              </Text>
             </View>
             <View style={ListItemGroupStyles.textDetail}>
               <Text style={{ color: this.props.isOwned ? Colors.mediumseagreen : Colors.orangered }}>
@@ -62,7 +65,7 @@ class ListItemGroup extends PureComponent<Props> {
               <View style={ListItemGroupStyles.circle} />
               <View style={ListItemGroupStyles.member1}>
                 <Text style={{ fontSize: screenWidth / 30, opacity: 0.8 }}>
-                  Được tạo ngày {moment(this.props.dataTrip.create_date).format('L')}
+                  Bắt đầu {this.props.dataTrip.begin_date} - {this.props.dataTrip.end_date}
                 </Text>
               </View>
             </View>

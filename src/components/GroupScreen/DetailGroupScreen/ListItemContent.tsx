@@ -1,9 +1,13 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import ListItemContentStyles from '../../../styles/GroupsStyles/DetailGroupScreenStyles/ListItemContentStyles';
 import { MaterialIcons, Octicons, FontAwesome } from '@expo/vector-icons';
 import Colors from '../../../constants/Colors';
+import { BASEURL } from '../../../api/api';
+import { transaction } from '../../../constants/FunctionCommon';
+import { screenWidth } from '../../../constants/Dimensions';
+import ListItemGroupStyles from '../../../styles/ExpenseScreenStyles/MainExpenseScreenStyles/ListItemGroupStyles';
 
 function mapStateToProps(state) {
   return {
@@ -37,17 +41,26 @@ class ListItemContent extends PureComponent<Props> {
   }
 
   render() {
+    const lengthImage = this.props.data.imageURL.length;
+
+    const avatarTransaction =
+      lengthImage > 0
+        ? { uri: `${BASEURL}/images/uploads/${this.props.data.imageURL[0]}` }
+        : transaction['avatar' + this.props.data.avatar];
     const timeDay = this.props.data.create_date.split(/[\s-T]+/);
     const time = timeDay[3].split('.').shift();
     return (
       <View style={ListItemContentStyles.mainContainer}>
         <View style={ListItemContentStyles.container}>
           <View style={ListItemContentStyles.time}>
-            <Text style={ListItemContentStyles.month}>thg {timeDay[1]}</Text>
             <Text style={ListItemContentStyles.day}>{timeDay[2]}</Text>
+            <Text style={ListItemContentStyles.month}>Tháng {timeDay[1]}</Text>
           </View>
           <View style={ListItemContentStyles.iconTitle}>
-            <FontAwesome name="file-text-o" size={25} color={Colors.lightgray} />
+            <Image
+              source={avatarTransaction}
+              style={lengthImage > 0 ? ListItemContentStyles.image1 : ListItemContentStyles.image}
+            />
           </View>
           <View style={ListItemContentStyles.content}>
             <Text style={ListItemContentStyles.title}>{this.props.data.name}</Text>
@@ -65,6 +78,7 @@ class ListItemContent extends PureComponent<Props> {
               name={'add-location'}
               color={this.props.data?.address ? Colors.splitWise : Colors.white}
               size={16}
+              style={{ marginHorizontal: screenWidth / 20 }}
             />
             <MaterialIcons
               name={'library-add'}

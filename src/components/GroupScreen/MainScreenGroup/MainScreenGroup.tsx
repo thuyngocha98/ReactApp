@@ -140,7 +140,6 @@ class MainScreenGroup extends Component<Props, States> {
   };
 
   render() {
-    console.log(this.state.data);
     return (
       <View style={MainScreenGroupStyles.container}>
         <StatusBar barStyle="light-content" hidden={false} backgroundColor="transparent" translucent />
@@ -164,20 +163,10 @@ class MainScreenGroup extends Component<Props, States> {
         <View style={MainScreenGroupStyles.cartExpense}>
           <Image style={MainScreenGroupStyles.avatar} source={this.thumbnail} />
           <View style={MainScreenGroupStyles.text}>
-            <Text style={MainScreenGroupStyles.textTotal}>Tổng số chuyến đi</Text>
-            {/* <View>
-              {this.state.total >= 0 ? (
-                <View style={{ flexDirection: 'row' }}>
-                  <Text style={{ color: Colors.white }}> Bạn lấy lại : </Text>
-                  <Text style={{ color: Colors.mediumseagreen }}>{number2money(this.state.total)} VND</Text>
-                </View>
-              ) : (
-                <View style={{ flexDirection: 'row' }}>
-                  <Text style={{ color: Colors.white }}> Bạn nợ : </Text>
-                  <Text style={{ color: Colors.orangered }}>{number2money(this.state.total * -1)} VND</Text>
-                </View>
-              )}
-            </View> */}
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={MainScreenGroupStyles.textTotal}>Bạn tham gia {this.state.data.length} nhóm du lịch</Text>
+            </View>
+            <Text style={MainScreenGroupStyles.email}>({this.props.user.email})</Text>
           </View>
           <View style={MainScreenGroupStyles.menu}>
             <TouchableOpacity>
@@ -218,13 +207,13 @@ class MainScreenGroup extends Component<Props, States> {
                 )
               )}
               ListEmptyComponent={() => (
-               <View style={MainScreenGroupStyles.viewEmpty}>
-                 <ListEmpty 
-                  title={'Hiện tại bạn chưa tham gia nhóm nào'}
-                  titleAction={'Bắt đầu tạo nhóm mới'}
-                  action={() => this.props.navigation.navigate('CreateGroupScreen')}
-                 />
-              </View>
+                <View style={MainScreenGroupStyles.viewEmpty}>
+                  <ListEmpty
+                    title={'Hiện tại bạn chưa tham gia nhóm nào'}
+                    titleAction={'Bắt đầu tạo nhóm mới'}
+                    action={() => this.props.navigation.navigate('CreateGroupScreen')}
+                  />
+                </View>
               )}
               keyExtractor={(item) => item._id.toString()}
             />

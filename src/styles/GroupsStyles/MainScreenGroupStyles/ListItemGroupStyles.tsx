@@ -22,7 +22,6 @@ const ListItemGroupStyles = StyleSheet.create({
     margin: screenWidth / 82.2,
   },
   nameGroup: {
-    flex: 1,
     flexDirection: 'column',
     alignItems: 'flex-start',
     marginLeft: screenWidth / 41.1,
@@ -48,6 +47,7 @@ const ListItemGroupStyles = StyleSheet.create({
   name: {
     fontWeight: '400',
     fontSize: screenWidth / 25,
+    marginBottom: screenWidth / 100,
   },
   linkComment: {
     height: screenWidth / 20,
@@ -62,7 +62,7 @@ const ListItemGroupStyles = StyleSheet.create({
     width: 0.6,
     backgroundColor: 'black',
     marginLeft: screenWidth / 22,
-    marginTop: -screenWidth / 70,
+    marginTop: -screenWidth / 130,
   },
   dotted2: {
     height: 0.3,

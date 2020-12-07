@@ -52,7 +52,7 @@ class MainLocationScreen extends Component<Props, States> {
     })
       .then((response) => response.json())
       .then(async (res) => {
-        res.data.lenght > 0 && this.setState({ coordinates: res.data });
+        res.data.length > 0 && this.setState({ coordinates: res.data });
       })
       .catch((error) => {
         alert(error);
@@ -82,54 +82,50 @@ class MainLocationScreen extends Component<Props, States> {
         <StatusBar hidden={true} />
         {length > 0 ? (
           <>
-          <MapView
-            zoomEnabled={true}
-            style={styles.mapStyle}
-            provider={PROVIDER_GOOGLE}
-            region={this.state.currentPosition}
-          >
-            {length > 1 && (
-              <Polyline coordinates={this.state.coordinates} strokeColor={Colors.tintColor} strokeWidth={4} />
-            )}
-            {this.state.coordinates.map((marker, i) => (
-              <Marker
-                anchor={{ x: 0.5, y: 0.5 }}
-                key={i}
-                coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-                title={marker.address}
-                description={`${moment(marker.create_date).format('dddd')}, ${moment(marker.create_date).format(
-                  'MMMM Do YYYY, h:mm:ss a',
-                )}`}
-              >
-                <View>
-                  <View style={styles.backgroundMarker}>
-                    <Text style={styles.customMarker}>{i + 1}</Text>
+            <MapView
+              zoomEnabled={true}
+              style={styles.mapStyle}
+              provider={PROVIDER_GOOGLE}
+              region={this.state.currentPosition}
+            >
+              {length > 1 && (
+                <Polyline coordinates={this.state.coordinates} strokeColor={Colors.tintColor} strokeWidth={4} />
+              )}
+              {this.state.coordinates.map((marker, i) => (
+                <Marker
+                  anchor={{ x: 0.5, y: 0.5 }}
+                  key={i}
+                  coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
+                  title={marker.address}
+                  description={`${moment(marker.create_date).format('dddd')}, ${moment(marker.create_date).format(
+                    'MMMM Do YYYY, h:mm:ss a',
+                  )}`}
+                >
+                  <View>
+                    <View style={styles.backgroundMarker}>
+                      <Text style={styles.customMarker}>{i + 1}</Text>
+                    </View>
                   </View>
-                </View>
-              </Marker>
-            ))}
-          </MapView>
-          <TouchableOpacity
-          onPress={() => this.props.navigation.goBack()}
-          style={styles.btnGoBack}>
-             <Ionicons name='md-arrow-back' size={30} color={Colors.gray} />
-          </TouchableOpacity>
+                </Marker>
+              ))}
+            </MapView>
+            <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={styles.btnGoBack}>
+              <Ionicons name="md-arrow-back" size={30} color={Colors.gray} />
+            </TouchableOpacity>
           </>
         ) : (
           <>
-          <MapView style={styles.mapStyle} provider={PROVIDER_GOOGLE} region={this.state.currentPosition}>
-            {/* <Marker
+            <MapView style={styles.mapStyle} provider={PROVIDER_GOOGLE} region={this.state.currentPosition}>
+              {/* <Marker
               coordinate={{
                 latitude: Number(this.state.currentPositionLatitude),
                 longitude: Number(this.state.currentPositionLongtitude),
               }}
             ></Marker> */}
-          </MapView>
-          <TouchableOpacity
-          onPress={() => this.props.navigation.goBack()}
-          style={styles.btnGoBack}>
-             <Ionicons name='md-arrow-back' size={30} color={Colors.gray} />
-          </TouchableOpacity>
+            </MapView>
+            <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={styles.btnGoBack}>
+              <Ionicons name="md-arrow-back" size={30} color={Colors.gray} />
+            </TouchableOpacity>
           </>
         )}
       </View>
@@ -178,13 +174,13 @@ const styles = StyleSheet.create({
   },
   btnGoBack: {
     position: 'absolute',
-    top: screenWidth/20,
-    left: screenWidth/24,
-    paddingVertical: screenWidth/72,
-    paddingHorizontal: screenWidth/18,
-    borderRadius: screenWidth/24,
-    backgroundColor: 'rgba(255,255,255,0.9)'
-},
+    top: screenWidth / 20,
+    left: screenWidth / 24,
+    paddingVertical: screenWidth / 72,
+    paddingHorizontal: screenWidth / 18,
+    borderRadius: screenWidth / 24,
+    backgroundColor: 'rgba(255,255,255,0.9)',
+  },
 });
 
 export default MainLocationScreen;

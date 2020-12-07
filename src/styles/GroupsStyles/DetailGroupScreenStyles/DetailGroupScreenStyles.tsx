@@ -14,39 +14,39 @@ const DetailGroupScreenStyles = StyleSheet.create({
     margin: 0,
   },
   viewDeleteModal: {
-      flexDirection: 'column',
-      backgroundColor: Colors.white,
-      borderTopLeftRadius: 10,
-      borderTopRightRadius: 10,
-      padding: screenWidth/36,
+    flexDirection: 'column',
+    backgroundColor: Colors.white,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    padding: screenWidth / 36,
   },
   txtTitleDeleteModal: {
-      fontSize: 16,
-      color: Colors.blackText,
-      paddingBottom: screenWidth/36,
-      paddingHorizontal: screenWidth/11,
-      textAlign: 'center',
-      borderBottomWidth: 1,
-      borderBottomColor: Colors.lavender
+    fontSize: 16,
+    color: Colors.blackText,
+    paddingBottom: screenWidth / 36,
+    paddingHorizontal: screenWidth / 11,
+    textAlign: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.lavender,
   },
   viewItemDeleteModal: {
-      flexDirection: 'column', 
-      justifyContent: 'center', 
-      alignItems: 'center'
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   viewBtnDeleteModal: {
-      flexDirection: 'row',
+    flexDirection: 'row',
   },
   txtBtnDeleteModal: {
-      fontSize: 14,
-      fontWeight: 'bold',
-      color: Colors.blackText,
-      textAlign: 'center',
-      paddingVertical: screenWidth/36
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: Colors.blackText,
+    textAlign: 'center',
+    paddingVertical: screenWidth / 36,
   },
   btnDeleteModal: {
-      flex: 1,
-      backgroundColor: Colors.white
+    flex: 1,
+    backgroundColor: Colors.white,
   },
   // modal create new
   viewModal: {
@@ -109,8 +109,8 @@ const DetailGroupScreenStyles = StyleSheet.create({
   },
   addTrip: {
     position: 'absolute',
-    bottom: screenHeight/108,
-    right: screenWidth/72,
+    bottom: screenHeight / 108,
+    right: screenWidth / 72,
     width: screenWidth / 7.5,
     height: screenWidth / 7.5,
     borderRadius: screenWidth / 4,
@@ -154,6 +154,7 @@ const DetailGroupScreenStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  }
+    marginTop: 30,
+  },
 });
 export default DetailGroupScreenStyles;

@@ -17,6 +17,8 @@ import { BASEURL } from '../../../../api/api';
 import { screenWidth } from '../../../../constants/Dimensions';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import { transaction } from '../../../../constants/FunctionCommon';
+import DetailGroupScreenStyles from '../../../../styles/GroupsStyles/DetailGroupScreenStyles/DetailGroupScreenStyles';
 
 function mapStateToProps(state) {
   return {};
@@ -96,10 +98,15 @@ class DetaiTransactionScreen extends Component<Props, States> {
   };
 
   render() {
+    const lengthImage = this.transaction.imageURL.length;
     const { navigation } = this.props;
     const nameGroup = navigation.getParam('nameGroup', 'No Name');
     const date = this.transaction.create_date;
     var time = date.split(/[\s-T]+/);
+    const avatarTransaction =
+      lengthImage > 0
+        ? { uri: `${BASEURL}/images/uploads/${this.transaction.imageURL[0]}` }
+        : transaction['avatar' + this.transaction.avatar];
 
     const images = this.transaction?.imageURL.map((url) => {
       return { url: `${BASEURL}/images/uploads/${url}` };
@@ -138,7 +145,12 @@ class DetaiTransactionScreen extends Component<Props, States> {
                 <View style={DetailTransactionScreenStyles.details}>
                   <View style={{ flexDirection: 'row' }}>
                     <View style={DetailTransactionScreenStyles.icons}>
-                      <Image source={list} />
+                      <Image
+                        source={avatarTransaction}
+                        style={
+                          lengthImage > 0 ? DetailTransactionScreenStyles.image2 : DetailTransactionScreenStyles.image1
+                        }
+                      />
                     </View>
                     <View style={DetailTransactionScreenStyles.contentDetails}>
                       <Text style={DetailTransactionScreenStyles.iconTravel}>{this.transaction?.name}</Text>

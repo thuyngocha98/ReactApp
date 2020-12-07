@@ -46,6 +46,7 @@ import ShowImagesScreen from '../components/GroupScreen/DetailGroupScreen/Images
 import AddImagesScreen from '../components/GroupScreen/DetailGroupScreen/ImagesScreen/AddImagesScreen';
 import ChatGroupScreen from '../components/GroupScreen/Chat/ChatGroupScreen';
 import MainLocationScreen from '../components/Location/MainLocationScreen';
+import PlaceGridScreen from '../components/Location/PlaceGridScreen';
 import AudioRecordingScreen from '../components/GroupScreen/Chat/AudioRecordingScreen';
 import MainDirectionScreen from '../components/Direction/MainDirectionScreen';
 
@@ -178,6 +179,7 @@ const GroupStack = createStackNavigator(
       screen: ExpenseByPlusOrMinusScreen,
     },
     MainLocationScreen,
+    PlaceGridScreen,
     MainDirectionScreen,
     MainPlanInTripScreen: {
       screen: MainPlanInTripScreen,

@@ -1,10 +1,10 @@
-import { Dimensions, Platform } from "react-native";
+import { Dimensions, Platform } from 'react-native';
 
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 export const screenWidth = viewportWidth;
 export const screenHeight = viewportHeight;
 export const APPBAR_HEIGHT = Platform.select({
-    ios: 44,
-    android: 56,
-    default: 64,
+  ios: 44,
+  android: 56,
+  default: 64,
 });

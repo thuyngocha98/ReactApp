@@ -27,11 +27,11 @@ const ChooseMultiplePeopleScreenStyles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500',
     color: Colors.white,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   cancel: {
     height: '100%',
-    paddingHorizontal: screenWidth/72,
+    paddingHorizontal: screenWidth / 72,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -85,7 +85,7 @@ const ChooseMultiplePeopleScreenStyles = StyleSheet.create({
     alignItems: 'center',
   },
   viewInput: {
-    marginLeft: screenWidth/72,
+    marginLeft: screenWidth / 72,
     flexDirection: 'column',
     flex: 2.5,
   },

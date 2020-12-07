@@ -11,6 +11,7 @@ import {
   Image,
   ScrollView,
   Platform,
+  Alert,
 } from 'react-native';
 import Colors from '../../../constants/Colors';
 import DetailGroupScreenStyles from '../../../styles/GroupsStyles/DetailGroupScreenStyles/DetailGroupScreenStyles';
@@ -61,12 +62,12 @@ type States = {
   index?: any;
   modalDeleteVisible?: boolean;
   modalNotification?: {
-    modalVisible?: boolean,
-    type?: string,
-    title?: string,
-    description?: string,
+    modalVisible?: boolean;
+    type?: string;
+    title?: string;
+    description?: string;
     onPress?: () => void;
-  },
+  };
 };
 
 class DetailGroupScreen extends Component<Props, States> {
@@ -86,7 +87,7 @@ class DetailGroupScreen extends Component<Props, States> {
       type: 'success',
       title: '',
       description: '',
-      onPress: () => {}
+      onPress: () => {},
     },
   };
 
@@ -137,7 +138,7 @@ class DetailGroupScreen extends Component<Props, States> {
         });
       })
       .catch((error) => {
-        this.setState({loading: false});
+        this.setState({ loading: false });
         alert(error);
       });
   };
@@ -157,13 +158,13 @@ class DetailGroupScreen extends Component<Props, States> {
     });
   };
 
-  onPress = visible => {
-    this.setState({modalDeleteVisible: visible});
-  }
+  onPress = (visible) => {
+    this.setState({ modalDeleteVisible: visible });
+  };
 
   toggleDeleteModal = () => {
-    this.setState({modalDeleteVisible: !this.state.modalDeleteVisible});
-  }
+    this.setState({ modalDeleteVisible: !this.state.modalDeleteVisible });
+  };
 
   callApiRemoveGroup = async () => {
     const data = {
@@ -181,12 +182,14 @@ class DetailGroupScreen extends Component<Props, States> {
       .then((response) => response.json())
       .then((res) => {
         if (res.result == 'Failed') {
-          this.setState({modalNotification: {
-            type: 'error',
-            title: res.message,
-            description: 'Vui lòng kiểm tra lại.',
-            modalVisible: true,
-          }})
+          this.setState({
+            modalNotification: {
+              type: 'error',
+              title: res.message,
+              description: 'Vui lòng kiểm tra lại.',
+              modalVisible: true,
+            },
+          });
         } else {
           this.props.navigation.navigate('GroupScreen');
         }
@@ -199,9 +202,28 @@ class DetailGroupScreen extends Component<Props, States> {
   onDeleteGroup = () => {
     this.toggleDeleteModal();
     this.callApiRemoveGroup();
-  }
+  };
+
+  seePlace = (trip) => {
+    Alert.alert(
+      `${trip.name}`,
+      'Những địa điểm nhóm đi qua',
+      [
+        {
+          text: 'Xem dạng lưới',
+          onPress: () => this.props.navigation.navigate('PlaceGridScreen', { tripId: trip._id }),
+        },
+        {
+          text: 'Xem trên bản đồ',
+          onPress: () => this.props.navigation.navigate('MainLocationScreen', { tripId: trip._id }),
+        },
+      ],
+      { cancelable: false },
+    );
+  };
 
   render() {
+    const lengthItemTransaction = this.state.data.length;
     const navigation = this.props.navigation;
     const time = this.dataTrip.create_date.split('-');
     return (
@@ -212,7 +234,7 @@ class DetailGroupScreen extends Component<Props, States> {
           title={this.state.modalNotification.title}
           description={this.state.modalNotification.description}
           txtButton="Ok"
-          onPress={() => this.setState({modalNotification: {modalVisible: false}})}
+          onPress={() => this.setState({ modalNotification: { modalVisible: false } })}
         />
         {/* view modal */}
         <Modal
@@ -245,21 +267,21 @@ class DetailGroupScreen extends Component<Props, States> {
           onBackdropPress={this.toggleDeleteModal}
         >
           <View style={DetailGroupScreenStyles.viewDeleteModal}>
-              <Text style={DetailGroupScreenStyles.txtTitleDeleteModal}>
-                  {`Bạn có chắc muốn xóa nhóm này?`}
-              </Text>
-              <View style={DetailGroupScreenStyles.viewBtnDeleteModal}>
-                  <TouchableOpacity
-                   onPress={this.toggleDeleteModal}
-                    style={[DetailGroupScreenStyles.btnDeleteModal,{borderRightWidth: 1,borderRightColor: Colors.lavender}]}>
-                      <Text style={DetailGroupScreenStyles.txtBtnDeleteModal}>Hủy bỏ</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                   onPress={this.onDeleteGroup}
-                    style={DetailGroupScreenStyles.btnDeleteModal}>
-                      <Text style={DetailGroupScreenStyles.txtBtnDeleteModal}>Xóa</Text>
-                  </TouchableOpacity>
-              </View>
+            <Text style={DetailGroupScreenStyles.txtTitleDeleteModal}>{`Bạn có chắc muốn xóa nhóm này?`}</Text>
+            <View style={DetailGroupScreenStyles.viewBtnDeleteModal}>
+              <TouchableOpacity
+                onPress={this.toggleDeleteModal}
+                style={[
+                  DetailGroupScreenStyles.btnDeleteModal,
+                  { borderRightWidth: 1, borderRightColor: Colors.lavender },
+                ]}
+              >
+                <Text style={DetailGroupScreenStyles.txtBtnDeleteModal}>Hủy bỏ</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.onDeleteGroup} style={DetailGroupScreenStyles.btnDeleteModal}>
+                <Text style={DetailGroupScreenStyles.txtBtnDeleteModal}>Xóa</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </Modal>
         <StatusBar barStyle="light-content" hidden={false} backgroundColor={'transparent'} translucent />
@@ -307,14 +329,10 @@ class DetailGroupScreen extends Component<Props, States> {
                       <AntDesign name={'right'} size={screenWidth / 28} />
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate('MainLocationScreen', { tripId: this.dataTrip._id });
-                    }}
-                  >
+                  <TouchableOpacity onPress={() => this.seePlace(this.dataTrip)}>
                     <View style={DetailGroupScreenStyles.overView}>
                       <Image style={DetailGroupScreenStyles.imageOverView} source={map} />
-                      <Text style={{ marginLeft: screenWidth / 20 }}>Những địa điểm mà nhóm đã đi qua</Text>
+                      <Text style={{ marginLeft: screenWidth / 20 }}>Những địa điểm nhóm đã đi qua</Text>
                       <View style={{ flex: 1 }} />
                       <AntDesign name={'right'} size={screenWidth / 28} />
                     </View>
@@ -363,9 +381,13 @@ class DetailGroupScreen extends Component<Props, States> {
               ),
               second: () => (
                 <View>
-                  <View style={DetailGroupScreenStyles.dateTitle}>
-                    <Text style={DetailGroupScreenStyles.date}>tháng {time[1] + ' ' + time[0]}</Text>
-                  </View>
+                  {lengthItemTransaction > 0 ? (
+                    <View style={DetailGroupScreenStyles.dateTitle}>
+                      <Text style={DetailGroupScreenStyles.date}>tháng {time[1] + ' ' + time[0]}</Text>
+                    </View>
+                  ) : (
+                    <View style={{ marginBottom: screenWidth / 5 }} />
+                  )}
                   {this.state.loading ? (
                     <View style={DetailGroupScreenStyles.activityIndicator}>
                       <LottieView
@@ -382,13 +404,13 @@ class DetailGroupScreen extends Component<Props, States> {
                       keyExtractor={(item, index) => index.toString()}
                       ListEmptyComponent={() => (
                         <View style={DetailGroupScreenStyles.viewEmpty}>
-                          <ListEmpty 
-                           title={'Hiện tại chưa có sự kiện nào được ghi lại'}
-                           titleAction={'Bắt đầu thêm sự kiện mới'}
-                           action={() => this.setState({ modalVisible: !this.state.modalVisible })}
+                          <ListEmpty
+                            title={'Hiện tại chưa có sự kiện nào được ghi lại'}
+                            titleAction={'Bắt đầu thêm sự kiện mới'}
+                            action={() => this.setState({ modalVisible: !this.state.modalVisible })}
                           />
-                       </View>
-                       )}
+                        </View>
+                      )}
                       renderItem={({ item }) => (
                         <TouchableOpacity
                           onPress={() => {
@@ -410,16 +432,18 @@ class DetailGroupScreen extends Component<Props, States> {
             initialLayout={{ width: screenWidth }}
           />
         </View>
-        {this.state.index == 1 ? (
-          this.state.modalVisible ? null : (
-            <TouchableOpacity
-              style={DetailGroupScreenStyles.addTrip}
-              activeOpacity={0.5}
-              onPress={() => this.setState({ modalVisible: !this.state.modalVisible })}
-            >
-              <MaterialIcons name={'add'} color={Colors.white} size={screenWidth / 9} />
-            </TouchableOpacity>
-          )
+        {lengthItemTransaction > 0 ? (
+          this.state.index == 1 ? (
+            this.state.modalVisible ? null : (
+              <TouchableOpacity
+                style={DetailGroupScreenStyles.addTrip}
+                activeOpacity={0.5}
+                onPress={() => this.setState({ modalVisible: !this.state.modalVisible })}
+              >
+                <MaterialIcons name={'add'} color={Colors.white} size={screenWidth / 9} />
+              </TouchableOpacity>
+            )
+          ) : null
         ) : null}
       </View>
     );

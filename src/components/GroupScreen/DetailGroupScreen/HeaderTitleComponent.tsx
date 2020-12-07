@@ -32,7 +32,7 @@ type Props = {
   startDay?: string;
   endDay?: string;
   dataTrip?: any;
-  onPress?: (_:boolean) => void;
+  onPress?: (_: boolean) => void;
 };
 
 type States = {
@@ -155,8 +155,6 @@ class HeaderTitleComponent extends Component<Props, States> {
     });
   };
 
-  
-
   imageLibrary = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -274,7 +272,7 @@ class HeaderTitleComponent extends Component<Props, States> {
               : ''
           }
         ></DialogInput>
-         {/* view modal */}
+        {/* view modal */}
         <View style={HeaderTitleComponentStyles.container}>
           <ImageBackground
             source={{ uri: 'https://designroast.org/wp-content/uploads/2014/02/pattern-thepatternlibrary.png' }}
@@ -323,23 +321,21 @@ class HeaderTitleComponent extends Component<Props, States> {
             <View style={HeaderTitleComponentStyles.contentText}>
               <Text style={HeaderTitleComponentStyles.textTitle}>{this.props.nameGroup}</Text>
               <Text style={HeaderTitleComponentStyles.numberPeopleAndTime}>
-                {this.props.numberUserInTrip} thành viên tham gia.
+                Bắt đầu {this.props.dataTrip.begin_date} - {this.props.dataTrip.end_date}
               </Text>
               <Text style={HeaderTitleComponentStyles.numberPeopleAndTime}>
-                Nhóm được tạo - tháng {time[1]} {time[0]}
+                {this.props.dataTrip.membersTrip} thành viên tham gia
               </Text>
-              {/*<Text style={HeaderTitleComponentStyles.startEndDay}>From {this.props.startDay.toString().split('-').join(' ')} To {this.props.endDay.toString().split('-').join(' ')}</Text>*/}
               <View style={HeaderTitleComponentStyles.owesAndMoney}>
                 <Text style={HeaderTitleComponentStyles.owes}>
                   {this.props.amount >= 0 ? 'Bạn lấy lại : ' : 'Bạn nợ : '}
                 </Text>
                 <Text style={HeaderTitleComponentStyles.money}>
                   {this.props.amount >= 0 ? (
-                    <Text>{number2money(this.props.amount)}</Text>
+                    <Text style={{ color: Colors.mediumseagreen }}>{number2money(this.props.amount)} VND</Text>
                   ) : (
-                    <Text>{number2money(this.props.amount * -1)}</Text>
+                    <Text style={{ color: Colors.orangered }}>{number2money(this.props.amount * -1)} VND</Text>
                   )}{' '}
-                  VND
                 </Text>
               </View>
             </View>

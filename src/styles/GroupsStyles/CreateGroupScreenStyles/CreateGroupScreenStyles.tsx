@@ -54,24 +54,25 @@ const CreateGroupScreenStyles = StyleSheet.create({
     fontSize: 17,
   },
   detail: {
-    height: screenWidth/12,
+    height: screenWidth / 12,
     paddingVertical: 0,
     fontSize: 16,
     color: Colors.blackText,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.gray
+    borderBottomColor: Colors.gray,
   },
   pickDate: {
     flexDirection: 'column',
     marginHorizontal: screenWidth / 20.55,
+    marginVertical: screenWidth / 50,
   },
   pickDate1: {
     flexDirection: 'column',
     marginHorizontal: screenWidth / 20.55,
-    marginBottom: screenWidth/20
+    marginBottom: screenWidth / 20,
   },
   chooseDay: {
-    marginTop: screenWidth/36,
+    marginTop: screenWidth / 36,
     backgroundColor: Colors.tintColor,
     height: screenWidth / 10,
     alignItems: 'center',
@@ -90,22 +91,22 @@ const CreateGroupScreenStyles = StyleSheet.create({
     backgroundColor: '#00000066',
   },
   listTrip: {
-    marginTop: screenHeight/64,
+    marginTop: screenHeight / 64,
   },
   itemTrip: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingBottom: screenHeight/72
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingBottom: screenHeight / 72,
   },
   txtTrip: {
-      fontSize: 16,
-      color: Colors.blackText,
+    fontSize: 16,
+    color: Colors.blackText,
   },
   selectTrip: {
-    paddingVertical: screenHeight/64,
+    paddingVertical: screenHeight / 64,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.lavender
-},
+    borderBottomColor: Colors.lavender,
+  },
 });
 export default CreateGroupScreenStyles;

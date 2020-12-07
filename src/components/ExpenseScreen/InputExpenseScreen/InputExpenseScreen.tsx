@@ -62,12 +62,12 @@ type States = {
   listImageAdd?: any[];
   isModelVisible?: boolean;
   modalNotification?: {
-    modalVisible?: boolean,
-    type?: string,
-    title?: string,
-    description?: string,
+    modalVisible?: boolean;
+    type?: string;
+    title?: string;
+    description?: string;
     onPress?: () => void;
-  },
+  };
   modalVisiblePickImage: boolean;
 };
 
@@ -76,10 +76,7 @@ const ASPECT_RATIO = screenWidth / (screenHeight / 1.97);
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 // Check platform android set flag animation layout
-if (
-  Platform.OS === 'android' &&
-  UIManager.setLayoutAnimationEnabledExperimental
-) {
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 class InputExpenseScreen extends Component<Props, States> {
@@ -105,7 +102,7 @@ class InputExpenseScreen extends Component<Props, States> {
         type: 'success',
         title: '',
         description: '',
-        onPress: () => {}
+        onPress: () => {},
       },
       modalVisiblePickImage: false,
     };
@@ -127,8 +124,7 @@ class InputExpenseScreen extends Component<Props, States> {
       let data = this.props.navigation.getParam('dataGroup', {});
       this.props.getListUserInTrip(data._id);
       let isCheck = this.props.navigation.getParam('isCheck', '1');
-      Platform.OS === 'android' &&
-                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      Platform.OS === 'android' && LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       if (isCheck === '1') this.setState({ isCheckExpense: true });
       else if (isCheck === '2') {
         this.onGetMyCurrentLocation();
@@ -238,12 +234,14 @@ class InputExpenseScreen extends Component<Props, States> {
     const Description = this.state.description;
     var list_user = await this.createListUser(listTypeUser, idPayer);
     if (this.state.checkDescription !== this.state.checkMoney) {
-      this.setState({modalNotification: {
-        type: 'error',
-        title: 'Thông tin không hợp lệ.',
-        description: 'Vui lòng nhập đầy đủ thông tin.',
-        modalVisible: true,
-      }})
+      this.setState({
+        modalNotification: {
+          type: 'error',
+          title: 'Thông tin không hợp lệ.',
+          description: 'Vui lòng nhập đầy đủ thông tin.',
+          modalVisible: true,
+        },
+      });
     } else {
       var bodyFormData = new FormData();
       var dataExpense = {};
@@ -259,6 +257,7 @@ class InputExpenseScreen extends Component<Props, States> {
       }
       if (this.state.isEnableAddLocation) {
         dataLocation = {
+          author: this.props.author,
           latitude: this.state.latMarker,
           longitude: this.state.longMarker,
           address: this.state.address,
@@ -290,19 +289,23 @@ class InputExpenseScreen extends Component<Props, States> {
           if (res.result === 'ok') {
             this.setInputExpenseAgain();
             await this.props.saveTripId(tripId);
-            this.setState({modalNotification: {
-              type: 'success',
-              title: SAVE_SUCCESS,
-              description: 'Thông tin của bạn đã được lưu thành công.',
-              modalVisible: true,
-            }})
+            this.setState({
+              modalNotification: {
+                type: 'success',
+                title: SAVE_SUCCESS,
+                description: 'Thông tin của bạn đã được lưu thành công.',
+                modalVisible: true,
+              },
+            });
           } else {
-            this.setState({modalNotification: {
-              type: 'error',
-              title: 'Đã xảy ra lỗi',
-              description: 'Lưu thông tin không thành công, xin vui lòng thử lại.',
-              modalVisible: true,
-            }})
+            this.setState({
+              modalNotification: {
+                type: 'error',
+                title: 'Đã xảy ra lỗi',
+                description: 'Lưu thông tin không thành công, xin vui lòng thử lại.',
+                modalVisible: true,
+              },
+            });
           }
         })
         .catch((error) => {
@@ -312,11 +315,11 @@ class InputExpenseScreen extends Component<Props, States> {
   }
 
   onActionModal = () => {
-    this.setState({modalNotification: {modalVisible: false}});
-    if(this.state.modalNotification.title == SAVE_SUCCESS){
+    this.setState({ modalNotification: { modalVisible: false } });
+    if (this.state.modalNotification.title == SAVE_SUCCESS) {
       this.props.navigation.goBack();
     }
-  }
+  };
 
   async setInputExpenseAgain() {
     this.setState({
@@ -348,15 +351,16 @@ class InputExpenseScreen extends Component<Props, States> {
   async onShowHideViewLocation() {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
-      this.setState({modalNotification: {
-        type: 'warning',
-        title: 'Bạn đã không cấp quyền sử dụng vị trí',
-        description: 'Bạn không thể sử dụng tính năng vị trí.',
-        modalVisible: true,
-      }})
+      this.setState({
+        modalNotification: {
+          type: 'warning',
+          title: 'Bạn đã không cấp quyền sử dụng vị trí',
+          description: 'Bạn không thể sử dụng tính năng vị trí.',
+          modalVisible: true,
+        },
+      });
     } else {
-      Platform.OS === 'android' &&
-                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      Platform.OS === 'android' && LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       if (this.state.isCheckLocation) this.setState({ isCheckLocation: false });
       else {
         if (!this.state.latMarker) {
@@ -383,20 +387,21 @@ class InputExpenseScreen extends Component<Props, States> {
   async onGetMyCurrentLocation() {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
-      this.setState({modalNotification: {
-        type: 'warning',
-        title: 'Bạn đã không cấp quyền sử dụng vị trí',
-        description: 'Bạn không thể sử dụng tính năng vị trí.',
-        modalVisible: true,
-      }})
+      this.setState({
+        modalNotification: {
+          type: 'warning',
+          title: 'Bạn đã không cấp quyền sử dụng vị trí',
+          description: 'Bạn không thể sử dụng tính năng vị trí.',
+          modalVisible: true,
+        },
+      });
     } else {
       let currentPosition = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
       let address = await Location.reverseGeocodeAsync({
         latitude: currentPosition.coords.latitude,
         longitude: currentPosition.coords.longitude,
       });
-      Platform.OS === 'android' &&
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      Platform.OS === 'android' && LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       this.setState({
         isCheckLocation: true,
         isEnableAddLocation: true,
@@ -413,12 +418,14 @@ class InputExpenseScreen extends Component<Props, States> {
   _pickImage = async () => {
     const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
     if (status !== 'granted') {
-      this.setState({modalNotification: {
-        type: 'warning',
-        title: 'Bạn đã không cấp quyền sử dụng thư viện',
-        description: 'Bạn không thể sử dụng tính năng đăng tải ảnh.',
-        modalVisible: true,
-      }})
+      this.setState({
+        modalNotification: {
+          type: 'warning',
+          title: 'Bạn đã không cấp quyền sử dụng thư viện',
+          description: 'Bạn không thể sử dụng tính năng đăng tải ảnh.',
+          modalVisible: true,
+        },
+      });
     } else {
       this.toggleModalPickImage();
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -430,11 +437,11 @@ class InputExpenseScreen extends Component<Props, States> {
         // ImagePicker saves the taken photo to disk and returns a local URI to it
         let localUri = result.uri;
         let filename = localUri.split('/').pop();
-  
+
         // Infer the type of the image
         let match = /\.(\w+)$/.exec(filename);
         let type = match ? `image/${match[1]}` : `image`;
-  
+
         let listImage = this.state.listImageAdd.concat({
           id: this.state.listImageAdd?.length + 1,
           url: localUri,
@@ -449,12 +456,14 @@ class InputExpenseScreen extends Component<Props, States> {
   _pickImageCamera = async () => {
     const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
     if (status !== 'granted') {
-      this.setState({modalNotification: {
-        type: 'warning',
-        title: 'Bạn đã không cấp quyền sử dụng camera',
-        description: 'Bạn không thể sử dụng tính năng chụp ảnh.',
-        modalVisible: true,
-      }})
+      this.setState({
+        modalNotification: {
+          type: 'warning',
+          title: 'Bạn đã không cấp quyền sử dụng camera',
+          description: 'Bạn không thể sử dụng tính năng chụp ảnh.',
+          modalVisible: true,
+        },
+      });
     } else {
       this.toggleModalPickImage();
       let result = await ImagePicker.launchCameraAsync({
@@ -497,16 +506,14 @@ class InputExpenseScreen extends Component<Props, States> {
   };
 
   toggleExpense = () => {
-    Platform.OS === 'android' &&
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      this.setState({ isCheckExpense: !this.state.isCheckExpense })
-  }
+    Platform.OS === 'android' && LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    this.setState({ isCheckExpense: !this.state.isCheckExpense });
+  };
 
   toggleImage = () => {
-    Platform.OS === 'android' &&
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      this.setState({ isCheckImage: !this.state.isCheckImage })
-  }
+    Platform.OS === 'android' && LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    this.setState({ isCheckImage: !this.state.isCheckImage });
+  };
 
   render() {
     const { navigation } = this.props;
@@ -523,7 +530,7 @@ class InputExpenseScreen extends Component<Props, States> {
           txtButton="Ok"
           onPress={this.onActionModal}
         />
-         <Modal
+        <Modal
           isVisible={this.state.modalVisiblePickImage}
           style={InputExpenseScreenStyles.mainModal}
           coverScreen={false}
@@ -531,30 +538,24 @@ class InputExpenseScreen extends Component<Props, States> {
           onBackdropPress={this.toggleModalPickImage}
         >
           <View style={InputExpenseScreenStyles.viewModal}>
-              <Text style={InputExpenseScreenStyles.txtTitleModal}>
-                  {`Thêm ảnh từ`}
-              </Text>
-              <View style={InputExpenseScreenStyles.viewBtnModal}>
-                  <TouchableOpacity
-                    onPress={this._pickImage}
-                    style={[InputExpenseScreenStyles.btnModal,{borderRightWidth: 1,borderRightColor: Colors.lavender}]}>
-                      <Text style={InputExpenseScreenStyles.txtBtnModal}>Thư viện</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={this._pickImageCamera}
-                    style={InputExpenseScreenStyles.btnModal}>
-                      <Text style={InputExpenseScreenStyles.txtBtnModal}>Camera</Text>
-                  </TouchableOpacity>
-              </View>
+            <Text style={InputExpenseScreenStyles.txtTitleModal}>{`Thêm ảnh từ`}</Text>
+            <View style={InputExpenseScreenStyles.viewBtnModal}>
+              <TouchableOpacity
+                onPress={this._pickImage}
+                style={[InputExpenseScreenStyles.btnModal, { borderRightWidth: 1, borderRightColor: Colors.lavender }]}
+              >
+                <Text style={InputExpenseScreenStyles.txtBtnModal}>Thư viện</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this._pickImageCamera} style={InputExpenseScreenStyles.btnModal}>
+                <Text style={InputExpenseScreenStyles.txtBtnModal}>Camera</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </Modal>
         <StatusBar barStyle="light-content" hidden={false} backgroundColor={'transparent'} translucent />
         <ModalOrg visible={this.state.isModelVisible} onRequestClose={this.toggleModal}>
           <ImageViewer useNativeDriver={true} imageUrls={this.state.listImageAdd} />
-          <TouchableOpacity
-            onPress={this.toggleModal}
-            style={InputExpenseScreenStyles.viewDropModalZoom}
-          >
+          <TouchableOpacity onPress={this.toggleModal} style={InputExpenseScreenStyles.viewDropModalZoom}>
             <Feather name={'x'} color={Colors.black} size={18} />
           </TouchableOpacity>
         </ModalOrg>
@@ -575,7 +576,9 @@ class InputExpenseScreen extends Component<Props, States> {
             <TouchableOpacity
               style={InputExpenseScreenStyles.save}
               activeOpacity={0.5}
-              disabled={!this.state.checkDescription && !this.state.isEnableAddLocation && this.state.listImageAdd?.length === 0}
+              disabled={
+                !this.state.checkDescription && !this.state.isEnableAddLocation && this.state.listImageAdd?.length === 0
+              }
               onPress={() => {
                 this.createTransaction(Group._id, this.listTypeUser, this.idPayer);
               }}
@@ -600,10 +603,7 @@ class InputExpenseScreen extends Component<Props, States> {
         </View>
         <ScrollView keyboardShouldPersistTaps="handled">
           {/* view add expense */}
-          <TouchableOpacity
-            onPress={this.toggleExpense}
-            style={InputExpenseScreenStyles.viewRowItem}
-          >
+          <TouchableOpacity onPress={this.toggleExpense} style={InputExpenseScreenStyles.viewRowItem}>
             <View style={InputExpenseScreenStyles.viewIconAndTitleItem}>
               <MaterialIcons name={'note-add'} color={Colors.tintColor} size={screenWidth / 14} />
               <Text style={InputExpenseScreenStyles.txtTitleItem}>Chi phí</Text>
@@ -672,12 +672,14 @@ class InputExpenseScreen extends Component<Props, States> {
                     onPress={() =>
                       this.state.checkDescription && this.state.checkMoney
                         ? this.prepareSendListUserToChoose(this.listTypeUser, this.idPayer)
-                        : this.setState({modalNotification: {
-                            type: 'error',
-                            title: 'Đã có lỗi xảy ra',
-                            description: 'Vui lòng nhập đầy đủ thông tin',
-                            modalVisible: true,
-                          }})
+                        : this.setState({
+                            modalNotification: {
+                              type: 'error',
+                              title: 'Đã có lỗi xảy ra',
+                              description: 'Vui lòng nhập đầy đủ thông tin',
+                              modalVisible: true,
+                            },
+                          })
                     }
                   >
                     Chọn thành viên thanh toán (đầu vào)
@@ -689,12 +691,14 @@ class InputExpenseScreen extends Component<Props, States> {
                     onPress={() =>
                       this.state.checkDescription && this.state.checkMoney
                         ? this.prepareSendListUserToSplit(this.listTypeUser, this.idPayer)
-                        : this.setState({modalNotification: {
-                            type: 'error',
-                            title: 'Đã có lỗi xảy ra',
-                            description: 'Vui lòng nhập đầy đủ thông tin',
-                            modalVisible: true,
-                          }})
+                        : this.setState({
+                            modalNotification: {
+                              type: 'error',
+                              title: 'Đã có lỗi xảy ra',
+                              description: 'Vui lòng nhập đầy đủ thông tin',
+                              modalVisible: true,
+                            },
+                          })
                     }
                   >
                     Chọn thành viên tham gia (đầu ra)
@@ -774,10 +778,7 @@ class InputExpenseScreen extends Component<Props, States> {
           ) : null}
           <View style={InputExpenseScreenStyles.line} />
           {/* view add image */}
-          <TouchableOpacity
-            onPress={this.toggleImage}
-            style={InputExpenseScreenStyles.viewRowItem}
-          >
+          <TouchableOpacity onPress={this.toggleImage} style={InputExpenseScreenStyles.viewRowItem}>
             <View style={InputExpenseScreenStyles.viewIconAndTitleItem}>
               <MaterialIcons name={'library-add'} color={Colors.mediumseagreen} size={screenWidth / 14} />
               <Text style={InputExpenseScreenStyles.txtTitleItem}>Hình ảnh</Text>
