@@ -32,6 +32,7 @@ import { screenWidth } from '../../constants/Dimensions';
 import DialogBox from 'react-native-dialogbox';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons1 from 'react-native-vector-icons/MaterialIcons';
+import ModalNotification from '../components/ModalNotification';
 
 type Props = {
   navigation?: any;
@@ -45,6 +46,13 @@ class MainForgotPasswordScreen extends Component<Props> {
     pinCode: '',
     password: '',
     repeatPassword: '',
+    modalNotification: {
+      modalVisible: false,
+      type: 'success',
+      title: '',
+      description: '',
+      onPress: () => {},
+    },
   };
   emailTextInput: TextInput;
   scroll: JSX.Element;
@@ -82,15 +90,36 @@ class MainForgotPasswordScreen extends Component<Props> {
 
   onChangePassword = async () => {
     if (!this.validateEmail(this.state.email)) {
-      this.handleOnPress('Error!', ['Email invalid!', 'Please check again.']);
+      this.setState({
+        modalNotification: {
+          type: 'error',
+          title: 'Email không đúng!',
+          description: 'Vui lòng kiểm tra lại.',
+          modalVisible: true,
+        },
+      });
       return;
     }
     if (this.state.password === '') {
-      this.handleOnPress('Error!', ['Password invalid!', 'Please enter password.']);
+      this.setState({
+        modalNotification: {
+          type: 'error',
+          title: 'Mật khẩu không đúng!',
+          description: 'Vui lòng kiểm tra lại.',
+          modalVisible: true,
+        },
+      });
       return;
     }
     if (this.state.password.length < 5) {
-      this.handleOnPress('Error!', ['Password invalid!', 'Password must be at least 5 characters.']);
+      this.setState({
+        modalNotification: {
+          type: 'error',
+          title: 'Mật khẩu không đúng!',
+          description: 'Vui lòng kiểm tra lại.',
+          modalVisible: true,
+        },
+      });
       return;
     }
     const data = {
@@ -114,16 +143,23 @@ class MainForgotPasswordScreen extends Component<Props> {
         .then((response) => response.json())
         .then((res) => {
           if (res.error) {
-            this.handleOnPress('Error!', [res.error, 'Please check again.']);
+            this.setState({
+              modalNotification: {
+                type: 'error',
+                title: 'Mã pin không đúng!',
+                description: 'Vui lòng kiểm tra lại.',
+                modalVisible: true,
+              },
+            });
           } else {
             AsyncStorage.removeItem('jwt');
-            this.dialogbox.tip({
-              title: 'Alert!',
-              content: [res.result, "Let's go!"],
-              btn: {
-                text: 'OK',
-                style: { fontWeight: '500', fontSize: 20, color: '#044de0' },
-                callback: () => {
+            this.setState({
+              modalNotification: {
+                type: 'success',
+                title: 'Thay đổi mật khẩu thành công!',
+                description: 'Bạn có thể đăng nhập.',
+                modalVisible: true,
+                onPress: () => {
                   this.props.navigation.navigate('MainLoginScreen');
                 },
               },
@@ -134,13 +170,27 @@ class MainForgotPasswordScreen extends Component<Props> {
           console.log(error);
         });
     } else {
-      this.handleOnPress('Error!', ['Confirm password incorrect', 'Please check again.']);
+      this.setState({
+        modalNotification: {
+          type: 'error',
+          title: 'Xác nhận mật khẩu không đúng!',
+          description: 'Vui lòng kiểm tra lại.',
+          modalVisible: true,
+        },
+      });
     }
   };
 
   sendMailGetCode = async () => {
     if (!this.validateEmail(this.state.email)) {
-      this.handleOnPress('Error!', ['Email invalid!', 'Please check again.']);
+      this.setState({
+        modalNotification: {
+          type: 'error',
+          title: 'Email không đúng!',
+          description: 'Vui lòng kiểm tra lại.',
+          modalVisible: true,
+        },
+      });
       return;
     }
     const data = {
@@ -158,9 +208,23 @@ class MainForgotPasswordScreen extends Component<Props> {
       .then((response) => response.json())
       .then((res) => {
         if (res.error) {
-          this.handleOnPress('Error!', [res.error, 'Please check again.']);
+          this.setState({
+            modalNotification: {
+              type: 'error',
+              title: 'Email không đúng!',
+              description: 'Vui lòng kiểm tra lại.',
+              modalVisible: true,
+            },
+          });
         } else {
-          this.handleOnPress('Alert!', ['Sent Mail!', 'Please check your email.']);
+          this.setState({
+            modalNotification: {
+              type: 'success',
+              title: 'Mã pin đã được gửi!',
+              description: 'Vui lòng kiểm tra email của bạn.',
+              modalVisible: true,
+            },
+          });
         }
       })
       .catch((error) => {
@@ -178,6 +242,14 @@ class MainForgotPasswordScreen extends Component<Props> {
     const { navigation } = this.props;
     return (
       <View style={{ flex: 1 }}>
+        <ModalNotification
+          type={this.state.modalNotification.type}
+          modalVisible={this.state.modalNotification.modalVisible}
+          title={this.state.modalNotification.title}
+          description={this.state.modalNotification.description}
+          txtButton="Ok"
+          onPress={() => this.setState({ modalNotification: { modalVisible: false } })}
+        />
         <KeyboardAwareScrollView
           style={{ flex: 1 }}
           innerRef={(ref) => {
