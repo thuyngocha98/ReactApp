@@ -1,6 +1,5 @@
-import { StyleSheet, StatusBar } from 'react-native';
-import Constants from 'expo-constants';
-import { screenWidth, APPBAR_HEIGHT } from '../../../../constants/Dimensions';
+import { StyleSheet } from 'react-native';
+import { screenWidth } from '../../../../constants/Dimensions';
 import Colors from '../../../../constants/Colors';
 
 const ListItemDetailTransactionStyles = StyleSheet.create({
@@ -20,6 +19,7 @@ const ListItemDetailTransactionStyles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-start',
+    marginRight: screenWidth/72,
   },
   iconCheck: {
     flex: 1,
@@ -28,9 +28,11 @@ const ListItemDetailTransactionStyles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: screenWidth/7.2,
+    height:  screenWidth/7.2,
+    borderWidth: 1,
+    borderColor: Colors.lavender,
+    borderRadius:  screenWidth/14.4,
   },
   title: {
     flex: 5,

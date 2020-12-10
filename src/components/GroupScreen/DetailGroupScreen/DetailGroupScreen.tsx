@@ -7,7 +7,6 @@ import {
   FlatList,
   StatusBar,
   Dimensions,
-  StyleSheet,
   Image,
   ScrollView,
   Platform,
@@ -40,6 +39,7 @@ import groupChat from '../../../../assets/images/group-chat.png';
 import plus from '../../../../assets/images/plus.png';
 import ModalNotification from '../../components/ModalNotification';
 import ListEmpty from '../../components/ListEmpty';
+import ModalLoading from '../../components/ModalLoading';
 function mapStateToProps(state) {
   return {
     userId: state.dataUser.dataUser._id,
@@ -304,100 +304,95 @@ class DetailGroupScreen extends Component<Props, States> {
             navigationState={{ index: this.state.index, routes: this.state.routes }}
             renderScene={SceneMap({
               first: () => (
-                <ScrollView>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate('InputExpenseScreen', { dataGroup: this.dataTrip });
-                    }}
-                  >
-                    <View style={[DetailGroupScreenStyles.overView, { marginTop: screenHeight / 40 }]}>
-                      <Image style={DetailGroupScreenStyles.imageOverView} source={plus} />
-                      <Text style={{ marginLeft: screenWidth / 20 }}>Tạo mới</Text>
-                      <View style={{ flex: 1 }} />
-                      <AntDesign name={'right'} size={screenWidth / 28} />
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate('MainPlanInTripScreen', { tripId: this.dataTrip._id });
-                    }}
-                  >
-                    <View style={[DetailGroupScreenStyles.overView, { marginTop: screenHeight / 40 }]}>
-                      <Image style={DetailGroupScreenStyles.imageOverView} source={destination} />
-                      <Text style={{ marginLeft: screenWidth / 20 }}>Lịch trình chuyến đi</Text>
-                      <View style={{ flex: 1 }} />
-                      <AntDesign name={'right'} size={screenWidth / 28} />
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => this.seePlace(this.dataTrip)}>
-                    <View style={DetailGroupScreenStyles.overView}>
-                      <Image style={DetailGroupScreenStyles.imageOverView} source={map} />
-                      <Text style={{ marginLeft: screenWidth / 20 }}>Những địa điểm nhóm đã đi qua</Text>
-                      <View style={{ flex: 1 }} />
-                      <AntDesign name={'right'} size={screenWidth / 28} />
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate('ShowImagesScreen', { tripId: this.dataTrip._id });
-                    }}
-                  >
-                    <View style={DetailGroupScreenStyles.overView}>
-                      <Image style={DetailGroupScreenStyles.imageOverView} source={picture} />
-                      <Text style={{ marginLeft: screenWidth / 20 }}>Hình ảnh chuyến đi</Text>
-                      <View style={{ flex: 1 }} />
-                      <AntDesign name={'right'} size={screenWidth / 28} />
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate('ChatGroupScreen', {
-                        tripId: this.dataTrip._id,
-                        nameTrip: this.dataTrip.name,
-                        navigation: this.props.navigation,
-                      });
-                    }}
-                  >
-                    <View style={DetailGroupScreenStyles.overView}>
-                      <Image style={DetailGroupScreenStyles.imageOverView} source={groupChat} />
-                      <Text style={{ marginLeft: screenWidth / 20 }}>Nhắn tin nhóm</Text>
-                      <View style={{ flex: 1 }} />
-                      <AntDesign name={'right'} size={screenWidth / 28} />
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate('BalanceScreen', { tripId: this.dataTrip._id });
-                    }}
-                  >
-                    <View style={DetailGroupScreenStyles.overView}>
-                      <Image style={DetailGroupScreenStyles.imageOverView} source={balance} />
-                      <Text style={{ marginLeft: screenWidth / 20 }}>Tổng số dư giao dịch</Text>
-                      <View style={{ flex: 1 }} />
-                      <AntDesign name={'right'} size={screenWidth / 28} />
-                    </View>
-                  </TouchableOpacity>
-                </ScrollView>
+                <>
+                  <ModalLoading isVisible={this.state.loading}/>
+                  <ScrollView style={{flex: 1}}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('InputExpenseScreen', { dataGroup: this.dataTrip });
+                      }}
+                    >
+                      <View style={[DetailGroupScreenStyles.overView, { marginTop: screenHeight / 40 }]}>
+                        <Image style={DetailGroupScreenStyles.imageOverView} source={plus} />
+                        <Text style={{ marginLeft: screenWidth / 20 }}>Tạo mới</Text>
+                        <View style={{ flex: 1 }} />
+                        <AntDesign name={'right'} size={screenWidth / 28} />
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('MainPlanInTripScreen', { tripId: this.dataTrip._id });
+                      }}
+                    >
+                      <View style={[DetailGroupScreenStyles.overView, { marginTop: screenHeight / 40 }]}>
+                        <Image style={DetailGroupScreenStyles.imageOverView} source={destination} />
+                        <Text style={{ marginLeft: screenWidth / 20 }}>Lịch trình chuyến đi</Text>
+                        <View style={{ flex: 1 }} />
+                        <AntDesign name={'right'} size={screenWidth / 28} />
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.seePlace(this.dataTrip)}>
+                      <View style={DetailGroupScreenStyles.overView}>
+                        <Image style={DetailGroupScreenStyles.imageOverView} source={map} />
+                        <Text style={{ marginLeft: screenWidth / 20 }}>Những địa điểm nhóm đã đi qua</Text>
+                        <View style={{ flex: 1 }} />
+                        <AntDesign name={'right'} size={screenWidth / 28} />
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('ShowImagesScreen', { tripId: this.dataTrip._id });
+                      }}
+                    >
+                      <View style={DetailGroupScreenStyles.overView}>
+                        <Image style={DetailGroupScreenStyles.imageOverView} source={picture} />
+                        <Text style={{ marginLeft: screenWidth / 20 }}>Hình ảnh chuyến đi</Text>
+                        <View style={{ flex: 1 }} />
+                        <AntDesign name={'right'} size={screenWidth / 28} />
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('ChatGroupScreen', {
+                          tripId: this.dataTrip._id,
+                          nameTrip: this.dataTrip.name,
+                          navigation: this.props.navigation,
+                        });
+                      }}
+                    >
+                      <View style={DetailGroupScreenStyles.overView}>
+                        <Image style={DetailGroupScreenStyles.imageOverView} source={groupChat} />
+                        <Text style={{ marginLeft: screenWidth / 20 }}>Nhắn tin nhóm</Text>
+                        <View style={{ flex: 1 }} />
+                        <AntDesign name={'right'} size={screenWidth / 28} />
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('BalanceScreen', { tripId: this.dataTrip._id });
+                      }}
+                    >
+                      <View style={DetailGroupScreenStyles.overView}>
+                        <Image style={DetailGroupScreenStyles.imageOverView} source={balance} />
+                        <Text style={{ marginLeft: screenWidth / 20 }}>Tổng số dư giao dịch</Text>
+                        <View style={{ flex: 1 }} />
+                        <AntDesign name={'right'} size={screenWidth / 28} />
+                      </View>
+                    </TouchableOpacity>
+                  </ScrollView>
+                </>
               ),
               second: () => (
-                <View>
-                  {lengthItemTransaction > 0 ? (
-                    <View style={DetailGroupScreenStyles.dateTitle}>
-                      <Text style={DetailGroupScreenStyles.date}>tháng {time[1] + ' ' + time[0]}</Text>
-                    </View>
-                  ) : (
-                    <View style={{ marginBottom: screenWidth / 5 }} />
-                  )}
-                  {this.state.loading ? (
-                    <View style={DetailGroupScreenStyles.activityIndicator}>
-                      <LottieView
-                        style={DetailGroupScreenStyles.viewLottie}
-                        source={require('../../../../assets/lotties/WaveLoading.json')}
-                        autoPlay
-                        loop
-                      />
-                    </View>
-                  ) : (
+                <>
+                  <ModalLoading isVisible={this.state.loading}/>
+                  <View style={{flex: 1}}>
+                    {lengthItemTransaction > 0 ? (
+                      <View style={DetailGroupScreenStyles.dateTitle}>
+                        <Text style={DetailGroupScreenStyles.date}>tháng {time[1] + ' ' + time[0]}</Text>
+                      </View>
+                    ) : (
+                      <View style={{ marginBottom: screenWidth / 5 }} />
+                    )}
                     <FlatList
                       data={this.state.data}
                       scrollEnabled
@@ -424,8 +419,8 @@ class DetailGroupScreen extends Component<Props, States> {
                         </TouchableOpacity>
                       )}
                     />
-                  )}
-                </View>
+                  </View>
+                </>
               ),
             })}
             onIndexChange={(index) => this.setIndex(index)}
@@ -449,12 +444,6 @@ class DetailGroupScreen extends Component<Props, States> {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  scene: {
-    flex: 1,
-  },
-});
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(

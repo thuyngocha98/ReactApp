@@ -31,7 +31,7 @@ import MainForgotPasswordScreen from '../components/ForgotPasswordScreen/MainFor
 import AddMemberGroupScreen from '../components/GroupScreen/CreateGroupScreen/AddMemberGroupScreen';
 import ChoosePayerScreen from '../components/ExpenseScreen/ChoosePayerScreen/ChoosePayerScreen';
 import ChooseMultiplePeopleScreen from '../components/ExpenseScreen/ChoosePayerScreen/ChooseMultiplePeopleScreen/ChooseMultiplePeopleScreen';
-import DetaiTransactionScreen from '../components/GroupScreen/DetailGroupScreen/DetailTransactionScreen/DetaiTransactionScreen';
+import DetailTransactionScreen from '../components/GroupScreen/DetailGroupScreen/DetailTransactionScreen/DetaiTransactionScreen';
 import { screenWidth } from '../constants/Dimensions';
 import SearchDetailScreen from '../components/SearchScreen/SearchDetailScreen/SearchDetailScreen';
 import DescriptionLocationScreen from '../components/SearchScreen/SearchDetailScreen/DescriptionLocationScreen';
@@ -146,7 +146,7 @@ const GroupStack = createStackNavigator(
       screen: AddImagesScreen,
     },
     DetaiTransactionScreen: {
-      screen: DetaiTransactionScreen,
+      screen: DetailTransactionScreen,
     },
     BalanceScreen: {
       screen: BalanceScreen,

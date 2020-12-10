@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, StatusBar, TouchableOpacity, Text, Image, FlatList, Modal, StyleSheet, ScrollView } from 'react-native';
+import { View, StatusBar, TouchableOpacity, Text, Image, FlatList, Modal, Platform, UIManager, LayoutAnimation } from 'react-native';
 import Colors from '../../../../constants/Colors';
-import { Ionicons, AntDesign, Entypo } from '@expo/vector-icons';
+import { Ionicons, AntDesign, Entypo, Feather } from '@expo/vector-icons';
 import DetailTransactionScreenStyles from '../../../../styles/GroupsStyles/DetailGroupScreenStyles/DetailTransactionScreenStyles/DetailTransactionScreenStyles';
 
 // @ts-ignore
@@ -15,10 +15,12 @@ import ListItemDetailTransaction from './ListItemDetailTransaction';
 import { number2money } from '../../../../constants/FunctionCommon';
 import { BASEURL } from '../../../../api/api';
 import { screenWidth } from '../../../../constants/Dimensions';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import { transaction } from '../../../../constants/FunctionCommon';
-import DetailGroupScreenStyles from '../../../../styles/GroupsStyles/DetailGroupScreenStyles/DetailGroupScreenStyles';
+import moment from 'moment';
+import localization from 'moment/locale/vi';
+moment.updateLocale("vi", localization);
+import LottieView from 'lottie-react-native';
 
 function mapStateToProps(state) {
   return {};
@@ -33,7 +35,11 @@ type States = {
   loading?: boolean;
   isModelVisible?: boolean;
 };
-class DetaiTransactionScreen extends Component<Props, States> {
+// Check platform android set flag animation layout
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+class DetailTransactionScreen extends Component<Props, States> {
   constructor(props) {
     super(props);
     this.transaction = this.props.navigation.getParam('transaction', '');
@@ -48,20 +54,21 @@ class DetaiTransactionScreen extends Component<Props, States> {
       header: null,
     };
   };
-  transaction: any[];
+  transaction: {
+    trip_id?: string,
+    _id?: string,
+    imageURL?: any[],
+    create_date?: any,
+    avatar?: any,
+    amount?: any,
+    name?: string,
+    address?: string,
+    update_date?: any,
+  };
 
   componentDidMount() {
     this.getDataTransaction();
   }
-
-  data = [
-    {
-      id: 1,
-    },
-    {
-      id: 2,
-    },
-  ];
 
   getDataTransaction = async () => {
     this.setState({ loading: true });
@@ -80,6 +87,8 @@ class DetaiTransactionScreen extends Component<Props, States> {
     })
       .then((response) => response.json())
       .then((res) => {
+        Platform.OS === 'android' && 
+          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         this.setState({
           data: res.data,
           loading: false,
@@ -97,26 +106,124 @@ class DetaiTransactionScreen extends Component<Props, States> {
     this.setState({ isModelVisible: !this.state.isModelVisible });
   };
 
-  render() {
-    const lengthImage = this.transaction.imageURL.length;
+  renderHeader = () => {
     const { navigation } = this.props;
     const nameGroup = navigation.getParam('nameGroup', 'No Name');
-    const date = this.transaction.create_date;
-    var time = date.split(/[\s-T]+/);
+    const lengthImage = this.transaction.imageURL.length;
     const avatarTransaction =
       lengthImage > 0
         ? { uri: `${BASEURL}/images/uploads/${this.transaction.imageURL[0]}` }
         : transaction['avatar' + this.transaction.avatar];
+    const update_date = this.transaction?.update_date ?
+      this.transaction.update_date : this.transaction.create_date;
+    return (
+      <View>
+        <View style={DetailTransactionScreenStyles.details}>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={DetailTransactionScreenStyles.icons}>
+              <Image
+                source={avatarTransaction}
+                style={
+                  lengthImage > 0 ? DetailTransactionScreenStyles.image2 : DetailTransactionScreenStyles.image1
+                }
+              />
+            </View>
+            <View style={DetailTransactionScreenStyles.contentDetails}>
+              <Text style={DetailTransactionScreenStyles.iconTravel}>{this.transaction?.name}</Text>
+              <Text style={DetailTransactionScreenStyles.money}>
+                {number2money(this.transaction?.amount)} VND
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View style={{ flexDirection: 'row', paddingHorizontal: screenWidth/18 }}>
+          <View style={DetailTransactionScreenStyles.personAdd}>
+            <View style={DetailTransactionScreenStyles.person}>
+              <View style={DetailTransactionScreenStyles.nameGroup}>
+                <Image
+                  style={DetailTransactionScreenStyles.image}
+                  source={require('../../../../../assets/images/icon-home.png')}
+                />
+                <Text numberOfLines={1} style={DetailTransactionScreenStyles.txtAllOf}>Tổng hợp chi phí của {nameGroup}</Text>
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row', marginLeft: 10 }}>
+              <Text numberOfLines={1} style={DetailTransactionScreenStyles.txtDate}>
+                {`Được bạn tạo ngày ${moment(this.transaction.create_date).format('ll')}`}
+              </Text>
+            </View>
+            <View style={{ flexDirection: 'row', marginLeft: 10 }}>
+              <Text numberOfLines={1} style={DetailTransactionScreenStyles.txtDate}>
+                {`Cập nhật cuối cùng ngày ${moment(update_date).format('ll')}`}
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View style={DetailTransactionScreenStyles.hr} />
+      </View>
+    );
+  }
 
+  renderFooter = () => {
+    return (
+      <>
+        {this.transaction?.address && (
+          <View style={DetailTransactionScreenStyles.viewAddress}>
+            <Text style={DetailTransactionScreenStyles.txtTitle}>Địa điểm</Text>
+            <View style={DetailTransactionScreenStyles.viewTextAddress}>
+              
+              <Text style={DetailTransactionScreenStyles.txtAddress}>
+                {this.transaction?.address}asdfsdfsdfsdfsdf
+              </Text>
+              <View style={DetailTransactionScreenStyles.viewLottie}>
+                <LottieView
+                  style={DetailTransactionScreenStyles.lottieMap}
+                  source={require('../../../../../assets/lotties/mapmaker.json')}
+                  autoPlay
+                  loop
+                />
+              </View>
+            </View>
+          </View>
+        )}
+        {this.transaction?.imageURL.length > 0 && (
+          <View style={DetailTransactionScreenStyles.viewImages}>
+            <Text style={DetailTransactionScreenStyles.txtTitle}>Hình ảnh</Text>
+              <View style={DetailTransactionScreenStyles.viewFlatList}>
+                <FlatList 
+                  data={this.transaction?.imageURL || []}
+                  renderItem={({item, index}) => (
+                    <TouchableOpacity onPress={() => this.toggleModal()}>
+                      <Image
+                        source={{ uri: `${BASEURL}/images/uploads/${item}` }}
+                        style={DetailTransactionScreenStyles.listImages}
+                      />
+                    </TouchableOpacity>
+                  )}
+                  keyExtractor={item => item.toString()}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                />
+              </View>
+          </View>
+        )}
+      </>
+    );
+  }
+
+  render() {
+    const { navigation } = this.props;
     const images = this.transaction?.imageURL.map((url) => {
       return { url: `${BASEURL}/images/uploads/${url}` };
     });
-
     return (
       <View style={DetailTransactionScreenStyles.container}>
         <StatusBar barStyle="light-content" hidden={false} backgroundColor={'transparent'} translucent />
         <Modal visible={this.state.isModelVisible} transparent={false} onRequestClose={() => this.toggleModal()}>
-          <ImageViewer imageUrls={images} />
+          <ImageViewer useNativeDriver={true} imageUrls={images} />
+          <TouchableOpacity onPress={this.toggleModal} style={DetailTransactionScreenStyles.viewDropModalZoom}>
+            <Feather name={'x'} color={Colors.black} size={18} />
+          </TouchableOpacity>
         </Modal>
         <View style={DetailTransactionScreenStyles.containerHeader}>
           <View style={DetailTransactionScreenStyles.header}>
@@ -130,122 +237,24 @@ class DetaiTransactionScreen extends Component<Props, States> {
               <Ionicons name="ios-arrow-back" size={30} color={Colors.white} />
             </TouchableOpacity>
             <Text style={DetailTransactionScreenStyles.addContact}>Chi Tiết</Text>
-            <TouchableOpacity style={DetailTransactionScreenStyles.save1} activeOpacity={0.5} onPress={() => {}}>
+            <TouchableOpacity disabled style={DetailTransactionScreenStyles.save1} activeOpacity={0.5} onPress={() => {}}>
               <AntDesign name={'delete'} size={25} color={Colors.white} />
             </TouchableOpacity>
-            <TouchableOpacity style={DetailTransactionScreenStyles.save2} activeOpacity={0.5} onPress={() => {}}>
+            <TouchableOpacity disabled style={DetailTransactionScreenStyles.save2} activeOpacity={0.5} onPress={() => {}}>
               <Entypo name={'edit'} color={Colors.white} size={25} />
             </TouchableOpacity>
           </View>
         </View>
-        <ScrollView>
-          {this.transaction?.amount && (
-            <View>
-              <View>
-                <View style={DetailTransactionScreenStyles.details}>
-                  <View style={{ flexDirection: 'row' }}>
-                    <View style={DetailTransactionScreenStyles.icons}>
-                      <Image
-                        source={avatarTransaction}
-                        style={
-                          lengthImage > 0 ? DetailTransactionScreenStyles.image2 : DetailTransactionScreenStyles.image1
-                        }
-                      />
-                    </View>
-                    <View style={DetailTransactionScreenStyles.contentDetails}>
-                      <Text style={DetailTransactionScreenStyles.iconTravel}>{this.transaction?.name}</Text>
-                      <Text style={DetailTransactionScreenStyles.money}>
-                        {number2money(this.transaction?.amount)} VND
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-                <View style={{ flexDirection: 'row', paddingHorizontal: 20 }}>
-                  <View style={DetailTransactionScreenStyles.personAdd}>
-                    <View style={DetailTransactionScreenStyles.person}>
-                      <View style={DetailTransactionScreenStyles.nameGroup}>
-                        <Image
-                          style={DetailTransactionScreenStyles.image}
-                          source={require('../../../../../assets/images/icon-home.png')}
-                        />
-                        <Text style={DetailTransactionScreenStyles.txtAllOf}>Tổng hợp chi phí của {nameGroup}</Text>
-                      </View>
-                    </View>
-                    <View style={{ flexDirection: 'row', marginLeft: 10 }}>
-                      <Text style={{ fontSize: 14, marginBottom: 5, opacity: 0.5 }}>Được bạn tạo ngày </Text>
-                      <Text style={{ fontSize: 14, opacity: 0.5 }}>
-                        {time[2]}-{time[1]}-{time[0]}
-                      </Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', marginLeft: 10 }}>
-                      <Text style={{ fontSize: 14, marginBottom: 5, opacity: 0.5 }}>Cập nhật cuối cùng ngày </Text>
-                      <Text style={{ fontSize: 14, opacity: 0.5 }}>
-                        {time[2]}-{time[1]}-{time[0]}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-                <View style={DetailTransactionScreenStyles.hr}></View>
-              </View>
-              <View style={{ flex: 1 }}>
-                <FlatList
-                  scrollEnabled
-                  data={this.state.data}
-                  renderItem={({ item }) => <ListItemDetailTransaction data={item} />}
-                  keyExtractor={(item) => item._id.toString()}
-                />
-              </View>
-            </View>
-          )}
-          {this.transaction?.address && (
-            <View
-              style={{
-                borderTopWidth: 1,
-                borderTopColor: Colors.gray,
-                paddingVertical: screenWidth / 24,
-                paddingHorizontal: screenWidth / 24,
-                marginTop: -2,
-              }}
-            >
-              <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Địa điểm</Text>
-              <Text style={{ fontSize: 15, color: Colors.gray, marginLeft: screenWidth / 36 }}>
-                {this.transaction?.address}
-              </Text>
-            </View>
-          )}
-          {this.transaction?.imageURL.length > 0 && (
-            <View
-              style={{
-                borderTopWidth: 1,
-                borderTopColor: Colors.gray,
-                paddingVertical: screenWidth / 24,
-                paddingHorizontal: screenWidth / 24,
-              }}
-            >
-              <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Hình ảnh</Text>
-              <View style={{ flexDirection: 'row' }}>
-                {this.transaction?.imageURL.map((url) => (
-                  <TouchableOpacity key={url} onPress={() => this.toggleModal()}>
-                    <Image
-                      source={{ uri: `${BASEURL}/images/uploads/${url}` }}
-                      style={{
-                        marginTop: screenWidth / 72,
-                        marginLeft: screenWidth / 36,
-                        resizeMode: 'stretch',
-                        width: screenWidth / 4,
-                        height: screenWidth / 3.6,
-                        borderRadius: 8,
-                      }}
-                    />
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-          )}
-        </ScrollView>
+        <FlatList
+          data={this.state.data}
+          renderItem={({ item }) => <ListItemDetailTransaction data={item} />}
+          keyExtractor={(item) => item._id.toString()}
+          ListHeaderComponent={this.renderHeader}
+          ListFooterComponent={this.renderFooter}
+        />
       </View>
     );
   }
 }
 
-export default connect(mapStateToProps)(DetaiTransactionScreen);
+export default connect(mapStateToProps)(DetailTransactionScreen);

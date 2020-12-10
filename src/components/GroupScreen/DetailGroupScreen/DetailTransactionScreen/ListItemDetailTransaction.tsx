@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ListItemDetailTransactionStyles from '../../../../styles/GroupsStyles/DetailGroupScreenStyles/DetailTransactionScreenStyles/ListItemDetailTransactionStyles';
-import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Image, Text } from 'react-native';
 import Colors from '../../../../constants/Colors';
 import { thumbnails, number2money } from '../../../../constants/FunctionCommon';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { screenWidth } from '../../../../constants/Dimensions';
 import { BASEURL } from '../../../../api/api';
 
 function mapStateToProps(state) {
@@ -13,7 +11,11 @@ function mapStateToProps(state) {
 }
 
 type Props = {
-  data?: any[];
+  data?: {
+    user_id?: any,
+    type?: number,
+    total?: number,
+  };
 };
 
 class ListItemDetailTransaction extends Component<Props> {

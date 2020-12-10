@@ -8,7 +8,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BASEURL } from '../../../api/api';
 import { bindActionCreators } from 'redux';
 import { getApiListTrip } from '../../../actions/action';
-import { number2money, thumbnails } from '../../../constants/FunctionCommon';
+import { thumbnails } from '../../../constants/FunctionCommon';
 import { SearchBar } from 'react-native-elements';
 import { screenWidth } from '../../../constants/Dimensions';
 import LottieView from 'lottie-react-native';
@@ -208,11 +208,13 @@ class MainScreenGroup extends Component<Props, States> {
               )}
               ListEmptyComponent={() => (
                 <View style={MainScreenGroupStyles.viewEmpty}>
-                  <ListEmpty
-                    title={'Hiện tại bạn chưa tham gia nhóm nào'}
-                    titleAction={'Bắt đầu tạo nhóm mới'}
-                    action={() => this.props.navigation.navigate('CreateGroupScreen')}
-                  />
+                  {this.state.value.length == 0 && 
+                    <ListEmpty
+                      title={'Hiện tại bạn chưa tham gia nhóm nào'}
+                      titleAction={'Bắt đầu tạo nhóm mới'}
+                      action={() => this.props.navigation.navigate('CreateGroupScreen')}
+                    />
+                  }
                 </View>
               )}
               keyExtractor={(item) => item._id.toString()}

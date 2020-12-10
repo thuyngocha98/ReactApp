@@ -14,14 +14,17 @@ function mapStateToProps(state) {
 }
 
 type Props = {
-  avatarMain?: string;
-  money?: string;
-  name?: string;
-  isGetBack?: boolean;
-  nameSub?: string;
-  moneySub?: string;
   nameSecondSub?: string;
-  data?: any[];
+  data?: {
+    _id?: string,
+    totalBalanceTrip?: any,
+    avatar?: any,
+    name?: string,
+  };
+  tripId?: string;
+  handleRemind?: (_: boolean) => void;
+  handleResolve?: () => void;
+  handleLoading?: (_: boolean) => void;
 };
 
 type States = {
@@ -34,6 +37,7 @@ class ListItemBalance extends PureComponent<Props, States> {
   };
 
   remind = () => {
+    this.props.handleLoading(true);
     const data = {
       tripId: this.props.tripId,
       userIdReminded: this.props.data._id,
@@ -50,14 +54,15 @@ class ListItemBalance extends PureComponent<Props, States> {
     })
       .then((response) => response.json())
       .then((res) => {
-        console.log(res);
+        this.props.handleRemind(true);
+        this.props.handleLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        this.props.handleRemind(false);
+        this.props.handleLoading(false);
       });
   };
   render() {
-    console.log(this.props.data);
     const thumbnail =
       this.props.data.avatar.length > 2
         ? { uri: `${BASEURL}/images/avatars/${this.props.data.avatar}` }
@@ -119,9 +124,7 @@ class ListItemBalance extends PureComponent<Props, States> {
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => {
-                    Alert.alert('Settle Up');
-                  }}
+                  onPress={() => this.props.handleResolve()}
                 >
                   <View style={ListItemBalanceStyles.btn}>
                     <Text style={ListItemBalanceStyles.txt}>Giải quyết</Text>

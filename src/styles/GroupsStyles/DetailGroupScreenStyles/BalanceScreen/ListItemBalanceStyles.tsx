@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import Colors from "../../../../constants/Colors";
-import { screenWidth } from "../../../../constants/Dimensions";
+import { screenHeight, screenWidth } from "../../../../constants/Dimensions";
 
 const ListItemBalanceStyles = StyleSheet.create({
     container: {
@@ -9,7 +9,7 @@ const ListItemBalanceStyles = StyleSheet.create({
         alignItems: 'center',
         marginHorizontal: screenWidth/41.1,
         marginBottom: screenWidth/41.1,
-        
+        paddingTop: screenHeight/56,
     },
     firtItem: {
         flexDirection: 'row',
@@ -24,9 +24,11 @@ const ListItemBalanceStyles = StyleSheet.create({
         justifyContent: 'center'
     },
     photo: {
-        width: screenWidth/8.935,
-        height: screenWidth/8.935,
-        borderRadius: screenWidth/17.87
+        width: screenWidth/8,
+        height: screenWidth/8,
+        borderRadius: screenWidth/16,
+        borderWidth: 1,
+        borderColor: Colors.lavender,
     },
     title: {
         flex: 3.5,
@@ -54,6 +56,7 @@ const ListItemBalanceStyles = StyleSheet.create({
     },
     containerSecond: {
         flexDirection: 'column',
+        marginTop: screenHeight/56,
     },
     secondItem: {
         flexDirection: 'row',
@@ -94,10 +97,10 @@ const ListItemBalanceStyles = StyleSheet.create({
     },
     btn: {
         borderRadius: screenWidth/82.2,
-        elevation: 1,
+        elevation: 3,
         marginHorizontal: screenWidth/82.2,
-        borderBottomWidth: 2,
-        borderColor: Colors.lightgray
+        // borderBottomWidth: 2,
+        // borderColor: Colors.lightgray
         
     },
     txt: {
