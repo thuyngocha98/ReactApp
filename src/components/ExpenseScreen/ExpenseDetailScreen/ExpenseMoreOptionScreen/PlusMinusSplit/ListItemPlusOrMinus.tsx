@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Image, Text } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import Colors from '../../../../../constants/Colors';
 import { TextInput } from 'react-native-gesture-handler';
 import ListItemPlusOrMinusStyles from '../../../../../styles/ExpenseScreenStyles/ExpenseDetailScreenStyles/ExpenseMoreOptionScreenStyles/PlusOrMinusSplit/ListItemPlusOrMinusStyles';
 

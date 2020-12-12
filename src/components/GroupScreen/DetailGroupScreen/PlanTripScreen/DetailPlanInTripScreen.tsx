@@ -29,7 +29,14 @@ type Props = {
 }
 
 type States = {
-    data?: any[],
+    data?: {
+        data?: {
+            route?: {
+                legs?: any[],
+            },
+        },
+        location?: any[],
+    },
     loading?: boolean,
     modalVisible?: boolean,
     modalUpdateVisible?: boolean,
@@ -48,7 +55,14 @@ class DetailPlanInTripScreen extends Component<Props, States> {
     };
 
     state = {
-        data: [],
+        data: {
+            data: {
+                route: {
+                    legs: [],
+                },
+            },
+            location: [],
+        },
         loading: true,
         modalVisible: false,
         modalOptionVisible: false,
@@ -264,6 +278,7 @@ class DetailPlanInTripScreen extends Component<Props, States> {
     }
 
     render() {
+        console.log(this.state.data?.location)
         const RenderItem = ({index, title, desc, url, data}) => (
             <View style={styles.viewItem}>
                 <View style={styles.indexItem}>
@@ -464,14 +479,13 @@ class DetailPlanInTripScreen extends Component<Props, States> {
                 <ScrollView style={styles.viewContent}>
                     {this.state.loading ? (
                         <View style={styles.activityIndicator}>
-                             <View style={styles.activityIndicator}>
-                                <LottieView
-                                    style={styles.viewLottie}
-                                    source={require('../../../../../assets/lotties/PinJump.json')}
-                                    autoPlay
-                                    loop
-                                />
-                            </View>
+                            <LottieView
+                                style={styles.viewLottie}
+                                source={require('../../../../../assets/lotties/PinJump.json')}
+                                autoPlay
+                                loop
+                            />
+                            <Text style={styles.txtLoading}>Đang tải...</Text>
                         </View>
                     ) : (
                         <>
@@ -803,5 +817,11 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
+    },
+    txtLoading: {
+        position: 'absolute',
+        top: screenHeight/3,
+        fontSize: 13,
+        color: Colors.blackText,
     }
 });

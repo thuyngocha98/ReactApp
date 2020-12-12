@@ -1,29 +1,37 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, FlatList } from 'react-native';
 import { BASEURL } from '../../api/api';
-import { screenWidth, APPBAR_HEIGHT } from '../../constants/Dimensions';
-import moment from 'moment';
+import { screenWidth } from '../../constants/Dimensions';
 import Colors from '../../constants/Colors';
-import { getStatusBarHeight } from 'react-native-iphone-x-helper';
-import { Form } from 'native-base';
-import { CONTACTS } from 'expo-permissions';
 
 type Props = {
-  data?: any[];
+  data?: {
+    author?: {
+      email?: string,
+      avatar?: any,
+    }
+    amountTransaction?: number,
+    nameTransaction?: string,
+    address?: string,
+    imageURL?: any[],
+  };
 };
 
 type States = {};
 
 class DetailPlaceGridScreen extends Component<Props, States> {
   render() {
-    const data = this.props.data;
+    const { data } = this.props;
+    console.log(data)
     return (
       <View>
         <View style={styles.container}>
           <View style={styles.userEven}>
-            <Image style={styles.avatar} source={{ uri: `${BASEURL}/images/avatars/${data.author.avatar}` }} />
+            <View style={styles.viewAvatar}>
+              <Image style={styles.avatar} source={{ uri: `${BASEURL}/images/avatars/${data?.author?.avatar}` }} />
+            </View>
             <View style={styles.user}>
-              <Text>{data.author.email}</Text>
+              <Text>{data?.author?.email}</Text>
               <Text style={{ fontSize: screenWidth / 35, color: Colors.mediumseagreen }}>
                 ( Thành viên ghi lại thông tin )
               </Text>
@@ -39,8 +47,8 @@ class DetailPlaceGridScreen extends Component<Props, States> {
                 <View style={styles.expense1}>
                   <Text style={{ fontWeight: 'bold' }}>Giao dịch:</Text>
                   <Text>
-                    {data.amountTransaction > 0
-                      ? ` ${data.nameTransaction} - ${data.amountTransaction} VNĐ`
+                    {data?.amountTransaction > 0
+                      ? ` ${data?.nameTransaction} - ${data?.amountTransaction} VNĐ`
                       : ` Không thực hiện giao dịch.`}
                   </Text>
                 </View>
@@ -50,23 +58,20 @@ class DetailPlaceGridScreen extends Component<Props, States> {
                 <View style={styles.circle} />
                 <View style={styles.place1}>
                   <Text style={{ fontWeight: 'bold' }}>Địa điểm:</Text>
-                  <Text style={{ flex: 1 }}> {data.address}.</Text>
+                  <Text style={{ flex: 1 }}> {data?.address}.</Text>
                 </View>
               </View>
             </View>
           </View>
           <View style={styles.showImage}>
             <FlatList
-              data={data.imageURL}
+              data={data?.imageURL}
               renderItem={({ item }) => (
                 <Image source={{ uri: `${BASEURL}/images/uploads/${item}` }} style={styles.image} />
               )}
               numColumns={3}
               keyExtractor={(item, index) => index.toString()}
             />
-            {/* {data.imageURL.map((url, i) => (
-            <Image key={i} source={{ uri: `${BASEURL}/images/uploads/${url}` }} style={styles.image} />
-          ))} */}
           </View>
         </View>
         <View style={styles.hr} />
@@ -85,12 +90,20 @@ const styles = StyleSheet.create({
     paddingLeft: screenWidth / 30,
     paddingTop: screenWidth / 30,
   },
+  viewAvatar: {
+    width: screenWidth / 10,
+    height: screenWidth / 10,
+    borderRadius: screenWidth / 6.8,
+    marginTop: screenWidth / 54.8,
+    borderWidth: 0.5,
+    borderColor: Colors.lightgray,
+    backgroundColor: Colors.lightgray,
+  },
   avatar: {
     width: screenWidth / 10,
     height: screenWidth / 10,
     borderRadius: screenWidth / 6.8,
     resizeMode: 'cover',
-    marginTop: screenWidth / 54.8,
   },
   userEven: {
     flexDirection: 'row',
@@ -109,6 +122,8 @@ const styles = StyleSheet.create({
     height: screenWidth / 3.7,
     borderRadius: 8,
     marginBottom: screenWidth / 70,
+    borderWidth: 0.5,
+    borderColor: Colors.lightgray
   },
   hr: {
     width: screenWidth,

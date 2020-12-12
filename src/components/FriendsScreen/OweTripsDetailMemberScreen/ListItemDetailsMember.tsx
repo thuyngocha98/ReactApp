@@ -3,18 +3,10 @@ import {
     View,
     TouchableOpacity,
     Text,
-    Animated,
-    ScrollView,
-    Alert,
-    FlatList,
-    StatusBar,
     SectionList
 } from 'react-native';
 import styles from "../../../styles/FriendsScreenStyles/OweTripDetailsMemberScreenStyle/ListItemDetailsMemberStyle";
-import { Ionicons, EvilIcons, FontAwesome5 } from '@expo/vector-icons';
-import { screenWidth } from '../../../constants/Dimensions';
 import ListItemDetailsContent from "./ListItemDetailsContent";
-import Constants from 'expo-constants';
 
 type Props = {
     navigation?: any,

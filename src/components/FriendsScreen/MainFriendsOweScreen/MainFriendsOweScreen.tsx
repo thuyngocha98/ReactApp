@@ -13,7 +13,6 @@ import styles from "../../../styles/FriendsScreenStyles/MainFriendsOweScreenStyl
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 // @ts-ignore
 import avatar from "../../../../assets/images/avatar.jpg";
-import ListItemGroup from "../../GroupScreen/MainScreenGroup/ListItemGroup";
 import Colors from "../../../constants/Colors";
 import ListItemFriendsOwe from "./ListItemFriendsOwe";
 

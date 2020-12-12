@@ -28,10 +28,7 @@ class ListItemGroup extends PureComponent<Props> {
     const avatar =
       lengthAvatar > 2
         ? { uri: `${BASEURL}/images/avatarsGroup/${this.props.dataTrip.avatarGroup}` }
-        : {
-            uri:
-              'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flat_tick_icon.svg/768px-Flat_tick_icon.svg.png',
-          };
+        : require('../../../../assets/images/avatarBackgroundGroup.png')
     var money = this.props.price;
     if (parseInt(money) < 0) {
       money = money.toString().replace('-', '');
@@ -64,7 +61,7 @@ class ListItemGroup extends PureComponent<Props> {
               <View style={ListItemGroupStyles.dotted2} />
               <View style={ListItemGroupStyles.circle} />
               <View style={ListItemGroupStyles.member1}>
-                <Text style={{ fontSize: screenWidth / 30, opacity: 0.8 }}>
+                <Text numberOfLines={1} style={{ fontSize: screenWidth / 30, opacity: 0.8 }}>
                   Bắt đầu {this.props.dataTrip.begin_date} - {this.props.dataTrip.end_date}
                 </Text>
               </View>
@@ -73,7 +70,7 @@ class ListItemGroup extends PureComponent<Props> {
               <View style={ListItemGroupStyles.dotted3} />
               <View style={ListItemGroupStyles.circle1} />
               <View style={ListItemGroupStyles.member2}>
-                <Text style={{ fontSize: screenWidth / 30, opacity: 0.8 }}>
+                <Text numberOfLines={1} style={{ fontSize: screenWidth / 30, opacity: 0.8 }}>
                   {' '}
                   {this.props.dataTrip.membersTrip} thành viên ( bạn và {this.props.dataTrip.membersTrip - 1} thành viên
                   khác)

@@ -94,38 +94,35 @@ const ChatGroupScreenStyles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: screenWidth / 80,
-    marginVertical: screenWidth / 80,
+    paddingVertical: screenWidth / 54,
+  },
+  containerInput: {
+    flex: 1,
+    marginLeft: screenWidth/72,
   },
   input: {
     paddingLeft: screenWidth / 30,
-    height: screenWidth / 9,
+    height: screenWidth / 10,
     borderWidth: 1,
     borderColor: Colors.lightgray,
     borderRadius: screenWidth / 20,
     fontSize: screenWidth / 28,
   },
   send: {
-    width: screenWidth / 13,
-    height: screenWidth / 13,
-    borderRadius: screenWidth / 4,
+    width: screenWidth / 11,
+    height: screenWidth / 11,
+    borderRadius: screenWidth / 5.5,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.tintColor,
-    marginTop: screenWidth / 110,
-    marginLeft: screenWidth / 60,
+    marginLeft: screenWidth/36,
+    marginRight: screenWidth/72,
   },
-  location: {
-    marginTop: screenWidth / 150,
-    // marginLeft: screenWidth / 110,
-  },
-  camera: {
-    marginTop: screenWidth / 90,
-    marginLeft: screenWidth / 130,
-  },
-  image: {
-    marginTop: screenWidth / 90,
-    marginLeft: screenWidth / 35,
+  iconFooter: {
+    width: screenWidth / 10,
+    height: screenWidth / 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   microphone: {
     marginRight: screenWidth / 100,
@@ -296,5 +293,16 @@ const ChatGroupScreenStyles = StyleSheet.create({
     paddingHorizontal: 10,
     alignItems: 'center',
   },
+  txtTimeRecording: { 
+    alignContent: 'center', 
+    fontSize: 38,
+    marginTop: screenWidth / 50
+  },
+  separator: {
+    width: screenWidth/15,
+    height: 2,
+    backgroundColor: Colors.lightgray,
+    alignSelf: 'center'
+  }
 });
 export default ChatGroupScreenStyles;

@@ -5,7 +5,7 @@ import { View, TouchableOpacity, Text, FlatList } from 'react-native';
 import BalanceScreenStyles from '../../../../styles/GroupsStyles/DetailGroupScreenStyles/BalanceScreen/BalanceScreenStyles';
 import { Ionicons } from '@expo/vector-icons';
 import ListItemBalance from './ListItemBalance';
-import { APPBAR_HEIGHT, screenHeight, screenWidth } from '../../../../constants/Dimensions';
+import { screenHeight, screenWidth } from '../../../../constants/Dimensions';
 import { BASEURL } from '../../../../api/api';
 import ModalNotification from '../../../components/ModalNotification';
 import ModalLoading from '../../../components/ModalLoading';

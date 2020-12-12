@@ -534,6 +534,7 @@ class PlanTripScreen extends Component<Props, States> {
                                 autoPlay
                                 loop
                             />
+                            <Text style={styles.txtLoading}>Đang tải...</Text>
                         </View>
                     ) : (
                         <>
@@ -864,5 +865,11 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
+    },
+    txtLoading: {
+        position: 'absolute',
+        top: screenHeight/3,
+        fontSize: 13,
+        color: Colors.blackText,
     }
 });

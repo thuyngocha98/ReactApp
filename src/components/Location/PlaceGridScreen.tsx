@@ -3,10 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from 'react
 import { screenWidth, APPBAR_HEIGHT } from '../../constants/Dimensions';
 import { BASEURL } from '../../api/api';
 import { Ionicons } from '@expo/vector-icons';
-import moment from 'moment';
 import Colors from '../../constants/Colors';
-import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import DetailPlaceGridScreen from './DetailPlaceGridScreen';
+import Constants from "expo-constants";
 
 type Props = {
   navigation?: any;
@@ -45,7 +44,7 @@ class PlaceGridScreen extends Component<Props, States> {
       .then((response) => response.json())
       .then(async (res) => {
         this.setState({
-          dataPlace: res.data,
+          dataPlace: res.data.reverse(),
         });
       })
       .catch((error) => {
@@ -59,15 +58,18 @@ class PlaceGridScreen extends Component<Props, States> {
         <View style={styles.containerHeader}>
           <View style={styles.header}>
             <TouchableOpacity
-              style={styles.goback}
-              activeOpacity={0.5}
-              onPress={() => {
-                this.props.navigation.goBack();
-              }}
+                style={styles.cancel}
+                activeOpacity={0.5}
+                onPress={() => {
+                    this.props.navigation.goBack();
+                }}
             >
-              <Ionicons name="ios-arrow-back" size={screenWidth / 14} color={Colors.white} />
+                <Ionicons name="ios-arrow-back" size={32} color={Colors.white} />
             </TouchableOpacity>
-            <Text style={styles.detailPlace}>Chi tiết những địa điểm đã đi qua</Text>
+            <Text numberOfLines={1} style={styles.addContact}>
+              Chi tiết những địa điểm đã đi qua
+            </Text>
+            <View style={styles.save} />
           </View>
         </View>
         <FlatList
@@ -75,6 +77,8 @@ class PlaceGridScreen extends Component<Props, States> {
           scrollEnabled
           renderItem={({ item }) => <DetailPlaceGridScreen data={item} />}
           keyExtractor={(item) => item._id.toString()}
+          initialNumToRender={4}
+          removeClippedSubviews
         />
       </View>
     );
@@ -85,22 +89,37 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  textHeaderLeft: {
+    fontSize: 17,
+    color: Colors.white
+  },
   containerHeader: {
-    width: screenWidth,
-    height: APPBAR_HEIGHT + getStatusBarHeight() + screenWidth / 50,
-    backgroundColor: Colors.tintColor,
+      width: screenWidth,
+      height: APPBAR_HEIGHT + Constants.statusBarHeight,
+      backgroundColor: Colors.tabIconSelected,
   },
   header: {
-    flex: 1,
-    flexDirection: 'row',
-    marginTop: getStatusBarHeight() + screenWidth / 40,
-    justifyContent: 'space-between',
-    marginHorizontal: screenWidth / 27.43,
+      flex: 1,
+      marginTop: Constants.statusBarHeight,
+      flexDirection: 'row',
+      alignItems: 'center',
   },
-  goback: {
-    height: '100%',
-    paddingHorizontal: screenWidth / 72,
-    // alignItems: 'center',
+  addContact: {
+      flex: 1,
+      fontSize: 18,
+      fontWeight: '500',
+      color: Colors.white,
+      textAlign: 'center',
+  },
+  cancel: {
+      paddingLeft: screenWidth/27,
+      paddingRight: screenWidth/24,
+      paddingVertical: screenWidth/72,
+  },
+  save: {
+      paddingRight: screenWidth/27,
+      paddingLeft: screenWidth/27,
+      paddingVertical: screenWidth/72,
   },
   detailPlace: {
     flex: 1,

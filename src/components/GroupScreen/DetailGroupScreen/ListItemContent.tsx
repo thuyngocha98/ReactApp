@@ -2,12 +2,11 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Image } from 'react-native';
 import ListItemContentStyles from '../../../styles/GroupsStyles/DetailGroupScreenStyles/ListItemContentStyles';
-import { MaterialIcons, Octicons, FontAwesome } from '@expo/vector-icons';
+import { MaterialIcons, Octicons } from '@expo/vector-icons';
 import Colors from '../../../constants/Colors';
 import { BASEURL } from '../../../api/api';
 import { transaction } from '../../../constants/FunctionCommon';
 import { screenWidth } from '../../../constants/Dimensions';
-import ListItemGroupStyles from '../../../styles/ExpenseScreenStyles/MainExpenseScreenStyles/ListItemGroupStyles';
 
 function mapStateToProps(state) {
   return {

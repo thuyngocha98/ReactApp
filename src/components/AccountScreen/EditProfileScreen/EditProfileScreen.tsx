@@ -270,6 +270,7 @@ class EditProfileScreen extends Component<Props, States> {
             />
           </TouchableOpacity>
         </View>
+        <Text style={styles.txtGuide}>Bấm vào ảnh để thay đổi ảnh đại diện</Text>
       </ScrollView>
     );
   }
@@ -371,6 +372,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '400',
   },
+  txtGuide: {
+    position: 'absolute',
+    top:  APPBAR_HEIGHT + Constants.statusBarHeight,
+    textAlign: 'center',
+    left: 0,
+    right: 0,
+    fontSize: 12,
+    color: Colors.gray
+  }
 });
 
 const mapDispatchToProps = (dispatch) => {

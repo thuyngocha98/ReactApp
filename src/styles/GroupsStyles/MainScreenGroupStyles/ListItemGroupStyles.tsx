@@ -60,20 +60,20 @@ const ListItemGroupStyles = StyleSheet.create({
   dotted1: {
     height: screenWidth / 6,
     width: 0.6,
-    backgroundColor: 'black',
+    backgroundColor: 'gray',
     marginLeft: screenWidth / 22,
     marginTop: -screenWidth / 130,
   },
   dotted2: {
     height: 0.3,
     width: screenWidth / 10,
-    backgroundColor: 'black',
+    backgroundColor: 'gray',
     marginTop: screenWidth / 29,
   },
   dotted3: {
     height: 0.3,
     width: screenWidth / 10,
-    backgroundColor: 'black',
+    backgroundColor: 'gray',
     marginTop: screenWidth / 20,
   },
   circle: {

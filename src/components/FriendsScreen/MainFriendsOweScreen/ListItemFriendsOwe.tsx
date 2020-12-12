@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {View, FlatList, Image, Text} from 'react-native';
 import Styles from "../../../styles/FriendsScreenStyles/MainFriendsOweScreenStyle/ListItemFriendsOweStyle";
 import Colors from '../../../constants/Colors';
-import {FontAwesome5, Octicons} from '@expo/vector-icons';
+import { Octicons } from '@expo/vector-icons';
 import ListDetailFriendsOwe from "./ListDetailFriendsOwe";
 // @ts-ignore
 import userFriend from "../../../../assets/images/userFriend.png";

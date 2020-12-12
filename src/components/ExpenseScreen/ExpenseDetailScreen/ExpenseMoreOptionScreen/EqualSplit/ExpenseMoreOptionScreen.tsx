@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Colors from '../../../../../constants/Colors';
 import { View, TouchableOpacity, Text, Image, FlatList, ScrollView, StatusBar } from 'react-native';
-import { Ionicons, Octicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import ExpenseMoreOptionScreenStyles from '../../../../../styles/ExpenseScreenStyles/ExpenseDetailScreenStyles/ExpenseMoreOptionScreenStyles/EqualSplit/ExpenseMoreOptionScreenStyles';
 import { thumbnails, number2money } from '../../../../../constants/FunctionCommon';
 import { BASEURL } from '../../../../../api/api';

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, Image, FlatList, StatusBar} from "react-native";
+import {View, Text, TouchableOpacity, FlatList, StatusBar} from "react-native";
 import Colors from "../../../constants/Colors";
 import styles from "../../../styles/FriendsScreenStyles/MainDetailsWhoPaidScreenStyle/MainDetailsWhoPaidScreenStyle";
 import TransactedComponent from "./TransactedComponent";

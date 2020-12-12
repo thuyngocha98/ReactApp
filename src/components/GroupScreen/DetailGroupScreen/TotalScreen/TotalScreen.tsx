@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Colors from '../../../../constants/Colors';
-import { View, TouchableOpacity, Text, StatusBar, Image, Button, Alert, FlatList } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import BalanceScreenStyles from '../../../../styles/GroupsStyles/DetailGroupScreenStyles/BalanceScreen/BalanceScreenStyles';
-import { MaterialCommunityIcons, FontAwesome5, Entypo } from '@expo/vector-icons';
 import { APPBAR_HEIGHT } from '../../../../constants/Dimensions';
 import TotalScreenStyles from '../../../../styles/GroupsStyles/DetailGroupScreenStyles/TotalScreen/TotalScreenStyles';
 

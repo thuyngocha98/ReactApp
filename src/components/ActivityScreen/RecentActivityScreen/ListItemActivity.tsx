@@ -17,6 +17,9 @@ import remove from '../../../../assets/images/remove.png';
 import { thumbnails, number2money } from '../../../constants/FunctionCommon';
 import { connect } from 'react-redux';
 import { BASEURL } from '../../../api/api';
+import moment from 'moment';
+import localization from 'moment/locale/vi';
+moment.updateLocale("vi", localization);
 
 function mapStateToProps(state) {
   return {
@@ -25,7 +28,23 @@ function mapStateToProps(state) {
 }
 
 type Props = {
-  data?: any[];
+  data?: {
+    type?: string,
+    user_id?: {
+      avatar?: any,
+      name: string,   
+    }
+    create_date?: any,
+    delete_date?: any,
+    update_date?: any,
+    trip_id?: {
+      name?: string,
+    },
+    transaction_id?: {
+      name?: string,
+      amount?: number,
+    }
+  };
 };
 
 class ListItemActivity extends PureComponent<Props> {
@@ -36,7 +55,6 @@ class ListItemActivity extends PureComponent<Props> {
           ? { uri: `${BASEURL}/images/avatars/${this.props.data.user_id.avatar}` }
           : thumbnails['avatar' + this.props.data.user_id.avatar];
       const date = this.props.data.create_date;
-      var time = date.split(/[\s-T:]+/);
       var name = this.props.data.user_id.name.split(/[\s ]+/);
       return (
         <View>
@@ -57,10 +75,7 @@ class ListItemActivity extends PureComponent<Props> {
               <View>
                 <View style={styles.flexRow}>
                   <Text style={styles.time}>
-                    ngày {time[2]} thg {time[1]}, {time[0]} -{' '}
-                  </Text>
-                  <Text style={styles.time}>
-                    {time[3]}:{time[4]}
+                    {`ngày ${moment(date).format('LLL')}`}
                   </Text>
                 </View>
               </View>
@@ -75,7 +90,6 @@ class ListItemActivity extends PureComponent<Props> {
           ? { uri: `${BASEURL}/images/avatars/${this.props.data.user_id.avatar}` }
           : thumbnails['avatar' + this.props.data.user_id.avatar];
       const date = this.props.data.create_date;
-      var time = date.split(/[\s-T:]+/);
       var name = this.props.data.user_id.name.split(/[\s ]+/);
       var nameTransaction = this.props.data.transaction_id.name;
       return (
@@ -103,10 +117,7 @@ class ListItemActivity extends PureComponent<Props> {
                 </View>
                 <View style={styles.flexRow}>
                   <Text style={styles.time}>
-                    ngày {time[2]} thg {time[1]}, {time[0]} -{' '}
-                  </Text>
-                  <Text style={styles.time}>
-                    {time[3]}:{time[4]}
+                    {`ngày ${moment(date).format('LLL')}`}
                   </Text>
                 </View>
               </View>
@@ -121,7 +132,6 @@ class ListItemActivity extends PureComponent<Props> {
           ? { uri: `${BASEURL}/images/avatars/${this.props.data.user_id.avatar}` }
           : thumbnails['avatar' + this.props.data.user_id.avatar];
       const date = this.props.data.delete_date;
-      var time = date.split(/[\s-T:]+/);
       var name = this.props.data.user_id.name.split(/[\s ]+/);
       return (
         <View>
@@ -142,10 +152,7 @@ class ListItemActivity extends PureComponent<Props> {
               <View>
                 <View style={styles.flexRow}>
                   <Text style={styles.time}>
-                    ngày {time[2]} thg {time[1]}, {time[0]} -{' '}
-                  </Text>
-                  <Text style={styles.time}>
-                    {time[3]}:{time[4]}
+                    {`ngày ${moment(date).format('LLL')}`}
                   </Text>
                 </View>
               </View>
@@ -160,7 +167,6 @@ class ListItemActivity extends PureComponent<Props> {
           ? { uri: `${BASEURL}/images/avatars/${this.props.data.user_id.avatar}` }
           : thumbnails['avatar' + this.props.data.user_id.avatar];
       const date = this.props.data.update_date;
-      var time = date.split(/[\s-T:]+/);
       var name = this.props.data.user_id.name.split(/[\s ]+/);
       return (
         <View>
@@ -181,10 +187,7 @@ class ListItemActivity extends PureComponent<Props> {
               <View>
                 <View style={styles.flexRow}>
                   <Text style={styles.time}>
-                    ngày {time[2]} thg {time[1]}, {time[0]} -{' '}
-                  </Text>
-                  <Text style={styles.time}>
-                    {time[3]}:{time[4]}
+                    {`ngày ${moment(date).format('LLL')}`}
                   </Text>
                 </View>
               </View>

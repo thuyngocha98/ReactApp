@@ -28,59 +28,64 @@ const styles = StyleSheet.create({
     textUser: {
         marginTop: screenWidth / 100,
         fontSize: 20,
-        fontWeight: '500',
+        fontWeight: 'bold',
         color: Colors.white
     },
     email: {
-        opacity: 0.7,
+        opacity: 0.8,
         fontSize: 17,
         marginBottom: screenWidth / 27.4,
         color: Colors.white
     },
     mainContainer: {
-        marginTop: screenWidth / 20.55,
-        paddingHorizontal: screenWidth / 20.55,
+        marginTop: screenWidth / 36,
+        paddingHorizontal: screenWidth / 36,
         backgroundColor: Colors.white
     },
+    viewItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    viewIcon: {
+        width: screenWidth/10,
+        height: screenWidth/10,
+        overflow: 'hidden',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    txtItem: {
+        fontSize: 17,
+        color: Colors.blackText,
+        flex: 1,
+        marginLeft: screenWidth/36,
+    },
+    viewTxt: {
+        flex: 1,
+        borderBottomWidth:1,
+        borderBottomColor: Colors.lavender,
+        
+    },
+    viewRow: {
+        paddingVertical: screenHeight/56,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
     overView: {
-        marginVertical: screenWidth / 25,
-        flexDirection: 'row',
+        justifyContent: 'center',
         alignItems: 'center',
+        marginBottom: screenHeight/56,
     },
-    textOverview: {
-        marginLeft: screenWidth / 27.4,
-        fontSize: 18,
-        color: 'gray',
+    txtTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: Colors.tintColor,
     },
-    setting: {
-        flexDirection: 'row',
-        marginVertical: screenWidth / 25,
-        alignItems: 'center',
-    },
-    textSetting: {
-        marginLeft: screenWidth / 30,
-        fontSize: 18,
-        color: 'gray',
-    },
-    help: {
-        flexDirection: 'row',
-        marginVertical: screenWidth / 25,
-        alignItems: 'center',
-    },
-    textHelp: {
-        marginLeft: screenWidth / 26,
-        fontSize: 18,
-        color: 'gray'
-    },
-    signOut: {
-        flexDirection: 'row',
-        marginVertical: screenWidth / 25,
-        alignItems: 'center',
-    },
-    textSignOut: {
-        marginLeft: screenWidth / 26,
-        fontSize: 18,
-        color: 'gray',
+    txtDesc: {
+        fontSize: 15,
+        color: Colors.gray,
+        marginTop: screenHeight/108,
+        marginHorizontal: screenWidth/36,
+        textAlign: 'center'
     }
 
 });

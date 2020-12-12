@@ -108,6 +108,7 @@ class AddDestinationScreen extends Component<Props, State> {
         <View style={styles.viewList}>
           <FlatList
             initialNumToRender={8}
+            removeClippedSubviews
             keyboardShouldPersistTaps="handled"
             extraData={this.state}
             data={this.state.data}

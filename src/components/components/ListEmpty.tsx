@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     txtEmpty: {
         fontSize: 14,
         color: Colors.gray,
+        textAlign: 'center'
     },
     viewAction: {
         marginTop: screenHeight/56,

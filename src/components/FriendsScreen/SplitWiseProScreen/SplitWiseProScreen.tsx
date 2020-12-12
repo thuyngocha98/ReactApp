@@ -5,7 +5,6 @@ import styles from '../../../styles/FriendsScreenStyles/SplitWiseProScreenStyle/
 import { AntDesign } from '@expo/vector-icons';
 // @ts-ignore
 import money from '../../../../assets/images/money.png';
-import Layout from '../../../constants/Layout';
 
 type Props = { navigation };
 

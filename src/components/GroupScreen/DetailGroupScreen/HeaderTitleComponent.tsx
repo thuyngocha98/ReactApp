@@ -28,7 +28,6 @@ type Props = {
   idGroup?: string;
   time?: string;
   amount?: number;
-  numberUserInTrip?: number;
   startDay?: string;
   endDay?: string;
   dataTrip?: any;

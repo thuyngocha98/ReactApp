@@ -75,10 +75,10 @@ class MainActivityScreen extends Component<Props, States> {
       .then((response) => response.json())
       .then((res) => {
         this.setState({
-          data: res.data.reverse(),
+          data: res.data,
           loading: false,
         });
-        this.arrayData = res.data.reverse();
+        this.arrayData = res.data;
       })
       .catch((error) => {
         this.setState({
@@ -137,6 +137,8 @@ class MainActivityScreen extends Component<Props, States> {
             <FlatList
               scrollEnabled
               data={this.state.data}
+              initialNumToRender={7}
+              removeClippedSubviews
               renderItem={({ item }) => (
                 <TouchableOpacity>
                   <ListItemActivity data={item} />
@@ -173,9 +175,8 @@ const styles = StyleSheet.create({
     marginTop: screenWidth / 41.1,
   },
   title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: screenWidth / 20.55,
+    fontSize: 25,
+    marginBottom: screenWidth / 36,
     marginLeft: screenWidth / 20.55,
     opacity: 0.5,
   },

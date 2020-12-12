@@ -10,13 +10,11 @@ import {
   Keyboard,
   TextInput,
 } from 'react-native';
-import { Ionicons, FontAwesome5, Octicons } from '@expo/vector-icons';
-import ListItemNumberSplit from './ListItemNumberSplit';
-import { APPBAR_HEIGHT, screenWidth } from '../../../../../constants/Dimensions';
+import { Ionicons } from '@expo/vector-icons';
+import { screenWidth } from '../../../../../constants/Dimensions';
 import Colors from '../../../../../constants/Colors';
 import ExpenseByNumberSplitScreenStyles from '../../../../../styles/ExpenseScreenStyles/ExpenseDetailScreenStyles/ExpenseMoreOptionScreenStyles/NumberSplit/ExpenseByNumberSplitScreenStyles';
 import { thumbnails, number2money } from '../../../../../constants/FunctionCommon';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { BASEURL } from '../../../../../api/api';
 import ModalNotification from '../../../../components/ModalNotification';
 

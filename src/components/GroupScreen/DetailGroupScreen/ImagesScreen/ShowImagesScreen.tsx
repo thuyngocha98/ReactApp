@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, TouchableOpacity, Text, StyleSheet, StatusBar, FlatList, Image, ScrollView, Modal } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, FlatList, Image, ScrollView, Modal } from 'react-native';
 import Colors from '../../../../constants/Colors';
 import { APPBAR_HEIGHT, screenWidth } from '../../../../constants/Dimensions';
 import { BASEURL } from '../../../../api/api';

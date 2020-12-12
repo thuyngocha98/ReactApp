@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text, Platform, Image, TouchableOpacity, AsyncStorage, StatusBar } from 'react-native';
+import { View, Text, Platform, Image, TouchableOpacity, ScrollView, AsyncStorage, StatusBar } from 'react-native';
 import styles from '../../styles/AccountScreenStyle/MainAccountScreenStyle';
-import { MaterialCommunityIcons, EvilIcons, AntDesign } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { BASEURL } from '../../api/api';
 
 // @ts-ignore
 import { thumbnails } from '../../constants/FunctionCommon';
 import { screenWidth } from '../../constants/Dimensions';
+import Colors from "../../constants/Colors";
 
 function mapStateToProps(state) {
   return {
@@ -25,8 +26,18 @@ type Props = {
   };
 };
 
-class MainAccountScreen extends Component<Props> {
+type States = {
+  isOverview?: boolean,
+  isHelp?: boolean,
+}
+
+class MainAccountScreen extends Component<Props, States> {
   _navListener: any;
+
+  state = {
+    isOverview: false,
+    isHelp: false,
+  }
 
   componentDidMount() {
     //set barstyle of statusbar
@@ -49,13 +60,22 @@ class MainAccountScreen extends Component<Props> {
     this.props.navigation.navigate('MainLoginScreen');
   };
 
+  handleOverView = () => {
+    this.setState({ isOverview: !this.state.isOverview })
+  }
+
+  handleHelp = () => {
+    this.setState({ isHelp: !this.state.isHelp })
+  }
+
   render() {
-    const thumbnail =
-      this.props.user.avatar.length > 2
-        ? { uri: `${BASEURL}/images/avatars/${this.props.user.avatar}` }
-        : thumbnails['avatar' + this.props.user.avatar];
+    const { isHelp, isOverview } = this.state;
+    const thumbnail = this.props.user?.avatar &&
+      this.props.user?.avatar.length > 2
+        ? { uri: `${BASEURL}/images/avatars/${this.props.user?.avatar}` }
+        : thumbnails['avatar' + this.props.user?.avatar];
     return (
-      <View>
+      <ScrollView>
         <View style={styles.headerContainer}>
           <StatusBar barStyle="light-content" hidden={false} backgroundColor="transparent" translucent />
           <View style={styles.header}>
@@ -65,24 +85,29 @@ class MainAccountScreen extends Component<Props> {
           </View>
         </View>
         <View style={styles.mainContainer}>
-          <TouchableOpacity style={styles.overView}>
-            <MaterialCommunityIcons
-              name={'home-outline'}
-              size={25}
-              color={'gray'}
-              style={{ marginLeft: screenWidth / 205.5 }}
-            />
-            <Text
-              style={styles.textOverview}
-              onPress={() => {
-                this.props.navigation.navigate('AudioRecordingScreen');
-              }}
-            >
-              Tổng quan
-            </Text>
+          <TouchableOpacity onPress={this.handleOverView} style={styles.viewItem}>
+            <View style={styles.viewTxt}>
+              <View style={styles.viewRow}>
+                <View style={styles.viewIcon}>
+                  <AntDesign name={'home'} size={25} color={'gray'}/>
+                </View>
+                <Text style={styles.txtItem}>
+                  Tổng quan
+                </Text>
+                <AntDesign name={isOverview ? 'up' : 'down'} size={20} color={'gray'} style={{marginRight: screenWidth/36}} />
+              </View>
+              {isOverview &&
+              <View style={styles.overView}>
+                 <Text style={styles.txtTitle}>Wego</Text>
+                 <Text style={styles.txtDesc}>
+                   Là một ứng dụng miễn phí với nhiều tính năng hỗ trợ cho du lịch nhóm như tạo nhóm,
+                   lên lịch trình, quản lý chi tiêu, chia sẻ vị trí, hình ảnh, ...
+                 </Text>
+              </View>}
+            </View>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.setting}
+            style={styles.viewItem}
             activeOpacity={0.6}
             onPress={() => {
               this.props.navigation.navigate('EditProfileScreen', {
@@ -94,19 +119,49 @@ class MainAccountScreen extends Component<Props> {
               });
             }}
           >
-            <EvilIcons name={'user'} size={30} color={'gray'} />
-            <Text style={styles.textSetting}>Chỉnh sửa thông tin</Text>
+            <View style={styles.viewTxt}>
+              <View style={styles.viewRow}>
+                <View style={styles.viewIcon}>
+                  <AntDesign name={'edit'} size={25} color={'gray'} />
+                </View>
+                <Text style={styles.txtItem}>Chỉnh sửa thông tin</Text>
+                <AntDesign name={'right'} size={20} color={'gray'} style={{marginRight: screenWidth/36}} />
+              </View>
+            </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.help} onPress={() => {}}>
-            <MaterialCommunityIcons name={'flag-outline'} size={25} color={'gray'} />
-            <Text style={styles.textHelp}>Trợ giúp</Text>
+          <TouchableOpacity style={styles.viewItem} onPress={this.handleHelp}>
+            <View style={styles.viewTxt}>
+              <View style={styles.viewRow}>
+                <View style={styles.viewIcon}>
+                  <AntDesign name={'questioncircleo'} size={25} color={'gray'} />
+                </View>
+                <Text style={styles.txtItem}>Trợ giúp</Text>
+                <AntDesign name={isHelp ? 'up' : 'down'} size={20} color={'gray'} style={{marginRight: screenWidth/36}} />
+              </View>
+              {isHelp &&
+              <View style={styles.overView}>
+                 <Text style={styles.txtTitle}>Liên Hệ</Text>
+                 <Text style={styles.txtDesc}>
+                  Trong lúc sử dụng nếu có bất kỳ thắc mắc, hỏi đáp nào xin vui lòng liên hệ tới:
+                 </Text>
+                 <Text style={{...styles.txtDesc, color: 'blue', opacity: 0.5}}>
+                  wegocontact2020@gmail.com
+                 </Text>
+              </View>}
+             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.signOut} onPress={this.signOut}>
-            <AntDesign name={'logout'} size={20} color={'gray'} style={{ marginLeft: screenWidth / 137 }} />
-            <Text style={styles.textSignOut}>Đăng xuất</Text>
+          <TouchableOpacity style={styles.viewItem} onPress={this.signOut}>
+            <View style={styles.viewTxt}>
+              <View style={styles.viewRow}>
+                <View style={styles.viewIcon}>
+                  <AntDesign name={'logout'} size={25} color={'gray'} />
+                </View>
+                <Text style={{...styles.txtItem, color: Colors.orangered, opacity: 0.7}}>Đăng xuất</Text>
+              </View>
+            </View>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }

@@ -17,6 +17,7 @@ import { BASEURL } from '../../../../api/api';
 import Modal from 'react-native-modal';
 import { connect } from 'react-redux';
 import LottieView from 'lottie-react-native';
+import ListEmpty from '../../../components/ListEmpty';
 
 function mapStateToProps(state) {
   return {
@@ -203,6 +204,18 @@ export class MainPlanInTripScreen extends Component<Props, States> {
     this.onToggleModal();
   };
 
+  renderEmpty = () => {
+    return (
+      <View style={styles.viewEmpty}>
+        <ListEmpty 
+          title={'Nhóm của bạn chưa có lịch trình nào.'}
+          titleAction={null}
+          action={null}
+        />
+      </View>
+    );
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -232,6 +245,8 @@ export class MainPlanInTripScreen extends Component<Props, States> {
         {/* view modal save */}
         <Modal
           avoidKeyboard
+          animationIn='zoomIn'
+          animationOut="zoomOut"
           isVisible={this.state.modalAddVisible}
           style={styles.mainModalSave}
           coverScreen={false}
@@ -300,7 +315,6 @@ export class MainPlanInTripScreen extends Component<Props, States> {
               </View>
               </>
             )}
-            
           </View>
         </Modal>
         <View style={styles.containerHeader}>
@@ -334,6 +348,7 @@ export class MainPlanInTripScreen extends Component<Props, States> {
             <Text style={styles.txtRecommend}>Lịch trình của bạn</Text>
             <FlatList
               data={this.state.data}
+              ListEmptyComponent={this.renderEmpty}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   key={item._id}
@@ -507,4 +522,9 @@ const styles = StyleSheet.create({
     width: screenWidth / 3.6,
     height: screenWidth / 3.6,
   },
+  viewEmpty: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });

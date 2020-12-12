@@ -5,7 +5,6 @@ import { OpenMapDirections } from 'react-native-navigation-directions';
 import {
   Text,
   TouchableOpacity,
-  TouchableHighlight,
   View,
   TextInput,
   YellowBox,
@@ -14,14 +13,12 @@ import {
   Keyboard,
   Platform,
   Alert,
-  Slider,
 } from 'react-native';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import Colors from '../../../constants/Colors';
 import ChatGroupScreenStyles from '../../../styles/GroupsStyles/ChatGroupScreenStypes/ChatGroupScreenStyles';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons1 from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -36,6 +33,7 @@ import { Audio, AVPlaybackStatus } from 'expo-av';
 import * as Location from 'expo-location';
 import moment from 'moment';
 import * as FileSystem from 'expo-file-system';
+import ModalLoading from '../../components/ModalLoading';
 
 type Props = {
   _id?: any;
@@ -70,14 +68,13 @@ type States = {
   volume?: any;
   rate?: any;
   fileUrl?: any;
-  heightScroll?: Number;
-  y?: Number;
   isShareLocation?: boolean;
   isStopLocation?: boolean;
   isGetLocation?: boolean;
   location?: any;
   objectLocation?: any;
   currentLocation?: any;
+  finalDurationAudio?: any;
 };
 
 function mapStateToProps(state) {
@@ -93,7 +90,6 @@ class ChatGroupScreen extends Component<Props, States> {
 
   private audioRecording: Audio.Recording | null;
   private sound: Audio.Sound | null;
-  private audioSound: Audio.Sound;
 
   constructor(props) {
     super(props);
@@ -121,14 +117,13 @@ class ChatGroupScreen extends Component<Props, States> {
       volume: 1.0,
       rate: 1.0,
       fileUrl: null,
-      heightScroll: 0,
-      y: 0,
       isShareLocation: false,
       isStopLocation: false,
       isGetLocation: false,
       location: null,
       objectLocation: null,
       currentLocation: null,
+      finalDurationAudio: 0,
     };
   }
 
@@ -158,6 +153,7 @@ class ChatGroupScreen extends Component<Props, States> {
   nameTrip = this.props.navigation.getParam('nameTrip', '');
 
   getTotalMessage = async () => {
+    this.setState({ isLoading: true });
     await fetch(`${BASEURL}/api/chat/get_messages_by_trip_id/${this.tripId}`, {
       method: 'GET',
       headers: {
@@ -167,9 +163,13 @@ class ChatGroupScreen extends Component<Props, States> {
     })
       .then((response) => response.json())
       .then(async (res) => {
-        this.setState({ chatMessages: res.data });
+        this.setState({ 
+          chatMessages: res.data,
+          isLoading: false,
+        });
       })
       .catch((error) => {
+        this.setState({ isLoading: false });
         alert(error);
       });
   };
@@ -209,8 +209,25 @@ class ChatGroupScreen extends Component<Props, States> {
     });
   };
 
+  handlePressLocation = () => {
+    Keyboard.dismiss();
+    this.setState({
+      isShareLocation: !this.state.isShareLocation,
+    });
+  };
+
+  handlePressRecording = () => {
+    Keyboard.dismiss();
+    this.setState({
+      isRecording: !this.state.isRecording,
+    });
+  };
+
   _keyboardDidShow = () => {
-    this._scrollToInput();
+    this.setState({
+      isShareLocation: false,
+      isRecording: false,
+    }, () =>  this._scrollToInput());
   };
 
   componentWillUnmount = () => {
@@ -353,7 +370,6 @@ class ChatGroupScreen extends Component<Props, States> {
   }
 
   audioMessage = async () => {
-    Keyboard.dismiss();
     const { status } = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
     if (status !== 'granted') {
       alert('Sorry, we need audio recording permissions to make this work!');
@@ -361,10 +377,10 @@ class ChatGroupScreen extends Component<Props, States> {
       if (this.state.recording) {
         await this.audioRecording.stopAndUnloadAsync();
       }
+      this.handlePressRecording();
       this.setState({
         isShareLocation: false,
         recording: false,
-        isRecording: !this.state.isRecording,
       });
     }
   };
@@ -444,10 +460,10 @@ class ChatGroupScreen extends Component<Props, States> {
         name: `recording.${fileType}`,
         type: `audio/x-${fileType}`,
       };
-
       if (dataAudio) {
         this.setState({
           dataAudio,
+          finalDurationAudio: audio._finalDurationMillis,
         });
       }
 
@@ -491,17 +507,19 @@ class ChatGroupScreen extends Component<Props, States> {
       }
     }
     if (status['durationMillis'] === status['positionMillis']) {
+      this.sound.setOnPlaybackStatusUpdate(null);
       this.setState({
         shouldPlay: false,
       });
+      await this.sound.unloadAsync();
       this.sound = null;
     }
   };
 
   private _stopPlaybackAndBeginRecording = async () => {
     if (this.sound !== null) {
-      await this.sound.unloadAsync();
       this.sound.setOnPlaybackStatusUpdate(null);
+      await this.sound.unloadAsync();
       this.sound = null;
     }
     try {
@@ -536,14 +554,13 @@ class ChatGroupScreen extends Component<Props, States> {
   };
 
   cancelRecording = async () => {
+    this.audioRecording.setOnRecordingStatusUpdate(null);
+    await this.audioRecording.stopAndUnloadAsync();
+    this.audioRecording = null;
     this.setState({
       recording: !this.state.recording,
+      recordingDuration: null,
     });
-    await this.audioRecording.stopAndUnloadAsync();
-    if (this.audioRecording !== null) {
-      this.audioRecording.setOnRecordingStatusUpdate(null);
-      this.audioRecording = null;
-    }
   };
 
   sendAudioRecording = async () => {
@@ -558,19 +575,19 @@ class ChatGroupScreen extends Component<Props, States> {
 
     setTimeout(() => {
       this.getDataAudioRecording();
-    }, 400);
+    }, 200);
   };
 
   getDataAudioRecording = async () => {
-    let { dataAudio, soundDuration, soundPosition } = this.state;
+    let { dataAudio, finalDurationAudio } = this.state;
     let bodyFormData = new FormData();
     if (dataAudio) {
-      if (soundDuration) {
+      if (finalDurationAudio) {
         bodyFormData.append('audio', dataAudio);
         bodyFormData.append('tripId', this.tripId);
         bodyFormData.append('userId', this.props.user._id);
-        bodyFormData.append('soundDuration', soundDuration);
-        bodyFormData.append('soundPosition', soundPosition);
+        bodyFormData.append('soundDuration', finalDurationAudio);
+        bodyFormData.append('soundPosition', 0);
         await fetch(`${BASEURL}/api/chat/save_audio_recording`, {
           method: 'POST',
           headers: {
@@ -595,14 +612,14 @@ class ChatGroupScreen extends Component<Props, States> {
       if (this.state.idPositionMillis === id) {
         await this.sound.playAsync();
       } else {
-        this.sound.stopAsync();
         this.sound.setOnPlaybackStatusUpdate(null);
+        await this.sound.stopAsync();
         this.sound = null;
-        await this.setState({
+        this.setState({
           idPositionMillis: id,
         });
         const soundObject = new Audio.Sound();
-        let file = await `${BASEURL}/images/audioRecordings/${audio.audioURL}`;
+        let file = `${BASEURL}/images/audioRecordings/${audio.audioURL}`;
         await soundObject.loadAsync({ uri: file });
         soundObject.setOnPlaybackStatusUpdate(this._updateScreenForSoundAudioStatus);
         this.sound = await soundObject;
@@ -622,10 +639,10 @@ class ChatGroupScreen extends Component<Props, States> {
   };
 
   pauseAudio = async (id, audio) => {
+    await this.sound.pauseAsync()
     this.setState({
       shouldPlay: false,
     });
-    await this.sound.pauseAsync();
   };
   scroll: JSX.Element;
 
@@ -634,37 +651,15 @@ class ChatGroupScreen extends Component<Props, States> {
     this.scrollView.scrollToEnd({ animated: true });
   };
 
-  find_dimesions = async (layout) => {
-    const { height } = layout;
-    if (this.state.isRecording === false) {
-      await this.setState({
-        heightScroll: screenHeight - height - screenWidth / 4,
-      });
-    }
-  };
-
-  find_dimesions1 = async (layout) => {
-    const { height } = layout;
-    if (this.state.isRecording) {
-      await this.setState({
-        y: height,
-      });
-    } else {
-      this.setState({
-        y: 0,
-      });
-    }
-  };
-
   shareLocation = async () => {
     let { status } = await Location.requestPermissionsAsync();
     if (status !== 'granted') {
       Alert.alert('Permission to access location was denied');
     } else {
+      this.handlePressLocation();
       this.setState({
         isRecording: false,
         isGetLocation: !this.state.isGetLocation,
-        isShareLocation: !this.state.isShareLocation,
       });
       let currentLocation = await Location.getCurrentPositionAsync({});
       let data = {
@@ -991,54 +986,39 @@ class ChatGroupScreen extends Component<Props, States> {
               <Ionicons name="ios-arrow-back" size={32} color={Colors.white} />
             </TouchableOpacity>
             <Text style={ChatGroupScreenStyles.nameGroup}>{this.nameTrip}</Text>
-            <View>
-              <TouchableOpacity
-                onPress={() => {
-                  alert('Ok');
-                }}
-              >
-                <MaterialCommunityIcons name="dots-vertical-circle-outline" size={32} color={Colors.white} />
-              </TouchableOpacity>
-            </View>
+            <View style={ChatGroupScreenStyles.cancel}/>
           </View>
         </View>
         {Platform.OS === 'android' ? (
           <View style={{ flex: 1 }}>
+            <ModalLoading isVisible={this.state.isLoading}/>
             <ScrollView
               style={{ flex: 1 }}
               ref={(ref) => {
                 this.scrollView = ref;
               }}
+              onLayout={(evt) => {
+                this._scrollToInput()
+              }}
               onContentSizeChange={() => this._scrollToInput()}
             >
               {messages}
             </ScrollView>
-            <View
-              style={ChatGroupScreenStyles.footer}
-              onLayout={(event) => {
-                this.find_dimesions(event.nativeEvent.layout);
-              }}
-            >
+            <View style={ChatGroupScreenStyles.footer}>
               {lengthMessage < 1 ? (
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <TouchableOpacity style={ChatGroupScreenStyles.location} onPress={this.shareLocation}>
+                  <TouchableOpacity style={ChatGroupScreenStyles.iconFooter} onPress={this.shareLocation}>
                     <MaterialIcons name={'location-on'} size={screenWidth / 14} color={Colors.tintColor} />
                   </TouchableOpacity>
-                  <TouchableOpacity style={ChatGroupScreenStyles.camera} onPress={this.imageCamera}>
+                  <TouchableOpacity style={ChatGroupScreenStyles.iconFooter} onPress={this.imageCamera}>
                     <FontAwesome name={'camera'} size={screenWidth / 16} color={Colors.tintColor} />
                   </TouchableOpacity>
-                  <TouchableOpacity style={ChatGroupScreenStyles.image} onPress={this.imagePhoto}>
+                  <TouchableOpacity style={ChatGroupScreenStyles.iconFooter} onPress={this.imagePhoto}>
                     <FontAwesome name={'photo'} size={screenWidth / 16} color={Colors.tintColor} />
                   </TouchableOpacity>
                 </View>
               ) : null}
-              <View
-                style={
-                  lengthMessage > 0
-                    ? { marginLeft: screenWidth / 100, flex: 1 }
-                    : { marginLeft: screenWidth / 35, flex: 1, marginRight: screenWidth / 50 }
-                }
-              >
+              <View style={ChatGroupScreenStyles.containerInput}>
                 <TextInput
                   style={ChatGroupScreenStyles.input}
                   autoCapitalize={'none'}
@@ -1051,14 +1031,13 @@ class ChatGroupScreen extends Component<Props, States> {
                   onChangeText={this.chatMessage}
                 />
               </View>
-              {/* <View style={{}}/> */}
               <View>
                 {lengthMessage > 0 ? (
                   <TouchableOpacity style={ChatGroupScreenStyles.send} onPress={this.submitMessage}>
                     <Ionicons1 name={'ios-send'} size={screenWidth / 20} color={Colors.white} />
                   </TouchableOpacity>
                 ) : (
-                  <TouchableOpacity style={ChatGroupScreenStyles.microphone} onPress={this.audioMessage}>
+                  <TouchableOpacity style={ChatGroupScreenStyles.iconFooter} onPress={this.audioMessage}>
                     <FontAwesome name={'microphone'} size={screenWidth / 16} color={Colors.tintColor} />
                   </TouchableOpacity>
                 )}
@@ -1066,6 +1045,7 @@ class ChatGroupScreen extends Component<Props, States> {
             </View>
             {this.state.isShareLocation ? (
               <View>
+                <View style={ChatGroupScreenStyles.separator} />
                 {this.state.isStopLocation ? (
                   <TouchableOpacity style={ChatGroupScreenStyles.shareLocation} onPress={this.isStopShareLocation}>
                     <Text style={{ color: Colors.white, fontSize: 18, fontWeight: 'bold', opacity: 0.9 }}>
@@ -1096,36 +1076,28 @@ class ChatGroupScreen extends Component<Props, States> {
               ref={(ref) => {
                 this.scrollView = ref;
               }}
+              onLayout={(evt) => {
+                this._scrollToInput()
+              }}
               onContentSizeChange={() => this._scrollToInput()}
             >
               {messages}
             </ScrollView>
-            <View
-              style={ChatGroupScreenStyles.footer}
-              onLayout={(event) => {
-                this.find_dimesions(event.nativeEvent.layout);
-              }}
-            >
+            <View style={ChatGroupScreenStyles.footer}>
               {lengthMessage < 1 ? (
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <TouchableOpacity style={ChatGroupScreenStyles.location} onPress={this.shareLocation}>
+                  <TouchableOpacity style={ChatGroupScreenStyles.iconFooter} onPress={this.shareLocation}>
                     <MaterialIcons name={'location-on'} size={screenWidth / 14} color={Colors.tintColor} />
                   </TouchableOpacity>
-                  <TouchableOpacity style={ChatGroupScreenStyles.camera} onPress={this.imageCamera}>
+                  <TouchableOpacity style={ChatGroupScreenStyles.iconFooter} onPress={this.imageCamera}>
                     <FontAwesome name={'camera'} size={screenWidth / 16} color={Colors.tintColor} />
                   </TouchableOpacity>
-                  <TouchableOpacity style={ChatGroupScreenStyles.image} onPress={this.imagePhoto}>
+                  <TouchableOpacity style={ChatGroupScreenStyles.iconFooter} onPress={this.imagePhoto}>
                     <FontAwesome name={'photo'} size={screenWidth / 16} color={Colors.tintColor} />
                   </TouchableOpacity>
                 </View>
               ) : null}
-              <View
-                style={
-                  lengthMessage > 0
-                    ? { marginLeft: screenWidth / 100, flex: 1 }
-                    : { marginLeft: screenWidth / 35, flex: 1, marginRight: screenWidth / 50 }
-                }
-              >
+              <View style={ChatGroupScreenStyles.containerInput}>
                 <TextInput
                   style={ChatGroupScreenStyles.input}
                   autoCapitalize={'none'}
@@ -1144,7 +1116,7 @@ class ChatGroupScreen extends Component<Props, States> {
                     <Ionicons1 name={'ios-send'} size={screenWidth / 20} color={Colors.white} />
                   </TouchableOpacity>
                 ) : (
-                  <TouchableOpacity style={ChatGroupScreenStyles.microphone} onPress={this.audioMessage}>
+                  <TouchableOpacity style={ChatGroupScreenStyles.iconFooter} onPress={this.audioMessage}>
                     <FontAwesome name={'microphone'} size={screenWidth / 16} color={Colors.tintColor} />
                   </TouchableOpacity>
                 )}
@@ -1180,9 +1152,15 @@ class ChatGroupScreen extends Component<Props, States> {
         )}
         {this.state.isRecording ? (
           <View style={ChatGroupScreenStyles.audioRecording}>
+            <View style={ChatGroupScreenStyles.separator} />
             {this.state.recording === false ? (
               <View style={{ flex: 1 }}>
-                <View style={{ flex: 1 }}></View>
+                <View style={ChatGroupScreenStyles.timingRecording}>
+                  <Text style={ChatGroupScreenStyles.txtTimeRecording}>
+                    {`00:00`}
+                  </Text>
+                </View>
+                <View style={{ flex: 1 }}/>
                 <View>
                   <TouchableOpacity style={ChatGroupScreenStyles.bgAudio} onPress={this._stopPlaybackAndBeginRecording}>
                     <Text style={ChatGroupScreenStyles.textAudio}>Ghi âm</Text>
@@ -1192,7 +1170,7 @@ class ChatGroupScreen extends Component<Props, States> {
             ) : (
               <View style={{ flex: 1 }}>
                 <View style={ChatGroupScreenStyles.timingRecording}>
-                  <Text style={{ alignContent: 'center', fontSize: screenWidth / 8, marginTop: screenWidth / 50 }}>
+                  <Text style={ChatGroupScreenStyles.txtTimeRecording}>
                     {this._getRecordingTimestamp()}
                   </Text>
                 </View>
