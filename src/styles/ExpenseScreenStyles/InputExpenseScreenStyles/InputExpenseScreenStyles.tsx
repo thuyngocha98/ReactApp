@@ -399,6 +399,14 @@ const InputExpenseScreenStyles = StyleSheet.create({
     paddingTop: screenWidth / 48,
     marginRight: screenWidth / 24,
   },
+  viewImageAdd: {
+    overflow: 'hidden',
+    width: screenWidth / 3,
+    height: screenWidth / 4,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.lavender,
+  },
   imageAdd: {
     resizeMode: 'cover',
     width: screenWidth / 3,

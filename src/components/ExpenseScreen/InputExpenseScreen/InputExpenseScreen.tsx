@@ -450,18 +450,18 @@ class InputExpenseScreen extends Component<Props, States> {
   }
 
   _pickImage = async () => {
+    this.toggleModalPickImage();
     const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
     if (status !== 'granted') {
       this.setState({
         modalNotification: {
           type: 'warning',
-          title: 'Bạn đã không cấp quyền sử dụng thư viện',
-          description: 'Bạn không thể sử dụng tính năng đăng tải ảnh.',
+          title: 'Bạn chưa cấp quyền sử dụng thư viện',
+          description: 'Bạn không thể sử dụng tính năng chọn ảnh.',
           modalVisible: true,
         },
       });
     } else {
-      this.toggleModalPickImage();
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
@@ -488,18 +488,18 @@ class InputExpenseScreen extends Component<Props, States> {
   };
 
   _pickImageCamera = async () => {
-    const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+    this.toggleModalPickImage();
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
       this.setState({
         modalNotification: {
           type: 'warning',
-          title: 'Bạn đã không cấp quyền sử dụng camera',
+          title: 'Bạn chưa cấp quyền sử dụng camera',
           description: 'Bạn không thể sử dụng tính năng chụp ảnh.',
           modalVisible: true,
         },
       });
     } else {
-      this.toggleModalPickImage();
       let result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
@@ -550,52 +550,53 @@ class InputExpenseScreen extends Component<Props, States> {
   };
 
   onPressShare = async () => {
-    try {
-      const result = await Share.share(
-        {
-          ...Platform.select({
-            ios: {
-              message: 'Chia sẻ một khoảnh khắc : ',
-              url: `${BASEURL}/api/index/shareSocial/${this.props.author}/${this.state.dataShare.imgId}/${this.state.dataShare.locationId}`,
-            },
-            android: {
-              message: `${BASEURL}/api/index/shareSocial/${this.props.author}/${this.state.dataShare.imgId}/${this.state.dataShare.locationId}`,
-            },
-          }),
-          title: 'Wow, did you see that?',
-        },
-        {
-          ...Platform.select({
-            ios: {
-              // iOS only:
-              excludedActivityTypes: ['com.apple.UIKit.activity.PostToTwitter'],
-            },
-            android: {
-              // Android only:
-              dialogTitle: 'Chia sẻ với',
-            },
-          }),
-        },
-      );
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          this.setState({
-            visibleModalShare: false,
-            listImageAdd: [],
-            isEnableAddLocation: false,
-            isCheckImage: false,
-            isCheckLocation: false,
-          });
-          // shared
+    this.setState({
+      visibleModalShare: false,
+      listImageAdd: [],
+      isEnableAddLocation: false,
+      isCheckImage: false,
+      isCheckLocation: false,
+    }, async () => {
+      try {
+        const result = await Share.share(
+          {
+            ...Platform.select({
+              ios: {
+                message: 'Chia sẻ một khoảnh khắc : ',
+                url: `${BASEURL}/api/index/shareSocial/${this.props.author}/${this.state.dataShare.imgId}/${this.state.dataShare.locationId}`,
+              },
+              android: {
+                message: `${BASEURL}/api/index/shareSocial/${this.props.author}/${this.state.dataShare.imgId}/${this.state.dataShare.locationId}`,
+              },
+            }),
+            title: 'Wow, did you see that?',
+          },
+          {
+            ...Platform.select({
+              ios: {
+                // iOS only:
+                excludedActivityTypes: ['com.apple.UIKit.activity.PostToTwitter'],
+              },
+              android: {
+                // Android only:
+                dialogTitle: 'Chia sẻ với',
+              },
+            }),
+          },
+        );
+        if (result.action === Share.sharedAction) {
+          if (result.activityType) {
+            // shared with activity type of result.activityType
+          } else {
+            // shared
+          }
+        } else if (result.action === Share.dismissedAction) {
+          // dismissed
         }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
+      } catch (error) {
+        alert(error.message);
       }
-    } catch (error) {
-      alert(error.message);
-    }
+    });
   };
 
   render() {
@@ -617,6 +618,9 @@ class InputExpenseScreen extends Component<Props, States> {
         {/* view modal share */}
         <Modal
           avoidKeyboard
+          animationIn="zoomIn"
+          animationOut="fadeOut"
+          animationOutTiming={10}
           isVisible={this.state.visibleModalShare}
           style={InputExpenseScreenStyles.mainModalShare}
           coverScreen={false}
@@ -919,6 +923,7 @@ class InputExpenseScreen extends Component<Props, States> {
                   data={this.state.listImageAdd}
                   extraData={this.state}
                   horizontal
+                  showsHorizontalScrollIndicator={false}
                   renderItem={({ item, index }) => (
                     <View style={InputExpenseScreenStyles.showImage}>
                       <TouchableOpacity
@@ -927,7 +932,7 @@ class InputExpenseScreen extends Component<Props, States> {
                       >
                         <Feather name={'x'} color={Colors.black} size={11} />
                       </TouchableOpacity>
-                      <TouchableOpacity onPress={() => this.toggleModal()}>
+                      <TouchableOpacity  style={InputExpenseScreenStyles.viewImageAdd} onPress={() => this.toggleModal()}>
                         <Image source={{ uri: item.url }} style={InputExpenseScreenStyles.imageAdd} />
                       </TouchableOpacity>
                     </View>
