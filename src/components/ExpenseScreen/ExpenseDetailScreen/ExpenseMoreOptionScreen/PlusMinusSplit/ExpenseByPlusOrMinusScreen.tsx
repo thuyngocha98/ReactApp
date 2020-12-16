@@ -84,15 +84,19 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
 
   createListUser(list_user, totalMoney) {
     Keyboard.dismiss();
+    const { data1, moneyInputs, arrChecked } = this.state;
+    const { navigation } = this.props;
     for (let i = 0; i < list_user.length; i++) {
       list_user[i].amount_user = 0;
     }
     let totalInput = 0;
-    for (let i = 0; i < this.state.data1.length; i++) {
-      totalInput += parseInt(this.state.moneyInputs[i]);
+    for (let i = 0; i < data1.length; i++) {
+      const money = moneyInputs[i] !== undefined &&
+        moneyInputs[i] !== '' ? moneyInputs[i] : '0';
+      totalInput += parseInt(money);
       for (let j = 0; j < list_user.length; j++) {
-        if (this.state.data1[i].user_id._id == list_user[j].user_id) {
-          list_user[j].amount_user = parseInt(this.state.moneyInputs[i]);
+        if (data1[i].user_id._id == list_user[j].user_id) {
+          list_user[j].amount_user = parseInt(money);
         }
       }
     }
@@ -100,22 +104,35 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
     if (remain < 0) {
       this.setState({modalNotification: {
         type: 'error',
-        title: 'Số tiền thanh toán không bằng tổng chi phí',
-        description: 'Vui lòng nhập số tiền lại',
+        title: 'Số tiền thanh toán không hợp lệ',
+        description: 'Vui lòng kiểm tra lại',
         modalVisible: true,
       }})
     } else {
       let numberPeopleSplit = 0;
       for (let i = 0; i < list_user.length; i++) {
-        if (this.state.arrChecked[i] == true) numberPeopleSplit++;
+        if (arrChecked[i] == true) numberPeopleSplit++;
       }
-      let amount = Math.round(remain / numberPeopleSplit);
-      for (let j = 0; j < list_user.length; j++) {
-        if (this.state.arrChecked[j] == true) {
-          list_user[j].amount_user += amount;
+      if (numberPeopleSplit <= 0) {
+        if (remain == 0) {
+          navigation.navigate('InputExpenseScreen', { listTypeUser: list_user });
+        } else {
+          this.setState({modalNotification: {
+            type: 'error',
+            title: 'Số tiền thanh toán không hợp lệ',
+            description: 'Vui lòng kiểm tra lại',
+            modalVisible: true,
+          }})
         }
+      } else {
+        let amount = Math.round(remain / numberPeopleSplit);
+        for (let j = 0; j < list_user.length; j++) {
+          if (arrChecked[j] == true) {
+            list_user[j].amount_user += amount;
+          }
+        }
+        navigation.navigate('InputExpenseScreen', { listTypeUser: list_user });
       }
-      this.props.navigation.navigate('InputExpenseScreen', { listTypeUser: list_user });
     }
   }
 
@@ -233,6 +250,11 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
               <FlatList
                 data={this.state.data1}
                 extraData={this.state}
+                ListHeaderComponent={() => (
+                  <Text style={ExpenseByPlusOrMinusStyles.txtTitleList1}>
+                    Danh sách thành viên trả thêm tiền
+                  </Text>
+                )}
                 renderItem={({ item, index }) => {
                   const thumbnail =
                     item.user_id.avatar.length > 2
@@ -255,7 +277,7 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
                             <TextInput
                               style={ExpenseByPlusOrMinusStyles.input}
                               onChangeText={async (text) => {
-                                text = text.toString().replace(/,/g, '');
+                                text = text.toString().replace(/[^0-9]+/g, '');
                                 let { moneyInputs } = this.state;
                                 moneyInputs[index] = text;
                                 await this.setState({
@@ -284,7 +306,6 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
                           <Feather name="delete" size={25} />
                         </TouchableOpacity>
                       </View>
-                      <View style={ExpenseByPlusOrMinusStyles.underLine} />
                     </View>
                   );
                 }}
@@ -293,12 +314,21 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
             ) : null}
           </View>
           <View style={ExpenseByPlusOrMinusStyles.viewTitle}>
-            <Text style={ExpenseByPlusOrMinusStyles.txtTitle}>Vui lòng tùy chọn thành viên tham gia.</Text>
+            <Text style={ExpenseByPlusOrMinusStyles.txtTitle}>{`Nhấn `}
+              <Ionicons name="md-add-circle-outline" size={20} color={Colors.mediumseagreen} />
+              {` để chọn thành viên trả thêm tiền`}</Text>
+              <Text style={ExpenseByPlusOrMinusStyles.txtTitle}>{`Nhấn `}
+              <Ionicons name="ios-checkmark-circle" size={20} color={Colors.mediumseagreen} />
+              {` để chọn/loại bỏ khỏi thanh toán`}</Text>
+            <Text style={ExpenseByPlusOrMinusStyles.txtTitle1}>(các thành viên còn lại được chia đều)</Text>
           </View>
           <View style={ExpenseByPlusOrMinusStyles.flatlist2}>
             <FlatList
               data={this.state.data2}
               extraData={this.state}
+              ListHeaderComponent={() => (
+                <View style={ExpenseByPlusOrMinusStyles.line} />
+              )}
               renderItem={({ item, index }) => (
                 (this.state.arrChecked[index] =
                   this.state.arrChecked[index] === undefined ? true : this.state.arrChecked[index]),
@@ -336,13 +366,20 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
                               ExpenseByPlusOrMinusStyles.txt2,
                               {
                                 color: this.state.arrChecked[index] ? Colors.black : Colors.gray,
-                                fontSize: this.state.arrChecked[index] ? 18 : 16,
+                                fontSize: this.state.arrChecked[index] ? 16 : 14,
                                 fontWeight: this.state.arrChecked[index] ? '500' : '400',
                               },
                             ]}
                           >
                             {item.user_id.name}
                           </Text>
+                          <View style={ExpenseByPlusOrMinusStyles.iconCheck}>
+                            <Ionicons
+                              name="ios-checkmark-circle"
+                              size={30}
+                              color={this.state.arrChecked[index] ? Colors.mediumseagreen : Colors.gray}
+                            />
+                          </View>
                         </View>
                       </TouchableOpacity>
                       <TouchableOpacity
@@ -352,10 +389,9 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
                         }}
                         style={ExpenseByPlusOrMinusStyles.iconRight}
                       >
-                        <Ionicons name="md-add-circle-outline" size={35} color={Colors.mediumseagreen} />
+                        <Ionicons name="md-add-circle-outline" size={30} color={Colors.mediumseagreen} />
                       </TouchableOpacity>
                     </View>
-                    <View style={ExpenseByPlusOrMinusStyles.underLineInput} />
                   </View>
                 )
               )}

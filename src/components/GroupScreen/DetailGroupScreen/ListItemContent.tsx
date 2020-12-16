@@ -7,7 +7,9 @@ import Colors from '../../../constants/Colors';
 import { BASEURL } from '../../../api/api';
 import { transaction } from '../../../constants/FunctionCommon';
 import { screenWidth } from '../../../constants/Dimensions';
-
+import moment from 'moment';
+import localization from 'moment/locale/vi';
+moment.updateLocale("vi", localization);
 function mapStateToProps(state) {
   return {
     userID: state.dataUser.dataUser._id,
@@ -46,14 +48,14 @@ class ListItemContent extends PureComponent<Props> {
       lengthImage > 0
         ? { uri: `${BASEURL}/images/uploads/${this.props.data.imageURL[0]}` }
         : transaction['avatar' + this.props.data.avatar];
-    const timeDay = this.props.data.create_date.split(/[\s-T]+/);
-    const time = timeDay[3].split('.').shift();
+    const date = moment(this.props.data.create_date).format('L').split('/');
+    const time = moment(this.props.data.create_date).format('LTS');
     return (
       <View style={ListItemContentStyles.mainContainer}>
         <View style={ListItemContentStyles.container}>
           <View style={ListItemContentStyles.time}>
-            <Text style={ListItemContentStyles.day}>{timeDay[2]}</Text>
-            <Text style={ListItemContentStyles.month}>Tháng {timeDay[1]}</Text>
+            <Text style={ListItemContentStyles.day}>{date[0]}</Text>
+            <Text style={ListItemContentStyles.month}>Tháng {date[1]}</Text>
           </View>
           <View style={ListItemContentStyles.iconTitle}>
             <Image

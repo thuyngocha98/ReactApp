@@ -4,7 +4,7 @@ import { View, Text, FlatList, Image, TouchableOpacity, Platform, StatusBar, Sty
 import MainScreenGroupStyles from '../../../styles/GroupsStyles/MainScreenGroupStyles/MainScreenGroupStyles';
 import ListItemGroup from './ListItemGroup';
 import Colors from '../../../constants/Colors';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { BASEURL } from '../../../api/api';
 import { bindActionCreators } from 'redux';
 import { getApiListTrip } from '../../../actions/action';
@@ -221,6 +221,13 @@ class MainScreenGroup extends Component<Props, States> {
             />
           )}
         </View>
+        {this.state.data.length > 0 &&
+        <TouchableOpacity style={styles.addTrip}
+          activeOpacity={0.5}
+          onPress={ () => this.props.navigation.navigate('CreateGroupScreen')}
+        >
+          <MaterialIcons name={'add'} color={Colors.white} size={screenWidth/10}/>
+        </TouchableOpacity>}
       </View>
     );
   }
@@ -253,6 +260,25 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.tintColor,
   },
+  addTrip: {
+    position: 'absolute',
+    bottom: 15,
+    right: 15,
+    width: screenWidth / 7.5,
+    height: screenWidth / 7.5,
+    borderRadius: screenWidth / 4,
+    justifyContent:'center',
+    alignItems:'center',
+    shadowColor: "#000",
+    shadowOffset: {
+        width: 0,
+        height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
+    backgroundColor: Colors.tintColor
+  }
 });
 
 const mapDispatchToProps = (dispatch) => {

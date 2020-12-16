@@ -13,7 +13,7 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/images/wego-icon.png",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -24,6 +24,10 @@
       "supportsTablet": true
     },
     "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/wego-adap.png",
+        "backgroundColor": "#FFF"
+      },
       "package": "com.uit.wego",
       "config": {
         "googleMaps": {

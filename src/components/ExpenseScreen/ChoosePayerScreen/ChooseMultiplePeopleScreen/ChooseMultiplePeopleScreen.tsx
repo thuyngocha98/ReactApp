@@ -162,7 +162,7 @@ class ChooseMultiplePeopleScreen extends Component<Props, States> {
                         <TextInput
                           style={ChooseMultiplePeopleScreenStyles.input}
                           onChangeText={async (text) => {
-                            text = text.toString().replace(/,/g, '');
+                            text = text.toString().replace(/[^0-9]+/g, '');
                             let { moneyInputs } = this.state;
                             moneyInputs[index] = text;
                             await this.setState({

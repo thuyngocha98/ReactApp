@@ -33,6 +33,7 @@ import ModalNotification from '../../components/ModalNotification';
 import Modal from 'react-native-modal';
 import ModalLoading from '../../components/ModalLoading';
 import LottieView from 'lottie-react-native';
+import { number2money } from '../../../constants/FunctionCommon';
 
 function mapStateToProps(state) {
   return {
@@ -171,7 +172,7 @@ class InputExpenseScreen extends Component<Props, States> {
     this.props.navigation.navigate('ExpenseMoreOptionScreen', {
       list_user: list_user,
       listUser: this.props.listUserInTrip,
-      totalMoney: this.state.money.replace(/,/g, ''),
+      totalMoney: this.state.money.replace(/[^0-9]+/g, ''),
       userPayer: userPayer,
     });
   }
@@ -182,7 +183,7 @@ class InputExpenseScreen extends Component<Props, States> {
     this.props.navigation.navigate('ChoosePayerScreen', {
       list_user: list_user,
       listUser: this.props.listUserInTrip,
-      totalMoney: this.state.money.replace(/,/g, ''),
+      totalMoney: this.state.money.replace(/[^0-9]+/g, ''),
     });
   }
 
@@ -201,22 +202,22 @@ class InputExpenseScreen extends Component<Props, States> {
   }
 
   checkMoney(text) {
-    if (text === '') {
+    let onlyNumber = text.replace(/[^0-9]+/g, '');
+    if (onlyNumber === '') {
       this.setState({
-        money: text,
+        money: onlyNumber,
         checkMoney: false,
       });
     } else {
-      text = text.toString().replace(/,/g, '');
       this.setState({
-        money: text.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+        money: number2money(parseInt(onlyNumber)),
         checkMoney: true,
       });
     }
   }
 
   async createListUser(listTypeUser, idPayer) {
-    const Money = parseInt(this.state.money.replace(/,/g, ''));
+    const Money = parseInt(this.state.money.replace(/[^0-9]+/g, ''));
     var Payer = idPayer === '' ? this.props.author : idPayer;
     var list_user = [];
     const listUser = this.props.listUserInTrip;
@@ -245,7 +246,7 @@ class InputExpenseScreen extends Component<Props, States> {
 
   async createTransaction(tripId, listTypeUser, idPayer) {
     Keyboard.dismiss();
-    const Money = parseInt(this.state.money.replace(/,/g, ''));
+    const Money = parseInt(this.state.money.replace(/[^0-9]+/g, ''));
     const Description = this.state.description;
     var list_user = await this.createListUser(listTypeUser, idPayer);
     if (this.state.checkDescription !== this.state.checkMoney) {
@@ -599,6 +600,38 @@ class InputExpenseScreen extends Component<Props, States> {
     });
   };
 
+  handleSelectInput = () => {
+    Keyboard.dismiss();
+    if (this.state.checkDescription && this.state.checkMoney) {
+      this.prepareSendListUserToChoose(this.listTypeUser, this.idPayer);
+    } else {
+      this.setState({
+        modalNotification: {
+          type: 'error',
+          title: 'Đã có lỗi xảy ra',
+          description: 'Hãy nhập đầy đủ thông tin chi phí và thử lại.',
+          modalVisible: true,
+        },
+      })
+    }
+  }
+
+  handleSelectOutput = () => {
+    Keyboard.dismiss();
+    if (this.state.checkDescription && this.state.checkMoney) {
+      this.prepareSendListUserToSplit(this.listTypeUser, this.idPayer);
+    } else {
+      this.setState({
+        modalNotification: {
+          type: 'error',
+          title: 'Đã có lỗi xảy ra',
+          description: 'Hãy nhập đầy đủ thông tin chi phí và thử lại.',
+          modalVisible: true,
+        },
+      })
+    }
+  }
+
   render() {
     const { navigation } = this.props;
     this.listTypeUser = navigation.getParam('listTypeUser', []);
@@ -747,7 +780,15 @@ class InputExpenseScreen extends Component<Props, States> {
               </View>
               <View style={InputExpenseScreenStyles.sectionDescription}>
                 <View style={InputExpenseScreenStyles.iconDescription}>
-                  <MaterialIcons name="description" size={26} color={Colors.blackText} style={{ padding: 5 }} />
+                  <MaterialIcons 
+                    name="description" 
+                    size={26} 
+                    color={Colors.blackText} 
+                    style={{ 
+                      paddingHorizontal: screenWidth / 66,
+                      paddingVertical: screenWidth / 90, 
+                    }}
+                  />
                 </View>
                 <View style={InputExpenseScreenStyles.inputDescription}>
                   <TextInput
@@ -787,18 +828,7 @@ class InputExpenseScreen extends Component<Props, States> {
                 <View style={InputExpenseScreenStyles.button}>
                   <Text
                     style={InputExpenseScreenStyles.text2}
-                    onPress={() =>
-                      this.state.checkDescription && this.state.checkMoney
-                        ? this.prepareSendListUserToChoose(this.listTypeUser, this.idPayer)
-                        : this.setState({
-                            modalNotification: {
-                              type: 'error',
-                              title: 'Đã có lỗi xảy ra',
-                              description: 'Vui lòng nhập đầy đủ thông tin',
-                              modalVisible: true,
-                            },
-                          })
-                    }
+                    onPress={this.handleSelectInput}
                   >
                     Chọn thành viên thanh toán (đầu vào)
                   </Text>
@@ -806,18 +836,7 @@ class InputExpenseScreen extends Component<Props, States> {
                 <View style={InputExpenseScreenStyles.button}>
                   <Text
                     style={InputExpenseScreenStyles.text3}
-                    onPress={() =>
-                      this.state.checkDescription && this.state.checkMoney
-                        ? this.prepareSendListUserToSplit(this.listTypeUser, this.idPayer)
-                        : this.setState({
-                            modalNotification: {
-                              type: 'error',
-                              title: 'Đã có lỗi xảy ra',
-                              description: 'Vui lòng nhập đầy đủ thông tin',
-                              modalVisible: true,
-                            },
-                          })
-                    }
+                    onPress={this.handleSelectOutput}
                   >
                     Chọn thành viên tham gia (đầu ra)
                   </Text>

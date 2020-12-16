@@ -1,6 +1,6 @@
 import { StyleSheet, StatusBar } from 'react-native';
 import Constants from 'expo-constants';
-import { screenWidth, APPBAR_HEIGHT } from '../../../../../constants/Dimensions';
+import { screenWidth, APPBAR_HEIGHT, screenHeight } from '../../../../../constants/Dimensions';
 import Colors from '../../../../../constants/Colors';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
@@ -62,16 +62,19 @@ const ExpenseByPlusOrMinusStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  txt1: {
-    fontSize: 18,
+  txt2: {
+    flex: 1,
   },
-  txt2: {},
   contentLeft: {
     flex: 5.5,
     flexDirection: 'row',
   },
+  iconCheck: {
+    paddingRight: screenWidth/72,
+  },
   iconRight: {
-    flex: 0.5,
+    paddingRight: screenWidth / 54,
+    paddingLeft: screenWidth/72,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -176,22 +179,38 @@ const ExpenseByPlusOrMinusStyles = StyleSheet.create({
     flexDirection: 'column',
   },
   flatlist1: {
-    
+    marginBottom: screenHeight/56,
   },
   viewTitle: {
     marginVertical: 10,
     marginHorizontal: 20,
   },
   txtTitle: {
-    fontSize: 17,
+    fontSize: 14,
     color: Colors.black,
+    marginBottom: screenHeight/216,
+  },
+  txtTitle1: {
+    fontSize: 13,
+    color: Colors.gray,
+  },
+  txtTitleList1: {
+    fontSize: 14,
+    color: Colors.black,
+    paddingLeft: screenWidth/20,
+  },
+  line: {
+    alignSelf: 'center',
+    height: 2, 
+    width: screenWidth/18, 
+    backgroundColor: Colors.lavender
   },
   flatlist2: {
     flex: 1,
   },
   flatlistMember: {
     flexDirection: 'column',
-    marginHorizontal: screenWidth / 82.5,
+    marginLeft: screenWidth / 82.5,
   },
   listMember: {
     flexDirection: 'row',
@@ -250,7 +269,7 @@ const ExpenseByPlusOrMinusStyles = StyleSheet.create({
     borderRadius: screenWidth / 20,
   },
   txt: {
-    fontSize: 16,
+    fontSize: 15,
   },
   underLine: {
     marginTop: screenWidth / 80,
