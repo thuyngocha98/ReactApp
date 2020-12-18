@@ -210,7 +210,7 @@ const ExpenseByNumberSplitScreenStyles = StyleSheet.create({
     borderRadius: screenWidth / 16.44,
   },
   txt: {
-    fontSize: 18,
+    fontSize: 16,
   },
   underLine: {
     marginTop: screenWidth / 27.4,

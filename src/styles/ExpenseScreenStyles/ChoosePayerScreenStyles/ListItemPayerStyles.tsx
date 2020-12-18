@@ -8,13 +8,15 @@ const ListItemPayerStyles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         marginHorizontal: screenWidth/20.55,
-        marginTop: screenWidth / 27.4,
+        // marginTop: screenWidth / 27.4,
     },
     container: {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        
+        paddingVertical: screenWidth/36,
+        borderBottomWidth: 1,
+        borderBottomColor: Colors.lavender,
     },
     avatar: {
         flex: 1,
@@ -34,12 +36,13 @@ const ListItemPayerStyles = StyleSheet.create({
         alignItems: 'center',
     },
     image: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
+        width: screenWidth/7.2,
+        height: screenWidth/7.2,
+        borderRadius: screenWidth/14.4,
     },
     txt: {
-        fontSize: 19
+        fontSize: 16,
+        marginLeft: screenWidth/72,
     },
     underLine: {
         marginTop: screenWidth / 27.4,

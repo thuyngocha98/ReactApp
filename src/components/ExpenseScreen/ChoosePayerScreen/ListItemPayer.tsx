@@ -38,7 +38,6 @@ class ListItemPayer extends PureComponent<Props> {
             <Ionicons name="ios-checkmark" size={40} color={Colors.mediumseagreen} />
           </View>
         </View>
-        <View style={ListItemPayerStyles.underLine} />
       </View>
     );
   }

@@ -173,7 +173,7 @@ class DetailTransactionScreen extends Component<Props, States> {
             <View style={DetailTransactionScreenStyles.viewTextAddress}>
               
               <Text style={DetailTransactionScreenStyles.txtAddress}>
-                {this.transaction?.address}asdfsdfsdfsdfsdf
+                {this.transaction?.address}
               </Text>
               <View style={DetailTransactionScreenStyles.viewLottie}>
                 <LottieView

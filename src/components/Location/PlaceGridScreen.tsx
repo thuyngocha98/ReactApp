@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Colors from '../../constants/Colors';
 import DetailPlaceGridScreen from './DetailPlaceGridScreen';
 import Constants from "expo-constants";
+import ListEmpty from '../components/ListEmpty';
 
 type Props = {
   navigation?: any;
@@ -79,6 +80,15 @@ class PlaceGridScreen extends Component<Props, States> {
           keyExtractor={(item) => item._id.toString()}
           initialNumToRender={4}
           removeClippedSubviews
+          ListEmptyComponent={() => (
+            <View style={styles.viewEmpty}>
+              <ListEmpty 
+                title={'Hiện tại chưa có địa điểm nào được ghi lại.'}
+                titleAction={null}
+                action={null}
+              />
+            </View>
+          )}
         />
       </View>
     );
@@ -129,6 +139,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignItems: 'center',
   },
+  viewEmpty: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
 
 export default PlaceGridScreen;

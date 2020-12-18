@@ -215,6 +215,9 @@ const ExpenseByPlusOrMinusStyles = StyleSheet.create({
   listMember: {
     flexDirection: 'row',
     marginRight: screenWidth / 41.1,
+    paddingVertical: screenHeight/108,
+    borderBottomWidth: 0.5,
+    borderBottomColor: Colors.lavender,
   },
 
   // flatlist 1
@@ -222,12 +225,14 @@ const ExpenseByPlusOrMinusStyles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     marginHorizontal: screenWidth / 20.55,
-    marginTop: screenWidth / 27.4,
   },
   containerFlatlist: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: screenHeight/56,
+    borderBottomWidth: 0.5,
+    borderBottomColor: Colors.lavender,
   },
   avatar1: {
     flexDirection: 'column',

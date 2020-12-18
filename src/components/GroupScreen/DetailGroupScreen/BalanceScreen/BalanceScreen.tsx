@@ -9,6 +9,7 @@ import { screenHeight, screenWidth } from '../../../../constants/Dimensions';
 import { BASEURL } from '../../../../api/api';
 import ModalNotification from '../../../components/ModalNotification';
 import ModalLoading from '../../../components/ModalLoading';
+import ListEmpty from '../../../components/ListEmpty';
 
 function mapStateToProps(state) {
   return {};
@@ -179,6 +180,15 @@ class BalanceScreen extends Component<Props, States> {
                 handleLoading={this.handleLoading}
               />
             }
+            ListEmptyComponent={() => (
+              <View style={BalanceScreenStyles.viewEmpty}>
+                <ListEmpty 
+                  title={'Hiện tại chưa có chi phí nào được ghi lại.'}
+                  titleAction={null}
+                  action={null}
+                />
+              </View>
+            )}
             keyExtractor={(item) => item._id.toString()}
           />
         </View>

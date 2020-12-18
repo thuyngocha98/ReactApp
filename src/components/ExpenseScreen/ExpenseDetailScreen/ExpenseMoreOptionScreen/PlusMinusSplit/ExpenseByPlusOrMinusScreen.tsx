@@ -136,6 +136,91 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
     }
   }
 
+  renderHeader = () => {
+    return (
+      <>
+        <View style={ExpenseByPlusOrMinusStyles.flatlist1}>
+          {this.state.data1.length > 0 ? (
+            <FlatList
+              data={this.state.data1}
+              extraData={this.state}
+              ListHeaderComponent={() => (
+                <Text style={ExpenseByPlusOrMinusStyles.txtTitleList1}>
+                  Danh sách thành viên trả thêm tiền
+                </Text>
+              )}
+              renderItem={({ item, index }) => {
+                const thumbnail =
+                  item.user_id.avatar.length > 2
+                    ? { uri: `${BASEURL}/images/avatars/${item.user_id.avatar}` }
+                    : thumbnails['avatar' + item.user_id.avatar];
+                return (
+                  <View style={ExpenseByPlusOrMinusStyles.mainFlatlist}>
+                    <View style={ExpenseByPlusOrMinusStyles.containerFlatlist}>
+                      <View style={ExpenseByPlusOrMinusStyles.avatar1}>
+                        <Image style={ExpenseByPlusOrMinusStyles.image} source={thumbnail} />
+                      </View>
+                      <View style={ExpenseByPlusOrMinusStyles.name}>
+                        <Text numberOfLines={1} style={ExpenseByPlusOrMinusStyles.txt}>{item.user_id.name}</Text>
+                      </View>
+                      <View style={ExpenseByPlusOrMinusStyles.viewInputMoney}>
+                        <View style={ExpenseByPlusOrMinusStyles.viewVND}>
+                          <Text style={ExpenseByPlusOrMinusStyles.txtVND}>VND</Text>
+                        </View>
+                        <View style={ExpenseByPlusOrMinusStyles.viewInput}>
+                          <TextInput
+                            style={ExpenseByPlusOrMinusStyles.input}
+                            onChangeText={async (text) => {
+                              text = text.toString().replace(/[^0-9]+/g, '');
+                              let { moneyInputs } = this.state;
+                              moneyInputs[index] = text;
+                              await this.setState({
+                                moneyInputs,
+                              });
+                            }}
+                            value={
+                              this.state.moneyInputs[index] !== undefined && this.state.moneyInputs[index] !== ''
+                                ? number2money(parseInt(this.state.moneyInputs[index]))
+                                : ''
+                            }
+                            placeholder="0,00"
+                            keyboardType="number-pad"
+                            autoCorrect={false}
+                            underlineColorAndroid={'transparent'}
+                          />
+                          <View style={{ height: 1, backgroundColor: Colors.black }} />
+                        </View>
+                      </View>
+                      <TouchableOpacity
+                        style={ExpenseByPlusOrMinusStyles.delete}
+                        onPress={() => {
+                          this.deleteFromList(item);
+                        }}
+                      >
+                        <Feather name="delete" size={25} />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                );
+              }}
+              keyExtractor={(item) => item.user_id._id.toString()}
+            />
+          ) : null}
+        </View>
+        <View style={ExpenseByPlusOrMinusStyles.viewTitle}>
+          <Text style={ExpenseByPlusOrMinusStyles.txtTitle}>{`Nhấn `}
+            <Ionicons name="md-add-circle-outline" size={20} color={Colors.mediumseagreen} />
+            {` để chọn thành viên trả thêm tiền`}</Text>
+            <Text style={ExpenseByPlusOrMinusStyles.txtTitle}>{`Nhấn `}
+            <Ionicons name="ios-checkmark-circle" size={20} color={Colors.mediumseagreen} />
+            {` để chọn/loại bỏ khỏi thanh toán`}</Text>
+          <Text style={ExpenseByPlusOrMinusStyles.txtTitle1}>(các thành viên còn lại được chia đều)</Text>
+        </View>
+        <View style={ExpenseByPlusOrMinusStyles.line} />
+      </>
+    );
+  }
+
   render() {
     const { navigation } = this.props;
     const list_user = navigation.getParam('list_user', '');
@@ -244,161 +329,81 @@ class ExpenseByPlusOrMinusScreen extends Component<Props, States> {
             </Text>
           </TouchableOpacity>
         </View>
-        <ScrollView style={ExpenseByPlusOrMinusStyles.categoryList}>
-          <View style={ExpenseByPlusOrMinusStyles.flatlist1}>
-            {this.state.data1.length > 0 ? (
-              <FlatList
-                data={this.state.data1}
-                extraData={this.state}
-                ListHeaderComponent={() => (
-                  <Text style={ExpenseByPlusOrMinusStyles.txtTitleList1}>
-                    Danh sách thành viên trả thêm tiền
-                  </Text>
-                )}
-                renderItem={({ item, index }) => {
-                  const thumbnail =
-                    item.user_id.avatar.length > 2
-                      ? { uri: `${BASEURL}/images/avatars/${item.user_id.avatar}` }
-                      : thumbnails['avatar' + item.user_id.avatar];
-                  return (
-                    <View style={ExpenseByPlusOrMinusStyles.mainFlatlist}>
-                      <View style={ExpenseByPlusOrMinusStyles.containerFlatlist}>
-                        <View style={ExpenseByPlusOrMinusStyles.avatar1}>
-                          <Image style={ExpenseByPlusOrMinusStyles.image} source={thumbnail} />
-                        </View>
-                        <View style={ExpenseByPlusOrMinusStyles.name}>
-                          <Text numberOfLines={1} style={ExpenseByPlusOrMinusStyles.txt}>{item.user_id.name}</Text>
-                        </View>
-                        <View style={ExpenseByPlusOrMinusStyles.viewInputMoney}>
-                          <View style={ExpenseByPlusOrMinusStyles.viewVND}>
-                            <Text style={ExpenseByPlusOrMinusStyles.txtVND}>VND</Text>
-                          </View>
-                          <View style={ExpenseByPlusOrMinusStyles.viewInput}>
-                            <TextInput
-                              style={ExpenseByPlusOrMinusStyles.input}
-                              onChangeText={async (text) => {
-                                text = text.toString().replace(/[^0-9]+/g, '');
-                                let { moneyInputs } = this.state;
-                                moneyInputs[index] = text;
-                                await this.setState({
-                                  moneyInputs,
-                                });
-                              }}
-                              value={
-                                this.state.moneyInputs[index] !== undefined && this.state.moneyInputs[index] !== ''
-                                  ? number2money(parseInt(this.state.moneyInputs[index]))
-                                  : ''
-                              }
-                              placeholder="0,00"
-                              keyboardType="number-pad"
-                              autoCorrect={false}
-                              underlineColorAndroid={'transparent'}
-                            />
-                            <View style={{ height: 1, backgroundColor: Colors.black }} />
-                          </View>
-                        </View>
-                        <TouchableOpacity
-                          style={ExpenseByPlusOrMinusStyles.delete}
-                          onPress={() => {
-                            this.deleteFromList(item);
-                          }}
-                        >
-                          <Feather name="delete" size={25} />
-                        </TouchableOpacity>
+          
+        <View style={ExpenseByPlusOrMinusStyles.flatlist2}>
+          <FlatList
+            data={this.state.data2}
+            extraData={this.state}
+            ListHeaderComponent={this.renderHeader}
+            renderItem={({ item, index }) => (
+              (this.state.arrChecked[index] =
+                this.state.arrChecked[index] === undefined ? true : this.state.arrChecked[index]),
+              (
+                <View style={ExpenseByPlusOrMinusStyles.flatlistMember}>
+                  <View style={ExpenseByPlusOrMinusStyles.listMember}>
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={async () => {
+                        let { arrChecked } = this.state;
+                        if (arrChecked[index] === undefined) arrChecked[index] = true;
+                        arrChecked[index] = !arrChecked[index];
+                        await this.setState({
+                          arrChecked,
+                        });
+                      }}
+                      style={ExpenseByPlusOrMinusStyles.contentLeft}
+                    >
+                      <View style={ExpenseByPlusOrMinusStyles.imageAvatar}>
+                        <Image
+                          style={[
+                            ExpenseByPlusOrMinusStyles.avatar,
+                            { opacity: this.state.arrChecked[index] ? 1 : 0.3 },
+                          ]}
+                          source={
+                            item.user_id.avatar.length > 2
+                              ? { uri: `${BASEURL}/images/avatars/${item.user_id.avatar}` }
+                              : thumbnails['avatar' + item.user_id.avatar]
+                          }
+                        />
                       </View>
-                    </View>
-                  );
-                }}
-                keyExtractor={(item) => item.user_id._id.toString()}
-              />
-            ) : null}
-          </View>
-          <View style={ExpenseByPlusOrMinusStyles.viewTitle}>
-            <Text style={ExpenseByPlusOrMinusStyles.txtTitle}>{`Nhấn `}
-              <Ionicons name="md-add-circle-outline" size={20} color={Colors.mediumseagreen} />
-              {` để chọn thành viên trả thêm tiền`}</Text>
-              <Text style={ExpenseByPlusOrMinusStyles.txtTitle}>{`Nhấn `}
-              <Ionicons name="ios-checkmark-circle" size={20} color={Colors.mediumseagreen} />
-              {` để chọn/loại bỏ khỏi thanh toán`}</Text>
-            <Text style={ExpenseByPlusOrMinusStyles.txtTitle1}>(các thành viên còn lại được chia đều)</Text>
-          </View>
-          <View style={ExpenseByPlusOrMinusStyles.flatlist2}>
-            <FlatList
-              data={this.state.data2}
-              extraData={this.state}
-              ListHeaderComponent={() => (
-                <View style={ExpenseByPlusOrMinusStyles.line} />
-              )}
-              renderItem={({ item, index }) => (
-                (this.state.arrChecked[index] =
-                  this.state.arrChecked[index] === undefined ? true : this.state.arrChecked[index]),
-                (
-                  <View style={ExpenseByPlusOrMinusStyles.flatlistMember}>
-                    <View style={ExpenseByPlusOrMinusStyles.listMember}>
-                      <TouchableOpacity
-                        activeOpacity={1}
-                        onPress={async () => {
-                          let { arrChecked } = this.state;
-                          if (arrChecked[index] === undefined) arrChecked[index] = true;
-                          arrChecked[index] = !arrChecked[index];
-                          await this.setState({
-                            arrChecked,
-                          });
-                        }}
-                        style={ExpenseByPlusOrMinusStyles.contentLeft}
-                      >
-                        <View style={ExpenseByPlusOrMinusStyles.imageAvatar}>
-                          <Image
-                            style={[
-                              ExpenseByPlusOrMinusStyles.avatar,
-                              { opacity: this.state.arrChecked[index] ? 1 : 0.3 },
-                            ]}
-                            source={
-                              item.user_id.avatar.length > 2
-                                ? { uri: `${BASEURL}/images/avatars/${item.user_id.avatar}` }
-                                : thumbnails['avatar' + item.user_id.avatar]
-                            }
+                      <View style={ExpenseByPlusOrMinusStyles.content}>
+                        <Text
+                          style={[
+                            ExpenseByPlusOrMinusStyles.txt2,
+                            {
+                              color: this.state.arrChecked[index] ? Colors.black : Colors.gray,
+                              fontSize: this.state.arrChecked[index] ? 16 : 14,
+                              fontWeight: this.state.arrChecked[index] ? '500' : '400',
+                            },
+                          ]}
+                        >
+                          {item.user_id.name}
+                        </Text>
+                        <View style={ExpenseByPlusOrMinusStyles.iconCheck}>
+                          <Ionicons
+                            name="ios-checkmark-circle"
+                            size={30}
+                            color={this.state.arrChecked[index] ? Colors.mediumseagreen : Colors.gray}
                           />
                         </View>
-                        <View style={ExpenseByPlusOrMinusStyles.content}>
-                          <Text
-                            style={[
-                              ExpenseByPlusOrMinusStyles.txt2,
-                              {
-                                color: this.state.arrChecked[index] ? Colors.black : Colors.gray,
-                                fontSize: this.state.arrChecked[index] ? 16 : 14,
-                                fontWeight: this.state.arrChecked[index] ? '500' : '400',
-                              },
-                            ]}
-                          >
-                            {item.user_id.name}
-                          </Text>
-                          <View style={ExpenseByPlusOrMinusStyles.iconCheck}>
-                            <Ionicons
-                              name="ios-checkmark-circle"
-                              size={30}
-                              color={this.state.arrChecked[index] ? Colors.mediumseagreen : Colors.gray}
-                            />
-                          </View>
-                        </View>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        activeOpacity={1}
-                        onPress={async () => {
-                          this.addToList(item);
-                        }}
-                        style={ExpenseByPlusOrMinusStyles.iconRight}
-                      >
-                        <Ionicons name="md-add-circle-outline" size={30} color={Colors.mediumseagreen} />
-                      </TouchableOpacity>
-                    </View>
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={async () => {
+                        this.addToList(item);
+                      }}
+                      style={ExpenseByPlusOrMinusStyles.iconRight}
+                    >
+                      <Ionicons name="md-add-circle-outline" size={30} color={Colors.mediumseagreen} />
+                    </TouchableOpacity>
                   </View>
-                )
-              )}
-              keyExtractor={(item) => item.user_id._id.toString()}
-            />
-          </View>
-        </ScrollView>
+                </View>
+              )
+            )}
+            keyExtractor={(item) => item.user_id._id.toString()}
+          />
+        </View>
       </View>
     );
   }

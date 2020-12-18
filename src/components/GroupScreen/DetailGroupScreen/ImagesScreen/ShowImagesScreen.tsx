@@ -9,6 +9,7 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
 import localization from 'moment/locale/vi';
+import ListEmpty from '../../../components/ListEmpty';
 moment.updateLocale("vi", localization);
 function mapStateToProps(state) {
   return {};
@@ -82,7 +83,6 @@ class ShowImagesScreen extends Component<Props, States> {
   };
 
   render() {
-    console.log();
     return (
       <View style={styles.mainContainer}>
         <Modal visible={this.state.isModelVisible} transparent={false} onRequestClose={() => this.toggleModal()}>
@@ -112,26 +112,36 @@ class ShowImagesScreen extends Component<Props, States> {
           </View>
         </View>
         <ScrollView style={{ flex: 1, flexDirection: 'column' }}>
-          {this.state.listImage.map((images) => (
-            <View key={images._id} style={styles.viewItem} >
-              <Text>{moment(images.create_date).format('LLL')}</Text>
-              <FlatList
-                horizontal
-                data={images.imageURL}
-                renderItem={({ item }) => (
-                  <View style={styles.viewItemImage} >
-                    <TouchableOpacity onPress={() => this.onZoomImage(item)}>
-                      <Image
-                        source={{ uri: `${BASEURL}/images/uploads/${item}` }}
-                        style={styles.itemImage}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                )}
-                keyExtractor={(item) => item.toString()}
+          {this.state.listImage.length > 0 ? (
+            this.state.listImage.map((images) => (
+              <View key={images._id} style={styles.viewItem} >
+                <Text>{moment(images.create_date).format('LLL')}</Text>
+                <FlatList
+                  horizontal
+                  data={images.imageURL}
+                  renderItem={({ item }) => (
+                    <View style={styles.viewItemImage} >
+                      <TouchableOpacity onPress={() => this.onZoomImage(item)}>
+                        <Image
+                          source={{ uri: `${BASEURL}/images/uploads/${item}` }}
+                          style={styles.itemImage}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                  keyExtractor={(item) => item.toString()}
+                />
+              </View>
+            ))
+          ) : (
+            <View style={styles.viewEmpty}>
+              <ListEmpty 
+                title={'Hiện tại chưa có hình ảnh nào được ghi lại'}
+                titleAction={null}
+                action={null}
               />
             </View>
-          ))}
+          )}
         </ScrollView>
       </View>
     );
@@ -248,6 +258,11 @@ const styles = StyleSheet.create({
     width: screenWidth / 3 - 2,
     height: screenWidth / 3 - 2,
   },
+  viewEmpty: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
 
 export default connect(mapStateToProps)(ShowImagesScreen);

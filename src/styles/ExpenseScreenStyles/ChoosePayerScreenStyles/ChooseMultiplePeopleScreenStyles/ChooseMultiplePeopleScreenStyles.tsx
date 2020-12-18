@@ -99,7 +99,8 @@ const ChooseMultiplePeopleScreenStyles = StyleSheet.create({
     borderRadius: screenWidth / 16.44,
   },
   txt: {
-    fontSize: 19,
+    fontSize: 16,
+    marginLeft: screenWidth/ 72,
   },
   underLine: {
     marginTop: screenWidth / 27.4,
@@ -128,7 +129,7 @@ const ChooseMultiplePeopleScreenStyles = StyleSheet.create({
   },
   moneyTotal: {
     color: Colors.black,
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: '400',
   },
   line2: {
@@ -137,7 +138,7 @@ const ChooseMultiplePeopleScreenStyles = StyleSheet.create({
     alignItems: 'center',
   },
   moneyLeft: {
-    fontSize: 17,
+    fontSize: 16,
   },
 });
 export default ChooseMultiplePeopleScreenStyles;

@@ -31,8 +31,8 @@ type States = {
 };
 
 class ChooseMultiplePeopleScreen extends Component<Props, States> {
-  totalMoney: string;
-  listUser: any[];
+  totalMoney: string = this.props.navigation.getParam('totalMoney', '0');
+  listUser: any[] = this.props.navigation.getParam('listUser', '');
   constructor(props){
     super(props)
     this.state = {
@@ -55,12 +55,7 @@ class ChooseMultiplePeopleScreen extends Component<Props, States> {
     };
   };
 
-  componentDidMount() {
-    this.totalMoney = this.props.navigation.getParam('totalMoney', '0');
-    this.listUser = this.props.navigation.getParam('listUser', '');
-  }
-
-  async caculateTotalMoney() {
+  async calculateTotalMoney() {
     let moneyInput = 0;
     for (var i = 0; i < this.listUser.length; i++) {
       moneyInput +=
@@ -168,7 +163,7 @@ class ChooseMultiplePeopleScreen extends Component<Props, States> {
                             await this.setState({
                               moneyInputs,
                             });
-                            this.caculateTotalMoney();
+                            this.calculateTotalMoney();
                           }}
                           value={
                             this.state.moneyInputs[index] !== undefined && this.state.moneyInputs[index] !== ''
@@ -195,7 +190,7 @@ class ChooseMultiplePeopleScreen extends Component<Props, States> {
         <View style={ChooseMultiplePeopleScreenStyles.footer}>
           <View style={ChooseMultiplePeopleScreenStyles.line1}>
             <Text style={ChooseMultiplePeopleScreenStyles.moneyTotal}>
-              {`${number2money(this.state.moneyCurrent)} VND of `}
+              {`${number2money(this.state.moneyCurrent)} VND / `}
             </Text>
             <Text style={ChooseMultiplePeopleScreenStyles.moneyTotal}>{this.totalMoney ? number2money(this.totalMoney) : 0} VND</Text>
           </View>
@@ -213,7 +208,7 @@ class ChooseMultiplePeopleScreen extends Component<Props, States> {
                 },
               ]}
             >
-              {number2money(this.state.moneyLeft)} VND left
+              Còn lại {number2money(this.state.moneyLeft)} VND
             </Text>
           </View>
         </View>

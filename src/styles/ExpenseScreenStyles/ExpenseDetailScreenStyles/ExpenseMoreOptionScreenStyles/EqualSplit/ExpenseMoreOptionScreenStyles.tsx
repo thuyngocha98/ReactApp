@@ -50,7 +50,7 @@ const ExpenseMoreOptionScreenStyles = StyleSheet.create({
   },
   contentSplit: {
     flexDirection: 'column',
-    marginVertical: screenWidth / 13.7,
+    marginVertical: screenWidth / 24,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -160,9 +160,9 @@ const ExpenseMoreOptionScreenStyles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   txtAll: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: '500',
-    marginRight: screenWidth / 72,
+    marginRight: screenWidth / 54,
   },
   iconAll: {
     justifyContent: 'center',
@@ -171,7 +171,6 @@ const ExpenseMoreOptionScreenStyles = StyleSheet.create({
 
   // list view user
   imageAvatar: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -184,11 +183,16 @@ const ExpenseMoreOptionScreenStyles = StyleSheet.create({
   },
   content: {
     flex: 4,
+    marginLeft: screenWidth/36,
     justifyContent: 'center'
   },
   txt2: {
     fontSize: 15,
     fontWeight: 'bold',
+  },
+  nameItem: {
+    fontSize: 16,
+    fontWeight: 'normal',
   },
   iconRight: {
     flex: 1.7,

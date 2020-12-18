@@ -39,6 +39,10 @@ const BalanceScreenStyles = StyleSheet.create({
         paddingLeft: screenWidth/27,
         paddingVertical: screenWidth/72,
     },
-
+    viewEmpty: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 });
 export default BalanceScreenStyles;

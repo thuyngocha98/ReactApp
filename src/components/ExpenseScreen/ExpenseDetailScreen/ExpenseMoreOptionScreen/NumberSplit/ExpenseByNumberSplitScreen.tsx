@@ -260,7 +260,7 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
         <View style={ExpenseByNumberSplitScreenStyles.footer}>
           <View style={ExpenseByNumberSplitScreenStyles.line1}>
             <Text style={ExpenseByNumberSplitScreenStyles.moneyTotal}>
-              {number2money(this.state.moneyCurrent)} VND -
+              {number2money(this.state.moneyCurrent)} VND /
             </Text>
             <Text style={ExpenseByNumberSplitScreenStyles.moneyTotal}>{totalMoney ? ` ${number2money(totalMoney)}` : 0} VND</Text>
           </View>
@@ -282,7 +282,7 @@ class ExpenseByNumberSplitScreen extends Component<Props, States> {
             <Text style={{ fontSize: screenWidth / 24, color: 'purple' }}>
               {number2money(this.state.moneyLeft)} VND
             </Text>
-            <Text style={{ fontSize: screenWidth / 24 }}> chưa thanh toán</Text>
+            <Text numberOfLines={1} style={{ fontSize: screenWidth / 24 }}> chưa thanh toán</Text>
           </View>
         </View>
       </View>

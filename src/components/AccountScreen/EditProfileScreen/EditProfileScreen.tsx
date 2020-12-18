@@ -151,6 +151,7 @@ class EditProfileScreen extends Component<Props, States> {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
+      allowsEditing: true,
     });
 
     if (!result.cancelled) {

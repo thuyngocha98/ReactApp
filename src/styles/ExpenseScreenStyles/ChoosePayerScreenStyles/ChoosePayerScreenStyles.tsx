@@ -71,7 +71,7 @@ const ChoosePayerScreenStyles = StyleSheet.create({
     backgroundColor: Colors.lightgray,
   },
   txt: {
-    fontSize: 19,
+    fontSize: 18,
   },
   multiple: {
     marginTop: screenWidth / 20.55,

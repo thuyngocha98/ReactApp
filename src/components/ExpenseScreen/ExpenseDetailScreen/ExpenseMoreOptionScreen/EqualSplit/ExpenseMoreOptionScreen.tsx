@@ -159,10 +159,12 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
             <Image style={ExpenseMoreOptionScreenStyles.avatar} source={thumbnail} />
           </View>
           <View style={ExpenseMoreOptionScreenStyles.content}>
-            <Text style={ExpenseMoreOptionScreenStyles.txt1}>
-              {`Thành viên thanh toán:  `}
+            <Text numberOfLines={1} style={ExpenseMoreOptionScreenStyles.txt1}>
+              {`Người thanh toán:  `}
+                <Text style={ExpenseMoreOptionScreenStyles.txt2}>
+                  {userPayer.user_id.name}
+                </Text>
             </Text>
-            <Text style={ExpenseMoreOptionScreenStyles.txt2}>{userPayer.user_id.name}</Text>
           </View>
         </View>
         <View style={ExpenseMoreOptionScreenStyles.underLineInput} />
@@ -278,7 +280,7 @@ class ExpenseMoreOptionScreen extends Component<Props, States> {
                       <View style={ExpenseMoreOptionScreenStyles.content}>
                         <Text
                           style={[
-                            ExpenseMoreOptionScreenStyles.txt2,
+                            ExpenseMoreOptionScreenStyles.nameItem,
                             { color: this.state.arrChecked[index] ? Colors.black : Colors.gray },
                           ]}
                         >
