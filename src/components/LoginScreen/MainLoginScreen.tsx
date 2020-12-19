@@ -10,7 +10,6 @@ import {
   StatusBar,
   Image,
   TouchableOpacity,
-  AsyncStorage,
   Keyboard,
 } from 'react-native';
 // @ts-ignore
@@ -24,10 +23,12 @@ import eyeBlack from '../../../assets/images/eye_black.png';
 // @ts-ignore
 import emailEnvelope from '../../../assets/images/envelope-shape.png';
 import Colors from '../../constants/Colors';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { BASEURL } from '../../api/api';
 import { bindActionCreators } from 'redux';
 import { getApiDataUser } from '../../actions/action';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ScrollView } from 'react-native-gesture-handler';
+
 type Props = {
   navigation?: any;
   getDataUser?: any;
@@ -168,11 +169,6 @@ class MainLoginScreen extends Component<Props, States> {
     }
   }
 
-  _scrollToInput(position) {
-    // Add a 'scroll' ref to your ScrollView
-    this.scroll.props.scrollToPosition(position, position, true);
-  }
-
   render() {
     const { navigation } = this.props;
     return (
@@ -185,11 +181,8 @@ class MainLoginScreen extends Component<Props, States> {
           txtButton="Ok"
           onPress={this.onActionModal}
         />
-        <KeyboardAwareScrollView
+        <ScrollView
           style={{ flex: 1 }}
-          innerRef={(ref) => {
-            this.scroll = ref;
-          }}
           keyboardShouldPersistTaps="handled" // can click button when is openning keyboard
         >
           <View style={styles.mainContainer}>
@@ -216,13 +209,7 @@ class MainLoginScreen extends Component<Props, States> {
                       autoCorrect={false}
                       placeholderTextColor={Colors.lightgray}
                       underlineColorAndroid="transparent"
-                      onSubmitEditing={() => {
-                        this.secondTextInput.focus();
-                      }}
                       blurOnSubmit={false}
-                      onFocus={() => {
-                        this._scrollToInput(0);
-                      }}
                     />
                   </View>
                 </View>
@@ -245,9 +232,6 @@ class MainLoginScreen extends Component<Props, States> {
                       underlineColorAndroid="transparent"
                       ref={(input) => {
                         this.secondTextInput = input;
-                      }}
-                      onFocus={() => {
-                        this._scrollToInput(screenWidth / 5.48);
                       }}
                       onSubmitEditing={Keyboard.dismiss}
                     />
@@ -279,7 +263,7 @@ class MainLoginScreen extends Component<Props, States> {
               </View>
             </View>
           </View>
-        </KeyboardAwareScrollView>
+        </ScrollView>
       </View>
     );
   }

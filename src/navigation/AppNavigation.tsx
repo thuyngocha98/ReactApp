@@ -4,7 +4,7 @@ import * as Font from 'expo-font';
 import React, { useState } from 'react';
 import { StyleSheet, View, Platform, Dimensions, Text, TouchableOpacity } from 'react-native';
 import { Ionicons, Feather, MaterialCommunityIcons, Octicons, AntDesign, Entypo, EvilIcons, FontAwesome5, MaterialIcons, FontAwesome } from '@expo/vector-icons';
-import { Notifications } from 'expo';
+import * as Notifications from 'expo-notifications'
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
 import Modal from 'react-native-modal';
@@ -17,16 +17,31 @@ import {useSelector} from 'react-redux';
 import AppNavigator from './AppNavigator';
 import Colors from '../constants/Colors';
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 export default function AppNavigation(props) {
   const {user} = useSelector(states => ({user: states.dataUser.dataUser}));
   const [isLoadingComplete, setLoadingComplete] = useState(false);
-  const [expoPushToken, setExpoPushToken] = useState('');
   const [isSelected, setSelected] = useState(false);
-  const [notification, setNotification] = useState({
-    data: {
-      content: '',
+  const [notificationData, setNotificationData] = useState({
+    notification: {
+      request: {
+        content: {
+          title: '',
+        }
+      }
     }
   });
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = React.useRef();
+  const responseListener = React.useRef();
 
   React.useEffect(() => {
     const check = () => {
@@ -41,39 +56,53 @@ export default function AppNavigation(props) {
     return () => check;
   }, [user]);
 
-  const registerForPushNotificationsAsync = async () => {
-    if (Constants.isDevice) {
-        const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-        let finalStatus = existingStatus;
-        if (existingStatus !== 'granted') {
-            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-            finalStatus = status;
-        }
-        if (finalStatus !== 'granted') {
-            alert('Failed to get push token for push notification!');
-            return;
-        }
-        let token = await Notifications.getExpoPushTokenAsync();
-        setExpoPushToken(token);
-    } else {
-        alert('Must use physical device for Push Notifications');
-    }
-
-    if (Platform.OS === 'android') {
-        Notifications.createChannelAndroidAsync('default', {
-        name: 'default',
-        sound: true,
-        priority: 'max',
-        vibrate: [0, 250, 250, 250],
-        });
-    }
-  };
-
   React.useEffect(() => {
-    registerForPushNotificationsAsync();
-    const _notificationSubscription = Notifications.addListener(_handleNotification);
-    return () => _notificationSubscription;
-  },[])
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      setSelected(true);
+      setNotificationData(response);
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener);
+      Notifications.removeNotificationSubscription(responseListener);
+    };
+  }, []);
+
+  async function registerForPushNotificationsAsync() {
+    let token;
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
+  
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+  
+    return token;
+  }
 
   const updateTokenNotification = async () => {
     let data = {
@@ -94,13 +123,6 @@ export default function AppNavigation(props) {
         alert(error);
       });
   }
-
-  const _handleNotification = notification => {
-      if(notification.origin == 'selected'){
-        setSelected(true);
-      }
-      setNotification(notification);
-  };
 
   const onPressCancel = () => {
     setSelected(false)
@@ -160,7 +182,9 @@ export default function AppNavigation(props) {
                   autoPlay
                   loop
               />
-              <Text style={styles.txtTitle}>{notification.data.content}</Text>
+              <Text style={styles.txtTitle}>
+                {notification && notificationData.notification.request.content.title}
+              </Text>
               <View style={styles.viewBtn}>
                 <TouchableOpacity 
                 onPress={onPressCancel}

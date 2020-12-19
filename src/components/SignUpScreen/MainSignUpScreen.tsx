@@ -13,7 +13,6 @@ import styles from '../../styles/SignUpScreenStyle/MainSignUpScreenStyle';
 // @ts-ignore
 import reactLogo from '../../../assets/images/wego.png';
 import { BASEURL } from '../../api/api';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Colors from '../../constants/Colors';
 import { screenWidth } from '../../constants/Dimensions';
 import { Notifications } from 'expo';
@@ -22,6 +21,7 @@ import Constants from 'expo-constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ModalNotification from '../components/ModalNotification';
+import { ScrollView } from 'react-native-gesture-handler';
 
 type Props = {
   navigation?: any;
@@ -182,12 +182,6 @@ class MainSignUpScreen extends Component<Props> {
     }
   };
 
-  // screen scroll when click on textInput
-  _scrollToInput(position) {
-    // Add a 'scroll' ref to your ScrollView
-    this.scroll.props.scrollToPosition(1, position, true);
-  }
-
   render() {
     const { navigation } = this.props;
     return (
@@ -200,13 +194,8 @@ class MainSignUpScreen extends Component<Props> {
           txtButton="Ok"
           onPress={() => this.setState({modalNotification: {modalVisible: false}})}
         />
-        <KeyboardAwareScrollView
-          enableOnAndroid={true}
-          enableAutomaticScroll={Platform.OS === 'ios'}
+        <ScrollView
           style={{ flex: 1 }}
-          innerRef={(ref) => {
-            this.scroll = ref;
-          }}
           keyboardShouldPersistTaps="handled" // can click button when is openning keyboard
         >
           <View style={styles.mainContainer}>
@@ -232,13 +221,7 @@ class MainSignUpScreen extends Component<Props> {
                   autoCorrect={false}
                   placeholderTextColor={Colors.lightgray}
                   underlineColorAndroid="transparent"
-                  onSubmitEditing={() => {
-                    this.emailTextInput.focus();
-                  }}
                   blurOnSubmit={false}
-                  onFocus={() => {
-                    this._scrollToInput(0);
-                  }}
                 />
               </View>
             </View>
@@ -268,13 +251,7 @@ class MainSignUpScreen extends Component<Props> {
                   ref={(input) => {
                     this.emailTextInput = input;
                   }}
-                  onSubmitEditing={() => {
-                    this.passTextInput.focus();
-                  }}
                   blurOnSubmit={false}
-                  onFocus={() => {
-                    this._scrollToInput(screenWidth / 8);
-                  }}
                 />
               </View>
             </View>
@@ -305,13 +282,7 @@ class MainSignUpScreen extends Component<Props> {
                   ref={(input) => {
                     this.passTextInput = input;
                   }}
-                  onSubmitEditing={() => {
-                    this.rePassTextInput.focus();
-                  }}
                   blurOnSubmit={false}
-                  onFocus={() => {
-                    this._scrollToInput(screenWidth / 5.1375);
-                  }}
                 />
               </View>
             </View>
@@ -342,10 +313,6 @@ class MainSignUpScreen extends Component<Props> {
                   ref={(input) => {
                     this.rePassTextInput = input;
                   }}
-                  // onSubmitEditing={() => { this.secondTextInput.focus(); }}
-                  onFocus={() => {
-                    this._scrollToInput(screenWidth / 2.5);
-                  }}
                   onSubmitEditing={Keyboard.dismiss}
                 />
               </View>
@@ -369,7 +336,7 @@ class MainSignUpScreen extends Component<Props> {
               </View>
             </View>
           </View>
-        </KeyboardAwareScrollView>
+        </ScrollView>
       </View>
     );
   }

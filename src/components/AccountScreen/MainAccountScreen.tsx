@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, Platform, Image, TouchableOpacity, ScrollView, AsyncStorage, StatusBar } from 'react-native';
+import { View, Text, Platform, Image, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
 import styles from '../../styles/AccountScreenStyle/MainAccountScreenStyle';
 import { AntDesign } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { BASEURL } from '../../api/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // @ts-ignore
 import { thumbnails } from '../../constants/FunctionCommon';

@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   View,
   TextInput,
-  YellowBox,
   ScrollView,
   Image,
   Keyboard,
@@ -15,7 +14,6 @@ import {
   Alert,
 } from 'react-native';
 
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import Colors from '../../../constants/Colors';
 import ChatGroupScreenStyles from '../../../styles/GroupsStyles/ChatGroupScreenStypes/ChatGroupScreenStyles';

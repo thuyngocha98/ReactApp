@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, ActivityIndicator, Image, AsyncStorage, StatusBar } from 'react-native';
+import { View, ActivityIndicator, Image, StatusBar } from 'react-native';
 import SplashScreenStyles from '../styles/SplashScreen/SplashScreenStyles';
 import Colors from '../constants/Colors';
 import { bindActionCreators } from 'redux';
 import { getApiDataUser } from '../actions/action';
 import { screenWidth } from '../constants/Dimensions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function mapStateToProps(state) {
   return {};

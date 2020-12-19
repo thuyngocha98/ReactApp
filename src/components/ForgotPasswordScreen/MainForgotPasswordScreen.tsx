@@ -8,8 +8,6 @@ import {
   Image,
   TouchableOpacity,
   KeyboardAvoidingView,
-  AsyncStorage,
-  Alert,
   Keyboard,
 } from 'react-native';
 import styles from '../../styles/ForgotPasswordScreenStyles/MainForgotPasswordScreenStyle';
@@ -27,12 +25,12 @@ import key from '../../../assets/images/key.png';
 import { BASEURL } from '../../api/api';
 import Colors from '../../constants/Colors';
 import { MaterialIcons } from '@expo/vector-icons';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { screenWidth } from '../../constants/Dimensions';
-import DialogBox from 'react-native-dialogbox';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons1 from 'react-native-vector-icons/MaterialIcons';
 import ModalNotification from '../components/ModalNotification';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ScrollView } from 'react-native-gesture-handler';
 
 type Props = {
   navigation?: any;
@@ -59,7 +57,6 @@ class MainForgotPasswordScreen extends Component<Props> {
   pinCodeTextInput: any;
   passTextInput: any;
   rePassTextInput: TextInput;
-  dialogbox: any;
 
   componentWillUnmount() {
     this.setState({
@@ -67,19 +64,6 @@ class MainForgotPasswordScreen extends Component<Props> {
       pinCode: '',
       password: '',
       repeatPassword: '',
-    });
-  }
-
-  handleOnPress(title, content) {
-    // alert
-    Keyboard.dismiss();
-    this.dialogbox.tip({
-      title: title,
-      content: content,
-      btn: {
-        text: 'OK',
-        style: { fontWeight: '500', fontSize: 20, color: '#044de0' },
-      },
     });
   }
 
@@ -232,12 +216,6 @@ class MainForgotPasswordScreen extends Component<Props> {
       });
   };
 
-  // screen scroll when click on textInput
-  _scrollToInput(position) {
-    // Add a 'scroll' ref to your ScrollView
-    this.scroll.props.scrollToPosition(1, position, true);
-  }
-
   render() {
     const { navigation } = this.props;
     return (
@@ -250,11 +228,8 @@ class MainForgotPasswordScreen extends Component<Props> {
           txtButton="Ok"
           onPress={() => this.setState({ modalNotification: { modalVisible: false } })}
         />
-        <KeyboardAwareScrollView
+        <ScrollView
           style={{ flex: 1 }}
-          innerRef={(ref) => {
-            this.scroll = ref;
-          }}
           keyboardShouldPersistTaps="always" // can click button when is openning keyboard
         >
           <View style={styles.mainContainer}>
@@ -282,13 +257,7 @@ class MainForgotPasswordScreen extends Component<Props> {
                   autoCorrect={false}
                   placeholderTextColor={Colors.lightgray}
                   underlineColorAndroid="transparent"
-                  onSubmitEditing={() => {
-                    this.pinCodeTextInput.focus();
-                  }}
                   blurOnSubmit={false}
-                  onFocus={() => {
-                    this._scrollToInput(0);
-                  }}
                 />
               </View>
               <TouchableOpacity style={styles.send} onPress={this.sendMailGetCode}>
@@ -320,13 +289,7 @@ class MainForgotPasswordScreen extends Component<Props> {
                   ref={(input) => {
                     this.pinCodeTextInput = input;
                   }}
-                  onSubmitEditing={() => {
-                    this.passTextInput.focus();
-                  }}
                   blurOnSubmit={false}
-                  onFocus={() => {
-                    this._scrollToInput(screenWidth / 20.55);
-                  }}
                 />
               </View>
             </View>
@@ -356,13 +319,7 @@ class MainForgotPasswordScreen extends Component<Props> {
                   ref={(input) => {
                     this.passTextInput = input;
                   }}
-                  onSubmitEditing={() => {
-                    this.rePassTextInput.focus();
-                  }}
                   blurOnSubmit={false}
-                  onFocus={() => {
-                    this._scrollToInput(screenWidth / 5.1375);
-                  }}
                 />
               </View>
             </View>
@@ -392,9 +349,6 @@ class MainForgotPasswordScreen extends Component<Props> {
                   ref={(input) => {
                     this.rePassTextInput = input;
                   }}
-                  onFocus={() => {
-                    this._scrollToInput(screenWidth / 2.5);
-                  }}
                 />
               </View>
             </View>
@@ -413,14 +367,7 @@ class MainForgotPasswordScreen extends Component<Props> {
               </TouchableOpacity>
             </View>
           </View>
-        </KeyboardAwareScrollView>
-        <DialogBox
-          ref={(dialogbox) => {
-            this.dialogbox = dialogbox;
-          }}
-          isOverlayClickClose={false}
-          style={{ backgroundColor: '#333' }}
-        />
+        </ScrollView>
       </View>
     );
   }

@@ -281,9 +281,6 @@ class AddMemberGroupScreen extends Component<Props, States> {
                 style={{ flex: 8 }}
                 keyboardType="email-address"
                 onChangeText={(text) => this.listenerInputEmail(text)}
-                onSubmitEditing={() => {
-                  this.emailTextInput.focus();
-                }}
                 value={this.state.email}
                 returnKeyType={'next'}
                 autoCapitalize={'none'}
