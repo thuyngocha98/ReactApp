@@ -1,14 +1,5 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  StatusBar,
-  Image,
-  TouchableOpacity,
-  Platform,
-  Keyboard,
-} from 'react-native';
+import { View, Text, TextInput, StatusBar, Image, TouchableOpacity, Platform, Keyboard } from 'react-native';
 import styles from '../../styles/SignUpScreenStyle/MainSignUpScreenStyle';
 // @ts-ignore
 import reactLogo from '../../../assets/images/wego.png';
@@ -42,7 +33,7 @@ class MainSignUpScreen extends Component<Props> {
       type: 'success',
       title: '',
       description: '',
-      onPress: () => {}
+      onPress: () => {},
     },
   };
   scroll: any;
@@ -73,23 +64,27 @@ class MainSignUpScreen extends Component<Props> {
         finalStatus = status;
       }
       if (finalStatus !== 'granted') {
-        this.setState({modalNotification: {
-          type: 'warning',
-          title: 'Warning',
-          description: 'Failed to get push token for push notification!',
-          modalVisible: true,
-        }})
+        this.setState({
+          modalNotification: {
+            type: 'warning',
+            title: 'Warning',
+            description: 'Failed to get push token for push notification!',
+            modalVisible: true,
+          },
+        });
         return;
       }
       let token = await Notifications.getExpoPushTokenAsync();
       this.setState({ tokenNotification: token });
     } else {
-      this.setState({modalNotification: {
-        type: 'warning',
-        title: 'Warning',
-        description: 'Must use physical device for Push Notifications!',
-        modalVisible: true,
-      }})
+      this.setState({
+        modalNotification: {
+          type: 'warning',
+          title: 'Warning',
+          description: 'Must use physical device for Push Notifications!',
+          modalVisible: true,
+        },
+      });
     }
 
     if (Platform.OS === 'android') {
@@ -106,34 +101,42 @@ class MainSignUpScreen extends Component<Props> {
     await this.registerForPushNotificationsAsync();
     Keyboard.dismiss();
     if (this.state.name.length < 2) {
-      this.setState({modalNotification: {
-        type: 'error',
-        title: 'Tên không hợp lệ!',
-        description: 'Tên phải có ít nhất 2 ký tự.',
-        modalVisible: true,
-      }})
+      this.setState({
+        modalNotification: {
+          type: 'error',
+          title: 'Tên không hợp lệ!',
+          description: 'Tên phải có ít nhất 2 ký tự.',
+          modalVisible: true,
+        },
+      });
     } else if (!this.validateEmail(this.state.email)) {
-      this.setState({modalNotification: {
-        type: 'error',
-        title: 'Email không hợp lệ!',
-        description: 'Vui lòng kiểm tra lại.',
-        modalVisible: true,
-      }})
+      this.setState({
+        modalNotification: {
+          type: 'error',
+          title: 'Email không hợp lệ!',
+          description: 'Vui lòng kiểm tra lại.',
+          modalVisible: true,
+        },
+      });
     } else if (this.state.password === '') {
-      this.setState({modalNotification: {
-        type: 'error',
-        title: 'Mật khẩu không hợp lệ!',
-        description: 'Vui lòng nhập lại mật khẩu.',
-        modalVisible: true,
-      }})
+      this.setState({
+        modalNotification: {
+          type: 'error',
+          title: 'Mật khẩu không hợp lệ!',
+          description: 'Vui lòng nhập lại mật khẩu.',
+          modalVisible: true,
+        },
+      });
       return;
     } else if (this.state.password.length < 5) {
-      this.setState({modalNotification: {
-        type: 'error',
-        title: 'Mật khẩu không hợp lệ!',
-        description: 'Mật khẩu phải có ít nhất 5 ký tự.',
-        modalVisible: true,
-      }})
+      this.setState({
+        modalNotification: {
+          type: 'error',
+          title: 'Mật khẩu không hợp lệ!',
+          description: 'Mật khẩu phải có ít nhất 5 ký tự.',
+          modalVisible: true,
+        },
+      });
       return;
     } else {
       if (this.state.password === this.state.repeatPassword) {
@@ -156,12 +159,14 @@ class MainSignUpScreen extends Component<Props> {
           .then((response) => response.json())
           .then((res) => {
             if (res.error) {
-              this.setState({modalNotification: {
-                type: 'error',
-                title: res.error,
-                description: 'Vui lòng kiểm tra lại.',
-                modalVisible: true,
-              }})
+              this.setState({
+                modalNotification: {
+                  type: 'error',
+                  title: res.error,
+                  description: 'Vui lòng kiểm tra lại.',
+                  modalVisible: true,
+                },
+              });
             } else {
               if (res.result == 'ok') {
                 this.props.navigation.navigate('verifyScreen');
@@ -172,12 +177,14 @@ class MainSignUpScreen extends Component<Props> {
             console.log(error);
           });
       } else {
-        this.setState({modalNotification: {
-          type: 'error',
-          title: 'Xác nhận mật khẩu không đúng!',
-          description: 'Vui lòng kiểm tra lại.',
-          modalVisible: true,
-        }})
+        this.setState({
+          modalNotification: {
+            type: 'error',
+            title: 'Xác nhận mật khẩu không đúng!',
+            description: 'Vui lòng kiểm tra lại.',
+            modalVisible: true,
+          },
+        });
       }
     }
   };
@@ -198,7 +205,7 @@ class MainSignUpScreen extends Component<Props> {
           title={this.state.modalNotification.title}
           description={this.state.modalNotification.description}
           txtButton="Ok"
-          onPress={() => this.setState({modalNotification: {modalVisible: false}})}
+          onPress={() => this.setState({ modalNotification: { modalVisible: false } })}
         />
         <KeyboardAwareScrollView
           enableOnAndroid={true}

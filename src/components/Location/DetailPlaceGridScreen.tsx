@@ -3,17 +3,18 @@ import { View, Text, StyleSheet, Image, FlatList } from 'react-native';
 import { BASEURL } from '../../api/api';
 import { screenWidth } from '../../constants/Dimensions';
 import Colors from '../../constants/Colors';
+import { thumbnails } from '../../constants/FunctionCommon';
 
 type Props = {
   data?: {
     author?: {
-      email?: string,
-      avatar?: any,
-    }
-    amountTransaction?: number,
-    nameTransaction?: string,
-    address?: string,
-    imageURL?: any[],
+      email?: string;
+      avatar?: any;
+    };
+    amountTransaction?: number;
+    nameTransaction?: string;
+    address?: string;
+    imageURL?: any[];
   };
 };
 
@@ -22,13 +23,16 @@ type States = {};
 class DetailPlaceGridScreen extends Component<Props, States> {
   render() {
     const { data } = this.props;
-    console.log(data)
+    const thumbnail =
+      this.props.data?.author?.avatar && this.props.data?.author?.avatar.length > 2
+        ? { uri: `${BASEURL}/images/avatars/${this.props.data?.author?.avatar}` }
+        : thumbnails['avatar' + this.props.data?.author?.avatar];
     return (
       <View>
         <View style={styles.container}>
           <View style={styles.userEven}>
             <View style={styles.viewAvatar}>
-              <Image style={styles.avatar} source={{ uri: `${BASEURL}/images/avatars/${data?.author?.avatar}` }} />
+              <Image style={styles.avatar} source={thumbnail} />
             </View>
             <View style={styles.user}>
               <Text>{data?.author?.email}</Text>
@@ -123,7 +127,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: screenWidth / 70,
     borderWidth: 0.5,
-    borderColor: Colors.lightgray
+    borderColor: Colors.lightgray,
   },
   hr: {
     width: screenWidth,

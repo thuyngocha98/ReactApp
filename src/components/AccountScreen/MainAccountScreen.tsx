@@ -8,7 +8,7 @@ import { BASEURL } from '../../api/api';
 // @ts-ignore
 import { thumbnails } from '../../constants/FunctionCommon';
 import { screenWidth } from '../../constants/Dimensions';
-import Colors from "../../constants/Colors";
+import Colors from '../../constants/Colors';
 
 function mapStateToProps(state) {
   return {
@@ -27,9 +27,9 @@ type Props = {
 };
 
 type States = {
-  isOverview?: boolean,
-  isHelp?: boolean,
-}
+  isOverview?: boolean;
+  isHelp?: boolean;
+};
 
 class MainAccountScreen extends Component<Props, States> {
   _navListener: any;
@@ -37,7 +37,7 @@ class MainAccountScreen extends Component<Props, States> {
   state = {
     isOverview: false,
     isHelp: false,
-  }
+  };
 
   componentDidMount() {
     //set barstyle of statusbar
@@ -61,17 +61,18 @@ class MainAccountScreen extends Component<Props, States> {
   };
 
   handleOverView = () => {
-    this.setState({ isOverview: !this.state.isOverview })
-  }
+    this.setState({ isOverview: !this.state.isOverview });
+  };
 
   handleHelp = () => {
-    this.setState({ isHelp: !this.state.isHelp })
-  }
+    this.setState({ isHelp: !this.state.isHelp });
+  };
 
   render() {
+    console.log(this.props.user?.avatar);
     const { isHelp, isOverview } = this.state;
-    const thumbnail = this.props.user?.avatar &&
-      this.props.user?.avatar.length > 2
+    const thumbnail =
+      this.props.user?.avatar && this.props.user?.avatar.length > 2
         ? { uri: `${BASEURL}/images/avatars/${this.props.user?.avatar}` }
         : thumbnails['avatar' + this.props.user?.avatar];
     return (
@@ -89,21 +90,25 @@ class MainAccountScreen extends Component<Props, States> {
             <View style={styles.viewTxt}>
               <View style={styles.viewRow}>
                 <View style={styles.viewIcon}>
-                  <AntDesign name={'home'} size={25} color={'gray'}/>
+                  <AntDesign name={'home'} size={25} color={'gray'} />
                 </View>
-                <Text style={styles.txtItem}>
-                  Tổng quan
-                </Text>
-                <AntDesign name={isOverview ? 'up' : 'down'} size={20} color={'gray'} style={{marginRight: screenWidth/36}} />
+                <Text style={styles.txtItem}>Tổng quan</Text>
+                <AntDesign
+                  name={isOverview ? 'up' : 'down'}
+                  size={20}
+                  color={'gray'}
+                  style={{ marginRight: screenWidth / 36 }}
+                />
               </View>
-              {isOverview &&
-              <View style={styles.overView}>
-                 <Text style={styles.txtTitle}>Wego</Text>
-                 <Text style={styles.txtDesc}>
-                   Là một ứng dụng miễn phí với nhiều tính năng hỗ trợ cho du lịch nhóm như tạo nhóm,
-                   lên lịch trình, quản lý chi tiêu, chia sẻ vị trí, hình ảnh, ...
-                 </Text>
-              </View>}
+              {isOverview && (
+                <View style={styles.overView}>
+                  <Text style={styles.txtTitle}>Wego</Text>
+                  <Text style={styles.txtDesc}>
+                    Là một ứng dụng miễn phí với nhiều tính năng hỗ trợ cho du lịch nhóm như tạo nhóm, lên lịch trình,
+                    quản lý chi tiêu, chia sẻ vị trí, hình ảnh, ...
+                  </Text>
+                </View>
+              )}
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -125,7 +130,7 @@ class MainAccountScreen extends Component<Props, States> {
                   <AntDesign name={'edit'} size={25} color={'gray'} />
                 </View>
                 <Text style={styles.txtItem}>Chỉnh sửa thông tin</Text>
-                <AntDesign name={'right'} size={20} color={'gray'} style={{marginRight: screenWidth/36}} />
+                <AntDesign name={'right'} size={20} color={'gray'} style={{ marginRight: screenWidth / 36 }} />
               </View>
             </View>
           </TouchableOpacity>
@@ -136,19 +141,23 @@ class MainAccountScreen extends Component<Props, States> {
                   <AntDesign name={'questioncircleo'} size={25} color={'gray'} />
                 </View>
                 <Text style={styles.txtItem}>Trợ giúp</Text>
-                <AntDesign name={isHelp ? 'up' : 'down'} size={20} color={'gray'} style={{marginRight: screenWidth/36}} />
+                <AntDesign
+                  name={isHelp ? 'up' : 'down'}
+                  size={20}
+                  color={'gray'}
+                  style={{ marginRight: screenWidth / 36 }}
+                />
               </View>
-              {isHelp &&
-              <View style={styles.overView}>
-                 <Text style={styles.txtTitle}>Liên Hệ</Text>
-                 <Text style={styles.txtDesc}>
-                  Trong lúc sử dụng nếu có bất kỳ thắc mắc, hỏi đáp nào xin vui lòng liên hệ tới:
-                 </Text>
-                 <Text style={{...styles.txtDesc, color: 'blue', opacity: 0.5}}>
-                  wegocontact2020@gmail.com
-                 </Text>
-              </View>}
-             </View>
+              {isHelp && (
+                <View style={styles.overView}>
+                  <Text style={styles.txtTitle}>Liên Hệ</Text>
+                  <Text style={styles.txtDesc}>
+                    Trong lúc sử dụng nếu có bất kỳ thắc mắc, hỏi đáp nào xin vui lòng liên hệ tới:
+                  </Text>
+                  <Text style={{ ...styles.txtDesc, color: 'blue', opacity: 0.5 }}>wegocontact2020@gmail.com</Text>
+                </View>
+              )}
+            </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.viewItem} onPress={this.signOut}>
             <View style={styles.viewTxt}>
@@ -156,7 +165,7 @@ class MainAccountScreen extends Component<Props, States> {
                 <View style={styles.viewIcon}>
                   <AntDesign name={'logout'} size={25} color={'gray'} />
                 </View>
-                <Text style={{...styles.txtItem, color: Colors.orangered, opacity: 0.7}}>Đăng xuất</Text>
+                <Text style={{ ...styles.txtItem, color: Colors.orangered, opacity: 0.7 }}>Đăng xuất</Text>
               </View>
             </View>
           </TouchableOpacity>
