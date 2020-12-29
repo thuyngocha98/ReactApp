@@ -155,12 +155,8 @@ class MainDirectionScreen extends React.Component<Props, States> {
     };
 
     const transportPlan = 'd';
-    console.log(startPoint);
-    console.log(endPoint);
     this.toggleModal()
-    OpenMapDirections(startPoint, endPoint, transportPlan).then((res) => {
-      console.log(res);
-    });
+    OpenMapDirections(startPoint, endPoint, transportPlan);
   }
 
   onOpenModal = user => {

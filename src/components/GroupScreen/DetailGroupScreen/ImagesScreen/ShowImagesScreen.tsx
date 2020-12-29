@@ -69,7 +69,7 @@ class ShowImagesScreen extends Component<Props, States> {
         }
       })
       .catch((error) => {
-        console.log(error);
+        alert(error);
       });
   };
 

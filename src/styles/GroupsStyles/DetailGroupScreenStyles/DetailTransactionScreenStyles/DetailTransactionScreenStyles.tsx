@@ -40,12 +40,14 @@ const DetailTransactionScreenStyles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-start',
+    opacity: 0.4
   },
   save2: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-end',
+    opacity: 0.4
   },
   titleDetails: {
     fontSize: 18,

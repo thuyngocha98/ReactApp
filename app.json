@@ -11,6 +11,11 @@
       "android",
       "web"
     ],
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FFFFFF"
+    },
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/wego-icon.png",
@@ -37,7 +42,11 @@
       "useNextNotificationsApi": true,
       "permissions": [
         "ACCESS_COARSE_LOCATION",
-        "ACCESS_FINE_LOCATION"
+        "ACCESS_FINE_LOCATION",
+        "CAMERA",
+        "RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
       ],
       "googleServicesFile": "./google-services.json"
     }

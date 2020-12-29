@@ -56,8 +56,8 @@ class MainAccountScreen extends Component<Props, States> {
     this._navListener.remove();
   }
 
-  signOut = () => {
-    AsyncStorage.removeItem('jwt').then((r) => console.log(r));
+  signOut = async () => {
+    await AsyncStorage.removeItem('jwt');
     this.props.navigation.navigate('MainLoginScreen');
   };
 

@@ -13,7 +13,7 @@ import LottieView from 'lottie-react-native';
 import * as Location from 'expo-location';
 import { BASEURL } from '../api/api';
 import {useSelector} from 'react-redux';
-
+import * as SplashScreen from 'expo-splash-screen';
 import AppNavigator from './AppNavigator';
 import Colors from '../constants/Colors';
 
@@ -42,6 +42,10 @@ export default function AppNavigation(props) {
   const [notification, setNotification] = useState(false);
   const notificationListener = React.useRef();
   const responseListener = React.useRef();
+
+  React.useEffect(() => {
+    SplashScreen.hideAsync();
+  }, []);
 
   React.useEffect(() => {
     const check = () => {
@@ -206,29 +210,33 @@ export default function AppNavigation(props) {
 }
 
 async function loadResourcesAsync() {
-  await Promise.all([
-    Asset.loadAsync([
-      require('../../assets/images/wego.png'),
-      require('../../assets/images/wallpaper.png'),
-    ]),
-    Font.loadAsync({
-      // This is the font that we are using for our tab bar
-      ...Ionicons.font,
-      ...Feather.font,
-      ...MaterialCommunityIcons.font,
-      ...Octicons.font,
-      ...AntDesign.font,
-      ...Entypo.font,
-      ...EvilIcons.font,
-      ...FontAwesome5.font,
-      ...FontAwesome.font,
-      ...MaterialIcons.font,
-
-      // We include SpaceMono because we use it in FriendsScreen.js. Feel free to
-      // remove this if you are not using it in your app
-      'space-mono': require('../../assets/fonts/SpaceMono-Regular.ttf'),
-    }),
-  ]);
+  try {
+    await Promise.all([
+      Asset.loadAsync([
+        require('../../assets/images/wego.png'),
+        require('../../assets/images/wallpaper.png'),
+      ]),
+      Font.loadAsync({
+        // This is the font that we are using for our tab bar
+        ...Ionicons.font,
+        ...Feather.font,
+        ...MaterialCommunityIcons.font,
+        ...Octicons.font,
+        ...AntDesign.font,
+        ...Entypo.font,
+        ...EvilIcons.font,
+        ...FontAwesome5.font,
+        ...FontAwesome.font,
+        ...MaterialIcons.font,
+  
+        // We include SpaceMono because we use it in FriendsScreen.js. Feel free to
+        // remove this if you are not using it in your app
+        'space-mono': require('../../assets/fonts/SpaceMono-Regular.ttf'),
+      }),
+    ]);
+  } catch (error) {
+    alert(error);
+  }
 }
 
 function handleLoadingError(error: Error) {

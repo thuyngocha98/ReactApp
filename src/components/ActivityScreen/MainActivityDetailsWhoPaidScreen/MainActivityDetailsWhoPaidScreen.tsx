@@ -76,7 +76,6 @@ class MainActivityDetailsWhoPaidScreen extends Component<Props> {
        this.props.navigation.goBack();
     };
     render() {
-        console.log(this.props.navigation);
         // @ts-ignore
         return (
             <View>

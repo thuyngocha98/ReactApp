@@ -113,7 +113,7 @@ class AddImagesScreen extends Component<Props, States> {
             }
           })
           .catch((error) => {
-            console.log(error);
+            alert(error);
           });
       }
     } else {
@@ -135,7 +135,7 @@ class AddImagesScreen extends Component<Props, States> {
         ToastAndroid.showWithGravityAndOffset('upload done', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
         this.props.navigation.navigate('ShowImagesScreen');
       } catch (error) {
-        console.log('error : ' + error);
+        alert(error);
         return error;
       }
     }

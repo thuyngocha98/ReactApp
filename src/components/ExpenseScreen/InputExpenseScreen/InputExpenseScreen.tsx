@@ -452,7 +452,7 @@ class InputExpenseScreen extends Component<Props, States> {
 
   _pickImage = async () => {
     this.toggleModalPickImage();
-    const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (status !== 'granted') {
       this.setState({
         modalNotification: {
@@ -490,7 +490,7 @@ class InputExpenseScreen extends Component<Props, States> {
 
   _pickImageCamera = async () => {
     this.toggleModalPickImage();
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
     if (status !== 'granted') {
       this.setState({
         modalNotification: {
@@ -879,7 +879,7 @@ class InputExpenseScreen extends Component<Props, States> {
                   <TextInput
                     onChangeText={(text) => this.setState({ address: text })}
                     style={InputExpenseScreenStyles.inputLocation}
-                    placeholder="Enter title location"
+                    placeholder="Nhập tên địa điểm"
                     value={this.state.address}
                   />
                   <View style={InputExpenseScreenStyles.underLineInput1} />

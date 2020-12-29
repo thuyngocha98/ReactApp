@@ -139,7 +139,7 @@ class HeaderTitleComponent extends Component<Props, States> {
         }
       })
       .catch((error) => {
-        console.log(error);
+        alert(error);
       });
   };
   // function delete group
@@ -216,7 +216,7 @@ class HeaderTitleComponent extends Component<Props, States> {
       .then((response) => response.json())
       .then((res) => {})
       .catch((error) => {
-        console.log(error);
+        alert(error);
       });
     this.setState({
       image: null,
@@ -226,7 +226,7 @@ class HeaderTitleComponent extends Component<Props, States> {
   camera = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (status !== 'granted') {
-      alert('Sorry, we need camera roll permissions to make this work!');
+      alert('Xin lỗi, chúng tôi cần quyền sử dụng thư viện để hoạt động!');
     } else {
       Alert.alert(
         'Thay đổi ảnh đại diện nhóm',

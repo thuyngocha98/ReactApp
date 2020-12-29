@@ -180,7 +180,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
       })
       .catch((error) => {
         this.setState({ isLoading: false });
-        console.log(error);
+        alert(error);
       });
   };
 
@@ -225,7 +225,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
           });
       })
       .catch((error) => {
-        console.log(error);
+        alert(error);
       });
   };
 

@@ -124,7 +124,7 @@ class PlanTripScreen extends Component<Props, States> {
                 this.setState({
                     loading: false
                 })
-                console.log(error);
+                alert(error);
             });
     }
 
@@ -183,7 +183,7 @@ class PlanTripScreen extends Component<Props, States> {
                 this.setState({
                     loading: false
                 })
-                console.log(error);
+                alert(error);
             });
     }
 
@@ -207,7 +207,7 @@ class PlanTripScreen extends Component<Props, States> {
                 this.setState({
                     loadingTrip: false
                 })
-                console.log(error);
+                alert(error);
             });
     }
 
@@ -279,7 +279,7 @@ class PlanTripScreen extends Component<Props, States> {
                 this.setState({
                     loadingTrip: false
                 })
-                console.log(error);
+                alert(error);
             });
         this.onToggleModalSave();
     }

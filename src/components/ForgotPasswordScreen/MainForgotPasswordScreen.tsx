@@ -151,7 +151,7 @@ class MainForgotPasswordScreen extends Component<Props> {
           }
         })
         .catch((error) => {
-          console.log(error);
+          alert(error);
         });
     } else {
       this.setState({
@@ -212,7 +212,7 @@ class MainForgotPasswordScreen extends Component<Props> {
         }
       })
       .catch((error) => {
-        console.log(error);
+        alert(error);
       });
   };
 

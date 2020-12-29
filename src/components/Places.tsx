@@ -23,13 +23,9 @@ class Places extends Component<Props, State> {
     };
 
     placeSubmitHandler = () => {
-
         if (this.state.placeName.trim() === '') {
             return;
         }
-
-        console.log(this.state.placeName);
-
         const place = new Place(this.state.placeName);
         this.props.add(place);
     };

@@ -74,7 +74,7 @@ class MainSearchScreen extends Component<Props, States> {
                 this.setState({
                     loading: false
                 })
-                console.log(error);
+                alert(error);
             });
     };
 
@@ -98,7 +98,7 @@ class MainSearchScreen extends Component<Props, States> {
                 this.setState({
                     loading: false
                 })
-                console.log(error);
+                alert(error);
             });
     }
 

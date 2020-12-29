@@ -35,21 +35,21 @@ class SearchDetailScreen extends Component<Props, States> {
         loading: false
     }
 
-    static getDerivedStateFromProps(props, state) {
-        if(props.navigation.state.params?.next){
-            return {
-                next: props.navigation.state.params.next
-            }
-        }
-        return null;
-    }
+    // static getDerivedStateFromProps(props, state) {
+    //     if(props.navigation.state.params?.next){
+    //         return {
+    //             next: props.navigation.state.params.next
+    //         }
+    //     }
+    //     return null;
+    // }
 
-    componentDidUpdate(prevProps) {
-        if(this.props.navigation.state.params.next !== prevProps.next){
-            const next = this.props.navigation.getParam('next', '');
-            this.props.navigation.navigate('DescriptionLocationScreen', {data: next})
-        }
-    }
+    // componentDidUpdate(prevProps) {
+    //     if(this.props.navigation.state.params.next !== prevProps.next){
+    //         const next = this.props.navigation.getParam('next', '');
+    //         this.props.navigation.navigate('DescriptionLocationScreen', {data: next})
+    //     }
+    // }
 
     componentDidMount() {
         const data = this.props.navigation.getParam('data', '');
@@ -76,7 +76,7 @@ class SearchDetailScreen extends Component<Props, States> {
                 this.setState({
                     loading: false
                 })
-                console.log(error);
+                alert(error);
             });
     }
 

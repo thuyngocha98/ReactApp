@@ -4,35 +4,41 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const TIMEOUT = 100;
 
 // 52.187.177.12
-export const BASEURL = 'http://192.168.30.101:80';
+export const BASEURL = 'http://www.wego.host';
 
 axios.defaults.withCredentials = true;
 
 export default {
   // get data user
   _getDataUser: async () => {
-    const token = await AsyncStorage.getItem('jwt');
-    var dataUser = [];
-    const data = {
-      token: token,
-    };
-    const json = JSON.stringify(data);
-    await fetch(`${BASEURL}/api/user/get_info_user`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: json,
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        dataUser = res;
+    try {
+      const token = await AsyncStorage.getItem('jwt');
+      var dataUser = [];
+      const data = {
+        token: token,
+      };
+      const json = JSON.stringify(data);
+      await fetch(`${BASEURL}/api/user/get_info_user`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: json,
       })
-      .catch((error) => {
-        alert(error);
-      });
-    return dataUser;
+        .then((response) => response.json())
+        .then((res) => {
+          dataUser = res;
+        })
+        .catch((error) => {
+          alert(error);
+          return [];
+        });
+      return dataUser;
+    } catch (error) {
+      alert(error);
+      return [];
+    }
   },
 
   // get list trip

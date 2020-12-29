@@ -116,7 +116,7 @@ class DetailPlanInTripScreen extends Component<Props, States> {
                 })
             })
             .catch((error) => {
-                console.log(error);
+                alert(error);
             });
     }
 
@@ -144,7 +144,7 @@ class DetailPlanInTripScreen extends Component<Props, States> {
                 this.setState({
                     loading: false
                 })
-                console.log(error);
+                alert(error);
             });
     }
 
@@ -199,7 +199,7 @@ class DetailPlanInTripScreen extends Component<Props, States> {
                 this.setState({
                     loading: false
                 })
-                console.log(error);
+                alert(error);
             });
     }
 
@@ -260,7 +260,7 @@ class DetailPlanInTripScreen extends Component<Props, States> {
                 this.onToggleModalNotification();
             })
             .catch((error) => {
-                console.log(error);
+                alert(error);
             });
         this.onToggleModalUpdate();
     }
@@ -278,7 +278,6 @@ class DetailPlanInTripScreen extends Component<Props, States> {
     }
 
     render() {
-        console.log(this.state.data?.location)
         const RenderItem = ({index, title, desc, url, data}) => (
             <View style={styles.viewItem}>
                 <View style={styles.indexItem}>

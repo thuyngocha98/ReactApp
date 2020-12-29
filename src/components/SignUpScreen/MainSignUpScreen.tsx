@@ -169,7 +169,7 @@ class MainSignUpScreen extends Component<Props> {
             }
           })
           .catch((error) => {
-            console.log(error);
+            alert(error);
           });
       } else {
         this.setState({modalNotification: {

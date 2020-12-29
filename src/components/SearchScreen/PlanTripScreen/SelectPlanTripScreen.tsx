@@ -92,7 +92,7 @@ class SelectPlanTripScreen extends Component<Props, States> {
                 this.setState({
                     loading: false
                 })
-                console.log(error);
+                alert(error);
             });
     }
 
@@ -118,7 +118,7 @@ class SelectPlanTripScreen extends Component<Props, States> {
                 this.setState({
                     loading: false
                 })
-                console.log(error);
+                alert(error);
             });
         this.onToggleModal();
     }

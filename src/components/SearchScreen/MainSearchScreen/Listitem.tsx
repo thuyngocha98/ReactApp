@@ -68,8 +68,8 @@ export default class ListItems extends PureComponent<Props, States>{
                         <FlatList 
                             data={this.state.data}
                             renderItem={({item}) => (
-                                <TouchableOpacity 
-                                onPress={() => this.props.navigation.navigate('SearchDetailScreen', {data: this.props.item, next: item})}
+                                <View
+                                // onPress={() => this.props.navigation.navigate('SearchDetailScreen', {data: this.props.item, next: item})}
                                 style={styles.viewItem}>
                                     <View style={styles.styleImageListSearch}>
                                         <Image
@@ -78,7 +78,7 @@ export default class ListItems extends PureComponent<Props, States>{
                                         />
                                     </View>
                                     <Text numberOfLines={1} style={styles.txtItemSearch}>{item.title}</Text>
-                                </TouchableOpacity>
+                                </View>
                             )}
                             keyExtractor={item => item._id}
                         />

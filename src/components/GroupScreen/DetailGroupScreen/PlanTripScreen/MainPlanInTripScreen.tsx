@@ -103,7 +103,7 @@ export class MainPlanInTripScreen extends Component<Props, States> {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        alert(error);
       });
   };
 
@@ -128,7 +128,7 @@ export class MainPlanInTripScreen extends Component<Props, States> {
         this.setState({
           loadingNoInTrip: false,
         });
-        console.log(error);
+        alert(error);
       });
   };
 
@@ -169,7 +169,7 @@ export class MainPlanInTripScreen extends Component<Props, States> {
       })
       .catch((error) => {
         this.toggleModal();
-        console.log(error);
+        alert(error);
       });
   };
 
@@ -199,7 +199,7 @@ export class MainPlanInTripScreen extends Component<Props, States> {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        alert(error);
       });
     this.onToggleModal();
   };

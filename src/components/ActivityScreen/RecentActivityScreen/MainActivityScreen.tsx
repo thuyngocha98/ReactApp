@@ -84,7 +84,7 @@ class MainActivityScreen extends Component<Props, States> {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        alert(error);
       });
   };
 

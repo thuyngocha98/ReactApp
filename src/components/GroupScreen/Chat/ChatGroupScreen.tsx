@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { KeyboardAwareView } from 'react-native-keyboard-aware-view';
 import { OpenMapDirections } from 'react-native-navigation-directions';
 import {
   Text,
@@ -257,7 +256,7 @@ class ChatGroupScreen extends Component<Props, States> {
   imagePhoto = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (status !== 'granted') {
-      alert('Sorry, we need camera roll permissions to make this work!');
+      alert('Xin lỗi, chúng tôi cần quyền sử dụng thư viện để hoạt động!');
     } else {
       this.setState({
         isShareLocation: false,
@@ -290,7 +289,7 @@ class ChatGroupScreen extends Component<Props, States> {
   imageCamera = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     if (status !== 'granted') {
-      alert('Sorry, we need camera permissions to make this work!');
+      alert('Xin lỗi, chúng tôi cần quyền sử dụng camera để hoạt động!');
     } else {
       this.setState({
         isRecording: false,
@@ -346,7 +345,7 @@ class ChatGroupScreen extends Component<Props, States> {
           });
         })
         .catch((error) => {
-          console.log(error);
+          alert(error);
         });
     }
   };
@@ -370,7 +369,7 @@ class ChatGroupScreen extends Component<Props, States> {
   audioMessage = async () => {
     const { status } = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
     if (status !== 'granted') {
-      alert('Sorry, we need audio recording permissions to make this work!');
+      alert('Xin lỗi, chúng tôi cần quyền sử dụng Audio_Recording để hoạt động!');
     } else {
       if (this.state.recording) {
         await this.audioRecording.stopAndUnloadAsync();
@@ -495,7 +494,6 @@ class ChatGroupScreen extends Component<Props, States> {
   };
 
   private _updateScreenForSoundAudioStatus = async (status: AVPlaybackStatus) => {
-    // console.log(status);
     if (status.isLoaded) {
       if (status.shouldPlay) {
         this.setState({
@@ -531,7 +529,7 @@ class ChatGroupScreen extends Component<Props, States> {
         staysActiveInBackground: true,
       });
     } catch (error) {
-      console.log(error); // eslint-disable-line
+      alert(error); // eslint-disable-line
     }
     if (this.audioRecording !== null) {
       this.audioRecording.setOnRecordingStatusUpdate(null);
@@ -599,7 +597,7 @@ class ChatGroupScreen extends Component<Props, States> {
             this.socket.emit('audio recording', res.data);
           })
           .catch((error) => {
-            console.log(error);
+            alert(error);
           });
       }
     }
@@ -652,7 +650,7 @@ class ChatGroupScreen extends Component<Props, States> {
   shareLocation = async () => {
     let { status } = await Location.requestPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permission to access location was denied');
+      Alert.alert('Xin lỗi, chúng tôi cần quyền sử dụng vị trí để hoạt động!');
     } else {
       this.handlePressLocation();
       this.setState({
@@ -715,7 +713,7 @@ class ChatGroupScreen extends Component<Props, States> {
   directionMap = async () => {
     let { status } = await Location.requestPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permission to access location was denied');
+      Alert.alert('Xin lỗi, chúng tôi cần quyền sử dụng vị trí để hoạt động!');
     } else {
       let currentLocation = await Location.getCurrentPositionAsync({});
       let data = {
@@ -742,7 +740,7 @@ class ChatGroupScreen extends Component<Props, States> {
   _callShowDirections = async (location) => {
     let { status } = await Location.requestPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permission to access location was denied');
+      Alert.alert('Xin lỗi, chúng tôi cần quyền sử dụng vị trí để hoạt động!');
     } else {
       let locationUser = await Location.getCurrentPositionAsync();
       let currentLocation = await {
@@ -761,12 +759,8 @@ class ChatGroupScreen extends Component<Props, States> {
       };
 
       const transportPlan = 'd';
-      console.log(startPoint);
-      console.log(endPoint);
 
-      OpenMapDirections(startPoint, endPoint, transportPlan).then((res) => {
-        console.log(res);
-      });
+      OpenMapDirections(startPoint, endPoint, transportPlan)
     }
   };
 
@@ -1068,7 +1062,7 @@ class ChatGroupScreen extends Component<Props, States> {
             ) : null}
           </View>
         ) : (
-          <KeyboardAwareView>
+          <>
             <ScrollView
               style={{ flex: 1 }}
               ref={(ref) => {
@@ -1146,7 +1140,7 @@ class ChatGroupScreen extends Component<Props, States> {
                 </View>
               ) : null}
             </View>
-          </KeyboardAwareView>
+          </>
         )}
         {this.state.isRecording ? (
           <View style={ChatGroupScreenStyles.audioRecording}>

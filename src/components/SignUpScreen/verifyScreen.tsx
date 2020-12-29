@@ -138,7 +138,7 @@ const verifyScreen = (Props) => {
                     }
                 })
                 .catch((error) => {
-                    console.log(error);
+                    alert(error);
                 });
         } else {
             setModalNotification({
@@ -152,13 +152,8 @@ const verifyScreen = (Props) => {
     };
 
     const getDataUserForRedux = async () => {
-        const dataUser = await dispatch(getApiDataUser());
-        if (dataUser !== null) {
-            Props.navigation.navigate('FriendsScreen');
-        }
-        else {
-            console.log("error retrieve data user")
-        }
+        await dispatch(getApiDataUser());
+        Props.navigation.navigate('FriendsScreen');
     }
 
     return (

@@ -175,7 +175,7 @@ class DetailGroupScreen extends Component<Props, States> {
           this.setState({
             modalNotification: {
               type: 'error',
-              title: res.message,
+              title: 'Bạn không thể xóa nhóm.',
               description: 'Vui lòng kiểm tra lại.',
               modalVisible: true,
             },
@@ -185,7 +185,7 @@ class DetailGroupScreen extends Component<Props, States> {
         }
       })
       .catch((error) => {
-        console.log(error);
+        alert(error);
       });
   };
 
