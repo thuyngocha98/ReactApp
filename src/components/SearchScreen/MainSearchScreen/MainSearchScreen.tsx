@@ -7,6 +7,7 @@ import { SearchBar } from 'react-native-elements';
 import ListItems from './Listitem';
 import { BASEURL } from '../../../api/api';
 import LottieView from 'lottie-react-native';
+import ListEmpty from '../../components/ListEmpty';
 
 function mapStateToProps(state) {
     return {
@@ -163,7 +164,16 @@ class MainSearchScreen extends Component<Props, States> {
                             )}
                             keyExtractor={item => item._id.toString()}
                             initialNumToRender={4}
-                            onEndReachedThreshold={0.4}
+                            scrollEventThrottle={16}
+                            ListEmptyComponent={() => (
+                                <View style={styles.viewEmpty}>
+                                  <ListEmpty 
+                                    title={'Hiện tại đang có vấn đề xảy ra, vui lòng thử lại sau.'}
+                                    titleAction={null}
+                                    action={null}
+                                  />
+                                </View>
+                            )}
                         />
                     )}
                 </View>
@@ -214,6 +224,11 @@ const styles = StyleSheet.create({
         width: screenWidth/3.6,
         height: screenWidth/3.6,
     },
+    viewEmpty: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 });
 
 export default connect(

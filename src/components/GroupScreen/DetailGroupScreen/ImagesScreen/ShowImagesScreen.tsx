@@ -118,6 +118,7 @@ class ShowImagesScreen extends Component<Props, States> {
                 <Text>{moment(images.create_date).format('LLL')}</Text>
                 <FlatList
                   horizontal
+                  showsHorizontalScrollIndicator={false}
                   data={images.imageURL}
                   renderItem={({ item }) => (
                     <View style={styles.viewItemImage} >

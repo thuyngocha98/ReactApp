@@ -232,7 +232,7 @@ class AddMemberGroupScreen extends Component<Props, States> {
   renderListUserSearch = ({ item }) => {
     return (
       <TouchableOpacity
-        onPressIn={() => {
+        onPress={() => {
           this.addEmailToList(item.name, item.email), this.setState({ showUserExists: false });
         }}
       >
@@ -362,8 +362,10 @@ class AddMemberGroupScreen extends Component<Props, States> {
           {this.state.showUserExists ? (
             <View style={styles.popupList}>
               <FlatList
+                keyboardShouldPersistTaps="handled"
                 nestedScrollEnabled={true}
                 removeClippedSubviews={true}
+                initialNumToRender={4}
                 data={this.state.dataUserExist}
                 renderItem={this.renderListUserSearch}
                 keyExtractor={(item) => item._id.toString()}

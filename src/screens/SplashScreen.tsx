@@ -35,12 +35,17 @@ class SplashScreen extends Component<Props> {
     const { navigation, user } = this.props;
     const data = await this.receiveToken();
     if (data) {
-      await this.props.getDataUser();
-      if(user) {
-        navigation.navigate('GroupScreen');
-      }
-      else {
-        navigation.navigate('MainLoginScreen');
+      try {
+        await this.props.getDataUser();
+        if(user) {
+          navigation.navigate('GroupScreen');
+        }
+        else {
+          await AsyncStorage.removeItem('jwt');
+          navigation.navigate('MainLoginScreen');
+        }
+      } catch (error) {
+        alert(error);
       }
     } else {
       navigation.navigate('MainLoginScreen');

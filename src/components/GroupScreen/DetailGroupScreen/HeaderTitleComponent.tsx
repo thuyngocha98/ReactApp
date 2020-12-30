@@ -124,10 +124,10 @@ class HeaderTitleComponent extends Component<Props, States> {
       .then((response) => response.json())
       .then((res) => {
         if (res.result == 'Failed') {
-          Alert.alert(res.message);
+          Alert.alert('Đổi tên nhóm không thành công, vui lòng thử lại.');
         } else {
           Alert.alert(
-            res.message,
+            "Chúc mừng, bạn đã đổi tên nhóm thành công!",
             '',
             [
               {

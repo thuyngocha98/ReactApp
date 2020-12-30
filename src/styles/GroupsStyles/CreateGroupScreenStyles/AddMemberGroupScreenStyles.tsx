@@ -91,8 +91,10 @@ const styles = StyleSheet.create({
     width: screenWidth - screenWidth / 15,
     top: screenWidth / 3.1615,
     position: 'absolute',
-    backgroundColor: 'transparent',
+    borderRadius: screenWidth/72,
+    backgroundColor: Colors.lightgray,
     maxHeight: screenHeight/3,
+    padding: screenWidth/72,
   },
   userExists: {
     zIndex: 20,

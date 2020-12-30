@@ -175,8 +175,8 @@ class DetailGroupScreen extends Component<Props, States> {
           this.setState({
             modalNotification: {
               type: 'error',
-              title: 'Bạn không thể xóa nhóm.',
-              description: 'Vui lòng kiểm tra lại.',
+              title: 'Bạn không có quyền xóa nhóm!',
+              description: 'Vui lòng liên hệ nhóm trưởng.',
               modalVisible: true,
             },
           });
