@@ -326,7 +326,7 @@ class CreateGroupScreen extends Component<Props, States> {
         <View style={CreateGroupScreenStyles.categoryGroupName}>
           <Image
             style={CreateGroupScreenStyles.iconCamera}
-            source={require('../../../../assets/images/icon_camera.png')}
+            source={require('../../../../assets/images/avatarBackgroundGroup.png')}
           />
           <View style={CreateGroupScreenStyles.nameAndDetail}>
             <Text style={CreateGroupScreenStyles.groupName}>Tên Nhóm</Text>

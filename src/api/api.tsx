@@ -13,6 +13,7 @@ export default {
   _getDataUser: async () => {
     try {
       const token = await AsyncStorage.getItem('jwt');
+      if(token === null) return [];
       var dataUser = [];
       const data = {
         token: token,

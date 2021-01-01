@@ -208,7 +208,7 @@ class DetailGroupScreen extends Component<Props, States> {
           onPress: () => this.props.navigation.navigate('MainLocationScreen', { tripId: trip._id }),
         },
       ],
-      { cancelable: false },
+      { cancelable: true },
     );
   };
 

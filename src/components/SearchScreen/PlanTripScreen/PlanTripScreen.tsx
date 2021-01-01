@@ -352,7 +352,7 @@ class PlanTripScreen extends Component<Props, States> {
                     <View style={styles.lineTopCar} />
                 </View>
                 <View style={styles.timeAndDistance}>
-                    <Text style={styles.txtDescItem}>{distance == undefined ? 'Sorry, we could not calculate driving directions' :
+                    <Text style={styles.txtDescItem}>{distance == undefined ? 'Xin lỗi, chúng tôi không thể tính toán chỉ đường lái xe' :
                     Math.round((distance/1000)*100)/100 + " km  -  " +  Math.round(time/60) + " phút"}</Text>
                 </View>
             </View>

@@ -129,44 +129,36 @@ class EditProfileScreen extends Component<Props, States> {
     }
   }
 
-  componentDidMount() {
-    this.getPermissionAsync();
-  }
-
-  getPermissionAsync = async () => {
-    if (Constants.platform.ios) {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status !== 'granted') {
-        this.setState({modalNotification: {
-          type: 'error',
-          title: 'Xin quyền không thành công',
-          description: 'Xin lỗi, chúng tôi cần quyền sử dụng camera để tiếp tục',
-          modalVisible: true,
-        }})
-      }
-    }
-  };
-
   _pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
-      allowsEditing: true,
-    });
-
-    if (!result.cancelled) {
-      let localUri = result.uri;
-      let filename = localUri.split('/').pop();
-
-      // Infer the type of the image
-      let match = /\.(\w+)$/.exec(filename);
-      let type = match ? `image/${match[1]}` : `image`;
-      let image = {
-        url: localUri,
-        name: filename,
-        type,
-      };
-      this.setState({ image: image });
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status !== 'granted') {
+      this.setState({modalNotification: {
+        type: 'error',
+        title: 'Xin quyền không thành công',
+        description: 'Xin lỗi, chúng tôi cần quyền sử dụng thư viện để tiếp tục',
+        modalVisible: true,
+      }})
+    } else {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        allowsEditing: true,
+      });
+  
+      if (!result.cancelled) {
+        let localUri = result.uri;
+        let filename = localUri.split('/').pop();
+  
+        // Infer the type of the image
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
+        let image = {
+          url: localUri,
+          name: filename,
+          type,
+        };
+        this.setState({ image: image });
+      }
     }
   };
 

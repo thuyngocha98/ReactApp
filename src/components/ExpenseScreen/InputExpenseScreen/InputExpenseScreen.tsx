@@ -398,6 +398,7 @@ class InputExpenseScreen extends Component<Props, States> {
       Platform.OS === 'android' && LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       if (this.state.isCheckLocation) this.setState({ isCheckLocation: false });
       else {
+        this.setState({ isLoading: true });
         if (!this.state.latMarker) {
           let currentPosition = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
           let address = await Location.reverseGeocodeAsync({
@@ -413,6 +414,7 @@ class InputExpenseScreen extends Component<Props, States> {
               (address[0]?.street ? address[0]?.street + ', ' : '') +
               (address[0]?.city ? address[0]?.city + ', ' : '') +
               (address[0]?.region ? address[0]?.region : ''),
+            isLoading: false,
           });
         } else this.setState({ isCheckLocation: true });
       }
@@ -799,7 +801,7 @@ class InputExpenseScreen extends Component<Props, States> {
                     keyboardType="visible-password"
                     autoCorrect={false}
                     maxLength={100}
-                    autoCapitalize={'words'}
+                    autoCapitalize={"sentences"}
                     underlineColorAndroid={'transparent'}
                   />
                   <View style={InputExpenseScreenStyles.underLineInput} />
